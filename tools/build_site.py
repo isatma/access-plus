@@ -211,7 +211,7 @@ def build():
 /* hero */''', 1)
 
     views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + gesture_html + '<!-- views:end -->\n'
-    home = re.sub(r'</main>\s*<footer>', lambda m: '</main>\n\n' + views_html + '\n<footer>', home, count=1)
+    home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer>', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer>', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
