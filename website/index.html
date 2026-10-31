@@ -46,13 +46,15 @@ a { color: inherit; }
 .bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
 .brand { font: 400 1.3em var(--display); letter-spacing: 0.08em; }
 .brand span { color: var(--signal); }
-.tagline { font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: auto; }
-@media (max-width: 640px) { .tagline { display: none; } }
+.brandbox { display: grid; gap: 4px; margin-right: auto; min-width: 0; }
+.brandrow { display: flex; align-items: center; gap: 12px; }
+.tagline { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 640px) { .tagline { font-size: 0.6em; } .bar { position: relative; top: auto; } .bar .wrap > .btn, .bar .wrap > a.btn { flex: 1 1 140px; min-height: 52px; font-size: 0.68em; padding: 0 10px; } }
 .btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
 
-section[id] { scroll-margin-top: 150px; }
+section[id] { scroll-margin-top: 170px; }
 .view > .wrap { padding-block: 28px 80px; display: grid; gap: 72px; }
 .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 
@@ -65,7 +67,6 @@ section[id] { scroll-margin-top: 150px; }
 .brand { text-decoration: none; }
 .testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
 .signin { gap: 10px; }
-.tagline { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .signin .demo { font: 500 0.78em var(--mono); letter-spacing: 0.1em; background: #ffc670; color: #231c05; padding: 2px 6px; }
 .backrow { display: flex; padding-bottom: 4px; }
 .backwrap { padding-block: 20px 0 !important; }
@@ -505,6 +506,59 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 520px) {
 #view-tech .tg-cats { grid-template-columns: 1fr; }
 }
+#view-about .ab-wrap { gap: 48px !important; }
+#view-about .ab-intro { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+#view-about .ab-intro h1 { font-size: 1.9em; line-height: 1.25; }
+#view-about .ab-intro .txt { display: grid; gap: 14px; }
+#view-about .ab-intro p { margin: 0; color: var(--muted); max-width: 42em; }
+#view-about .ab-intro .lead { color: var(--desc); font-size: 1.05em; }
+#view-about .ab-cloud { width: 100%; height: 260px; display: block; background: radial-gradient(ellipse at 50% 50%, #0f1a2c, #060b14 72%); border: 1px solid var(--line-hi); }
+#view-about .ab-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+#view-about .ab-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+#view-about .ab-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+#view-about .ab-head p { margin: 0; color: var(--muted); }
+#view-about .ab-story { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+#view-about .ab-story div { display: grid; gap: 8px; align-content: start; }
+#view-about .ab-story h3 { font: 600 1.02em var(--body); letter-spacing: 0; color: var(--ink); }
+#view-about .ab-story p { margin: 0; color: var(--desc); font-size: 0.95em; }
+#view-about .ab-prin { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); margin: 0; padding: 0; list-style: none; }
+#view-about .ab-prin li { background: var(--panel); padding: 16px 18px; display: grid; gap: 4px; }
+#view-about .ab-prin b { font-weight: 600; }
+#view-about .ab-prin span { color: var(--desc); font-size: 0.9em; }
+#view-about .ab-partners { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+#view-about .ab-p { position: relative; display: grid; gap: 10px; align-content: start; padding: 20px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--signal); }
+#view-about .ab-p .role { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+#view-about .ab-p h3 { font: 600 1.1em var(--body); letter-spacing: 0; }
+#view-about .ab-p .where { color: var(--muted); font-size: 0.88em; margin-top: -6px; }
+#view-about .ab-p p { margin: 0; color: var(--desc); font-size: 0.94em; }
+#view-about .ab-p ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.9em; display: grid; gap: 3px; }
+#view-about .ab-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#view-about .ab-c { display: grid; gap: 4px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+#view-about .ab-c b { font-weight: 600; }
+#view-about .ab-c small { color: var(--desc); font-size: 0.86em; }
+#view-about .ab-c .role { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-about .ab-c.open { border-style: dashed; border-color: #ffc670; }
+#view-about .ab-c.open .role { color: #ffc670; }
+#view-about .ab-join { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 28px; padding: 22px; border: 1px dashed var(--line-hi); background: color-mix(in srgb, var(--panel) 82%, transparent); align-items: start; }
+#view-about .ab-join h3 { font-size: 1em; }
+#view-about .ab-join p { margin: 0; color: var(--muted); }
+#view-about .ab-join ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+#view-about .ab-join li { padding-left: 12px; border-left: 2px solid var(--signal); color: var(--desc); font-size: 0.93em; }
+#view-about .ab-join li b { color: var(--ink); font-weight: 600; }
+#view-about .ab-comm { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+#view-about .ab-comm div { display: grid; gap: 6px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); background: var(--panel); min-height: 130px; }
+#view-about .ab-comm b { font-weight: 600; }
+#view-about .ab-comm small { color: var(--desc); font-size: 0.88em; }
+#view-about .ab-comm .soon { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-about .ab-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+@media (max-width: 960px) {
+#view-about .ab-intro, #view-about .ab-partners, #view-about .ab-join { grid-template-columns: 1fr; }
+#view-about .ab-story, #view-about .ab-prin, #view-about .ab-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#view-about .ab-comm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+#view-about .ab-story, #view-about .ab-prin, #view-about .ab-list, #view-about .ab-comm { grid-template-columns: 1fr; }
+}
 #view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 #view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
 #view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
@@ -521,11 +575,11 @@ footer .wrap { padding-block: 22px; }
 
 <header class="bar" id="top">
   <div class="wrap">
-    <a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><span class="tagline">AI-assisted skill building for assistive technology</span>
+    <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span></div><span class="tagline">AI-assisted skill building for assistive technology</span></div>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
     <a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#tech" data-route="tech">Tech guide</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#tech" data-route="tech">Tech guide</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a><a href="#about" data-route="about">About</a></nav></div>
 </header>
 <div class="band band-top" aria-hidden="true"><span class="bd orb g" style="left:2.0%;--d:6s"></span><span class="bd ring" style="left:9.4%;--d:13s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5fe0a8" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="4" stroke="#7cc4ff" stroke-width="1.2"/></svg></span><span class="bd wave" style="left:16.8%;--d:11s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#7cc4ff" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd tri" style="left:24.2%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#ffc670" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:31.5%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#ffc670"/><circle cx="12" cy="5" r="2" fill="#5fe0a8"/><circle cx="20" cy="5" r="2" fill="#7cc4ff"/><circle cx="28" cy="5" r="2" fill="#f7b2c4"/></svg></span><span class="bd orb p" style="left:38.9%;--d:14s"></span><span class="bd hex" style="left:46.3%;--d:12s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#f7b2c4" stroke-width="1.6"/></svg></span><span class="bd plus" style="left:53.7%;--d:10s"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2 V14 M2 8 H14" stroke="#5fe0a8" stroke-width="2" stroke-linecap="round"/></svg></span><span class="bd cube" style="left:61.1%;--d:8s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z M3 7 L12 12 L21 7 M12 12 V22" stroke="#5fe0a8" stroke-width="1.3"/></svg></span><span class="bd orb b" style="left:68.5%;--d:6s"></span><span class="bd wave" style="left:75.8%;--d:13s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#f7b2c4" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd ring" style="left:83.2%;--d:11s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ffc670" stroke-width="1.5" stroke-dasharray="3 3"/></svg></span><span class="bd tri" style="left:90.6%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#7cc4ff" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:98.0%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#5fe0a8"/><circle cx="12" cy="5" r="2" fill="#f7b2c4"/><circle cx="20" cy="5" r="2" fill="#ffc670"/><circle cx="28" cy="5" r="2" fill="#7cc4ff"/></svg></span></div>
 
@@ -1027,6 +1081,112 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
+  </div>
+</main>
+<main id="view-about" class="view" hidden>
+
+  <div class="wrap ab-wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+    <section class="ab-intro" aria-labelledby="ab-abT">
+      <div class="txt">
+        <div class="eyebrow">About Access+</div>
+        <h1 id="ab-abT">Everyone deserves a way in</h1>
+        <p class="lead">Access+ is an AI-assisted skill-building platform for assistive technology. It helps people with quadriplegia, ALS, and other conditions that limit hand use find, practice, and keep the ways of controlling technology that work for their bodies.</p>
+        <p>Instead of starting from a product catalog, Access+ starts with what a person wants to do: drive their chair, answer the phone, use a computer, talk with family, make music, or call for help at night. From there, people practice in simulators, borrow sensors by mail, read independent reviews, and build a profile that carries their skills and settings from one device to the next.</p>
+      </div>
+      <canvas class="ab-cloud" id="ab-abCloud" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+    </section>
+
+    <section aria-labelledby="ab-abWhyT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="ab-abWhyT">Why Access+ exists</h2></div>
+      <div class="ab-story">
+        <div>
+          <h3>The problem</h3>
+          <p>People who can't use their hands often have to learn a new control method for every device: one for the wheelchair, another for the phone, another for the computer. Equipment is expensive, trials are hard to arrange, and needs change, sometimes quickly, as with ALS. Too often people make big decisions without ever trying the options.</p>
+        </div>
+        <div>
+          <h3>Our approach</h3>
+          <p>One skill, many devices. A person learns a way of controlling technology, such as head movement, breath, a small arm movement or eye gaze, practices it safely in the browser, and carries the same profile across their chair, phone, computer and home. When their needs change, they can explore the next option before they need it.</p>
+        </div>
+        <div>
+          <h3>Where it came from</h3>
+          <p>Access+ grew out of years of hands-on, lived-experience testing of hands-free technology by its founder, Dave Whalen: nose tracking, on-screen keyboards, breath control, head sensors and adapted switches, used every day and shared with students, researchers and developers.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="ab-abPrinT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="ab-abPrinT">What we stand for</h2></div>
+      <ul class="ab-prin">
+        <li><b>We don't sell anything</b><span>We lend equipment, review technology honestly, and help people practice.</span></li>
+        <li><b>Never trapped</b><span>There is always a way to stop or get out, even if tracking or software fails.</span></li>
+        <li><b>Needs first</b><span>Start with what you want to do, not with a product.</span></li>
+        <li><b>Your data is yours</b><span>You choose what is saved and who sees it. Camera tracking stays on your device.</span></li>
+        <li><b>Open to everyone</b><span>Use it alone, with family, or with your therapist. Share what works.</span></li>
+        <li><b>Open where we can</b><span>Designs, keyboard layouts and findings are shared so others can build on them.</span></li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="ab-abPartT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="ab-abPartT">Partners</h2><p>The organizations helping build Access+.</p></div>
+      <div class="ab-partners">
+        <article class="ab-p">
+          <span class="role">Community partner</span>
+          <h3>Center for Disability Services</h3>
+          <span class="where">Albany, New York · formerly the Center for the Disabled</span>
+          <p>A Capital Region nonprofit that has served children and adults with disabilities and their families for decades. The Center is a home base for Access+ in the community, linking the project to the people and therapists it is meant to serve.</p>
+          <ul><li>Grant writing and software volunteering</li><li>A route for placing prototypes with people who can use them</li><li>Jamboxx breath-played instruments assembled and placed through the Center</li></ul>
+        </article>
+        <article class="ab-p">
+          <span class="role">University partner</span>
+          <h3>Rensselaer Polytechnic Institute</h3>
+          <span class="where">Troy, New York</span>
+          <p>Student teams in biomedical engineering and engineering at RPI are building new wheelchair inputs as their design projects, using a donated Permobil power wheelchair with R-Net electronics.</p>
+          <ul><li>An arm-crank exercise drive</li><li>A rowing pull trainer for people with biceps but no triceps or grip</li><li>An upper-arm movement controller for people who can't feel a joystick</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="ab-abCollabT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="ab-abCollabT">Collaborators and a growing network</h2><p>More partners are being added. Dashed cards are open invitations.</p></div>
+      <div class="ab-list">
+        <div class="ab-c"><span class="role">Hands-free gaming</span><b>UCL MotionInput Games</b><small>A University College London spin-off. Access+ advises on hands-free gaming and facial navigation.</small></div>
+        <div class="ab-c"><span class="role">Research</span><b>Augusta University</b><small>Research collaboration on eye gaze and a nighttime safety and communication system.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>ALS and spinal cord injury organizations</b><small>Help us reach people early, when there's time to explore options.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Occupational and physical therapists</b><small>Guide trials, shape the simulators, and tell us what your clients need.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Universities and student teams</b><small>Take on a design project, a study, or a new simulator.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Makers and open-source developers</b><small>Share switch designs, keyboard layouts and software.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Manufacturers</b><small>Lend equipment for trials and independent reviews.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Funders and foundations</b><small>Support equipment loans, research and free access.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Your organization</b><small>Have an idea we haven't thought of? We'd like to hear it.</small></div>
+      </div>
+    </section>
+
+    <section class="ab-join" aria-labelledby="ab-abJoinT">
+      <div style="display:grid;gap:12px">
+        <h3 id="ab-abJoinT">Become a partner or collaborator</h3>
+        <p>Access+ is early, and the people who join now will shape it. Tell us who you are and how you'd like to help, and we'll add you to the growing list.</p>
+        <div><button class="btn primary" type="button" data-abmsg="Partner sign-up isn't connected yet in this draft.">I'd like to help</button></div>
+      </div>
+      <ul>
+        <li><b>Test and give feedback</b> on the website, simulators and sensor kits.</li>
+        <li><b>Lend or review</b> equipment and software.</li>
+        <li><b>Build</b> a simulator, a sensor, a keyboard or a study.</li>
+        <li><b>Connect us</b> with people who could benefit.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="ab-abCommT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="ab-abCommT">Community</h2><p>Coming as the pilot grows.</p></div>
+      <div class="ab-comm">
+        <div><span class="soon">Coming</span><b>Stories and case studies</b><small>Real setups, what worked, and what didn't, shared with permission.</small></div>
+        <div><span class="soon">Coming</span><b>People like me</b><small>Find others with similar movement and goals, and see what they use.</small></div>
+        <div><span class="soon">Coming</span><b>Peer mentors</b><small>Experienced users helping people who are just starting out.</small></div>
+        <div><span class="soon">Coming</span><b>Shared library</b><small>Keyboard layouts, switch designs and setup recipes. See Keyboards.</small></div>
+      </div>
+    </section>
+
+    <p class="ab-note">Access+ is a pilot in development. Partner roles describe current and proposed work and will be confirmed with each organization.</p>
   </div>
 </main>
 <main id="view-gesture" class="view" hidden>
@@ -1746,7 +1906,18 @@ var __ID = function (x) { return document.getElementById('tg-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech'];
+var __ID = function (x) { return document.getElementById('ab-' + x) || document.getElementById(x); };
+
+(function () {
+  var toast = __ID('toast'), tt;
+  function note(m) { if (!toast) return; toast.textContent = m; toast.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toast.hidden = true; }, 3500); }
+  document.querySelectorAll('[data-abmsg]').forEach(function (b) { b.addEventListener('click', function () { note(b.dataset.abmsg); }); });
+  try { AgentCloud(__ID('abCloud')); } catch (e) {}
+})();
+
+})();
+(function () {
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var v = VIEWS.indexOf(h) >= 0 ? h : 'home';
