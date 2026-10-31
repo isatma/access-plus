@@ -203,7 +203,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brand">ACCESS<span>+</span></div>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
-    <button class="btn primary" type="button" data-msg="Sign in: profiles are not built yet.">Sign in</button>
+    <a class="btn primary" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a>
   </div>
 </header>
 
@@ -215,7 +215,7 @@ footer .wrap { padding-block: 22px; }
       <div class="eyebrow">Independent skill builder</div>
       <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Practice new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
-      <p>An AI guide coaches you along the way. <a href="#guide-ai" class="inline-link">Ask it a question</a>.</p>
+      <p>Ace, your AI guide, coaches you along the way. <a href="#guide-ai" class="inline-link">Ask Ace a question</a>.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
@@ -308,7 +308,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section id="guide-ai" aria-labelledby="aiTitle">
-      <div class="head"><h2 id="aiTitle">Your AI guide</h2><p>An AI-powered coach that helps you build skills at every step.</p></div>
+      <div class="head"><h2 id="aiTitle">Meet Ace, your AI guide</h2><p>Ace, the Adaptive Control Expert, is an AI-powered coach that helps you build skills at every step.</p></div>
       <div class="ai">
         <ul class="ai-list">
           <li><b>Finds a starting point</b><span>Asks about your goals, movement and positions, then suggests inputs and simulators to try.</span></li>
@@ -318,7 +318,7 @@ footer .wrap { padding-block: 22px; }
           <li><b>Tracks your progress</b><span>Summarizes results for you, your family or your therapist. You control what it saves.</span></li>
         </ul>
         <div class="chat" id="chat" aria-label="Chat with the AI guide">
-          <div class="chat-head"><span>AI GUIDE</span><span class="tag-ex" id="chatTag">Example</span></div>
+          <div class="chat-head"><span>ACE · AI GUIDE</span><span class="tag-ex" id="chatTag">Example</span></div>
           <div class="log" id="chatLog" aria-live="polite">
             <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
             <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
@@ -329,8 +329,8 @@ footer .wrap { padding-block: 22px; }
             <button class="chip small" type="button">I'm in bed this week. What changes?</button>
           </div>
           <form class="ask" id="askForm" autocomplete="off">
-            <label class="sr" for="askInput">Ask the AI guide</label>
-            <input id="askInput" type="text" placeholder="Ask the guide anything…" maxlength="600">
+            <label class="sr" for="askInput">Ask Ace</label>
+            <input id="askInput" type="text" placeholder="Ask Ace anything…" maxlength="600">
             <button class="btn primary" id="askBtn" type="submit">Ask</button>
             <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
           </form>
@@ -342,7 +342,7 @@ footer .wrap { padding-block: 22px; }
     <section id="how" aria-labelledby="howTitle">
       <div class="head"><h2 id="howTitle">How it works</h2></div>
       <div class="steps">
-        <a class="step" href="#" data-msg="Profiles: not built yet."><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
+        <a class="step" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
         <a class="step" href="borrow.html"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
         <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice</h3><p>Build skills in simulators and carry them to real devices.</p></a>
       </div>
@@ -526,7 +526,7 @@ footer .wrap { padding-block: 22px; }
 
   // AI guide chat
   var RULES = [
-    'You are the Access+ AI guide, a friendly coach on the Access+ website.',
+    'You are Ace, the Access+ AI guide, a friendly coach on the Access+ website. ACE stands for Adaptive Control Expert. If asked your name, say you are Ace.',
     'Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It helps people practice and explore new ways to control the devices they depend on: power wheelchairs and other mobility aids, phones, computers, communication devices and emerging electronics.',
     'Access+ does not sell anything. It lends sensor kits by mail, publishes independent technology reviews, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
     'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',

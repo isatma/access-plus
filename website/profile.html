@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Access+ Profile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Access+ console look. Profile on the left (identity, skills, current tools, positions, goals, team, kit), Ace interview panel on the right, sticky on desktop. */
+:root {
+  --bg: #0b1220; --panel: #0f1828; --panel-hi: #15233a;
+  --ink: #f0f5fa; --desc: #a9e4c4; --muted: #c4d0dd;
+  --line: #22314a; --line-hi: #3b5476;
+  --signal: #5fe0a8; --signal-ink: #04201a; --signal-soft: rgba(95,224,168,0.12);
+  --warn: #ffc670; --bad: #ff8a7e;
+  --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --base: 17px; --target: 64px;
+  color-scheme: dark;
+}
+:root.big { --base: 21px; --target: 88px; }
+* { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px; background-attachment: fixed;
+  font: 400 var(--base)/1.5 var(--body);
+}
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; letter-spacing: 0.03em; text-wrap: balance; }
+.wrap { position: relative; z-index: 1; max-width: 1220px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
+.brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; text-decoration: none; }
+.brand span { color: var(--signal); }
+.btn { min-height: 56px; padding: 0 18px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.76em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+.btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
+.btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+
+main .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.col { display: grid; gap: 18px; min-width: 0; }
+
+.card { position: relative; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); padding: 18px; display: grid; gap: 12px; min-width: 0; }
+.card::before, .card::after { content: ""; position: absolute; width: 12px; height: 12px; border: solid var(--line-hi); }
+.card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.card::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.card.hl::before, .card.hl::after { border-color: var(--signal); }
+.card h2 { font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.1em; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.card h2 small { font: 500 0.75em var(--mono); color: var(--muted); letter-spacing: 0.1em; }
+.card.flash { animation: flash 1.2s ease; }
+@keyframes flash { 0% { background: var(--signal-soft); } 100% { background: color-mix(in srgb, var(--panel) 94%, transparent); } }
+.eyebrow { font: 500 0.7em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
+.empty { color: var(--muted); font-size: 0.92em; margin: 0; }
+.example { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--warn); border: 1px solid var(--warn); padding: 3px 8px; }
+
+.who { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; }
+.avatar { width: 72px; height: 72px; border: 2px solid var(--signal); display: grid; place-items: center; font: 400 1.4em var(--display); color: var(--signal); }
+.who h1 { font-size: 1.45em; }
+.who p { margin: 2px 0 0; color: var(--desc); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
+.facts div { background: var(--panel); padding: 10px 12px; display: grid; gap: 2px; }
+.facts span { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.facts b { font-weight: 600; font-size: 0.95em; }
+
+.skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.skill { border: 1px solid var(--line); padding: 12px; display: grid; gap: 6px; background: var(--panel); }
+.skill b { font-weight: 600; }
+.skill small { color: var(--muted); font-size: 0.82em; }
+.lvl { display: flex; gap: 4px; }
+.lvl i { flex: 1; height: 6px; background: var(--line); }
+.lvl i.on { background: var(--signal); }
+.pill { justify-self: start; font: 500 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; }
+.pill.good { color: var(--signal); border-color: var(--signal); }
+.pill.ok { color: var(--warn); border-color: var(--warn); }
+.pill.no { color: var(--bad); border-color: var(--bad); }
+
+.tablewrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+td.ace { color: var(--desc); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { padding: 6px 12px; border: 1px solid var(--line-hi); font-size: 0.9em; }
+.chip.on { border-color: var(--signal); color: var(--signal); }
+.pos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+.pos div { border: 1px solid var(--line); padding: 12px; background: var(--panel); display: grid; gap: 4px; }
+.pos b { font-weight: 600; }
+.pos small { color: var(--desc); font-size: 0.85em; }
+ul.plain { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+ul.plain li { padding-left: 12px; border-left: 2px solid var(--signal); }
+ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
+
+/* Ace panel */
+.ace { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 88px); border-color: var(--signal); }
+.ace::before, .ace::after { border-color: var(--signal); }
+.acehead { display: flex; gap: 12px; align-items: center; }
+.acehead svg { width: 54px; height: 54px; flex: none; }
+.acehead h2 { font-size: 1em; }
+.acehead p { margin: 2px 0 0; color: var(--muted); font-size: 0.85em; }
+.log { display: grid; gap: 10px; max-height: 46vh; min-height: 180px; overflow-y: auto; padding-right: 4px; }
+.msg { max-width: 92%; padding: 10px 13px; font-size: 0.93em; white-space: pre-wrap; }
+.msg.me { justify-self: end; background: var(--panel-hi); border: 1px solid var(--line-hi); }
+.msg.ai { justify-self: start; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent); }
+.msg.thinking { color: var(--muted); font-style: italic; }
+.ask { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.ask textarea { min-height: var(--target); min-width: 0; resize: vertical; padding: 12px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-hi); font: 400 1em var(--body); }
+.ask textarea:focus { outline: 3px solid var(--signal); outline-offset: 1px; }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; }
+.quick .btn { min-height: 48px; font-size: 0.68em; }
+.toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+.note { margin: 0; color: var(--muted); font-size: 0.8em; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 960px) { main .wrap { grid-template-columns: 1fr; } .ace { position: static; order: -1; } }
+@media (prefers-reduced-motion: reduce) { .card.flash { animation: none; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a>
+    <a class="btn" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a>
+    <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="col" id="profileCol">
+
+      <section class="card hl" id="c-who" aria-labelledby="whoName">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="eyebrow">My profile</span><span class="example" id="exTag">Example profile</span>
+        </div>
+        <div class="who">
+          <div class="avatar" id="initials" aria-hidden="true">JR</div>
+          <div><h1 id="whoName">Jordan R.</h1><p id="whoLine">Building skills for the computer, phone and power chair</p></div>
+        </div>
+        <div class="facts" id="facts"></div>
+      </section>
+
+      <section class="card" id="c-skills" aria-labelledby="skillsT">
+        <h2 id="skillsT">Skills and qualifications <small>from assessments</small></h2>
+        <div class="skills" id="skills"></div>
+      </section>
+
+      <section class="card" id="c-tools" aria-labelledby="toolsT">
+        <h2 id="toolsT">Current tools <small>with Ace's take</small></h2>
+        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>Works well</th><th>Problems</th><th>Ace suggests</th></tr></thead><tbody id="tools"></tbody></table></div>
+      </section>
+
+      <section class="card" id="c-move" aria-labelledby="moveT">
+        <h2 id="moveT">Movement and senses</h2>
+        <div class="chips" id="move"></div>
+        <p class="empty" id="moveNote"></p>
+      </section>
+
+      <section class="card" id="c-pos" aria-labelledby="posT">
+        <h2 id="posT">Positions and routine</h2>
+        <div class="pos" id="pos"></div>
+      </section>
+
+      <section class="card" id="c-goals" aria-labelledby="goalsT">
+        <h2 id="goalsT">Goals</h2>
+        <ul class="plain" id="goals"></ul>
+      </section>
+
+      <section class="card" id="c-team" aria-labelledby="teamT">
+        <h2 id="teamT">Support and equipment</h2>
+        <ul class="plain" id="team"></ul>
+      </section>
+
+      <section class="card" id="c-next" aria-labelledby="nextT">
+        <h2 id="nextT">Next steps</h2>
+        <ul class="plain" id="next"></ul>
+      </section>
+
+      <p class="note">Your profile is yours. In the finished site you choose what is saved and who can see it: just you, family, or your therapist.</p>
+    </div>
+
+    <aside class="card ace" aria-labelledby="aceT">
+      <div class="acehead">
+        <svg viewBox="0 0 60 60" fill="none" aria-hidden="true"><rect x="8" y="12" width="44" height="38" rx="8" stroke="#f0f5fa" stroke-width="2"/><line x1="30" y1="4" x2="30" y2="12" stroke="#3b5476" stroke-width="2"/><circle cx="30" cy="4" r="3" fill="#5fe0a8"/><circle cx="22" cy="28" r="3.5" fill="#5fe0a8"/><circle cx="38" cy="28" r="3.5" fill="#5fe0a8"/><path d="M21 38 Q30 45 39 38" stroke="#5fe0a8" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <div><h2 id="aceT">Build it with Ace</h2><p>Just talk. Ace asks questions and fills in your profile as you go.</p></div>
+      </div>
+      <div class="log" id="log" aria-live="polite">
+        <div class="msg ai">Hi, I'm Ace. This is an example profile so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
+      </div>
+      <div class="quick" id="quick">
+        <button class="btn primary" id="startBtn" type="button">Start my profile</button>
+        <button class="btn" id="assessBtn" type="button">Assess my current tools</button>
+      </div>
+      <form class="ask" id="askForm" autocomplete="off">
+        <label class="sr" for="askIn">Talk to Ace</label>
+        <textarea id="askIn" rows="2" placeholder="Talk to Ace…"></textarea>
+        <button class="btn primary" id="sendBtn" type="submit">Send</button>
+      </form>
+      <div class="toggles">
+        <button class="btn" id="speakBtn" type="button" aria-pressed="false">Read replies aloud</button>
+        <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
+      </div>
+      <p class="note" id="aceNote">Ace uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function () {
+  // ---------- data ----------
+  var EXAMPLE = {
+    name: 'Jordan R.',
+    headline: 'Building skills for the computer, phone and power chair',
+    facts: { 'Main condition': 'C4 spinal cord injury', 'Hand use': 'None', 'Best movements': 'Head, face, breath', 'Uses Access+': 'On own and with OT' },
+    skills: [
+      { name: 'Nose pointer', level: 3, status: 'Reliable', note: '9 of 10 targets, 2.1 s average' },
+      { name: 'Smile switch', level: 3, status: 'Reliable', note: '5 of 5, no accidental presses' },
+      { name: 'Long blink', level: 1, status: 'Not yet', note: '3 accidental presses while talking' },
+      { name: 'Head tilt switches', level: 2, status: 'Possible', note: 'Left reliable, right tires quickly' },
+      { name: 'Sip-and-puff', level: 1, status: 'Trying', note: 'Kit on loan, week 1' },
+      { name: 'Voice commands', level: 2, status: 'Possible', note: 'Good indoors, struggles with noise' }
+    ],
+    tools: [
+      { tool: 'OptiKey on-screen keyboard', use: 'Typing, mouse clicks', works: 'Fast once set up', issues: 'Keys small in bed', ace: 'Make a larger in-bed keyboard layout' },
+      { tool: 'Nose tracking webcam', use: 'Pointer control', works: 'Accurate seated', issues: 'Pillow limits movement in bed', ace: 'Re-calibrate a bed profile with more speed' },
+      { tool: 'Phone voice control', use: 'Calls and texts', works: 'Hands-free calls', issues: 'Fails in noisy rooms', ace: 'Try a headset mic from the sensor kit' },
+      { tool: 'Power chair joystick (chin)', use: 'Driving', works: 'Indoors', issues: 'Neck fatigue by evening', ace: 'Practice head-tilt driving in the simulator' }
+    ],
+    movement: ['Head turn: full', 'Head tilt: partial', 'Nod: full', 'Smile: strong', 'Eyebrows: strong', 'Breath: strong', 'Shoulders: slight', 'Voice: clear'],
+    moveNote: 'Gets tired by evening. Sensation is reduced below the shoulders.',
+    positions: [
+      { name: 'Power chair', note: 'Most of the day. Nose tracking and chin joystick.' },
+      { name: 'Tilted back', note: 'Pressure relief every hour. Screen needs re-centering.' },
+      { name: 'In bed', note: 'Mornings and some sick days. Voice and smile switch.' }
+    ],
+    goals: [
+      { text: 'Use the computer for work 4 hours a day', when: 'Now' },
+      { text: 'Answer the phone and text without help', when: 'Next month' },
+      { text: 'Try head-tilt driving as a backup to the chin joystick', when: 'This year' }
+    ],
+    team: [
+      { text: 'Occupational therapist', note: 'Reviews results monthly' },
+      { text: 'Spouse helps with setup', note: 'Places the switch mount' },
+      { text: 'Sensor kit on loan', note: 'Breath switch and interface box, returns in 3 weeks' }
+    ],
+    next: [
+      { text: 'Run the bed-position nose pointer test', note: 'Suggested by Ace' },
+      { text: 'Practice sip-and-puff clicks, level 1', note: 'Computer exercises simulator' },
+      { text: 'Share this month’s results with the OT', note: 'You choose what is shared' }
+    ]
+  };
+  var BLANK = { name: '', headline: '', facts: {}, skills: [], tools: [], movement: [], moveNote: '', positions: [], goals: [], team: [], next: [] };
+  var P = JSON.parse(JSON.stringify(EXAMPLE));
+  var isExample = true;
+
+  // ---------- render ----------
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function emptyLine(parent, text) { parent.appendChild(el('p', 'empty', text)); }
+  function render() {
+    document.getElementById('exTag').hidden = !isExample;
+    var name = P.name || 'Your name';
+    document.getElementById('whoName').textContent = name;
+    document.getElementById('whoLine').textContent = P.headline || 'Talk to Ace to fill in your profile';
+    document.getElementById('initials').textContent = (P.name || '?').split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase() || '?';
+    var facts = document.getElementById('facts'); facts.innerHTML = '';
+    var keys = Object.keys(P.facts || {});
+    if (!keys.length) { var d = el('div'); d.appendChild(el('span', '', 'Not filled in yet')); d.appendChild(el('b', '', 'Ace will ask')); facts.appendChild(d); }
+    keys.forEach(function (k) { var d = el('div'); d.appendChild(el('span', '', k)); d.appendChild(el('b', '', P.facts[k])); facts.appendChild(d); });
+
+    var sk = document.getElementById('skills'); sk.innerHTML = '';
+    if (!P.skills.length) emptyLine(sk, 'No skills yet. They appear here when you run an assessment, like the gesture self-assessment or a simulator level.');
+    P.skills.forEach(function (s) {
+      var c = el('div', 'skill'); c.appendChild(el('b', '', s.name));
+      var lv = el('div', 'lvl'); for (var i = 1; i <= 4; i++) { var b = el('i'); if (i <= (s.level || 0)) b.className = 'on'; lv.appendChild(b); } c.appendChild(lv);
+      var cls = /reliable/i.test(s.status) ? 'good' : /not/i.test(s.status) ? 'no' : 'ok';
+      c.appendChild(el('span', 'pill ' + cls, s.status || 'Trying'));
+      if (s.note) c.appendChild(el('small', '', s.note));
+      sk.appendChild(c);
+    });
+
+    var tb = document.getElementById('tools'); tb.innerHTML = '';
+    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell Ace what you use today: devices, apps, switches, anything.'); td.colSpan = 5; tr.appendChild(td); tb.appendChild(tr); }
+    P.tools.forEach(function (t) {
+      var tr = el('tr');
+      [t.tool, t.use, t.works, t.issues].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
+      tr.appendChild(el('td', 'ace', t.ace || '–')); tb.appendChild(tr);
+    });
+
+    var mv = document.getElementById('move'); mv.innerHTML = '';
+    if (!P.movement.length) emptyLine(mv, 'Which movements you have, and how strong they are.');
+    P.movement.forEach(function (m) { mv.appendChild(el('span', 'chip on', m)); });
+    document.getElementById('moveNote').textContent = P.moveNote || '';
+
+    var ps = document.getElementById('pos'); ps.innerHTML = '';
+    if (!P.positions.length) emptyLine(ps, 'Where you spend your day: chair, tilted, bed, outdoors.');
+    P.positions.forEach(function (p) { var d = el('div'); d.appendChild(el('b', '', p.name)); d.appendChild(el('small', '', p.note || '')); ps.appendChild(d); });
+
+    function list(id, items, emptyText, sub) {
+      var u = document.getElementById(id); u.innerHTML = '';
+      if (!items.length) { u.appendChild(el('li', 'empty', emptyText)); return; }
+      items.forEach(function (it) { var li = el('li', '', it.text); var n = it[sub]; if (n) li.appendChild(el('small', '', n)); u.appendChild(li); });
+    }
+    list('goals', P.goals, 'What do you want to be able to do?', 'when');
+    list('team', P.team, 'Who helps you, and what equipment you have or have borrowed.', 'note');
+    list('next', P.next, 'Ace suggests next steps once your profile has some detail.', 'note');
+  }
+  render();
+
+  function flash(ids) { ids.forEach(function (id) { var c = document.getElementById(id); if (!c) return; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }); }
+
+  // merge updates from Ace
+  var MAP = { name: 'c-who', headline: 'c-who', facts: 'c-who', skills: 'c-skills', tools: 'c-tools', movement: 'c-move', moveNote: 'c-move', positions: 'c-pos', goals: 'c-goals', team: 'c-team', next: 'c-next' };
+  function apply(up) {
+    if (!up || typeof up !== 'object') return;
+    var touched = [];
+    function strs(a) { return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string' && x.trim(); }).map(String) : []; }
+    function objs(a, keys) { return Array.isArray(a) ? a.filter(function (x) { return x && typeof x === 'object'; }).map(function (x) { var o = {}; keys.forEach(function (k) { if (x[k] != null) o[k] = typeof x[k] === 'number' ? x[k] : String(x[k]); }); return o; }) : []; }
+    if (typeof up.name === 'string' && up.name.trim()) { P.name = up.name.trim(); touched.push('name'); }
+    if (typeof up.headline === 'string' && up.headline.trim()) { P.headline = up.headline.trim(); touched.push('headline'); }
+    if (up.facts && typeof up.facts === 'object' && !Array.isArray(up.facts)) { Object.keys(up.facts).forEach(function (k) { if (up.facts[k] != null && String(up.facts[k]).trim()) P.facts[String(k)] = String(up.facts[k]); }); touched.push('facts'); }
+    if (up.tools) { P.tools = objs(up.tools, ['tool', 'use', 'works', 'issues', 'ace']); touched.push('tools'); }
+    if (up.movement) { P.movement = strs(up.movement); touched.push('movement'); }
+    if (typeof up.moveNote === 'string') { P.moveNote = up.moveNote; touched.push('moveNote'); }
+    if (up.positions) { P.positions = objs(up.positions, ['name', 'note']); touched.push('positions'); }
+    if (up.goals) { P.goals = objs(up.goals, ['text', 'when']); touched.push('goals'); }
+    if (up.team) { P.team = objs(up.team, ['text', 'note']); touched.push('team'); }
+    if (up.next) { P.next = objs(up.next, ['text', 'note']); touched.push('next'); }
+    if (up.skills) { P.skills = objs(up.skills, ['name', 'level', 'status', 'note']).map(function (s) { s.level = Math.max(0, Math.min(4, Number(s.level) || 1)); return s; }); touched.push('skills'); }
+    render(); flash(touched.map(function (k) { return MAP[k]; }));
+  }
+
+  // ---------- Ace ----------
+  var RULES = [
+    'You are Ace (Adaptive Control Expert), the AI guide on the Access+ website. Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, reviews technology and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
+    'Right now you are helping the person build their Access+ profile by conversation, so they do not have to fill in forms. Interview them warmly, ONE short question at a time, and fill in the profile from what they say. Cover, roughly in this order: what to call them; what they want to be able to do (goals); which movements and senses they have and how strong (head turn, tilt, nod, face, eyes, breath, voice, shoulders, arms, fingers; fatigue); positions they spend time in (chair, tilted, bed, outdoors); the tools they use today and how well each works; who supports them and what equipment they have. Skip anything they already told you. Never push for medical details; record only what they choose to share.',
+    'When they describe current tools, assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
+    'This site is a pilot draft: never claim you saved anything to an account or started a simulator. No diagnosis or medical advice; for health, skin, breathing, swallowing or seating concerns, suggest their therapist or clinician.',
+    'Reply with ONLY a JSON object: {"reply": string, "updates": object}. "reply" is what you say aloud: plain text, warm, under 70 words, ending with your next question when you have one. "updates" holds only the profile fields that changed, each given in full: name (string), headline (one-line summary string), facts (object of short label: value pairs, max 5), movement (array of short strings like "Head turn: full"), moveNote (string), positions (array of {name, note}), goals (array of {text, when}), tools (array of {tool, use, works, issues, ace}), team (array of {text, note}), next (array of {text, note}), skills (array of {name, level 1-4, status, note}). Use {} when nothing changed.'
+  ].join('\n\n');
+
+  var log = document.getElementById('log'), form = document.getElementById('askForm'), input = document.getElementById('askIn');
+  var sendBtn = document.getElementById('sendBtn'), stopBtn = document.getElementById('stopBtn'), note = document.getElementById('aceNote');
+  var speakBtn = document.getElementById('speakBtn');
+  var turns = [], sampleFn = null, ctl = null, busy = false, speak = false;
+
+  function bubble(cls, text) { var d = el('div', 'msg ' + cls, text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  function setBusy(on) { busy = on; sendBtn.disabled = on; stopBtn.hidden = !on; document.querySelectorAll('#quick .btn').forEach(function (b) { b.disabled = on || !sampleFn; }); }
+  function say(text) {
+    if (!speak || !('speechSynthesis' in window)) return;
+    try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.rate = 1; speechSynthesis.speak(u); } catch (e) {}
+  }
+  speakBtn.addEventListener('click', function () {
+    speak = !speak; speakBtn.setAttribute('aria-pressed', speak ? 'true' : 'false');
+    if (!speak) { try { speechSynthesis.cancel(); } catch (e) {} }
+  });
+
+  function profileSnapshot() { return JSON.stringify(isExample ? BLANK : P); }
+  var errCopy = {
+    not_granted: 'Ace needs your permission to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude isn’t available on this account, so Ace is off.',
+    rate_limited: 'Ace is getting a lot of questions. Wait a minute and try again.',
+    session_expired: 'Please sign in to Claude again to talk with Ace.',
+    refused: 'Ace can’t help with that one. Try saying it another way.',
+    invalid_json: 'Ace got muddled. Please say that again.'
+  };
+
+  async function talk(userText, shown) {
+    if (!sampleFn || busy) return;
+    if (shown !== false) bubble('me', userText);
+    turns.push({ role: 'user', content: userText + '\n\n[Current profile JSON: ' + profileSnapshot() + ']' });
+    if (turns.length > 20) turns = turns.slice(-20);
+    while (turns.length && turns[0].role !== 'user') turns.shift();
+    var out = bubble('ai thinking', 'Ace is thinking…');
+    setBusy(true); ctl = new AbortController();
+    try {
+      var data = await sampleFn.json([{ role: 'user', content: RULES }].concat(turns), { modelTier: 'quick', cache: false, signal: ctl.signal });
+      var reply = data && typeof data.reply === 'string' ? data.reply : 'Tell me a bit more?';
+      out.classList.remove('thinking'); out.textContent = reply; say(reply);
+      turns.push({ role: 'assistant', content: JSON.stringify(data) });
+      if (isExample && data && data.updates && Object.keys(data.updates).length) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); }
+      apply(data && data.updates);
+    } catch (e) {
+      turns.pop(); out.classList.remove('thinking');
+      var code = e && e.code;
+      if (code === 'cancelled') out.textContent = 'Stopped.';
+      else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].indexOf(code) >= 0) { out.textContent = errCopy[code] || 'Ace isn’t available here.'; sampleFn = null; form.hidden = true; }
+      else out.textContent = errCopy[code] || 'Something went wrong reaching Ace. Try again.';
+    } finally { setBusy(false); ctl = null; if (!form.hidden) input.focus(); }
+  }
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); var t = input.value.trim(); if (!t) return; input.value = ''; talk(t); });
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+  stopBtn.addEventListener('click', function () { if (ctl) ctl.abort(); try { speechSynthesis.cancel(); } catch (e) {} });
+  document.getElementById('startBtn').addEventListener('click', function () {
+    isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = [];
+    log.innerHTML = '';
+    talk('Please start my profile interview. Greet me briefly and ask your first question.', false);
+  });
+  document.getElementById('assessBtn').addEventListener('click', function () {
+    if (isExample) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = []; log.innerHTML = ''; }
+    talk('I’d like you to assess the tools I use today. Ask me what I use, one at a time.', true);
+  });
+
+  setBusy(true); note.textContent = 'Connecting Ace…';
+  (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
+    sampleFn = fn; setBusy(false);
+    if (!fn) { form.hidden = true; document.getElementById('quick').hidden = true; note.textContent = 'Ace can talk with you when this page is opened in Claude while signed in. The profile shown is an example.'; return; }
+    note.textContent = 'Ace uses Claude on your own Claude account. For learning and practice, not medical advice.';
+  }).catch(function () { setBusy(false); form.hidden = true; note.textContent = 'Ace isn’t available here. The profile shown is an example.'; });
+
+  var root = document.documentElement, big = document.getElementById('bigToggle');
+  function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
+  try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
+  big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
+})();
+</script>
+</body>
+</html>

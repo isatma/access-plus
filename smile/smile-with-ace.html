@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Smile with Artie</title>
+<title>Smile with Ace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Access+ console look: dark grid ground, fine lines, green signal. Artie's face on the left, camera and controls on the right. */
+/* Access+ console look: dark grid ground, fine lines, green signal. Ace's face on the left, camera and controls on the right. */
 :root {
   --bg: #0b1220; --panel: #0f1828; --panel-hi: #15233a;
   --ink: #f0f5fa; --desc: #a9e4c4; --muted: #c4d0dd;
@@ -46,7 +46,7 @@ header p { margin: 0; color: var(--muted); max-width: 44em; }
 .label { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; }
 .label b { color: var(--signal); font-weight: 500; }
 
-#artie { display: block; width: 100%; height: auto; }
+#ace { display: block; width: 100%; height: auto; }
 .say { min-height: 2.6em; margin: 0; font: 600 1.15em var(--body); color: var(--desc); text-align: center; }
 
 .cam { position: relative; aspect-ratio: 4 / 3; background: #060b14; border: 1px solid var(--line); overflow: hidden; display: grid; place-items: center; }
@@ -86,14 +86,14 @@ header p { margin: 0; color: var(--muted); max-width: 44em; }
 <div class="wrap">
   <header>
     <div class="eyebrow">Access+ · Facial gesture practice</div>
-    <h1>Smile with <span>Artie</span></h1>
-    <p>Turn on your camera and smile. Artie smiles back. It's a quick way to try a smile switch, the same gesture many hands-free tools use as a click.</p>
+    <h1>Smile with <span>Ace</span></h1>
+    <p>Turn on your camera and smile. Ace smiles back. It's a quick way to try a smile switch, the same gesture many hands-free tools use as a click.</p>
   </header>
 
   <div class="stage">
-    <section class="panel" aria-label="Artie">
-      <div class="label"><span>Artie · Access+ guide</span><b id="mood">Waiting</b></div>
-      <svg id="artie" viewBox="0 0 360 300" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Artie the robot">
+    <section class="panel" aria-label="Ace">
+      <div class="label"><span>Ace · Access+ guide</span><b id="mood">Waiting</b></div>
+      <svg id="ace" viewBox="0 0 360 300" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Ace the robot">
         <line x1="180" y1="44" x2="180" y2="70" stroke="#3b5476" stroke-width="3"/>
         <circle class="antenna" cx="180" cy="38" r="8" fill="#5fe0a8"/>
         <rect x="70" y="70" width="220" height="180" rx="26" fill="#0f1828" stroke="#f0f5fa" stroke-width="3"/>
@@ -112,7 +112,7 @@ header p { margin: 0; color: var(--muted); max-width: 44em; }
           <circle cx="333" cy="208" r="9" fill="#0f1828" stroke="#5fe0a8" stroke-width="2.5"/>
         </g>
       </svg>
-      <p class="say" id="say" aria-live="polite">Hi, I'm Artie. Turn on your camera and give me a smile.</p>
+      <p class="say" id="say" aria-live="polite">Hi, I'm Ace. Turn on your camera and give me a smile.</p>
     </section>
 
     <section class="panel" aria-label="Your camera">

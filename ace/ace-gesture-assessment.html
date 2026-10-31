@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ace Gesture Self-Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Access+ console look. Left: camera + Ace. Right: four tabs (Live switches, Assessment, Nose pointer, Results). Large targets for hands-free use. */
+:root {
+  --bg: #0b1220; --panel: #0f1828; --panel-hi: #15233a;
+  --ink: #f0f5fa; --desc: #a9e4c4; --muted: #c4d0dd;
+  --line: #22314a; --line-hi: #3b5476;
+  --signal: #5fe0a8; --signal-ink: #04201a; --signal-soft: rgba(95,224,168,0.12);
+  --warn: #ffc670; --bad: #ff7a6e;
+  --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; }
+body {
+  background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px;
+  font: 400 17px/1.5 var(--body); padding: 24px 16px 40px;
+}
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+.wrap { max-width: 1180px; margin: 0 auto; display: grid; gap: 20px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font: 500 0.72em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
+h1 { margin: 0; font: 400 1.6em var(--display); letter-spacing: 0.03em; text-wrap: balance; }
+h1 span { color: var(--signal); }
+h2 { margin: 0; font: 400 1em var(--display); letter-spacing: 0.08em; text-transform: uppercase; }
+header p { margin: 0; color: var(--muted); max-width: 52em; }
+
+.stage { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr); gap: 20px; align-items: start; }
+.panel { position: relative; background: color-mix(in srgb, var(--panel) 95%, transparent); border: 1px solid var(--line-hi); padding: 16px; display: grid; gap: 12px; align-content: start; }
+.panel::before, .panel::after { content: ""; position: absolute; width: 14px; height: 14px; border: solid var(--signal); }
+.panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.label { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+.label b { color: var(--signal); font-weight: 500; }
+
+.cam { position: relative; aspect-ratio: 4 / 3; background: #060b14; border: 1px solid var(--line); overflow: hidden; }
+.cam video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); display: block; }
+.cam .off { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center; color: var(--muted); font-size: 0.92em; }
+.cam .nose { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%; border: 2px solid var(--signal); pointer-events: none; }
+
+.btn { min-height: 60px; padding: 0 18px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.8em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.btn.sm { min-height: 48px; min-width: 48px; padding: 0 12px; font-size: 0.9em; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+#ace { display: block; width: 100%; height: auto; max-height: 240px; }
+.say { margin: 0; min-height: 2.8em; font: 600 1.05em var(--body); color: var(--desc); text-align: center; }
+
+.tabs { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line-hi); }
+.tab { min-height: 56px; background: transparent; color: var(--muted); border: none; font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+.tab + .tab { border-left: 1px solid var(--line-hi); }
+.tab[aria-selected="true"] { background: var(--signal-soft); color: var(--signal); }
+
+.chs { display: grid; gap: 8px; }
+.ch { display: grid; grid-template-columns: 26px minmax(0, 1.1fr) minmax(0, 1.4fr) auto; gap: 10px; align-items: center; padding: 8px 10px; border: 1px solid var(--line); background: var(--panel); transition: background .2s, border-color .2s; }
+.ch.fired { border-color: var(--signal); background: var(--signal-soft); }
+.ch input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--signal); }
+.ch .nm { font-weight: 600; font-size: 0.95em; }
+.ch .nm small { display: block; color: var(--muted); font-weight: 400; font-size: 0.78em; }
+.meter { height: 16px; border: 1px solid var(--line-hi); position: relative; background: var(--bg); }
+.meter i { position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--desc); }
+.ch.fired .meter i { background: var(--signal); }
+.meter u { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--warn); }
+.th { display: flex; gap: 6px; align-items: center; font: 500 0.72em var(--mono); color: var(--muted); }
+.th span { min-width: 3.2em; text-align: center; font-variant-numeric: tabular-nums; }
+.cnt { font: 500 0.72em var(--mono); color: var(--signal); min-width: 2em; text-align: right; }
+
+.settings { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; font-size: 0.9em; color: var(--muted); }
+.settings label { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; cursor: pointer; }
+.settings input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--signal); }
+.settings input[type=range] { accent-color: var(--signal); }
+
+.prompt { display: grid; place-items: center; min-height: 150px; border: 1px solid var(--line-hi); background: var(--bg); text-align: center; padding: 16px; gap: 8px; }
+.prompt .big { font: 400 1.6em var(--display); color: var(--signal); }
+.prompt .sub { color: var(--muted); }
+.prog { height: 6px; background: var(--line); position: relative; }
+.prog i { position: absolute; inset: 0 auto 0 0; width: 0%; background: var(--signal); transition: width .3s; }
+
+.board { position: relative; aspect-ratio: 16 / 10; background: var(--bg); border: 1px solid var(--line-hi); overflow: hidden; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 10% 10%; }
+.target { position: absolute; border-radius: 50%; border: 2px solid var(--warn); transform: translate(-50%, -50%); display: grid; place-items: center; }
+.target::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--warn); }
+.target .ring { position: absolute; inset: -6px; border-radius: 50%; border: 3px solid var(--signal); clip-path: inset(0 0 0 0); opacity: 0; }
+.cursor { position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 2px solid var(--signal); box-shadow: 0 0 10px var(--signal); pointer-events: none; }
+.cursor::after { content: ""; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; margin: -2px; background: var(--signal); border-radius: 50%; }
+
+table { width: 100%; border-collapse: collapse; font-size: 0.92em; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); }
+th { font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+td.num { font-variant-numeric: tabular-nums; }
+.pill { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; white-space: nowrap; }
+.pill.good { color: var(--signal); border-color: var(--signal); }
+.pill.ok { color: var(--warn); border-color: var(--warn); }
+.pill.no { color: var(--bad); border-color: var(--bad); }
+.tablewrap { overflow-x: auto; }
+.note { margin: 0; color: var(--muted); font-size: 0.85em; }
+.privacy { margin: 0; color: var(--muted); font-size: 0.82em; border-left: 2px solid var(--signal); padding-left: 10px; }
+textarea { width: 100%; min-height: 160px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-hi); font: 400 0.85em var(--mono); padding: 10px; }
+.err { color: var(--warn); }
+
+@media (max-width: 860px) { .stage { grid-template-columns: 1fr; } .ch { grid-template-columns: 26px minmax(0,1fr) auto; } .ch .meter { grid-column: 2 / -1; grid-row: 2; } }
+@media (prefers-reduced-motion: no-preference) {
+  .antenna { animation: glow 2.4s ease-in-out infinite; }
+  @keyframes glow { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+  #aceHead { transition: transform .12s linear; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Access+ · Camera gesture self-assessment</div>
+    <h1>Find your best switches with <span>Ace</span></h1>
+    <p>Your webcam can turn small movements into switches: a smile, an open mouth, raised eyebrows, a long blink, or tilting, turning and nodding your head. Your nose can steer a pointer. Explore each one live, run the assessment, and see which work best for you.</p>
+  </header>
+
+  <div class="stage">
+    <div class="panel">
+      <div class="label"><span>Camera</span><b id="camState">Off</b></div>
+      <div class="cam" id="camBox">
+        <video id="video" playsinline muted hidden></video>
+        <div class="nose" id="noseDot" hidden></div>
+        <div class="off" id="camOff">Camera is off. Press Start camera. Your video stays on this device.</div>
+      </div>
+      <div class="row2">
+        <button class="btn primary" id="startBtn" type="button">Start camera</button>
+        <button class="btn" id="calBtn" type="button" disabled>Calibrate</button>
+      </div>
+      <svg id="ace" viewBox="0 0 360 260" fill="none" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Ace the robot mirrors your face">
+        <g id="aceHead" style="transform-origin: 180px 150px;">
+          <line x1="180" y1="34" x2="180" y2="58" stroke="#3b5476" stroke-width="3"/>
+          <circle class="antenna" cx="180" cy="28" r="8" fill="#5fe0a8"/>
+          <rect x="80" y="58" width="200" height="170" rx="26" fill="#0f1828" stroke="#f0f5fa" stroke-width="3"/>
+          <rect x="96" y="74" width="168" height="138" rx="16" fill="#060b14" stroke="#3b5476" stroke-width="1.5"/>
+          <rect x="62" y="116" width="18" height="52" rx="6" fill="#0f1828" stroke="#3b5476" stroke-width="2"/>
+          <rect x="280" y="116" width="18" height="52" rx="6" fill="#0f1828" stroke="#3b5476" stroke-width="2"/>
+          <g id="brows"><line x1="126" y1="104" x2="154" y2="104" stroke="#a9e4c4" stroke-width="4"/><line x1="206" y1="104" x2="234" y2="104" stroke="#a9e4c4" stroke-width="4"/></g>
+          <g id="eyes"><ellipse id="eyeL" cx="140" cy="130" rx="12" ry="14" fill="#5fe0a8"/><ellipse id="eyeR" cx="220" cy="130" rx="12" ry="14" fill="#5fe0a8"/></g>
+          <ellipse id="cheekL" cx="118" cy="166" rx="13" ry="6" fill="#5fe0a8" opacity="0"/>
+          <ellipse id="cheekR" cx="242" cy="166" rx="13" ry="6" fill="#5fe0a8" opacity="0"/>
+          <path id="mouth" d="M144 180 Q180 180 216 180" stroke="#5fe0a8" stroke-width="5"/>
+        </g>
+      </svg>
+      <p class="say" id="say" aria-live="polite">Hi, I'm Ace. Start your camera and I'll copy your face.</p>
+      <p class="privacy">Face tracking runs in your browser. No video or images are sent anywhere or saved.</p>
+    </div>
+
+    <div class="panel">
+      <div class="tabs" role="tablist" aria-label="Sections">
+        <button class="tab" role="tab" id="tab-live" aria-selected="true" aria-controls="pane-live" type="button">Live switches</button>
+        <button class="tab" role="tab" id="tab-assess" aria-selected="false" aria-controls="pane-assess" type="button">Assessment</button>
+        <button class="tab" role="tab" id="tab-pointer" aria-selected="false" aria-controls="pane-pointer" type="button">Nose pointer</button>
+        <button class="tab" role="tab" id="tab-results" aria-selected="false" aria-controls="pane-results" type="button">Results</button>
+      </div>
+
+      <section id="pane-live" role="tabpanel" aria-labelledby="tab-live" class="panel-inner" style="display:grid;gap:12px">
+        <p class="note">Each bar shows how strongly a gesture is detected. When it passes the yellow line long enough, it counts as a switch press and the row lights up. Use − and + to change how much movement each one needs. Tick the gestures you want to include in the assessment.</p>
+        <div class="chs" id="chs"></div>
+        <div class="settings">
+          <label><input type="checkbox" id="swapLR"> Swap left and right</label>
+          <label><input type="checkbox" id="swapUD"> Swap up and down</label>
+          <button class="btn sm" id="resetCounts" type="button">Reset counts</button>
+        </div>
+      </section>
+
+      <section id="pane-assess" role="tabpanel" aria-labelledby="tab-assess" hidden style="gap:12px">
+        <p class="note">Ace asks for each ticked gesture five times, at random moments, and times your response. Then there's a short rest where you talk or look around normally, to catch accidental triggers. Calibrate first, sitting the way you usually do.</p>
+        <div class="prompt" aria-live="assertive"><div class="big" id="pBig">Ready when you are</div><div class="sub" id="pSub">Ticked gestures: <span id="pCount">0</span></div></div>
+        <div class="prog" aria-hidden="true"><i id="pBar"></i></div>
+        <div class="row2">
+          <button class="btn primary" id="runBtn" type="button" disabled>Start assessment</button>
+          <button class="btn" id="stopRun" type="button" disabled>Stop</button>
+        </div>
+      </section>
+
+      <section id="pane-pointer" role="tabpanel" aria-labelledby="tab-pointer" hidden style="gap:12px">
+        <p class="note">Move your nose to steer the pointer. Hold it on each target for one second to select it. Ten targets, getting smaller.</p>
+        <div class="board" id="board"><div class="cursor" id="cursor"></div></div>
+        <div class="settings">
+          <label>Speed <input type="range" id="gain" min="2" max="10" step="0.5" value="5"></label>
+          <label>Smoothing <input type="range" id="smooth" min="0" max="0.9" step="0.1" value="0.6"></label>
+          <button class="btn sm" id="centerBtn" type="button">Re-center</button>
+        </div>
+        <div class="row2">
+          <button class="btn primary" id="ptrBtn" type="button" disabled>Start pointer test</button>
+          <p class="note" id="ptrStat" aria-live="polite">Not started</p>
+        </div>
+      </section>
+
+      <section id="pane-results" role="tabpanel" aria-labelledby="tab-results" hidden style="gap:12px">
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Gesture</th><th>Hits</th><th>Avg time</th><th>Accidental</th><th>Rating</th></tr></thead>
+            <tbody id="resBody"><tr><td colspan="5" class="note">Run the assessment to see results.</td></tr></tbody>
+          </table>
+        </div>
+        <p class="note" id="ptrRes">Nose pointer: not tested yet.</p>
+        <p class="say" id="bestLine" style="text-align:left"></p>
+        <button class="btn" id="copyBtn" type="button">Copy results</button>
+        <textarea id="copyBox" readonly hidden aria-label="Results text"></textarea>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ---- channels -------------------------------------------------------------
+const CH = [
+  { id: 'smile', name: 'Smile', hint: 'Both corners of the mouth', face: ['mouthSmileLeft', 'mouthSmileRight'], th: 0.45, hold: 150, ask: 'Smile' },
+  { id: 'mouth', name: 'Open mouth', hint: 'Drop the jaw', face: ['jawOpen'], th: 0.35, hold: 150, ask: 'Open your mouth' },
+  { id: 'brow', name: 'Raise eyebrows', hint: 'Lift both brows', face: ['browInnerUp'], th: 0.45, hold: 150, ask: 'Raise your eyebrows' },
+  { id: 'blink', name: 'Long blink', hint: 'Close both eyes and hold', face: ['eyeBlinkLeft', 'eyeBlinkRight'], min: true, th: 0.55, hold: 450, ask: 'Close your eyes and hold' },
+  { id: 'pucker', name: 'Pucker lips', hint: 'Kiss shape', face: ['mouthPucker'], th: 0.5, hold: 150, ask: 'Pucker your lips' },
+  { id: 'tiltL', name: 'Tilt left', hint: 'Ear toward left shoulder', pose: 'roll', dir: -1, th: 0.5, hold: 200, ask: 'Tilt your head left' },
+  { id: 'tiltR', name: 'Tilt right', hint: 'Ear toward right shoulder', pose: 'roll', dir: 1, th: 0.5, hold: 200, ask: 'Tilt your head right' },
+  { id: 'turnL', name: 'Turn left', hint: 'Look to your left', pose: 'yaw', dir: -1, th: 0.5, hold: 200, ask: 'Turn your head left' },
+  { id: 'turnR', name: 'Turn right', hint: 'Look to your right', pose: 'yaw', dir: 1, th: 0.5, hold: 200, ask: 'Turn your head right' },
+  { id: 'nodD', name: 'Nod down', hint: 'Chin toward chest', pose: 'pitch', dir: 1, th: 0.5, hold: 200, ask: 'Nod your head down' },
+  { id: 'nodU', name: 'Look up', hint: 'Chin up', pose: 'pitch', dir: -1, th: 0.5, hold: 200, ask: 'Look up' }
+];
+const POSE_RANGE = 25; // degrees for a full bar
+CH.forEach((c) => Object.assign(c, { v: 0, on: false, since: null, armed: true, count: 0, use: ['smile', 'mouth', 'brow', 'blink', 'tiltL', 'tiltR', 'turnL', 'turnR'].includes(c.id) }));
+
+const chsEl = $('chs');
+CH.forEach((c) => {
+  const row = document.createElement('div');
+  row.className = 'ch';
+  row.innerHTML = `<input type="checkbox" aria-label="Include ${c.name} in assessment" ${c.use ? 'checked' : ''}>
+    <div class="nm">${c.name}<small>${c.hint}</small></div>
+    <div class="meter" aria-hidden="true"><i></i><u></u></div>
+    <div class="th"><button class="btn sm" type="button" aria-label="Need less movement for ${c.name}">−</button><span></span><button class="btn sm" type="button" aria-label="Need more movement for ${c.name}">+</button><b class="cnt">0</b></div>`;
+  chsEl.appendChild(row);
+  c.row = row; c.bar = row.querySelector('.meter i'); c.mark = row.querySelector('.meter u');
+  c.thEl = row.querySelector('.th span'); c.cntEl = row.querySelector('.cnt');
+  const [minus, plus] = row.querySelectorAll('.th .btn');
+  minus.addEventListener('click', () => setTh(c, c.th - 0.05));
+  plus.addEventListener('click', () => setTh(c, c.th + 0.05));
+  row.querySelector('input').addEventListener('change', (e) => { c.use = e.target.checked; updateCount(); });
+  setTh(c, c.th);
+});
+function setTh(c, t) { c.th = Math.round(clamp(t, 0.1, 0.95) * 100) / 100; c.thEl.textContent = Math.round(c.th * 100) + '%'; c.mark.style.left = `calc(${c.th * 100}% - 1px)`; }
+function updateCount() { $('pCount').textContent = CH.filter((c) => c.use).length; }
+updateCount();
+
+// ---- tabs -------------------------------------------------------------------
+const tabs = ['live', 'assess', 'pointer', 'results'];
+function showTab(name) {
+  tabs.forEach((t) => {
+    $('tab-' + t).setAttribute('aria-selected', t === name ? 'true' : 'false');
+    const p = $('pane-' + t); p.hidden = t !== name; if (t === name) p.style.display = 'grid';
+  });
+}
+tabs.forEach((t) => $('tab-' + t).addEventListener('click', () => showTab(t)));
+
+// ---- Ace --------------------------------------------------------------------
+const say = (t) => { $('say').textContent = t; };
+const aceHead = $('aceHead');
+function drawAce(f) {
+  const s = f.smile, m = f.mouth;
+  const curve = 180 + s * 34 + m * 10, corners = 180 - s * 6, w = 34 + s * 12;
+  $('mouth').setAttribute('d', m > 0.35
+    ? `M${180 - 22} 178 Q180 ${178 + 18 + m * 22} ${180 + 22} 178 Q180 ${170} ${180 - 22} 178`
+    : `M${180 - w} ${corners} Q180 ${curve} ${180 + w} ${corners}`);
+  $('cheekL').setAttribute('opacity', (s * 0.55).toFixed(2)); $('cheekR').setAttribute('opacity', (s * 0.55).toFixed(2));
+  const ry = Math.max(1.5, 14 * (1 - f.blink * 0.95) - s * 4);
+  $('eyeL').setAttribute('ry', ry.toFixed(1)); $('eyeR').setAttribute('ry', ry.toFixed(1));
+  const ex = clamp(f.yaw / POSE_RANGE, -1, 1) * 8, ey = clamp(f.pitch / POSE_RANGE, -1, 1) * 6;
+  $('eyes').setAttribute('transform', `translate(${ex.toFixed(1)} ${ey.toFixed(1)})`);
+  $('brows').setAttribute('transform', `translate(${(ex * 0.6).toFixed(1)} ${(-f.brow * 12).toFixed(1)})`);
+  aceHead.style.transform = `rotate(${clamp(f.roll, -30, 30).toFixed(1)}deg)`;
+}
+drawAce({ smile: 0, mouth: 0, blink: 0, brow: 0, yaw: 0, pitch: 0, roll: 0 });
+
+// ---- tracking ---------------------------------------------------------------
+const video = $('video');
+let landmarker = null, stream = null, running = false, lastT = -1;
+let base = null; // neutral calibration
+let latest = null; // {bs, yaw, pitch, roll, nose:{x,y}}
+const listeners = new Set(); // fire listeners (assessment)
+
+async function loadModel() {
+  const vision = await import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs');
+  const files = await vision.FilesetResolver.forVisionTasks('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm');
+  const opts = (delegate) => ({
+    baseOptions: { modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task', delegate },
+    runningMode: 'VIDEO', numFaces: 1, outputFaceBlendshapes: true, outputFacialTransformationMatrixes: true
+  });
+  try { return await vision.FaceLandmarker.createFromOptions(files, opts('GPU')); }
+  catch (e) { return await vision.FaceLandmarker.createFromOptions(files, opts('CPU')); }
+}
+
+function eulerFrom(d) {
+  // column-major 4x4; R = Rz(roll) Ry(yaw) Rx(pitch)
+  const r00 = d[0], r10 = d[1], r20 = d[2], r21 = d[6], r22 = d[10];
+  const deg = 180 / Math.PI;
+  return { pitch: Math.atan2(r21, r22) * deg, yaw: Math.asin(clamp(-r20, -1, 1)) * deg, roll: Math.atan2(r10, r00) * deg };
+}
+
+function rawValue(c, f) {
+  if (c.face) {
+    const vals = c.face.map((n) => f.bs[n] ?? 0);
+    let v = c.min ? Math.min(...vals) : vals.reduce((a, b) => a + b, 0) / vals.length;
+    const b0 = base ? (c.min ? Math.min(...c.face.map((n) => base.bs[n] ?? 0)) : c.face.map((n) => base.bs[n] ?? 0).reduce((a, b) => a + b, 0) / c.face.length) : 0;
+    return clamp((v - b0) / Math.max(0.2, 1 - b0));
+  }
+  let deg = f[c.pose] - (base ? base[c.pose] : 0);
+  let dir = c.dir;
+  if ((c.pose === 'roll' || c.pose === 'yaw') && $('swapLR').checked) dir = -dir;
+  if (c.pose === 'pitch' && $('swapUD').checked) dir = -dir;
+  return clamp((deg * dir) / POSE_RANGE);
+}
+
+function frame() {
+  if (!running) return;
+  if (video.readyState >= 2 && video.currentTime !== lastT) {
+    lastT = video.currentTime;
+    const res = landmarker.detectForVideo(video, performance.now());
+    const now = performance.now();
+    if (res.faceBlendshapes && res.faceBlendshapes[0] && res.facialTransformationMatrixes && res.facialTransformationMatrixes[0]) {
+      const bs = {}; res.faceBlendshapes[0].categories.forEach((c) => { bs[c.categoryName] = c.score; });
+      const e = eulerFrom(res.facialTransformationMatrixes[0].data);
+      const nose = res.faceLandmarks[0][1];
+      latest = { bs, ...e, nose: { x: 1 - nose.x, y: nose.y } };
+      $('noseDot').hidden = false;
+      $('noseDot').style.left = (latest.nose.x * 100) + '%'; $('noseDot').style.top = (latest.nose.y * 100) + '%';
+      $('camState').textContent = base ? 'Tracking' : 'Tracking · not calibrated';
+      CH.forEach((c) => {
+        c.v = rawValue(c, latest);
+        c.bar.style.width = (c.v * 100).toFixed(0) + '%';
+        if (c.v >= c.th) {
+          if (c.since === null) c.since = now;
+          if (c.armed && now - c.since >= c.hold) { c.armed = false; fire(c, now); }
+        } else {
+          c.since = null;
+          if (c.v < c.th * 0.7) { c.armed = true; c.row.classList.remove('fired'); }
+        }
+      });
+      const g = (id) => CH.find((c) => c.id === id).v;
+      const dy = latest.yaw - (base ? base.yaw : 0), dp = latest.pitch - (base ? base.pitch : 0), dr = latest.roll - (base ? base.roll : 0);
+      drawAce({ smile: g('smile'), mouth: g('mouth'), blink: Math.max(0, (Math.min(bs.eyeBlinkLeft ?? 0, bs.eyeBlinkRight ?? 0) - 0.2) / 0.6), brow: g('brow'),
+        yaw: ($('swapLR').checked ? 1 : -1) * dy, pitch: dp * ($('swapUD').checked ? -1 : 1), roll: ($('swapLR').checked ? 1 : -1) * dr });
+      pointerStep(now);
+    } else {
+      latest = null; $('noseDot').hidden = true; $('camState').textContent = 'Looking for your face';
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function fire(c, t) {
+  c.count++; c.cntEl.textContent = c.count; c.row.classList.add('fired');
+  listeners.forEach((fn) => fn(c, t));
+  if (!assessing && !ptr.active) say(`${c.name}: switch press.`);
+}
+
+$('startBtn').addEventListener('click', async () => {
+  const b = $('startBtn'); b.disabled = true;
+  if (running) { stopCam(); b.disabled = false; return; }
+  try {
+    $('camState').textContent = 'Starting'; say('Getting ready…');
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }, audio: false });
+    video.srcObject = stream; video.hidden = false; $('camOff').hidden = true; await video.play();
+    if (!landmarker) { say('Loading face tracking. This takes a few seconds the first time.'); landmarker = await loadModel(); }
+    running = true; lastT = -1; requestAnimationFrame(frame);
+    b.textContent = 'Stop camera'; b.classList.remove('primary');
+    $('calBtn').disabled = false; $('runBtn').disabled = false; $('ptrBtn').disabled = false;
+    say('I can see you. Sit the way you usually do, then press Calibrate.');
+  } catch (e) {
+    stopCam();
+    const blocked = e && (e.name === 'NotAllowedError' || e.name === 'SecurityError');
+    $('say').innerHTML = '<span class="err">' + (blocked ? 'The camera is blocked. Allow camera access for this page in your browser, then try again.'
+      : e && e.name === 'NotFoundError' ? 'No camera was found on this device.' : 'Face tracking couldn’t start here. Check your connection and try again.') + '</span>';
+  }
+  b.disabled = false;
+});
+function stopCam() {
+  running = false; stopAssessment(); ptrStop();
+  if (stream) { stream.getTracks().forEach((t) => t.stop()); stream = null; }
+  video.hidden = true; $('camOff').hidden = false; $('noseDot').hidden = true;
+  $('camState').textContent = 'Off'; const b = $('startBtn'); b.textContent = 'Start camera'; b.classList.add('primary');
+  $('calBtn').disabled = true; $('runBtn').disabled = true; $('ptrBtn').disabled = true;
+}
+
+$('calBtn').addEventListener('click', async () => {
+  const b = $('calBtn'); b.disabled = true;
+  say('Hold still with a relaxed face for two seconds…');
+  const samples = []; const t0 = performance.now();
+  while (performance.now() - t0 < 2000) { if (latest) samples.push(latest); await wait(50); }
+  if (samples.length < 10) { say('I couldn’t see your face well enough. Check the lighting and try again.'); b.disabled = false; return; }
+  const avg = (fn) => samples.reduce((a, s) => a + fn(s), 0) / samples.length;
+  const bs = {}; Object.keys(samples[0].bs).forEach((k) => { bs[k] = avg((s) => s.bs[k] ?? 0); });
+  base = { bs, yaw: avg((s) => s.yaw), pitch: avg((s) => s.pitch), roll: avg((s) => s.roll), nose: { x: avg((s) => s.nose.x), y: avg((s) => s.nose.y) } };
+  ptr.cx = base.nose.x; ptr.cy = base.nose.y;
+  say('Calibrated. Try each gesture and watch the bars.');
+  b.disabled = false;
+});
+$('resetCounts').addEventListener('click', () => CH.forEach((c) => { c.count = 0; c.cntEl.textContent = '0'; }));
+
+// ---- assessment ---------------------------------------------------------------
+let assessing = false, stopFlag = false, results = null;
+const TRIALS = 5, TIMEOUT = 4000, REST = 10000;
+$('stopRun').addEventListener('click', () => { stopFlag = true; });
+function stopAssessment() { stopFlag = true; }
+async function sleepUnlessStopped(ms) { const t0 = performance.now(); while (performance.now() - t0 < ms) { if (stopFlag) throw new Error('stopped'); await wait(50); } }
+
+$('runBtn').addEventListener('click', async () => {
+  const chosen = CH.filter((c) => c.use);
+  if (!chosen.length) { $('pBig').textContent = 'Tick at least one gesture'; return; }
+  if (!base) { say('Calibrating first…'); $('calBtn').click(); await wait(2300); }
+  assessing = true; stopFlag = false; $('runBtn').disabled = true; $('stopRun').disabled = false;
+  const r = {}; CH.forEach((c) => { r[c.id] = { hits: 0, times: [], accidental: 0, tested: c.use }; });
+  let expected = null, gotAt = null;
+  const onFire = (c, t) => { if (expected && c.id === expected.id) { if (gotAt === null) gotAt = t; } else r[c.id].accidental++; };
+  listeners.add(onFire);
+  const total = chosen.length * TRIALS; let done = 0;
+  try {
+    for (const c of chosen) {
+      for (let i = 0; i < TRIALS; i++) {
+        expected = null;
+        $('pBig').textContent = 'Relax'; $('pSub').textContent = `${c.name} · try ${i + 1} of ${TRIALS}`;
+        await sleepUnlessStopped(1500 + Math.random() * 1500);
+        expected = c; gotAt = null; const t0 = performance.now();
+        $('pBig').textContent = c.ask + ' now'; say(c.ask + '!');
+        while (gotAt === null && performance.now() - t0 < TIMEOUT) { if (stopFlag) throw new Error('stopped'); await wait(30); }
+        if (gotAt !== null) { r[c.id].hits++; r[c.id].times.push((gotAt - t0) / 1000); say('Got it!'); } else say('Missed that one. No problem.');
+        expected = null; done++; $('pBar').style.width = (done / (total + 1) * 100) + '%';
+        await sleepUnlessStopped(700);
+      }
+    }
+    $('pBig').textContent = 'Now just relax'; $('pSub').textContent = 'Talk, look around and move naturally for 10 seconds';
+    say('Talk or look around normally. I’m watching for accidental presses.');
+    await sleepUnlessStopped(REST);
+    $('pBar').style.width = '100%';
+    results = r; renderResults(); $('pBig').textContent = 'Done'; $('pSub').textContent = 'See the Results tab';
+    say('All done! Here’s what worked best.'); showTab('results');
+  } catch (e) {
+    $('pBig').textContent = 'Stopped'; $('pSub').textContent = 'Press Start assessment to try again';
+  } finally {
+    listeners.delete(onFire); assessing = false; expected = null;
+    $('runBtn').disabled = !running; $('stopRun').disabled = true;
+  }
+});
+
+function rate(x) {
+  if (x.hits >= 4 && x.accidental <= 1) return ['Reliable', 'good', 3];
+  if (x.hits >= 2 && x.accidental <= 3) return ['Possible', 'ok', 2];
+  return ['Not yet', 'no', 1];
+}
+function renderResults() {
+  if (!results) return;
+  const rows = CH.filter((c) => results[c.id].tested).map((c) => {
+    const x = results[c.id], avg = x.times.length ? x.times.reduce((a, b) => a + b, 0) / x.times.length : null;
+    const [label, cls, score] = rate(x);
+    return { c, x, avg, label, cls, score: score * 100 + x.hits * 10 - x.accidental * 3 - (avg ?? 5) };
+  }).sort((a, b) => b.score - a.score);
+  $('resBody').innerHTML = '';
+  rows.forEach(({ c, x, avg, label, cls }) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${c.name}</td><td class="num">${x.hits} / ${TRIALS}</td><td class="num">${avg === null ? '–' : avg.toFixed(1) + ' s'}</td><td class="num">${x.accidental}</td><td><span class="pill ${cls}">${label}</span></td>`;
+    $('resBody').appendChild(tr);
+  });
+  const best = rows.filter((r) => r.label === 'Reliable').slice(0, 3).map((r) => r.c.name.toLowerCase());
+  $('bestLine').textContent = best.length
+    ? `Ace suggests: ${best.join(', ')}. Those are your strongest switches today. Try them as a click in the computer simulator.`
+    : 'No gesture was fully reliable today. Try lowering the movement needed on a few, recalibrate, and run it again.';
+}
+
+// ---- nose pointer test ----------------------------------------------------------
+const board = $('board'), cursor = $('cursor');
+const ptr = { active: false, x: 0.5, y: 0.5, cx: 0.5, cy: 0.5, target: null, n: 0, hits: 0, times: [], dwellStart: null, tStart: 0, el: null };
+const TARGETS = 10, DWELL = 1000, PTR_TIMEOUT = 10000;
+$('centerBtn').addEventListener('click', () => { if (latest) { ptr.cx = latest.nose.x; ptr.cy = latest.nose.y; } });
+function pointerStep(now) {
+  if (!latest) return;
+  const gain = Number($('gain').value), sm = Number($('smooth').value);
+  const tx = clamp(0.5 + (latest.nose.x - ptr.cx) * gain), ty = clamp(0.5 + (latest.nose.y - ptr.cy) * gain);
+  ptr.x = ptr.x * sm + tx * (1 - sm); ptr.y = ptr.y * sm + ty * (1 - sm);
+  cursor.style.left = (ptr.x * 100) + '%'; cursor.style.top = (ptr.y * 100) + '%';
+  if (!ptr.active || !ptr.target) return;
+  const rect = board.getBoundingClientRect();
+  const dx = (ptr.x - ptr.target.x) * rect.width, dy = (ptr.y - ptr.target.y) * rect.height;
+  const inside = Math.hypot(dx, dy) <= ptr.target.r;
+  const ring = ptr.el.querySelector('.ring');
+  if (inside) {
+    if (ptr.dwellStart === null) ptr.dwellStart = now;
+    const p = (now - ptr.dwellStart) / DWELL; ring.style.opacity = String(clamp(p));
+    if (p >= 1) { ptr.hits++; ptr.times.push((now - ptr.tStart) / 1000); nextTarget(); }
+  } else { ptr.dwellStart = null; ring.style.opacity = '0'; if (now - ptr.tStart > PTR_TIMEOUT) nextTarget(); }
+}
+function nextTarget() {
+  if (ptr.el) ptr.el.remove(); ptr.el = null; ptr.target = null; ptr.dwellStart = null;
+  if (ptr.n >= TARGETS) { ptrFinish(); return; }
+  ptr.n++;
+  const rect = board.getBoundingClientRect();
+  const r = Math.max(16, rect.width * (0.07 - ptr.n * 0.004));
+  ptr.target = { x: 0.1 + Math.random() * 0.8, y: 0.12 + Math.random() * 0.76, r };
+  const el = document.createElement('div'); el.className = 'target';
+  el.style.width = el.style.height = (r * 2) + 'px'; el.style.left = (ptr.target.x * 100) + '%'; el.style.top = (ptr.target.y * 100) + '%';
+  el.innerHTML = '<span class="ring"></span>'; board.appendChild(el); ptr.el = el; ptr.tStart = performance.now();
+  $('ptrStat').textContent = `Target ${ptr.n} of ${TARGETS} · hits ${ptr.hits}`;
+}
+function ptrFinish() {
+  ptr.active = false; $('ptrBtn').disabled = !running; $('ptrBtn').textContent = 'Start pointer test';
+  const avg = ptr.times.length ? ptr.times.reduce((a, b) => a + b, 0) / ptr.times.length : null;
+  const txt = `Nose pointer: ${ptr.hits} of ${TARGETS} targets${avg === null ? '' : `, ${avg.toFixed(1)} s average (including the 1 s hold)`}.`;
+  $('ptrStat').textContent = txt; $('ptrRes').textContent = txt; ptr.summary = txt;
+  say(ptr.hits >= 8 ? 'Great pointing! Nose tracking looks like a strong option for you.' : 'Pointer test done. Try more speed or more smoothing and run it again.');
+}
+function ptrStop() { ptr.active = false; if (ptr.el) ptr.el.remove(); ptr.el = null; ptr.target = null; }
+$('ptrBtn').addEventListener('click', () => {
+  if (ptr.active) { ptrStop(); $('ptrBtn').textContent = 'Start pointer test'; $('ptrStat').textContent = 'Stopped'; return; }
+  if (latest) { ptr.cx = base ? base.nose.x : latest.nose.x; ptr.cy = base ? base.nose.y : latest.nose.y; }
+  Object.assign(ptr, { active: true, n: 0, hits: 0, times: [] });
+  $('ptrBtn').textContent = 'Stop pointer test'; say('Steer with your nose and hold on each target.');
+  nextTarget();
+});
+
+// ---- copy results ---------------------------------------------------------------
+$('copyBtn').addEventListener('click', async () => {
+  const lines = ['Access+ gesture self-assessment with Ace', new Date().toLocaleString(), ''];
+  if (results) {
+    $('resBody').querySelectorAll('tr').forEach((tr) => lines.push([...tr.children].map((td) => td.textContent).join(' | ')));
+    lines.push('', $('bestLine').textContent);
+  } else lines.push('Assessment not run yet.');
+  lines.push(ptr.summary || 'Nose pointer: not tested yet.');
+  lines.push('', 'Thresholds: ' + CH.map((c) => `${c.name} ${Math.round(c.th * 100)}%`).join(', '));
+  const text = lines.join('\n');
+  const box = $('copyBox'); box.value = text;
+  try { await navigator.clipboard.writeText(text); $('copyBtn').textContent = 'Copied'; setTimeout(() => { $('copyBtn').textContent = 'Copy results'; }, 2000); }
+  catch (e) { box.hidden = false; box.focus(); box.select(); $('copyBtn').textContent = 'Select and copy the text below'; }
+});
+</script>
+</body>
+</html>
