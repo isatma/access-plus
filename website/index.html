@@ -62,6 +62,7 @@ main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
 
 /* hero */
 .intro { display: grid; gap: 16px; max-width: 50em; }
+.eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 .intro h1 { font-size: 2.2em; line-height: 1.25; }
 .intro h1 span { color: var(--signal); }
 .intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
@@ -131,13 +132,14 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
 
     <section class="intro" aria-labelledby="introTitle">
-      <h1 id="introTitle">Learn it once. <span>Use it everywhere.</span></h1>
-      <p>Find the way of controlling technology that works for your body, practice it in simulators, and carry the same skills and settings to your computer, phone, wheelchair and home, even as your needs change.</p>
+      <div class="eyebrow">Accessibility platform</div>
+      <h1 id="introTitle">Advanced control <span>for everyday life.</span></h1>
+      <p>Access+ helps people build life skills with new technology. Compare reviewed inputs, set up your posture and positions, practice in simulators, and bring advanced technologies together under one control profile for your computer, phone, wheelchair and home.</p>
     </section>
 
     <section class="steps" aria-label="How Access+ works">
-      <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Sign in and tell us about your goals, movement, positions and routine.</p></a>
-      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try technologies</h3><p>Explore software and hardware inputs, from eye gaze to sip-and-puff.</p></a>
+      <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Sign in and record your goals, movement, posture, positions and routine.</p></a>
+      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try technologies</h3><p>Read reviews and compare software and hardware, from eye gaze to sip-and-puff.</p></a>
       <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice in simulators</h3><p>Test your skills, see your scores, and get options matched to you.</p></a>
     </section>
 
@@ -160,7 +162,7 @@ footer .wrap { padding-block: 22px; }
       <div class="tiles">
         <button class="tile" type="button">Movement and function<small>What you can move, and how much</small></button>
         <button class="tile" type="button">Planning ahead<small>For progressive conditions such as ALS</small></button>
-        <button class="tile" type="button">Positions and routine<small>Bed, chair, tilt, outdoors</small></button>
+        <button class="tile" type="button">Posture and positions<small>Seating, bed, tilt, outdoors, daily routine</small></button>
         <button class="tile" type="button">Barriers<small>Cost, setup, fatigue, trials, information</small></button>
       </div>
       <div class="sub">Your controls</div>
@@ -175,7 +177,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="block" id="technologies" aria-labelledby="techTitle">
-      <div class="head"><h2 id="techTitle">2 · Try technologies</h2><p>Software and hardware inputs: what each one is, what it costs, and who it suits.</p></div>
+      <div class="head"><h2 id="techTitle">2 · Try technologies</h2><p>Reviews of software and hardware inputs: what each one is, what it costs, and who it suits.</p></div>
       <div class="tiles">
         <button class="tile" type="button">Eye gaze<small>Commercial, free, phone-based and DIY</small></button>
         <button class="tile" type="button">Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
