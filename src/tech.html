@@ -51,6 +51,11 @@ a.tg-cat { text-decoration: none; }
 .tg-group > header { display: grid; gap: 4px; }
 .tg-group > header b { font: 500 0.78em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
 .tg-group.sw > header b { color: #7cc4ff; }
+.tg-group.adv > header b { color: #b9a4ff; }
+.tg-groups.single { grid-template-columns: 1fr; }
+.tg-groups.single .tg-cats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 900px) { .tg-groups.single .tg-cats { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .tg-groups.single .tg-cats { grid-template-columns: 1fr; } }
 .tg-group > header span { color: var(--desc); font-size: 0.92em; }
 .tg-group .tg-cats { grid-template-columns: 1fr 1fr; }
 .tg-cat.wide { grid-column: span 2; min-height: 0; }
@@ -90,7 +95,7 @@ a.tg-cat { text-decoration: none; }
 <main>
   <div class="wrap tg-wrap">
     <section class="tg-intro" aria-labelledby="tgT">
-      <div class="eyebrow">Hardware and software guide</div>
+      <div class="eyebrow" id="tgEyebrow">Solutions guide</div>
       <h1 id="tgT">How the technology fits together</h1>
       <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
       <p>This guide walks through the hardware and software in each area, what each piece does, who it suits, and how to try it. It is independent: Access+ doesn't sell any of it.</p>
@@ -115,18 +120,27 @@ a.tg-cat { text-decoration: none; }
             <button class="tg-cat ready" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Guide ready</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
             <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches and interfaces</b><small>Button, breath, EMG, proximity; boxes that connect them</small></button>
             <button class="tg-cat" type="button" data-cat="home" aria-pressed="false"><span class="st8">Coming next</span><b>Smart home and safety</b><small>Lights, doors, bed, TV, calling for help</small></button>
-            <button class="tg-cat ready wide" type="button" data-cat="bci" aria-pressed="false"><span class="st8">Guide ready · Research</span><b>Brain-computer interfaces</b><small>Implants and headsets that turn brain signals into control</small></button>
           </div>
         </div>
         <div class="tg-group sw">
           <header><b>Software</b><span>Programs and settings that turn your movement into control: tracking, keyboards, voice, and phone accessibility.</span></header>
           <div class="tg-cats" role="group" aria-label="Software areas">
+            <a class="tg-cat ready" href="#gesture"><span class="st8">Guide ready · opens page</span><b>Head and face tracking</b><small>Webcam head, nose and face control, and a self-check</small></a>
+            <a class="tg-cat ready" href="#keyboards"><span class="st8">Guide ready · opens page</span><b>Virtual keyboards</b><small>On-screen keyboards like OptiKey, with shareable layouts</small></a>
+            <button class="tg-cat ready" type="button" data-cat="voice" aria-pressed="false"><span class="st8">Guide ready</span><b>Voice control and microphones</b><small>Running a Mac, PC or phone by voice, and the mic that makes it work</small></button>
             <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>Eye, head and nose tracking, alternative mice</small></button>
             <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, head tracking</small></button>
             <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech apps, soundboards</small></button>
             <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Hands-free games, adaptive play, instruments</small></button>
-            <a class="tg-cat ready" href="#keyboards"><span class="st8">Guide ready · opens page</span><b>Virtual keyboards</b><small>On-screen keyboards like OptiKey, with shareable layouts</small></a>
-            <button class="tg-cat ready" type="button" data-cat="voice" aria-pressed="false"><span class="st8">Guide ready</span><b>Voice control and microphones</b><small>Running a Mac, PC or phone by voice, and the mic that makes it work</small></button>
+          </div>
+        </div>
+        <div class="tg-group adv">
+          <header><b>Advanced technology</b><span>Emerging and research-stage technology: what it does today, who is building it, and how close it is.</span></header>
+          <div class="tg-cats" role="group" aria-label="Advanced technology areas">
+            <button class="tg-cat ready" type="button" data-cat="bci" aria-pressed="false"><span class="st8">Guide ready · Research</span><b>Brain-computer interfaces</b><small>Implants and headsets that turn brain signals into control</small></button>
+            <button class="tg-cat" type="button" data-cat="smartchair" aria-pressed="false"><span class="st8">Coming next · Research</span><b>Smart wheelchairs</b><small>AI-assisted driving and chair-plus-arm systems</small></button>
+            <button class="tg-cat" type="button" data-cat="exo" aria-pressed="false"><span class="st8">Coming next · Research</span><b>Exoskeletons and stimulation</b><small>Powered gloves and arm supports, nerve and spinal stimulation</small></button>
+            <button class="tg-cat" type="button" data-cat="ar" aria-pressed="false"><span class="st8">Coming next</span><b>Smart glasses and AR</b><small>Heads-up displays, gaze control, AI assistants you wear</small></button>
           </div>
         </div>
       </div>
@@ -457,6 +471,9 @@ a.tg-cat { text-decoration: none; }
     home: ['Smart home and safety', ['Lights, doors, thermostat and TV', 'Bed positioning', 'Calling for help at night', 'Voice assistants and switch control']],
     aac: ['Communication', ['Talking boards and speech-generating devices', 'Soundboards and phrase boards', 'Picture boards such as CommuniKate']],
     'switch': ['Switches and interfaces', ['Button, breath, sound, twitch, EMG and proximity switches', 'Switch interfaces that act as a keyboard, mouse or gamepad', 'Open-source and DIY builds']],
+    smartchair: ['Smart wheelchairs', ['AI-assisted and semi-autonomous driving', 'RAMMP: the ARPA-H wheelchair-and-arm project', 'Obstacle detection and shared control']],
+    exo: ['Exoskeletons and stimulation', ['Powered gloves and arm supports', 'Functional electrical stimulation', 'Spinal cord stimulation research']],
+    ar: ['Smart glasses and AR', ['Heads-up displays for gaming and control', 'Gaze and head control in glasses', 'Wearable AI assistants']],
     play: ['Gaming and music', ['Adaptive game controllers', 'Hands-free gaming with MotionInput', 'Breath-played instruments such as Jamboxx']]
   };
   var cats = document.querySelectorAll('#view-tech .tg-cat, .tg-cat');
@@ -477,6 +494,20 @@ a.tg-cat { text-decoration: none; }
       SOON[c][1].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
     });
   });
+  var MODES = {
+    software: { g: 'sw', first: 'voice', eb: 'Software solutions', h: 'Software that turns your movement into control', p: 'Tracking, virtual keyboards, voice and phone accessibility. Most of it is free or already built into your devices.' },
+    hardware: { g: 'hw', first: 'wheel', eb: 'Hardware solutions', h: 'The devices, inputs and interfaces you use', p: 'Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.' },
+    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology', h: 'What is coming next', p: 'Research-stage technology, explained plainly: what it can do today, who is building it, and how close it is to everyday use.' }
+  };
+  window.tgMode = function (m) {
+    var M = MODES[m] || MODES.hardware;
+    document.querySelectorAll('#view-tech .tg-group').forEach(function (g) { g.hidden = !g.classList.contains(M.g); });
+    var gs = document.querySelector('#view-tech .tg-groups'); if (gs) gs.classList.add('single');
+    var eb = document.querySelector('#view-tech .tg-intro .eyebrow'), h1 = document.querySelector('#view-tech .tg-intro h1'), lead = document.querySelector('#view-tech .tg-intro .lead');
+    if (eb) eb.textContent = M.eb; if (h1) h1.textContent = M.h; if (lead) lead.textContent = M.p;
+    var flow = document.querySelector('#view-tech .tg-flow'); if (flow) flow.hidden = m !== 'hardware';
+    var b = document.querySelector('#view-tech .tg-cat[data-cat="' + M.first + '"]'); if (b) b.click();
+  };
   var reg = document.getElementById('tgReg');
   if (reg) reg.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('tgRegDone').hidden = false; });
 })();

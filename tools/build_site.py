@@ -255,11 +255,11 @@ def build():
            '<a href="#home" data-route="home">Home</a>'
            '<a href="#simulators" data-route="simulators">Simulators</a>'
            '<a href="#guide-ai" data-route="guide-ai">AI agent</a>'
-           '<a href="#gesture" data-route="gesture">Head &amp; face tracking</a>'
-           '<a href="#keyboards" data-route="keyboards">Virtual keyboards</a>'
-           '<a href="#tech" data-route="tech">Tech guide</a>'
+           '<a href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a>'
+           '<a href="#software" data-route="software">Software solutions</a>'
+           '<a href="#hardware" data-route="hardware">Hardware solutions</a>'
+           '<a href="#advanced" data-route="advanced">Advanced tech</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
-           '<a href="#profile" data-route="profile">My profile</a>'
            '<a href="#about" data-route="about">About</a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', nav, home, count=1, flags=re.S)
     if '.testbadge' not in home:
@@ -285,9 +285,13 @@ def build():
   var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
-    var v = VIEWS.indexOf(h) >= 0 ? h : 'home';
+    var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech' };
+    var v = MODE[h] || (VIEWS.indexOf(h) >= 0 ? h : 'home');
+    if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
     var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' ? h : 'home');
+    if (v === 'tech') navKey = h === 'tech' ? 'hardware' : h;
+    if (v === 'gesture' || v === 'keyboards') navKey = 'software';
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
     window.scrollTo(0, 0);
