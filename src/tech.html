@@ -20,8 +20,9 @@
 .tg-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
 .tg-head p { margin: 0; color: var(--muted); }
 .tg-cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
-.tg-cat { display: grid; gap: 6px; align-content: start; padding: 16px; min-height: 120px; text-align: left; cursor: pointer; background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); border: 1px solid var(--line-hi); font: inherit; }
+.tg-cat { display: grid; gap: 6px; align-content: start; padding: 16px; min-height: 120px; text-align: left; cursor: pointer; background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); border: 1px solid var(--line-hi); font: inherit; text-decoration: none; }
 .tg-cat:hover { border-color: var(--signal); }
+a.tg-cat { text-decoration: none; }
 .tg-cat[aria-pressed="true"] { border-color: var(--signal); background: rgba(95,224,168,0.10); }
 .tg-cat b { font-weight: 600; }
 .tg-cat small { color: var(--desc); font-size: 0.86em; }
@@ -45,6 +46,42 @@
 .tg-soon { padding: 24px; border: 1px dashed var(--line-hi); color: var(--muted); display: grid; gap: 8px; }
 .tg-soon ul { margin: 0; padding-left: 18px; color: var(--desc); }
 .tg-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+.tg-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.tg-group { display: grid; gap: 12px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 60%, transparent); }
+.tg-group > header { display: grid; gap: 4px; }
+.tg-group > header b { font: 500 0.78em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
+.tg-group.sw > header b { color: #7cc4ff; }
+.tg-group > header span { color: var(--desc); font-size: 0.92em; }
+.tg-group .tg-cats { grid-template-columns: 1fr 1fr; }
+.tg-cat.wide { grid-column: span 2; min-height: 0; }
+@media (max-width: 520px) { .tg-cat.wide { grid-column: auto; } }
+.tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
+.tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
+.tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
+.tg-item .tg-tag { justify-self: start; }
+.tg-facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tg-fact { padding: 16px; border: 1px solid var(--line-hi); background: var(--panel); display: grid; gap: 4px; align-content: start; }
+.tg-fact b { font: 600 1.5em var(--body); color: var(--signal); line-height: 1.1; }
+.tg-fact span { color: var(--desc); font-size: 0.88em; }
+.tg-fact small { color: var(--muted); font-size: 0.75em; }
+.tg-listing dl { margin: 4px 0 0; display: grid; grid-template-columns: 9.5em 1fr; gap: 6px 12px; font-size: 0.9em; }
+.tg-listing dt { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.tg-listing dd { margin: 0; color: var(--desc); }
+.tg-listing { grid-column: span 2; }
+.tg-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.tg-steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--desc); font-size: 0.93em; }
+.tg-reg { display: grid; grid-template-columns: 1fr 1.1fr; gap: 20px; align-items: start; }
+.tg-rules { display: grid; gap: 10px; }
+.tg-rules li { color: var(--desc); }
+.tg-form { display: grid; gap: 12px; padding: 18px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.04); }
+.tg-form .k { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+.tg-form label { display: grid; gap: 5px; font-size: 0.88em; color: var(--muted); }
+.tg-form input, .tg-form select, .tg-form textarea { font: inherit; font-size: 1em; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); padding: 10px 12px; min-height: 44px; }
+.tg-form textarea { min-height: 70px; resize: vertical; }
+.tg-form .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tg-form button { min-height: 52px; font: 500 0.82em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: var(--signal); color: var(--signal-ink); border: 0; cursor: pointer; }
+.tg-form .done { margin: 0; color: #ffc670; font-size: 0.92em; }
+@media (max-width: 900px) { .tg-groups, .tg-two, .tg-reg { grid-template-columns: 1fr; } .tg-facts { grid-template-columns: 1fr 1fr; } .tg-listing { grid-column: auto; } .tg-listing dl { grid-template-columns: 1fr; gap: 2px; } .tg-listing dd { margin-bottom: 6px; } .tg-form .row { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { .tg-cats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tg-items { grid-template-columns: 1fr; } .tg-flow { grid-template-columns: 1fr; } .tg-flow .ar { transform: rotate(90deg); } }
 @media (max-width: 520px) { .tg-cats { grid-template-columns: 1fr; } }
 </style>
@@ -68,16 +105,30 @@
     </div>
 
     <section aria-labelledby="tgCatsT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="tgCatsT">Choose an area</h2><p>Wheelchairs are ready to explore. The others are coming next.</p></div>
-      <div class="tg-cats" id="cats" role="group" aria-label="Technology areas">
-        <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
-        <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>On-screen keyboards, eye trackers, head and nose tracking</small></button>
-        <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, Bluetooth switch interfaces</small></button>
-        <button class="tg-cat" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Coming next</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
-        <button class="tg-cat" type="button" data-cat="home" aria-pressed="false"><span class="st8">Coming next</span><b>Smart home and safety</b><small>Lights, doors, bed, TV, calling for help</small></button>
-        <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech devices, soundboards</small></button>
-        <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches and interfaces</b><small>Button, breath, sound, EMG, proximity, adapters</small></button>
-        <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Adaptive controllers, hands-free games, instruments</small></button>
+      <div class="tg-head"><h2 id="tgCatsT">Choose an area</h2><p>Every listing is tagged so you can tell them apart at a glance.</p></div>
+      <div class="tg-tags" aria-label="Tag key"><span class="tg-tag com">Commercial</span> sold by a company <span class="tg-tag open">Open source</span> free designs or code anyone can build or change <span class="tg-tag built">Built in</span> already on your phone, computer or chair <span class="tg-tag res">Research</span> in development</div>
+      <div class="tg-groups">
+        <div class="tg-group hw">
+          <header><b>Hardware</b><span>Physical things: the devices you use, the inputs you press or move, and the interface boxes that connect them.</span></header>
+          <div class="tg-cats" role="group" aria-label="Hardware areas">
+            <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
+            <button class="tg-cat ready" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Guide ready</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+            <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches and interfaces</b><small>Button, breath, EMG, proximity; boxes that connect them</small></button>
+            <button class="tg-cat" type="button" data-cat="home" aria-pressed="false"><span class="st8">Coming next</span><b>Smart home and safety</b><small>Lights, doors, bed, TV, calling for help</small></button>
+            <button class="tg-cat ready wide" type="button" data-cat="bci" aria-pressed="false"><span class="st8">Guide ready · Research</span><b>Brain-computer interfaces</b><small>Implants and headsets that turn brain signals into control</small></button>
+          </div>
+        </div>
+        <div class="tg-group sw">
+          <header><b>Software</b><span>Programs and settings that turn your movement into control: tracking, keyboards, voice, and phone accessibility.</span></header>
+          <div class="tg-cats" role="group" aria-label="Software areas">
+            <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>Eye, head and nose tracking, alternative mice</small></button>
+            <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, head tracking</small></button>
+            <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech apps, soundboards</small></button>
+            <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Hands-free games, adaptive play, instruments</small></button>
+            <a class="tg-cat ready" href="#keyboards"><span class="st8">Guide ready · opens page</span><b>Virtual keyboards</b><small>On-screen keyboards like OptiKey, with shareable layouts</small></a>
+            <button class="tg-cat ready" type="button" data-cat="voice" aria-pressed="false"><span class="st8">Guide ready</span><b>Voice control and microphones</b><small>Running a Mac, PC or phone by voice, and the mic that makes it work</small></button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -85,20 +136,20 @@
       <div class="tg-head"><h2 id="wheelT">Power wheelchairs</h2><p>Driving and controlling the chair with inputs other than a hand joystick.</p></div>
       <div class="tg-items">
         <article class="tg-item">
-          <span class="kind">Drive system · electronics</span>
+          <span class="kind">Drive system · electronics</span><span class="tg-tag com">Commercial</span>
           <h3>R-Net control system</h3>
           <p>The electronics platform inside many power wheelchairs, made by Curtiss-Wright and used by Permobil and other manufacturers. The joystick, power module, seating and add-on modules plug into one network, so new input modules can be added without replacing the chair.</p>
           <ul><li>Other chairs use different systems, such as Invacare's LiNX or Quantum's Q-Logic</li><li>Which system your chair has decides which input modules fit it</li></ul>
         </article>
         <article class="tg-item">
-          <span class="kind">Interface · specialty input module</span>
+          <span class="kind">Interface · specialty input module</span><span class="tg-tag com">Commercial</span>
           <h3>Omni2 (Permobil / R-Net)</h3>
           <p>A specialty input display that lets alternative controls drive an R-Net chair: head arrays, sip-and-puff, mini joysticks and switches. It also has built-in Bluetooth and infrared, so the same input can operate a computer, phone, TV and other devices.</p>
           <ul><li>Manufacturer-supported, so the chair's own safety system stays in charge</li><li>One input can drive, run seating functions and reach other devices</li></ul>
           <div class="tg-links"><a href="https://www.permobil.com/en-nz/products/electronics/permobil-omni2" target="_blank" rel="noopener">Permobil Omni2 &#8599;</a></div>
         </article>
         <article class="tg-item">
-          <span class="kind">Interface · input module</span>
+          <span class="kind">Interface · input module</span><span class="tg-tag com">Commercial</span>
           <h3>R-Net Input/Output Module</h3>
           <p>A simpler R-Net module that accepts switch or proportional inputs, such as mini joysticks, for driving and functions when a full specialty display isn't needed.</p>
           <div class="tg-links"><a href="https://www.cw-industrial.com/en-gb/medical-mobility/rnet/input-output-module" target="_blank" rel="noopener">Curtiss-Wright I/O Module &#8599;</a></div>
@@ -138,10 +189,260 @@
       <p class="tg-safe">Safety first: anything that drives a real wheelchair should be set up and tested with your seating specialist or supplier. Access+ sensor kits never connect to a wheelchair; driving practice happens in the simulator.</p>
     </section>
 
+
+    <section class="tg-panel" id="panel-arm" hidden aria-labelledby="armT">
+      <div class="tg-head"><h2 id="armT">Robotic arms</h2><p>Assistive arms that reach, grasp, eat, drink and open doors for people who can't use their arms.</p></div>
+      <div class="tg-facts">
+        <div class="tg-fact"><b>Under 1,000</b><span>Wheelchair-mounted assistive arms in use in the U.S.</span><small>Estimate. A 2024 FDA safety correction covered 949 JACO units across all models.</small></div>
+        <div class="tg-fact"><b>1</b><span>Wheelchair-mounted assistive arm registered with the FDA</span><small>Kinova JACO, per Disability Rights California</small></div>
+        <div class="tg-fact"><b>About 41%</b><span>Less caregiver time in a study of 31 JACO users</span><small>Maheu et al., 2011</small></div>
+        <div class="tg-fact"><b>2024</b><span>California Medi-Cal began covering an assistive arm as medical equipment</span><small>When medically necessary and prescribed</small></div>
+      </div>
+
+      <div class="tg-items">
+        <article class="tg-item tg-listing">
+          <span class="kind">Wheelchair-mounted arm</span><span class="tg-tag com">Commercial</span>
+          <h3>Kinova JACO assistive robotic arm</h3>
+          <dl>
+            <dt>What it does</dt><dd>A lightweight six-axis arm with a three-finger hand, mounted on a power wheelchair. Used for eating, drinking, opening doors, picking things up, hygiene and work tasks.</dd>
+            <dt>How you control it</dt><dd>Through the wheelchair's own input: hand or mini joystick, head array, sip-and-puff, or switches, alone or combined.</dd>
+            <dt>Cost</dt><dd>Not published. Quoted per person through dealers after an evaluation; reported in the tens of thousands of dollars.</dd>
+            <dt>How it's funded</dt><dd>Varies widely. California Medi-Cal covers it as medical equipment since September 2024. Medicare has no policy for robotic arms, and some private and Medicaid plans list it as not covered. Veterans programs and charities fund some arms.</dd>
+            <dt>Who uses it</dt><dd>People with spinal cord injury, ALS, muscular dystrophy, SMA, cerebral palsy and upper-limb loss who drive a power wheelchair.</dd>
+            <dt>Skills you'd need</dt><dd>Safe, steady control of a power wheelchair input; switching between arm, wrist and hand modes; planning movements in 3D; judging distance and speed near your face.</dd>
+            <dt>Safety note</dt><dd>2024 FDA safety correction for a coating that can be damaged; owners were told to inspect the arm and contact Kinova for protective pads.</dd>
+          </dl>
+          <div class="tg-links"><a href="https://www.kinovarobotics.com/uploads/Jaco-Robotic-Arm-Brochure-EN.pdf" target="_blank" rel="noopener">Kinova JACO brochure &#8599;</a><a href="https://www.fda.gov/medical-devices/medical-device-recalls/assistive-arm-correction-kinova-issues-correction-jaco-assistive-robotic-arm-due-fire-hazard-and" target="_blank" rel="noopener">FDA safety notice &#8599;</a><a href="#home">Practice: robotic arm simulator</a></div>
+        </article>
+        <article class="tg-item tg-listing">
+          <span class="kind">Tabletop eating aid</span><span class="tg-tag com">Commercial</span>
+          <h3>Obi robotic eating device</h3>
+          <dl>
+            <dt>What it does</dt><dd>A small table robot with a spoon arm and four food bowls. The user picks a bowl, and Obi scoops and brings the spoon to their mouth.</dd>
+            <dt>How you control it</dt><dd>Two switches: one chooses the bowl, one feeds. Switches can sit on the table, lap, headrest or under a foot.</dd>
+            <dt>Cost</dt><dd>About $5,950 in 2019 reporting. Check current pricing.</dd>
+            <dt>How it's funded</dt><dd>Medicare did not cover it at that time; some Medicaid programs, veterans contracts, schools and rental or lease options have.</dd>
+            <dt>Who uses it</dt><dd>Adults and children with limited arm and hand use who can sit at a table, including people with MS, ALS, cerebral palsy and spinal cord injury.</dd>
+            <dt>Skills you'd need</dt><dd>Reliable use of two switches; timing a press; a caregiver to fill the bowls and set the spoon position.</dd>
+          </dl>
+          <div class="tg-links"><a href="https://newmobility.com/obi-robotic-eating-aid/" target="_blank" rel="noopener">User review (New Mobility) &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Other arms</span><span class="tg-tag com">Commercial</span>
+          <h3>Available mainly outside the U.S.</h3>
+          <ul><li><b>iARM</b> (Assistive Innovations, Netherlands): wheelchair-mounted arm used mostly in Europe</li><li><b>Lio</b> (F&amp;P Robotics, Switzerland): a mobile care robot with an arm, used in care homes</li></ul>
+          <p>Ask whether a product is sold and supported in your country before you plan around it.</p>
+        </article>
+        <article class="tg-item">
+          <span class="kind">What's coming</span><span class="tg-tag res">Research</span>
+          <h3>Smarter wheelchair and arm together</h3>
+          <p>RAMMP, a five-year, up-to-$41 million ARPA-H project led by the University of Pittsburgh with Kinova, Carnegie Mellon, Cornell and others, is building a power wheelchair and arm that work as one system, with AI that can take over parts of a task, like opening a door, to reduce fatigue.</p>
+          <div class="tg-links"><a href="https://www.kinovarobotics.com/uploads/Kinova-Joins-ARPA-H-Project-to-Advance-Assistive-Mobility-and-Independence.pdf" target="_blank" rel="noopener">Project announcement &#8599;</a></div>
+        </article>
+      </div>
+
+      <div class="tg-two">
+        <article class="tg-item">
+          <span class="kind">How they help</span>
+          <h3>What owners use them for</h3>
+          <ul><li>Eating and drinking on your own schedule</li><li>Opening doors, pressing elevator buttons, picking up dropped items</li><li>Scratching an itch, wiping your face, hygiene</li><li>Work, school and hobbies without waiting for help</li><li>Less caregiver time for small tasks, and more privacy</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Why so few people have one</span>
+          <h3>The barriers</h3>
+          <ul><li><b>Cost and funding:</b> high price, no Medicare policy, and inconsistent insurance coverage</li><li><b>Proving ability:</b> funders want evidence a person can use one safely, but it's hard to try one first</li><li><b>Fit:</b> it has to mount on, and be powered by, a compatible wheelchair</li><li><b>Training:</b> few clinicians have hands-on experience</li><li><b>Awareness:</b> many people and therapists don't know arms exist</li></ul>
+        </article>
+      </div>
+
+      <div class="tg-two">
+        <article class="tg-item">
+          <span class="kind">Getting one</span>
+          <h3>The usual path</h3>
+          <ol class="tg-steps"><li>Practice the control skills, for example in the Access+ simulator</li><li>Ask your OT or seating clinic for an evaluation</li><li>A trial with a dealer or the manufacturer</li><li>Prescription and a letter of medical necessity</li><li>Funding request; appeal if denied</li><li>Mounting, setup and training</li></ol>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Resources</span>
+          <h3>Read more</h3>
+          <div class="tg-links" style="display:grid">
+            <a href="https://www.disabilityrightsca.org/publications/how-to-get-medi-cal-to-cover-an-assistive-robotic-arm" target="_blank" rel="noopener">How to get Medi-Cal to cover an arm &#8599;</a>
+            <a href="https://at3center.net/?p=3390" target="_blank" rel="noopener">A state AT program that lends a JACO &#8599;</a>
+            <a href="https://rehab.jmir.org/2025/1/e65759/PDF" target="_blank" rel="noopener">Research: barriers to robotic arm use &#8599;</a>
+            <a href="#guide-ai">Ask the AI agent about robotic arms</a>
+          </div>
+        </article>
+      </div>
+      <p class="tg-safe">Information is gathered from public sources and checked for neutrality, not paid for. Prices and coverage change; confirm with the maker, your clinic and your insurer.</p>
+    </section>
+
+    <section class="tg-panel" id="panel-bci" hidden aria-labelledby="bciT">
+      <div class="tg-head"><h2 id="bciT">Brain-computer interfaces</h2><p>Devices that read brain signals and turn them into cursor movement, typing, speech or control.</p></div>
+      <div class="tg-facts">
+        <div class="tg-fact"><b>0</b><span>Implanted BCIs approved by the FDA for everyday home use</span><small>All are in clinical trials as of October 2026</small></div>
+        <div class="tg-fact"><b>21</b><span>People with a Neuralink implant</span><small>Neuralink, January 2026</small></div>
+        <div class="tg-fact"><b>Since 2004</b><span>Academic BrainGate studies using Blackrock's Utah array</span><small>The longest human record</small></div>
+        <div class="tg-fact"><b>2028–2030</b><span>Earliest guesses for a U.S. prescription implant for paralysis</span><small>Industry estimate, not a promise</small></div>
+      </div>
+      <div class="tg-items">
+        <article class="tg-item tg-listing">
+          <span class="kind">Implant · surgery through the skull</span><span class="tg-tag res">Research</span>
+          <h3>Neuralink (Telepathy / N1)</h3>
+          <dl>
+            <dt>Where it's at</dt><dd>21 participants announced in January 2026, two years after the first implant (January 2024), in trials in the U.S. (PRIME), Canada, the U.K. and the UAE. Related studies for controlling a robotic arm and for speech are planned or underway. Blindsight, for vision, has an FDA breakthrough designation.</dd>
+            <dt>What people do with it</dt><dd>Move a computer cursor and click by thought, type, browse, play games and use design software.</dd>
+            <dt>How it works</dt><dd>A coin-sized wireless implant with very thin electrode threads, placed by a surgical robot.</dd>
+            <dt>Can I get one?</dt><dd>Only by joining a trial. People with quadriplegia from spinal cord injury or ALS can apply through Neuralink's patient registry.</dd>
+          </dl>
+          <div class="tg-links"><a href="https://neuralink.com/updates/two-years-of-telepathy/" target="_blank" rel="noopener">Neuralink update &#8599;</a></div>
+        </article>
+        <article class="tg-item tg-listing">
+          <span class="kind">Implant · through a blood vessel, no open brain surgery</span><span class="tg-tag res">Research</span>
+          <h3>Synchron (Stentrode)</h3>
+          <dl>
+            <dt>Where it's at</dt><dd>Finished its U.S. COMMAND early feasibility study and is preparing a larger pivotal trial, the step before FDA approval.</dd>
+            <dt>What people do with it</dt><dd>Text, email, shop and use smart home controls with thought "clicks," combined with eye tracking. Users have controlled iPhone and iPad through Apple's BCI support.</dd>
+            <dt>How it works</dt><dd>A stent-like sensor is threaded up through a vein in the neck to sit beside the motor cortex.</dd>
+          </dl>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Implant · arrays</span><span class="tg-tag com">Commercial</span><span class="tg-tag res">Research</span>
+          <h3>Blackrock Neurotech</h3>
+          <p>Makes the Utah array used in most academic BCI research, including BrainGate, where people have typed, moved robotic arms and spoken through a computer voice. U.S. permanent use is still investigational.</p>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Implant · thin film on the brain surface</span><span class="tg-tag res">Research</span>
+          <h3>Precision Neuroscience</h3>
+          <p>Its Layer 7 film received FDA 510(k) clearance in April 2025 for temporary recording, up to 30 days, in the hospital. Long-term implant use is still in trials.</p>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Implant · speech</span><span class="tg-tag res">Research</span>
+          <h3>Paradromics (Connexus)</h3>
+          <p>Focused on restoring speech. FDA approved its clinical trial in late 2025, and recruitment began in 2026.</p>
+        </article>
+        <article class="tg-item">
+          <span class="kind">No surgery · headsets</span><span class="tg-tag com">Commercial</span><span class="tg-tag res">Research</span>
+          <h3>Non-invasive EEG</h3>
+          <p>Caps and headsets that read brain activity through the scalp. Far slower and less precise than implants, but no surgery, and some are used today for simple switch-style selections and research.</p>
+        </article>
+      </div>
+      <div class="tg-two">
+        <article class="tg-item">
+          <span class="kind">Why it matters</span>
+          <h3>Who it could help</h3>
+          <ul><li>People with no reliable movement left, such as late-stage ALS or locked-in syndrome</li><li>High spinal cord injury where head, breath and eye control are tiring or limited</li><li>Restoring speech for people who can no longer talk</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">What to weigh</span>
+          <h3>Honest trade-offs today</h3>
+          <ul><li>Brain surgery and its risks, for most implants</li><li>Trial access only, with strict eligibility and many visits</li><li>Long-term support if a company changes direction</li><li>Head, nose, eye and switch methods remain faster to start and fully reversible</li></ul>
+        </article>
+      </div>
+      <p class="tg-safe">This field changes month to month. Figures here are from company announcements and public reporting as of October 2026. Check ClinicalTrials.gov for current, open studies.</p>
+    </section>
+
+    <section class="tg-panel" id="panel-voice" hidden aria-labelledby="voiceT">
+      <div class="tg-head"><h2 id="voiceT">Voice control and microphones</h2><p>Running a computer or phone entirely by voice: dictation, commands, clicking and scrolling.</p></div>
+      <div class="tg-items">
+        <article class="tg-item tg-listing">
+          <span class="kind">Apple · Mac, iPhone, iPad</span><span class="tg-tag built">Built in</span>
+          <h3>Apple Voice Control</h3>
+          <dl>
+            <dt>What it does</dt><dd>Full hands-free control: open apps, click anything by name or number, a grid for precise pointing, dictation and editing.</dd>
+            <dt>Cost</dt><dd>Free, included with macOS and iOS. Processing happens on the device.</dd>
+            <dt>Best for</dt><dd>The standard choice on Apple devices. Dragon no longer makes a Mac version, since 2018.</dd>
+            <dt>Turn it on</dt><dd>Settings, Accessibility, Voice Control.</dd>
+          </dl>
+        </article>
+        <article class="tg-item tg-listing">
+          <span class="kind">Windows</span><span class="tg-tag com">Commercial</span>
+          <h3>Dragon Professional (Microsoft / Nuance)</h3>
+          <dl>
+            <dt>What it does</dt><dd>The long-time leader for heavy dictation and voice control on Windows, with custom commands and a personal vocabulary that learns your voice.</dd>
+            <dt>Cost</dt><dd>About $700 one time for Professional 16. Windows only. The home edition and the Dragon Anywhere mobile app have been discontinued.</dd>
+            <dt>Best for</dt><dd>People who write a lot, and legal, medical and office work.</dd>
+          </dl>
+        </article>
+        <article class="tg-item tg-listing">
+          <span class="kind">Windows 11</span><span class="tg-tag built">Built in</span>
+          <h3>Windows Voice Access</h3>
+          <dl>
+            <dt>What it does</dt><dd>Microsoft's newer built-in voice control: open apps, click with number overlays, dictate and edit. It replaces the older Windows Speech Recognition.</dd>
+            <dt>Cost</dt><dd>Free with Windows 11.</dd>
+            <dt>Best for</dt><dd>A free starting point on any Windows 11 PC, or alongside Dragon.</dd>
+          </dl>
+        </article>
+        <article class="tg-item tg-listing">
+          <span class="kind">Mac, Windows, Linux</span><span class="tg-tag com">Commercial</span>
+          <h3>Talon Voice</h3>
+          <dl>
+            <dt>What it does</dt><dd>Very fast voice commands, plus noise clicks such as a pop, and eye tracking, all combined. Fully customizable with shared community scripts.</dd>
+            <dt>Cost</dt><dd>Free to use; a paid beta supports the developer.</dd>
+            <dt>Best for</dt><dd>Power users and programmers who want to combine voice, eye gaze and noises.</dd>
+          </dl>
+          <div class="tg-links"><a href="https://talonvoice.com" target="_blank" rel="noopener">talonvoice.com &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Android</span><span class="tg-tag built">Built in</span>
+          <h3>Google Voice Access</h3>
+          <p>Free Android app for controlling the phone by voice, with numbered labels to tap anything on screen.</p>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Microphones</span>
+          <h3>Choosing a microphone</h3>
+          <ul>
+            <li><b>Headset with a boom mic:</b> most accurate because the mic stays the same distance from your mouth; noise-cancelling models block room sound</li>
+            <li><b>Wireless headset:</b> freedom from cables in a wheelchair or bed; check battery life and pairing</li>
+            <li><b>Desk or array mic:</b> nothing to wear, but needs a quiet room and steady position</li>
+            <li><b>Mounted mic:</b> a small mic on a gooseneck on the wheelchair or bed rail, for people who can't put on a headset</li>
+            <li>Dragon publishes a list of microphones it has tested</li>
+          </ul>
+        </article>
+      </div>
+      <div class="tg-two">
+        <article class="tg-item">
+          <span class="kind">Good to know</span>
+          <h3>When voice works best, and when it doesn't</h3>
+          <ul><li>Great for writing, searching and commands</li><li>Hard in shared rooms, on the phone, or when breathing or voice tires</li><li>Pair it with head, nose or eye tracking for pointing, and a switch or facial gesture to mute</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Practice</span>
+          <h3>Build the skill</h3>
+          <p>Start with ten core commands, add more each week, and keep a list of the commands you use most.</p>
+          <div class="tg-links"><a href="#guide-ai">Ask the AI agent for a voice plan</a><a href="#gesture">Head and face tracking</a></div>
+        </article>
+      </div>
+    </section>
+
     <section class="tg-soon" id="panel-soon" hidden aria-live="polite">
       <b id="soonT"></b>
       <span>This part of the guide is coming next. It will cover:</span>
       <ul id="soonList"></ul>
+    </section>
+
+
+    <section aria-labelledby="regT" style="display:grid;gap:18px">
+      <div class="tg-head"><h2 id="regT">For companies and developers: list your product</h2><p>Free, neutral listings. Nothing here is for sale.</p></div>
+      <div class="tg-reg">
+        <div class="tg-rules">
+          <p style="margin:0;color:var(--desc)">Makers of commercial, open-source and research products can register to be listed in the guide. Every product gets the same template: what it does, how you control it, what it costs, how it's funded, who uses it, and the skills someone needs to use it, linked to an Access+ simulator where there is one.</p>
+          <ul class="tg-steps">
+            <li><b>No paid placement.</b> Listings are free and ordered the same way for everyone.</li>
+            <li><b>Facts, not marketing.</b> Access+ edits submissions into the neutral template and checks them against public sources.</li>
+            <li><b>Users have the last word.</b> Reviews come from people who use the technology, and makers can't edit them.</li>
+            <li><b>Open about money.</b> Any partnership or donated loan equipment is shown on the listing.</li>
+          </ul>
+        </div>
+        <form class="tg-form" id="tgReg" novalidate>
+          <span class="k">Preview form · not sent anywhere yet</span>
+          <div class="row"><label>Organization<input name="org" autocomplete="organization"></label><label>Product name<input name="product"></label></div>
+          <div class="row"><label>Type<select name="type"><option>Hardware</option><option>Software</option><option>Both</option></select></label><label>License<select name="lic"><option>Commercial</option><option>Open source</option><option>Research</option></select></label></div>
+          <label>What it does<textarea name="what"></textarea></label>
+          <div class="row"><label>Inputs it works with<input name="inputs" placeholder="Switches, head array, sip-and-puff…"></label><label>Price range<input name="price"></label></div>
+          <label>How people fund it<input name="funding" placeholder="Medicaid, VA, private insurance, grants…"></label>
+          <label>Skills a user needs<textarea name="skills"></textarea></label>
+          <button type="submit">Preview submission</button>
+          <p class="done" id="tgRegDone" hidden>Thanks. This is a preview, so nothing was sent. Listings open when the pilot launches.</p>
+        </form>
+      </div>
     </section>
 
     <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
@@ -150,7 +451,7 @@
 <script>
 (function () {
   var SOON = {
-    computer: ['Computer access', ['On-screen keyboards such as OptiKey (see the Keyboards page)', 'Eye trackers, commercial and low-cost', 'Head and nose tracking: MotionInput, FaceNav, Project Gameface, head mice', 'Voice control and dictation', 'Mouth joysticks and alternative mice']],
+    computer: ['Computer access', ['Eye trackers, commercial and low-cost', 'Head and nose tracking: MotionInput, FaceNav, Project Gameface, head mice', 'Mouth joysticks and alternative mice']],
     phone: ['Phones and tablets', ['Built-in switch control and voice control on iPhone and Android', 'Bluetooth switch interfaces', 'Head and eye tracking on phones', 'Mounts for bed and chair']],
     arm: ['Robotic arms', ['Assistive arms for eating, drinking and reaching', 'Controlling an arm from wheelchair inputs', 'Practicing in the robotic arm simulator']],
     home: ['Smart home and safety', ['Lights, doors, thermostat and TV', 'Bed positioning', 'Calling for help at night', 'Voice assistants and switch control']],
@@ -162,16 +463,22 @@
   var wheel = document.getElementById('panel-wheel'), soon = document.getElementById('panel-soon');
   if (!wheel || !soon) return;
   cats.forEach(function (b) {
+    if (!b.dataset.cat) return;
     b.addEventListener('click', function () {
       cats.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
       var c = b.dataset.cat;
-      if (c === 'wheel') { wheel.hidden = false; soon.hidden = true; return; }
-      wheel.hidden = true; soon.hidden = false;
+      var panels = document.querySelectorAll('#view-tech .tg-panel, .tg-panel');
+      var target = document.getElementById('panel-' + c) || document.getElementById('tg-panel-' + c);
+      panels.forEach(function (x) { x.hidden = x !== target; });
+      if (target) { soon.hidden = true; return; }
+      soon.hidden = false;
       document.getElementById('soonT').textContent = SOON[c][0];
       var ul = document.getElementById('soonList'); ul.innerHTML = '';
       SOON[c][1].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
     });
   });
+  var reg = document.getElementById('tgReg');
+  if (reg) reg.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('tgRegDone').hidden = false; });
 })();
 </script>
 </body>

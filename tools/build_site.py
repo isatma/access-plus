@@ -256,7 +256,7 @@ def build():
            '<a href="#simulators" data-route="simulators">Simulators</a>'
            '<a href="#guide-ai" data-route="guide-ai">AI agent</a>'
            '<a href="#gesture" data-route="gesture">Head &amp; face tracking</a>'
-           '<a href="#keyboards" data-route="keyboards">Keyboards</a>'
+           '<a href="#keyboards" data-route="keyboards">Virtual keyboards</a>'
            '<a href="#tech" data-route="tech">Tech guide</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
            '<a href="#profile" data-route="profile">My profile</a>'
