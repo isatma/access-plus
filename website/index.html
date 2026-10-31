@@ -49,6 +49,7 @@ a { color: inherit; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
 
+section[id] { scroll-margin-top: 96px; }
 main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 
@@ -95,6 +96,28 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .more { margin-top: 14px; color: var(--muted); font-size: 0.95em; }
 .more b { color: var(--ink); font-weight: 600; }
 
+
+.feature .viz svg { cursor: default; }
+.arm-rot { transform-box: view-box; transform-origin: 200px 230px; }
+.fore { transform-box: view-box; transform-origin: 200px 148px; }
+.fore-bend { transform-box: view-box; transform-origin: 200px 148px; transform: rotate(18deg); }
+.reach .fore { transform: translateY(-34px); }
+.reach .fore-bend { transform: rotate(0deg); }
+.jaw-l { transform-box: view-box; transform-origin: 200px 100px; }
+.jaw-r { transform-box: view-box; transform-origin: 200px 100px; }
+.reach .jaw-l { transform: rotate(22deg); }
+.reach .jaw-r { transform: rotate(-22deg); }
+.dial-item { cursor: pointer; }
+.dial-item rect { fill: #0f1828; stroke: #3b5476; }
+.dial-item text { fill: #c4d0dd; }
+.dial-item.on rect { stroke: #5fe0a8; fill: rgba(95,224,168,0.14); }
+.dial-item.on text { fill: #5fe0a8; }
+.dial-item:focus-visible rect { stroke: #5fe0a8; stroke-width: 3; }
+.dial-item:focus { outline: none; }
+.armctl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
+.armctl .btn { min-height: var(--target); justify-content: center; font-size: 0.85em; }
+.armsel { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal) !important; }
+
 /* steps */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
 .step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
@@ -122,10 +145,12 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .side { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) {
   .step, .sim, .feature, .chip { transition: background .18s, border-color .18s, color .18s; }
-  .arm-swing { animation: swing 6s ease-in-out infinite; transform-origin: 150px 196px; }
-  .arm-fore { animation: fore 6s ease-in-out infinite; transform-origin: 236px 120px; }
-  @keyframes swing { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-10deg); } }
-  @keyframes fore { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(16deg); } }
+  .idle { animation: sway 5s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 230px; }
+  @keyframes sway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+  .arm-rot { transition: transform .6s cubic-bezier(.3,.7,.3,1); }
+  .fore { transition: transform .45s ease; }
+  .fore-bend, .jaw-l, .jaw-r { transition: transform .35s ease; }
+  .dial-item rect, .dial-item text { transition: stroke .2s, fill .2s; }
 }
 </style>
 
@@ -151,38 +176,46 @@ footer .wrap { padding-block: 22px; }
       <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
       <div class="sims">
 
-        <a class="feature" href="#" data-msg="Robotic arm simulator: coming next.">
-          <div class="viz" aria-hidden="true">
-            <svg viewBox="0 0 400 230" fill="none" stroke-linecap="round">
+        <div class="feature" id="guide">
+          <div class="viz">
+            <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
               <g stroke="#3b5476" stroke-width="1">
-                <line x1="20" y1="206" x2="380" y2="206"/>
-                <line x1="40" y1="200" x2="40" y2="212"/><line x1="80" y1="200" x2="80" y2="212"/><line x1="120" y1="200" x2="120" y2="212"/><line x1="160" y1="200" x2="160" y2="212"/><line x1="200" y1="200" x2="200" y2="212"/><line x1="240" y1="200" x2="240" y2="212"/><line x1="280" y1="200" x2="280" y2="212"/><line x1="320" y1="200" x2="320" y2="212"/><line x1="360" y1="200" x2="360" y2="212"/>
-                <circle cx="150" cy="196" r="62" stroke-dasharray="3 5"/>
+                <path d="M30 230 A170 170 0 0 1 370 230" stroke-dasharray="3 6"/>
+                <line x1="10" y1="244" x2="390" y2="244"/>
               </g>
-              <rect x="300" y="160" width="34" height="46" stroke="#a9e4c4" stroke-width="1.5"/>
-              <line x1="296" y1="160" x2="338" y2="160" stroke="#a9e4c4" stroke-width="1.5"/>
-              <rect x="128" y="190" width="44" height="16" fill="#0f1828" stroke="#f0f5fa" stroke-width="2"/>
-              <g class="arm-swing">
-                <line x1="150" y1="196" x2="236" y2="120" stroke="#f0f5fa" stroke-width="7"/>
-                <circle cx="150" cy="196" r="8" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
-                <g class="arm-fore">
-                  <line x1="236" y1="120" x2="300" y2="150" stroke="#f0f5fa" stroke-width="5"/>
-                  <circle cx="236" cy="120" r="7" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
-                  <path d="M300 150 l14 -6 M300 150 l14 8" stroke="#5fe0a8" stroke-width="3"/>
-                  <circle cx="300" cy="150" r="4" fill="#5fe0a8"/>
+              <g id="dial" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1"></g>
+              <g id="armRot" class="arm-rot">
+                <g id="armIdle" class="idle">
+                  <line x1="200" y1="230" x2="200" y2="148" stroke="#f0f5fa" stroke-width="8"/>
+                  <g id="fore" class="fore">
+                    <g class="fore-bend">
+                      <line x1="200" y1="148" x2="200" y2="100" stroke="#f0f5fa" stroke-width="6"/>
+                      <circle cx="200" cy="148" r="7" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
+                      <g id="grip" class="grip">
+                        <path class="jaw-l" d="M200 100 l-9 -14" stroke="#5fe0a8" stroke-width="3.5"/>
+                        <path class="jaw-r" d="M200 100 l9 -14" stroke="#5fe0a8" stroke-width="3.5"/>
+                        <circle cx="200" cy="100" r="4" fill="#5fe0a8"/>
+                      </g>
+                    </g>
+                  </g>
                 </g>
               </g>
-              <text x="24" y="28" fill="#5fe0a8" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.5">MODE: ARM · TARGET: CUP</text>
+              <rect x="176" y="226" width="48" height="18" fill="#0f1828" stroke="#f0f5fa" stroke-width="2"/>
+              <circle cx="200" cy="230" r="9" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
             </svg>
           </div>
           <div class="body">
-            <span class="eyebrow">Featured simulator</span>
-            <h3>Robotic arm</h3>
-            <p>Reach, grasp and lift a cup using only your pointer. Switch between arm and gripper modes the way real assistive arms do.</p>
-            <div class="badges"><span class="badge">Nose tracking</span><span class="badge">Eye gaze</span><span class="badge">Switch</span></div>
-            <span class="btn primary launch">Launch simulator</span>
+            <span class="eyebrow">Featured · Robotic arm</span>
+            <h3>Steer the guide arm</h3>
+            <p>Turn the arm to point at part of the site, then press Go. It works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <div class="armctl" role="group" aria-label="Arm controls">
+              <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
+              <button class="btn primary" id="armGo" type="button">Go</button>
+              <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
+            </div>
+            <p class="armsel" id="armSel" aria-live="polite">Pointing at: Simulators</p>
           </div>
-        </a>
+        </div>
 
         <div class="side">
           <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
@@ -209,7 +242,7 @@ footer .wrap { padding-block: 22px; }
       </div>
     </section>
 
-    <section aria-labelledby="howTitle">
+    <section id="how" aria-labelledby="howTitle">
       <div class="head"><h2 id="howTitle">How it works</h2></div>
       <div class="steps">
         <a class="step" href="#" data-msg="Profiles: not built yet."><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
@@ -219,7 +252,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <div class="two">
-      <section aria-labelledby="goalsTitle">
+      <section id="goals" aria-labelledby="goalsTitle">
         <div class="head"><h2 id="goalsTitle">Start with a goal</h2></div>
         <div class="chips">
           <button class="chip" type="button">Get around</button>
@@ -231,7 +264,7 @@ footer .wrap { padding-block: 22px; }
           <button class="chip" type="button">Play and make music</button>
         </div>
       </section>
-      <section aria-labelledby="whoTitle">
+      <section id="who" aria-labelledby="whoTitle">
         <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
         <ul class="who">
           <li><b>On your own</b><span>Run self-trials at your own pace.</span></li>
@@ -258,6 +291,71 @@ footer .wrap { padding-block: 22px; }
   document.querySelectorAll('.chip').forEach(function (b) {
     b.addEventListener('click', function () { say(b.textContent + ': goal pages are not built yet.'); });
   });
+
+  // guide arm
+  var dests = [
+    { label: 'GOALS', name: 'Goals', go: '#goals' },
+    { label: 'SIMULATORS', name: 'Simulators', go: '#simulators' },
+    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: 'borrow.html' },
+    { label: 'HOW IT WORKS', name: 'How it works', go: '#how' },
+    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who' }
+  ];
+  var angles = [-64, -32, 0, 32, 64];
+  var NS = 'http://www.w3.org/2000/svg';
+  var dial = document.getElementById('dial'), rot = document.getElementById('armRot'), idle = document.getElementById('armIdle');
+  var svg = document.getElementById('armSvg'), sel = document.getElementById('armSel');
+  var cur = 1, busy = false, idleTimer;
+  dests.forEach(function (d, i) {
+    var a = angles[i] * Math.PI / 180, x = 200 + 178 * Math.sin(a), y = 230 - 178 * Math.cos(a);
+    var w = d.label.length * 7.4 + 20;
+    var g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'dial-item'); g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', 'Go to ' + d.name);
+    var r = document.createElementNS(NS, 'rect');
+    r.setAttribute('x', (x - w / 2).toFixed(1)); r.setAttribute('y', (y - 13).toFixed(1));
+    r.setAttribute('width', w.toFixed(1)); r.setAttribute('height', '26'); r.setAttribute('stroke-width', '1.2');
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', x.toFixed(1)); t.setAttribute('y', (y + 4).toFixed(1)); t.setAttribute('text-anchor', 'middle');
+    t.textContent = d.label;
+    g.append(r, t); dial.appendChild(g); d.el = g;
+    g.addEventListener('click', function () { point(i); go(); });
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); point(i); go(); } });
+  });
+  function wake() {
+    idle.classList.remove('idle'); clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () { idle.classList.add('idle'); }, 8000);
+  }
+  function point(i) {
+    cur = Math.max(0, Math.min(dests.length - 1, i));
+    rot.style.transform = 'rotate(' + angles[cur] + 'deg)';
+    dests.forEach(function (d, j) { d.el.classList.toggle('on', j === cur); });
+    sel.textContent = 'Pointing at: ' + dests[cur].name;
+    wake();
+  }
+  function go() {
+    if (busy) return; busy = true; wake();
+    var d = dests[cur];
+    sel.textContent = 'Going to: ' + d.name;
+    svg.classList.add('reach');
+    setTimeout(function () {
+      svg.classList.remove('reach'); busy = false;
+      if (d.go.charAt(0) === '#') {
+        var el = document.querySelector(d.go);
+        if (el) el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        sel.textContent = 'Pointing at: ' + d.name;
+      } else { window.location.href = d.go; }
+    }, 650);
+  }
+  document.getElementById('armLeft').addEventListener('click', function () { point(cur - 1); });
+  document.getElementById('armRight').addEventListener('click', function () { point(cur + 1); });
+  document.getElementById('armGo').addEventListener('click', go);
+  document.getElementById('guide').addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); point(cur - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); point(cur + 1); }
+  });
+  point(1); idle.classList.add('idle');
+
   var root = document.documentElement, big = document.getElementById('bigToggle');
   function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
   try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
