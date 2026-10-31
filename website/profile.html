@@ -45,6 +45,11 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; letter-sp
 .brand span { color: var(--signal); }
 .tagline { font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: auto; }
 @media (max-width: 640px) { .tagline { display: none; } }
+.navrow { border-top: 1px solid var(--line); }
+.nav { display: flex; gap: 4px; overflow-x: auto; padding-block: 4px; scrollbar-width: thin; }
+.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 14px; text-decoration: none; color: var(--muted); font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
+.nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
 .btn { min-height: 56px; padding: 0 18px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.76em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
@@ -107,7 +112,7 @@ ul.plain li { padding-left: 12px; border-left: 2px solid var(--signal); }
 ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 
 /* Ace panel */
-.ace { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 88px); border-color: var(--signal); }
+.ace { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 140px); border-color: var(--signal); }
 .ace::before, .ace::after { border-color: var(--signal); }
 .acehead { display: flex; gap: 12px; align-items: center; }
 .acehead canvas { width: 96px; height: 96px; flex: none; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line); }
@@ -136,9 +141,9 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 <header class="bar">
   <div class="wrap">
     <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a><span class="tagline">AI-assisted skill building for assistive technology</span>
-    <a class="btn" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
   </div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#simulators">Simulators</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#guide-ai">Meet Ace</a><a href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro">Gesture check</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#how">Borrow a kit</a><a href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi" aria-current="page">My profile</a></nav></div>
 </header>
 
 <main>

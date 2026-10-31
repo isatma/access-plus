@@ -43,6 +43,11 @@ a { color: inherit; }
 .bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
 .brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; text-decoration: none; }
 .brand span { color: var(--signal); }
+.navrow { border-top: 1px solid var(--line); }
+.nav { display: flex; gap: 4px; overflow-x: auto; padding-block: 4px; scrollbar-width: thin; }
+.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 14px; text-decoration: none; color: var(--muted); font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
+.nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
 .btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
@@ -91,7 +96,7 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
 .item.soon { border-style: dashed; cursor: default; }
 .item.soon .check { color: var(--amber); border-color: var(--amber); }
 
-.kit { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 96px); background: var(--panel); border: 1px solid var(--line-hi); padding: 20px; display: grid; gap: 14px; }
+.kit { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 150px); background: var(--panel); border: 1px solid var(--line-hi); padding: 20px; display: grid; gap: 14px; }
 .kit h2 { font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.1em; }
 .kit ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 .kit li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
@@ -111,11 +116,11 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
 
 <header class="bar">
   <div class="wrap">
-    <a class="brand" href="index.html">ACCESS<span>+</span></a>
-    <a class="btn" href="index.html">Home</a>
+    <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a>
+    <a class="btn primary" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
-    <button class="btn primary" type="button" data-msg="Sign in: profiles are not built yet.">Sign in</button>
-  </div>
+      </div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#simulators">Simulators</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#guide-ai">Meet Ace</a><a href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro">Gesture check</a><a href="borrow.html" aria-current="page">Borrow a kit</a><a href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a></nav></div>
 </header>
 
 <main>
