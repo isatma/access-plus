@@ -143,18 +143,18 @@ def build():
     <section class="gx" aria-labelledby="gxT">
       <div class="gx-text">
         <div class="eyebrow">Camera gesture self-assessment</div>
-        <h1 id="gxT">Gesture check with Ace</h1>
-        <p>Your webcam can turn small movements into switches. Ace watches your face, mirrors your expressions, and tests which gestures work best for you.</p>
+        <h1 id="gxT">Gesture check</h1>
+        <p>Your webcam can turn small movements into switches. The camera page mirrors your expressions on a face model and tests which gestures work best for you.</p>
         <ul class="gx-list">
           <li><b>Face switches</b><span>Smile, open mouth, raised eyebrows, long blink, pucker</span></li>
           <li><b>Head switches</b><span>Tilt left and right, turn left and right, nod down, look up</span></li>
           <li><b>Nose pointer</b><span>Steer a pointer with your nose and hold on targets that get smaller</span></li>
-          <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with Ace's top picks</span></li>
+          <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with the AI agent's top picks</span></li>
         </ul>
         <p class="gx-note">The camera is turned off inside this preview. Gesture Check runs on its own page, where your browser can use the camera. Your video stays on your device.</p>
         <a class="btn primary" href="%s" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
       </div>
-      <canvas id="gxFace" class="gx-face" role="img" aria-label="Ace, a wireframe face"></canvas>
+      <canvas id="gxFace" class="gx-face" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
     </section>
   </div>
 </main>
@@ -192,7 +192,7 @@ def build():
     nav = ('<nav class="nav" aria-label="Site">'
            '<a href="#home" data-route="home">Home</a>'
            '<a href="#simulators" data-route="simulators">Simulators</a>'
-           '<a href="#guide-ai" data-route="guide-ai">Meet Ace</a>'
+           '<a href="#guide-ai" data-route="guide-ai">AI agent</a>'
            '<a href="#gesture" data-route="gesture">Gesture check</a>'
            '<a href="#keyboards" data-route="keyboards">Keyboards</a>'
            '<a href="#tech" data-route="tech">Tech guide</a>'
@@ -245,7 +245,7 @@ def build():
     if (history.length > 1 && h !== 'home' && h !== '') history.back();
     else window.scrollTo({ top: 0, behavior: smooth });
   });
-  try { AceHead(document.getElementById('gxFace')); } catch (e) {}
+  try { AgentCloud(document.getElementById('gxFace')); } catch (e) {}
 '''
     views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {\n' + keyboards[2] + '\n})();\n(function () {\n' + tech[2] + '\n})();\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
     home = home.replace('</script>\n</body>', '</script>\n' + views_js + '</body>', 1) if '</body>' in home else home + views_js

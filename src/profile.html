@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Access+ console look. Profile on the left (identity, skills, current tools, positions, goals, team, kit), Ace interview panel on the right, sticky on desktop. */
+/* Access+ console look. Profile on the left (identity, skills, current tools, positions, goals, team, kit), the AI agent interview panel on the right, sticky on desktop. */
 :root {
   --bg: #0b1220; --panel: #0f1828; --panel-hi: #15233a;
   --ink: #f0f5fa; --desc: #a9e4c4; --muted: #c4d0dd;
@@ -113,7 +113,7 @@ ul.plain { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
 ul.plain li { padding-left: 12px; border-left: 2px solid var(--signal); }
 ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 
-/* Ace panel */
+/* the AI agent panel */
 .ace { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 140px); border-color: var(--signal); }
 .ace::before, .ace::after { border-color: var(--signal); }
 .acehead { display: flex; gap: 12px; align-items: center; }
@@ -145,13 +145,13 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
     <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a><span class="tagline">AI-assisted skill building for assistive technology</span>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#simulators">Simulators</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#guide-ai">Meet Ace</a><a href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro">Gesture check</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#how">Borrow a kit</a><a href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi" aria-current="page">My profile</a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#simulators">Simulators</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#guide-ai">Meet the AI agent</a><a href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro">Gesture check</a><a href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd#how">Borrow a kit</a><a href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi" aria-current="page">My profile</a></nav></div>
 </header>
 
 <main>
   <div class="wrap">
     <div class="col" id="profileCol">
-      <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and Ace will help you build your own.</div>
+      <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and the AI agent will help you build your own.</div>
 
       <section class="card hl" id="c-who" aria-labelledby="whoName">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
@@ -170,8 +170,8 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
       </section>
 
       <section class="card" id="c-tools" aria-labelledby="toolsT">
-        <h2 id="toolsT">Current tools <small>with Ace's take</small></h2>
-        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>Works well</th><th>Problems</th><th>Ace suggests</th></tr></thead><tbody id="tools"></tbody></table></div>
+        <h2 id="toolsT">Current tools <small>with the AI agent's take</small></h2>
+        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>Works well</th><th>Problems</th><th>AI suggestion</th></tr></thead><tbody id="tools"></tbody></table></div>
       </section>
 
       <section class="card" id="c-move" aria-labelledby="moveT">
@@ -206,25 +206,25 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
     <aside class="card ace" aria-labelledby="aceT">
       <div class="acehead">
         <canvas id="aceFace" aria-hidden="true"></canvas>
-        <div><h2 id="aceT">Build it with Ace</h2><p>Just talk. Ace asks questions and fills in your profile as you go.</p></div>
+        <div><h2 id="aceT">Build it with the AI agent</h2><p>Just talk. The AI agent asks questions and fills in your profile as you go.</p></div>
       </div>
       <div class="log" id="log" aria-live="polite">
-        <div class="msg ai">Hi, I'm Ace. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
+        <div class="msg ai">Hi, I'm the Access+ AI agent. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
       </div>
       <div class="quick" id="quick">
         <button class="btn primary" id="startBtn" type="button">Start my profile</button>
         <button class="btn" id="assessBtn" type="button">Assess my current tools</button>
       </div>
       <form class="ask" id="askForm" autocomplete="off">
-        <label class="sr" for="askIn">Talk to Ace</label>
-        <textarea id="askIn" rows="2" placeholder="Talk to Ace…"></textarea>
+        <label class="sr" for="askIn">Talk to the AI agent</label>
+        <textarea id="askIn" rows="2" placeholder="Talk to the AI agent…"></textarea>
         <button class="btn primary" id="sendBtn" type="submit">Send</button>
       </form>
       <div class="toggles">
         <button class="btn" id="speakBtn" type="button" aria-pressed="false">Read replies aloud</button>
         <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
       </div>
-      <p class="note" id="aceNote">Ace uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
+      <p class="note" id="aceNote">The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
     </aside>
   </div>
 </main>
@@ -232,149 +232,68 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 <footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.1 · Pilot draft · Updated October 31, 2026</span></div></footer>
 
 <script>
-/* Ace head: a 3D wireframe face mesh drawn on a canvas.
-   const head = AceHead(canvas); head.set({smile, open, blink, brow, yaw, pitch, roll}); head.talk(ms);
-   With no input it idles: slow head turns, blinks and a scan line. */
-function AceHead(canvas, opts) {
+/* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
+   const cloud = AgentCloud(canvas); cloud.talk(ms); cloud.pulse('#hex'); cloud.set({ energy, hue });
+   Idles as a slow, breathing swirl. Talking makes it shimmer; pulse() sends a soft colored wave through it. */
+function AgentCloud(canvas, opts) {
   opts = opts || {};
   var ctx = canvas.getContext('2d');
-  var GREEN = opts.color || '95,224,168', MINT = '169,228,196', WHITE = '240,245,250';
-  var A = 0.74, B = 1.0, C = 0.82;
-  var cur = { smile: 0, open: 0, blink: 0, brow: 0, yaw: 0, pitch: 0, roll: 0 };
-  var tgt = Object.assign({}, cur);
-  var live = false, lastLive = 0, talkUntil = 0, nextBlink = 2000, blinkStart = -1;
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function taper(y) { var k = y < 0 ? Math.min(1, -y / B) : 0; return { x: 1 - 0.32 * k, z: 1 - 0.12 * k }; }
-  function surfZ(x, y) {
-    var t = taper(y), xs = x / t.x, v = 1 - (xs / A) * (xs / A) - (y / B) * (y / B);
-    return C * Math.sqrt(Math.max(0, v)) * t.z;
+  var N = opts.count || 320, P = [];
+  var PAL = [[95, 224, 168], [124, 196, 255], [169, 228, 196], [200, 220, 255], [247, 178, 196]];
+  for (var i = 0; i < N; i++) {
+    var u = Math.random() * 2 - 1, th = Math.random() * Math.PI * 2, r = Math.pow(Math.random(), 0.6);
+    P.push({ u: u, th: th, r: r, sp: 0.15 + Math.random() * 0.5, ph: Math.random() * 6.28, sz: 0.6 + Math.random() * 1.6,
+      c: PAL[Math.random() < 0.55 ? 0 : Math.random() < 0.6 ? 1 : Math.floor(Math.random() * PAL.length)] });
   }
-  // mesh grid
-  var LAT = 18, LON = 28, grid = [];
-  for (var i = 0; i <= LAT; i++) {
-    var th = -1.22 + 2.42 * i / LAT, row = [];
-    for (var j = 0; j < LON; j++) {
-      var ph = 2 * Math.PI * j / LON;
-      var x = A * Math.cos(th) * Math.sin(ph), y = B * Math.sin(th), z = C * Math.cos(th) * Math.cos(ph);
-      var t = taper(y); row.push([x * t.x, y, z * t.z]);
-    }
-    grid.push(row);
-  }
-  function rot(p, r) {
-    var x = p[0], y = p[1], z = p[2], c, s, nx, ny, nz;
-    c = Math.cos(r.yaw); s = Math.sin(r.yaw); nx = x * c + z * s; nz = -x * s + z * c; x = nx; z = nz;
-    c = Math.cos(r.pitch); s = Math.sin(r.pitch); ny = y * c - z * s; nz = y * s + z * c; y = ny; z = nz;
-    c = Math.cos(r.roll); s = Math.sin(r.roll); nx = x * c - y * s; ny = x * s + y * c;
-    return [nx, ny, z];
-  }
-  var W, H, cx, cy, sc;
+  var energy = 0, eTarget = 0, talkUntil = 0, pulses = [], W, H, last = performance.now(), t = 0;
   function size() {
     var dpr = Math.min(2, window.devicePixelRatio || 1), rect = canvas.getBoundingClientRect();
-    var w = Math.max(40, rect.width || canvas.width), h = Math.max(40, rect.height || canvas.height);
+    var w = Math.max(30, rect.width || canvas.width), h = Math.max(30, rect.height || canvas.height);
     if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); W = w; H = h; cx = w / 2; cy = h * 0.52; sc = Math.min(w, h) * 0.40;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); W = w; H = h;
   }
-  function proj(p, r) { var q = rot(p, r), f = 3.2 / (3.2 - q[2]); return [cx + q[0] * sc * f, cy - q[1] * sc * f, q[2]]; }
-  function onFace(x, y, dz) { return [x, y, surfZ(x, y) + (dz || 0)]; }
-  function line(pts, r, rgb, a, w) {
-    ctx.beginPath(); var vis = 0;
-    for (var k = 0; k < pts.length; k++) { var q = proj(pts[k], r); if (q[2] > -0.15) vis++; k ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }
-    if (!vis) return; ctx.strokeStyle = 'rgba(' + rgb + ',' + a + ')'; ctx.lineWidth = w; ctx.stroke();
-  }
-  function curve(fn, n) { var out = []; for (var k = 0; k <= n; k++) out.push(fn(k / n)); return out; }
-
+  function hexRgb(h) { var m = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(h || ''); return m ? [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)] : [95, 224, 168]; }
   function frame(now) {
+    if (!canvas.offsetParent) { last = now; requestAnimationFrame(frame); return; }
     size();
-    // idle motion or live smoothing
-    if (live && now - lastLive > 1500) live = false;
-    if (!live) {
-      var tt = reduce ? 0 : now / 1000;
-      tgt.yaw = 16 * Math.sin(tt / 3.1); tgt.pitch = 5 * Math.sin(tt / 4.3); tgt.roll = 3 * Math.sin(tt / 5.2);
-      tgt.smile = 0.25 + 0.15 * Math.sin(tt / 2.7); tgt.brow = 0.1; tgt.open = 0;
-      if (!reduce && now > nextBlink) { blinkStart = now; nextBlink = now + 2500 + Math.random() * 3500; }
-      tgt.blink = blinkStart > 0 && now - blinkStart < 160 ? 1 : 0;
-    }
-    if (now < talkUntil) tgt.open = 0.25 + 0.25 * Math.abs(Math.sin(now / 90));
-    for (var key in cur) cur[key] += (tgt[key] - cur[key]) * (key === 'blink' ? 0.6 : 0.25);
-    var D = Math.PI / 180, r = { yaw: cur.yaw * D, pitch: cur.pitch * D, roll: cur.roll * D };
-
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    var talking = now < talkUntil;
+    var want = Math.max(eTarget, talking ? 0.75 + 0.25 * Math.sin(now / 110) : 0);
+    energy += (want - energy) * 0.08;
+    if (!reduce) t += dt * (0.35 + energy * 1.4);
+    var cx = W / 2, cy = H / 2, R = Math.min(W, H) * 0.34 * (1 + 0.04 * Math.sin(t * 0.9) + energy * 0.08);
     ctx.clearRect(0, 0, W, H);
-    // halo
-    var g = ctx.createRadialGradient(cx, cy, sc * 0.2, cx, cy, sc * 1.5);
-    g.addColorStop(0, 'rgba(' + GREEN + ',0.10)'); g.addColorStop(1, 'rgba(' + GREEN + ',0)');
+    var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.6);
+    g.addColorStop(0, 'rgba(95,224,168,' + (0.10 + energy * 0.10).toFixed(3) + ')');
+    g.addColorStop(0.5, 'rgba(124,196,255,0.05)'); g.addColorStop(1, 'rgba(124,196,255,0)');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-
-    // mesh: back first, then front
-    var P = grid.map(function (row) { return row.map(function (p) { return proj(p, r); }); });
-    ctx.lineWidth = 0.6;
-    for (var pass = 0; pass < 2; pass++) {
-      for (var i2 = 0; i2 <= LAT; i2++) for (var j2 = 0; j2 < LON; j2++) {
-        var a = P[i2][j2], b = P[i2][(j2 + 1) % LON], c2 = i2 < LAT ? P[i2 + 1][j2] : null, d = i2 < LAT ? P[i2 + 1][(j2 + 1) % LON] : null;
-        var zz = a[2];
-        if ((pass === 0) !== (zz < 0.05)) continue;
-        var al = zz < 0.05 ? 0.07 : 0.16 + 0.34 * Math.min(1, zz / C);
-        ctx.strokeStyle = 'rgba(' + GREEN + ',' + al.toFixed(3) + ')';
-        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
-        if (c2) { ctx.moveTo(a[0], a[1]); ctx.lineTo(c2[0], c2[1]); if (zz > 0.05) { ctx.moveTo(a[0], a[1]); ctx.lineTo(d[0], d[1]); } }
-        ctx.stroke();
+    pulses = pulses.filter(function (p) { return now - p.t0 < 1600; });
+    ctx.globalCompositeOperation = 'lighter';
+    for (var i = 0; i < N; i++) {
+      var p = P[i], th = p.th + t * p.sp, u = p.u + 0.25 * Math.sin(t * 0.4 + p.ph);
+      var s = Math.sqrt(Math.max(0, 1 - u * u));
+      var wob = 1 + 0.18 * Math.sin(t * 1.3 + p.ph * 2) + energy * 0.25 * Math.sin(t * 4 + p.ph);
+      var rr = R * p.r * wob;
+      var x = Math.cos(th) * s * rr, z = Math.sin(th) * s * rr, y = u * rr * 0.85;
+      x += Math.sin(t * 0.7 + p.ph) * R * 0.06; y += Math.cos(t * 0.5 + p.ph * 1.3) * R * 0.06;
+      var depth = (z / (R + 1e-6) + 1) / 2, a = 0.18 + 0.6 * depth, col = p.c;
+      for (var k = 0; k < pulses.length; k++) {
+        var q = pulses[k], age = (now - q.t0) / 1600, ring = Math.abs(p.r - age * 1.2);
+        if (ring < 0.18) { var f = (1 - ring / 0.18) * (1 - age); col = [col[0] + (q.c[0] - col[0]) * f, col[1] + (q.c[1] - col[1]) * f, col[2] + (q.c[2] - col[2]) * f]; a += 0.5 * f; }
       }
+      ctx.fillStyle = 'rgba(' + (col[0] | 0) + ',' + (col[1] | 0) + ',' + (col[2] | 0) + ',' + Math.min(1, a).toFixed(3) + ')';
+      var sz = p.sz * (0.7 + depth * 0.8) * (Math.min(W, H) / 200 + 0.4);
+      ctx.beginPath(); ctx.arc(cx + x, cy + y, sz, 0, 6.283); ctx.fill();
     }
-    // vertices on the front
-    ctx.fillStyle = 'rgba(' + GREEN + ',0.75)';
-    for (var i3 = 0; i3 <= LAT; i3++) for (var j3 = 0; j3 < LON; j3++) { var q = P[i3][j3]; if (q[2] > 0.25) ctx.fillRect(q[0] - 0.8, q[1] - 0.8, 1.6, 1.6); }
-
-    // features
-    ctx.save(); ctx.shadowColor = 'rgba(' + GREEN + ',0.9)'; ctx.shadowBlur = 6;
-    var s = cur.smile, o = cur.open, bl = cur.blink, br = cur.brow;
-    [-1, 1].forEach(function (side) {
-      var ex = 0.29 * side, ey = 0.13, ew = 0.13, open1 = Math.max(0.05, 1 - bl);
-      line(curve(function (u) { var x = ex + ew * (u * 2 - 1); return onFace(x, ey + 0.055 * open1 * Math.sin(Math.PI * u) - 0.012 * s, 0.01); }, 14), r, WHITE, 0.95, 1.4);
-      line(curve(function (u) { var x = ex + ew * (u * 2 - 1); return onFace(x, ey - (0.035 * open1 + 0.01 * s) * Math.sin(Math.PI * u), 0.01); }, 14), r, WHITE, 0.8, 1.2);
-      if (bl < 0.6) {
-        line(curve(function (u) { var an = u * Math.PI * 2; return onFace(ex + 0.038 * Math.cos(an), ey + 0.01 + 0.032 * Math.sin(an) * open1, 0.02); }, 20), r, GREEN, 1, 1.4);
-        line(curve(function (u) { var an = u * Math.PI * 2; return onFace(ex + 0.014 * Math.cos(an), ey + 0.01 + 0.012 * Math.sin(an), 0.025); }, 10), r, WHITE, 1, 1.2);
-      }
-      line(curve(function (u) { var x = ex + 0.16 * (u * 2 - 1) * 0.95; return onFace(x, 0.29 + 0.07 * br + 0.035 * Math.sin(Math.PI * (side > 0 ? u * 0.9 + 0.1 : u * 0.9)), 0.03); }, 12), r, MINT, 0.95, 2);
-      // cheekbone and jaw contours
-      line(curve(function (u) { return onFace(side * (0.2 + 0.32 * u), -0.05 - 0.08 * u + 0.02 * s, 0.005); }, 10), r, GREEN, 0.45, 1);
-      line(curve(function (u) { return onFace(side * (0.5 - 0.42 * u), -0.38 - 0.42 * Math.sin(u * Math.PI / 2), 0.0); }, 12), r, GREEN, 0.5, 1);
-      // nostril wing
-      line(curve(function (u) { var an = Math.PI * (0.2 + 1.1 * u); return onFace(side * (0.055 + 0.04 * Math.cos(an)), -0.17 + 0.03 * Math.sin(an), 0.13); }, 8), r, MINT, 0.85, 1.2);
-    });
-    // nose bridge and tip
-    line(curve(function (u) { return onFace(0, 0.18 - 0.36 * u, 0.02 + 0.13 * u * u); }, 10), r, MINT, 0.8, 1.2);
-    line(curve(function (u) { return onFace(-0.05 + 0.1 * u, -0.19 - 0.012 * Math.sin(Math.PI * u), 0.15); }, 6), r, WHITE, 0.85, 1.2);
-    // lips
-    var mw = 0.17 + 0.05 * s, my = -0.44, lift = 0.06 * s, drop = 0.16 * o;
-    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my + 0.03 * Math.sin(Math.PI * u) + lift * Math.pow(Math.abs(u * 2 - 1), 2) - 0.012 * Math.cos(u * Math.PI * 4) * (1 - s), 0.04); }, 20), r, WHITE, 0.95, 1.6);
-    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my + lift * Math.pow(Math.abs(u * 2 - 1), 2) - (0.01 + drop + 0.02 * s) * Math.sin(Math.PI * u), 0.04); }, 20), r, GREEN, 1, 1.6);
-    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my - 0.05 - drop - 0.02 * s - 0.03 * Math.sin(Math.PI * u) + lift * Math.pow(Math.abs(u * 2 - 1), 2) * 0.7, 0.03); }, 20), r, WHITE, 0.85, 1.4);
-    // chin and hairline
-    line(curve(function (u) { return onFace(0.12 * (u * 2 - 1), -0.8 - 0.03 * Math.sin(Math.PI * u), 0); }, 10), r, GREEN, 0.5, 1);
-    line(curve(function (u) { return onFace(0.5 * (u * 2 - 1), 0.62 + 0.06 * Math.sin(Math.PI * u), 0); }, 16), r, GREEN, 0.4, 1);
-    ctx.restore();
-
-    // scan line
-    if (!reduce) {
-      var period = 3600, sy = cy - sc * 1.15 + ((now % period) / period) * sc * 2.3;
-      var sg = ctx.createLinearGradient(0, sy - 18, 0, sy + 2);
-      sg.addColorStop(0, 'rgba(' + GREEN + ',0)'); sg.addColorStop(1, 'rgba(' + GREEN + ',0.22)');
-      ctx.fillStyle = sg; ctx.fillRect(cx - sc * 1.0, sy - 18, sc * 2.0, 20);
-      ctx.fillStyle = 'rgba(' + GREEN + ',0.6)'; ctx.fillRect(cx - sc * 1.0, sy, sc * 2.0, 1);
-    }
-    // corner ticks
-    ctx.strokeStyle = 'rgba(' + GREEN + ',0.55)'; ctx.lineWidth = 1.2;
-    var m = 6, L = Math.min(W, H) * 0.08;
-    [[m, m, 1, 1], [W - m, m, -1, 1], [m, H - m, 1, -1], [W - m, H - m, -1, -1]].forEach(function (k) {
-      ctx.beginPath(); ctx.moveTo(k[0], k[1] + L * k[3]); ctx.lineTo(k[0], k[1]); ctx.lineTo(k[0] + L * k[2], k[1]); ctx.stroke();
-    });
+    ctx.globalCompositeOperation = 'source-over';
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
   return {
-    set: function (p) { live = true; lastLive = performance.now(); for (var k in p) if (k in tgt && isFinite(p[k])) tgt[k] = p[k]; },
-    talk: function (ms) { talkUntil = performance.now() + (ms || 1200); }
+    talk: function (ms) { talkUntil = performance.now() + (ms || 1200); },
+    pulse: function (hex) { pulses.push({ t0: performance.now(), c: hexRgb(hex) }); },
+    set: function (o) { if (o && isFinite(o.energy)) eTarget = Math.max(0, Math.min(1, o.energy)); }
   };
 }
 
@@ -418,7 +337,7 @@ function AceHead(canvas, opts) {
       { text: 'Sensor kit on loan', note: 'Breath switch and interface box, returns in 3 weeks' }
     ],
     next: [
-      { text: 'Run the bed-position nose pointer test', note: 'Suggested by Ace' },
+      { text: 'Run the bed-position nose pointer test', note: 'Suggested by the AI agent' },
       { text: 'Practice sip-and-puff clicks, level 1', note: 'Computer exercises simulator' },
       { text: 'Share this month’s results with the OT', note: 'You choose what is shared' }
     ]
@@ -435,11 +354,11 @@ function AceHead(canvas, opts) {
     document.getElementById('sampleBanner').hidden = !isExample;
     var name = P.name || 'Your name';
     document.getElementById('whoName').textContent = name;
-    document.getElementById('whoLine').textContent = P.headline || 'Talk to Ace to fill in your profile';
+    document.getElementById('whoLine').textContent = P.headline || 'Talk to the AI agent to fill in your profile';
     document.getElementById('initials').textContent = (P.name || '?').split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase() || '?';
     var facts = document.getElementById('facts'); facts.innerHTML = '';
     var keys = Object.keys(P.facts || {});
-    if (!keys.length) { var d = el('div'); d.appendChild(el('span', '', 'Not filled in yet')); d.appendChild(el('b', '', 'Ace will ask')); facts.appendChild(d); }
+    if (!keys.length) { var d = el('div'); d.appendChild(el('span', '', 'Not filled in yet')); d.appendChild(el('b', '', 'The AI agent will ask')); facts.appendChild(d); }
     keys.forEach(function (k) { var d = el('div'); d.appendChild(el('span', '', k)); d.appendChild(el('b', '', P.facts[k])); facts.appendChild(d); });
 
     var sk = document.getElementById('skills'); sk.innerHTML = '';
@@ -454,7 +373,7 @@ function AceHead(canvas, opts) {
     });
 
     var tb = document.getElementById('tools'); tb.innerHTML = '';
-    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell Ace what you use today: devices, apps, switches, anything.'); td.colSpan = 5; tr.appendChild(td); tb.appendChild(tr); }
+    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell the AI agent what you use today: devices, apps, switches, anything.'); td.colSpan = 5; tr.appendChild(td); tb.appendChild(tr); }
     P.tools.forEach(function (t) {
       var tr = el('tr');
       [t.tool, t.use, t.works, t.issues].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
@@ -477,13 +396,13 @@ function AceHead(canvas, opts) {
     }
     list('goals', P.goals, 'What do you want to be able to do?', 'when');
     list('team', P.team, 'Who helps you, and what equipment you have or have borrowed.', 'note');
-    list('next', P.next, 'Ace suggests next steps once your profile has some detail.', 'note');
+    list('next', P.next, 'The AI agent suggests next steps once your profile has some detail.', 'note');
   }
   render();
 
   function flash(ids) { ids.forEach(function (id) { var c = document.getElementById(id); if (!c) return; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }); }
 
-  // merge updates from Ace
+  // merge updates from the AI agent
   var MAP = { name: 'c-who', headline: 'c-who', facts: 'c-who', skills: 'c-skills', tools: 'c-tools', movement: 'c-move', moveNote: 'c-move', positions: 'c-pos', goals: 'c-goals', team: 'c-team', next: 'c-next' };
   function apply(up) {
     if (!up || typeof up !== 'object') return;
@@ -504,9 +423,9 @@ function AceHead(canvas, opts) {
     render(); flash(touched.map(function (k) { return MAP[k]; }));
   }
 
-  // ---------- Ace ----------
+  // ---------- the AI agent ----------
   var RULES = [
-    'You are Ace (Adaptive Control Expert), the AI guide on the Access+ website. Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, reviews technology and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
+    'You are the Access+ AI agent, a calm, friendly guide on the Access+ website (you have no personal name). Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, reviews technology and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
     'Right now you are helping the person build their Access+ profile by conversation, so they do not have to fill in forms. Interview them warmly, ONE short question at a time, and fill in the profile from what they say. Cover, roughly in this order: what to call them; what they want to be able to do (goals); which movements and senses they have and how strong (head turn, tilt, nod, face, eyes, breath, voice, shoulders, arms, fingers; fatigue); positions they spend time in (chair, tilted, bed, outdoors); the tools they use today and how well each works; who supports them and what equipment they have. Skip anything they already told you. Never push for medical details; record only what they choose to share.',
     'When they describe current tools, assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
     'This site is a pilot draft: never claim you saved anything to an account or started a simulator. No diagnosis or medical advice; for health, skin, breathing, swallowing or seating concerns, suggest their therapist or clinician.',
@@ -517,7 +436,7 @@ function AceHead(canvas, opts) {
   var sendBtn = document.getElementById('sendBtn'), stopBtn = document.getElementById('stopBtn'), note = document.getElementById('aceNote');
   var speakBtn = document.getElementById('speakBtn');
   var turns = [], sampleFn = null, ctl = null, busy = false, speak = false;
-  var face = AceHead(document.getElementById('aceFace'));
+  var face = AgentCloud(document.getElementById('aceFace'));
 
   function bubble(cls, text) { var d = el('div', 'msg ' + cls, text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
   function setBusy(on) { busy = on; sendBtn.disabled = on; stopBtn.hidden = !on; document.querySelectorAll('#quick .btn').forEach(function (b) { b.disabled = on || !sampleFn; }); }
@@ -532,12 +451,12 @@ function AceHead(canvas, opts) {
 
   function profileSnapshot() { return JSON.stringify(isExample ? BLANK : P); }
   var errCopy = {
-    not_granted: 'Ace needs your permission to use Claude. Reload the page to be asked again.',
-    sampling_disabled: 'Claude isn’t available on this account, so Ace is off.',
-    rate_limited: 'Ace is getting a lot of questions. Wait a minute and try again.',
-    session_expired: 'Please sign in to Claude again to talk with Ace.',
-    refused: 'Ace can’t help with that one. Try saying it another way.',
-    invalid_json: 'Ace got muddled. Please say that again.'
+    not_granted: 'The AI agent needs your permission to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude isn’t available on this account, so the AI agent is off.',
+    rate_limited: 'The AI agent is getting a lot of questions. Wait a minute and try again.',
+    session_expired: 'Please sign in to Claude again to talk with the AI agent.',
+    refused: 'The AI agent can’t help with that one. Try saying it another way.',
+    invalid_json: 'Something got muddled. Please say that again.'
   };
 
   async function talk(userText, shown) {
@@ -546,7 +465,7 @@ function AceHead(canvas, opts) {
     turns.push({ role: 'user', content: userText + '\n\n[Current profile JSON: ' + profileSnapshot() + ']' });
     if (turns.length > 20) turns = turns.slice(-20);
     while (turns.length && turns[0].role !== 'user') turns.shift();
-    var out = bubble('ai thinking', 'Ace is thinking…');
+    var out = bubble('ai thinking', 'The AI agent is thinking…');
     setBusy(true); ctl = new AbortController();
     try {
       var data = await sampleFn.json([{ role: 'user', content: RULES }].concat(turns), { modelTier: 'quick', cache: false, signal: ctl.signal });
@@ -559,8 +478,8 @@ function AceHead(canvas, opts) {
       turns.pop(); out.classList.remove('thinking');
       var code = e && e.code;
       if (code === 'cancelled') out.textContent = 'Stopped.';
-      else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].indexOf(code) >= 0) { out.textContent = errCopy[code] || 'Ace isn’t available here.'; sampleFn = null; form.hidden = true; }
-      else out.textContent = errCopy[code] || 'Something went wrong reaching Ace. Try again.';
+      else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].indexOf(code) >= 0) { out.textContent = errCopy[code] || 'The AI agent isn’t available here.'; sampleFn = null; form.hidden = true; }
+      else out.textContent = errCopy[code] || 'Something went wrong reaching the AI agent. Try again.';
     } finally { setBusy(false); ctl = null; if (!form.hidden) input.focus(); }
   }
 
@@ -577,12 +496,12 @@ function AceHead(canvas, opts) {
     talk('I’d like you to assess the tools I use today. Ask me what I use, one at a time.', true);
   });
 
-  setBusy(true); note.textContent = 'Connecting Ace…';
+  setBusy(true); note.textContent = 'Connecting the AI agent…';
   (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
     sampleFn = fn; setBusy(false);
-    if (!fn) { form.hidden = true; document.getElementById('quick').hidden = true; note.textContent = 'Ace can talk with you when this page is opened in Claude while signed in. The profile shown is an example.'; return; }
-    note.textContent = 'Ace uses Claude on your own Claude account. For learning and practice, not medical advice.';
-  }).catch(function () { setBusy(false); form.hidden = true; note.textContent = 'Ace isn’t available here. The profile shown is an example.'; });
+    if (!fn) { form.hidden = true; document.getElementById('quick').hidden = true; note.textContent = 'The AI agent can talk with you when this page is opened in Claude while signed in. The profile shown is an example.'; return; }
+    note.textContent = 'The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.';
+  }).catch(function () { setBusy(false); form.hidden = true; note.textContent = 'The AI agent isn’t available here. The profile shown is an example.'; });
 
   var root = document.documentElement, big = document.getElementById('bigToggle');
   function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
