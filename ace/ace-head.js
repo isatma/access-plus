@@ -51,6 +51,7 @@ function AceHead(canvas, opts) {
   function curve(fn, n) { var out = []; for (var k = 0; k <= n; k++) out.push(fn(k / n)); return out; }
 
   function frame(now) {
+    if (!canvas.offsetParent) { requestAnimationFrame(frame); return; }
     size();
     // idle motion or live smoothing
     if (live && now - lastLive > 1500) live = false;
@@ -62,6 +63,8 @@ function AceHead(canvas, opts) {
       tgt.blink = blinkStart > 0 && now - blinkStart < 160 ? 1 : 0;
     }
     if (now < talkUntil) tgt.open = 0.25 + 0.25 * Math.abs(Math.sin(now / 90));
+    // unwind full spins so the head never turns back the long way
+    while (cur.yaw - tgt.yaw > 180) cur.yaw -= 360; while (tgt.yaw - cur.yaw > 180) cur.yaw += 360;
     for (var key in cur) cur[key] += (tgt[key] - cur[key]) * (key === 'blink' ? 0.6 : 0.25);
     var D = Math.PI / 180, r = { yaw: cur.yaw * D, pitch: cur.pitch * D, roll: cur.roll * D };
 

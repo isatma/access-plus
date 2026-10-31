@@ -52,7 +52,7 @@ a { color: inherit; }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
 
 section[id] { scroll-margin-top: 150px; }
-main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
+.view > .wrap { padding-block: 28px 80px; display: grid; gap: 72px; }
 .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 
 .navrow { border-top: 1px solid var(--line); }
@@ -61,6 +61,14 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
 .nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
 
+.brand { text-decoration: none; }
+.testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
+.signin { gap: 10px; }
+.tagline { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.signin .demo { font: 500 0.78em var(--mono); letter-spacing: 0.1em; background: #ffc670; color: #231c05; padding: 2px 6px; }
+.backrow { display: flex; padding-bottom: 4px; }
+.backwrap { padding-block: 20px 0 !important; }
+.totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: center; }
 .hero .intro { align-content: center; }
@@ -89,6 +97,13 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
 .sim::after { border-width: 0 1px 1px 0; }
 .feature { grid-template-rows: auto 1fr; }
+.feature .viz { position: relative; }
+.arm-ace { position: absolute; left: 1%; top: 66%; width: 15%; pointer-events: none; transition: left .6s ease, top .6s ease, width .6s ease; }
+.arm-ace.play { left: 6.6%; top: 40%; width: 21%; }
+.arm-ace canvas { display: block; width: 100%; aspect-ratio: 1; }
+.ace-name { position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%); font: 500 10px var(--mono); letter-spacing: 0.14em; color: var(--signal); }
+.ace-say { position: absolute; left: calc(100% + 8px); top: 18%; white-space: nowrap; font: 500 12px var(--mono); letter-spacing: 0.04em; color: var(--signal-ink); background: var(--signal); padding: 5px 9px; }
+.ace-say::after { content: ""; position: absolute; right: 100%; top: 8px; border: 6px solid transparent; border-right-color: var(--signal); }
 .feature .viz { border-bottom: 1px solid var(--line-hi); background: linear-gradient(180deg, var(--signal-soft), transparent); }
 .feature svg { display: block; width: 100%; height: auto; max-width: 100%; }
 .feature .body { display: grid; gap: 10px; padding: 22px; align-content: start; }
@@ -206,18 +221,165 @@ footer .wrap { padding-block: 22px; }
   .fore-bend, .jaw-l, .jaw-r { transition: transform .35s ease; }
   .dial-item rect, .dial-item text { transition: stroke .2s, fill .2s; }
 }
+/* views-css:start */
+#view-borrow .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+#view-borrow > .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
+#view-borrow .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
+#view-borrow .bw-intro { display: grid; gap: 14px; max-width: 50em; }
+#view-borrow .bw-intro h1 { font-size: 1.9em; line-height: 1.3; }
+#view-borrow .bw-intro p { margin: 0; color: var(--muted); max-width: 42em; }
+#view-borrow .bw-how { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); margin: 0; padding: 0; list-style: none; }
+#view-borrow .bw-how li { background: var(--panel); padding: 18px 20px; display: grid; gap: 6px; }
+#view-borrow .bw-how b { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+#view-borrow .bw-how span { font-weight: 600; }
+#view-borrow .bw-how small { color: var(--desc); font-size: 0.88em; }
+#view-borrow .catalog { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; align-items: start; }
+#view-borrow .bw-head { padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; margin-bottom: 18px; display: grid; gap: 4px; }
+#view-borrow .bw-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+#view-borrow .bw-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+#view-borrow .bw-head p { margin: 0; color: var(--muted); }
+#view-borrow .items { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+#view-borrow .item {
+  position: relative; min-height: calc(var(--target) + 60px);
+  display: grid; align-content: start; gap: 8px; padding: 18px 18px 16px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent); color: var(--ink);
+  border: 1px solid var(--line); text-align: left; cursor: pointer; font: inherit;
+}
+#view-borrow .item::before, #view-borrow .item::after { content: ""; position: absolute; width: 10px; height: 10px; border-color: var(--line-hi); border-style: solid; }
+#view-borrow .item::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+#view-borrow .item::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+#view-borrow .item:hover { background: var(--panel-hi); }
+#view-borrow .item[aria-pressed="true"] { border-color: var(--signal); background: var(--signal-soft); }
+#view-borrow .item[aria-pressed="true"]::before, #view-borrow .item[aria-pressed="true"]::after { border-color: var(--signal); width: 16px; height: 16px; }
+#view-borrow .item .top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+#view-borrow .item h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+#view-borrow .check { flex: none; font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-hi); padding: 3px 7px; }
+#view-borrow .item[aria-pressed="true"] .check { color: var(--signal-ink); background: var(--signal); border-color: var(--signal); }
+#view-borrow .item p { margin: 0; color: var(--desc); font-size: 0.9em; }
+#view-borrow .bw-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#view-borrow .bw-chip { font: 500 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-hi); padding: 2px 7px; }
+#view-borrow .item.core { grid-column: 1 / -1; min-height: 0; }
+#view-borrow .item.core .bw-chip.inc { color: var(--amber); border-color: var(--amber); }
+#view-borrow .item.soon { border-style: dashed; cursor: default; }
+#view-borrow .item.soon .check { color: var(--amber); border-color: var(--amber); }
+#view-borrow .kit { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 150px); background: var(--panel); border: 1px solid var(--line-hi); padding: 20px; display: grid; gap: 14px; }
+#view-borrow .kit h2 { font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.1em; }
+#view-borrow .kit ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+#view-borrow .kit li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+#view-borrow .kit li span:last-child { font: 500 0.7em var(--mono); color: var(--desc); letter-spacing: 0.08em; text-transform: uppercase; align-self: center; }
+#view-borrow .kit .empty { color: var(--muted); font-size: 0.92em; margin: 0; }
+#view-borrow .kit .note { color: var(--muted); font-size: 0.82em; margin: 0; }
+#view-borrow .kit .btn { width: 100%; justify-content: center; }
+@media (max-width: 860px) {
+#view-borrow .catalog { grid-template-columns: 1fr; }
+#view-borrow .kit { position: static; }
+}
+@media (max-width: 520px) {
+#view-borrow .bw-intro h1 { font-size: 1.45em; }
+}
+@media (prefers-reduced-motion: no-preference) {
+#view-borrow .item, #view-borrow .item::before, #view-borrow .item::after { transition: all .18s ease; }
+}
+#view-profile .btn:disabled { opacity: .45; cursor: not-allowed; }
+#view-profile > .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+#view-profile .col { display: grid; gap: 18px; min-width: 0; }
+#view-profile .card { position: relative; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); padding: 18px; display: grid; gap: 12px; min-width: 0; }
+#view-profile .card::before, #view-profile .card::after { content: ""; position: absolute; width: 12px; height: 12px; border: solid var(--line-hi); }
+#view-profile .card::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+#view-profile .card::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+#view-profile .card.hl::before, #view-profile .card.hl::after { border-color: var(--signal); }
+#view-profile .card h2 { font-size: 0.9em; text-transform: uppercase; letter-spacing: 0.1em; display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+#view-profile .card h2 small { font: 500 0.75em var(--mono); color: var(--muted); letter-spacing: 0.1em; }
+#view-profile .card.flash { animation: flash 1.2s ease; }
+@keyframes flash { 0% { background: var(--signal-soft); } 100% { background: color-mix(in srgb, var(--panel) 94%, transparent); } }
+#view-profile .eyebrow { font: 500 0.7em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
+#view-profile .empty { color: var(--muted); font-size: 0.92em; margin: 0; }
+#view-profile .sample { border: 1px dashed var(--warn); color: var(--ink); background: rgba(255,198,112,0.08); padding: 12px 16px; font-size: 0.95em; }
+#view-profile .sample b { color: var(--warn); }
+#view-profile .example { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--warn); border: 1px solid var(--warn); padding: 3px 8px; }
+#view-profile .pf-who { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; }
+#view-profile .avatar { width: 72px; height: 72px; border: 2px solid var(--signal); display: grid; place-items: center; font: 400 1.4em var(--display); color: var(--signal); }
+#view-profile .pf-who h1 { font-size: 1.45em; }
+#view-profile .pf-who p { margin: 2px 0 0; color: var(--desc); }
+#view-profile .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
+#view-profile .facts div { background: var(--panel); padding: 10px 12px; display: grid; gap: 2px; }
+#view-profile .facts span { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-profile .facts b { font-weight: 600; font-size: 0.95em; }
+#view-profile .skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+#view-profile .skill { border: 1px solid var(--line); padding: 12px; display: grid; gap: 6px; background: var(--panel); }
+#view-profile .skill b { font-weight: 600; }
+#view-profile .skill small { color: var(--muted); font-size: 0.82em; }
+#view-profile .lvl { display: flex; gap: 4px; }
+#view-profile .lvl i { flex: 1; height: 6px; background: var(--line); }
+#view-profile .lvl i.on { background: var(--signal); }
+#view-profile .pill { justify-self: start; font: 500 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid; }
+#view-profile .pill.good { color: var(--signal); border-color: var(--signal); }
+#view-profile .pill.ok { color: var(--warn); border-color: var(--warn); }
+#view-profile .pill.no { color: var(--bad); border-color: var(--bad); }
+#view-profile .tablewrap { overflow-x: auto; }
+#view-profile table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+#view-profile th, #view-profile td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+#view-profile th { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-profile td.ace { color: var(--desc); }
+#view-profile .pf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .pf-chip { padding: 6px 12px; border: 1px solid var(--line-hi); font-size: 0.9em; }
+#view-profile .pf-chip.on { border-color: var(--signal); color: var(--signal); }
+#view-profile .pos { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+#view-profile .pos div { border: 1px solid var(--line); padding: 12px; background: var(--panel); display: grid; gap: 4px; }
+#view-profile .pos b { font-weight: 600; }
+#view-profile .pos small { color: var(--desc); font-size: 0.85em; }
+#view-profile ul.plain { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+#view-profile ul.plain li { padding-left: 12px; border-left: 2px solid var(--signal); }
+#view-profile ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
+#view-profile .ace { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 140px); border-color: var(--signal); }
+#view-profile .ace::before, #view-profile .ace::after { border-color: var(--signal); }
+#view-profile .acehead { display: flex; gap: 12px; align-items: center; }
+#view-profile .acehead canvas { width: 96px; height: 96px; flex: none; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line); }
+#view-profile .acehead h2 { font-size: 1em; }
+#view-profile .acehead p { margin: 2px 0 0; color: var(--muted); font-size: 0.85em; }
+#view-profile .log { display: grid; gap: 10px; max-height: 46vh; min-height: 180px; overflow-y: auto; padding-right: 4px; }
+#view-profile .msg { max-width: 92%; padding: 10px 13px; font-size: 0.93em; white-space: pre-wrap; }
+#view-profile .msg.me { justify-self: end; background: var(--panel-hi); border: 1px solid var(--line-hi); }
+#view-profile .msg.pf-ai { justify-self: start; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent); }
+#view-profile .msg.thinking { color: var(--muted); font-style: italic; }
+#view-profile .ask { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+#view-profile .ask textarea { min-height: var(--target); min-width: 0; resize: vertical; padding: 12px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-hi); font: 400 1em var(--body); }
+#view-profile .ask textarea:focus { outline: 3px solid var(--signal); outline-offset: 1px; }
+#view-profile .quick { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .quick .btn { min-height: 48px; font-size: 0.68em; }
+#view-profile .toggles { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .note { margin: 0; color: var(--muted); font-size: 0.8em; }
+@media (max-width: 960px) {
+#view-profile > .wrap { grid-template-columns: 1fr; }
+#view-profile .ace { position: static; order: -1; }
+}
+@media (prefers-reduced-motion: reduce) {
+#view-profile .card.flash { animation: none; }
+}
+#view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+#view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
+#view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
+#view-gesture p { margin: 0; color: var(--muted); max-width: 40em; }
+#view-gesture .gx-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+#view-gesture .gx-list li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+#view-gesture .gx-list b { font-weight: 600; }
+#view-gesture .gx-list span { color: var(--desc); font-size: 0.93em; }
+#view-gesture .gx-note { color: var(--desc); font-size: 0.9em; }
+#view-gesture .gx-face { width: 100%; height: 380px; display: block; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
+@media (max-width: 900px) { #view-gesture .gx { grid-template-columns: 1fr; } #view-gesture .gx-face { height: 280px; } }
+/* views-css:end */
 </style>
 
 <header class="bar" id="top">
   <div class="wrap">
-    <div class="brand">ACCESS<span>+</span></div><span class="tagline">AI-assisted skill building for assistive technology</span>
+    <a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><span class="tagline">AI-assisted skill building for assistive technology</span>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
-    <a class="btn primary" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a>
+    <a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#top" aria-current="page">Home</a><a href="#simulators">Simulators</a><a href="#guide-ai">Meet Ace</a><a href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro">Gesture check</a><a href="borrow.html">Borrow a kit</a><a href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">Meet Ace</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
 </header>
 
-<main>
+<main id="view-home" class="view">
   <div class="wrap">
 
     <div class="hero">
@@ -229,6 +391,7 @@ footer .wrap { padding-block: 22px; }
     </section>
       <div class="feature" id="guide">
           <div class="viz">
+            <div class="arm-ace" id="aceWrap"><canvas id="armAce" aria-hidden="true"></canvas><span class="ace-name">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
               <g stroke="#3b5476" stroke-width="1">
                 <path d="M30 230 A170 170 0 0 1 370 230" stroke-dasharray="3 6"/>
@@ -236,14 +399,7 @@ footer .wrap { padding-block: 22px; }
               </g>
               <g id="dial" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1"></g>
               <g id="scene" visibility="hidden" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">
-                <g id="face" transform="translate(62 150)">
-                  <circle r="26" fill="#0f1828" stroke="#a9e4c4" stroke-width="1.5"/>
-                  <path d="M22 -4 q8 4 0 10" stroke="#a9e4c4" stroke-width="1.5"/>
-                  <circle cx="10" cy="-6" r="2.2" fill="#a9e4c4"/>
-                  <path d="M8 10 q6 3 12 -1" stroke="#a9e4c4" stroke-width="1.5"/>
-                  <text y="44" text-anchor="middle" fill="#c4d0dd">YOU</text>
-                </g>
-                <text id="bubble" x="60" y="98" text-anchor="middle" fill="#5fe0a8" font-size="12" visibility="hidden"></text>
+                
               </g>
               <g id="armRot" class="arm-rot">
                 <g id="armIdle" class="idle">
@@ -268,7 +424,7 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the guide arm</h3>
-            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and hand yourself a drink or your phone. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and hand Ace a drink, the phone or the TV remote. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
@@ -352,8 +508,8 @@ footer .wrap { padding-block: 22px; }
     <section id="how" aria-labelledby="howTitle">
       <div class="head"><h2 id="howTitle">How it works</h2></div>
       <div class="steps">
-        <a class="step" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
-        <a class="step" href="borrow.html"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
+        <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
+        <a class="step" href="#borrow"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
         <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice</h3><p>Build skills in simulators and carry them to real devices.</p></a>
       </div>
     </section>
@@ -384,7 +540,211 @@ footer .wrap { padding-block: 22px; }
   </div>
 </main>
 
+<!-- views:start -->
+<main id="view-borrow" class="view" hidden>
+
+  <div class="wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+
+    <section class="bw-intro" aria-labelledby="bw-t">
+      <div class="eyebrow">Equipment loan program</div>
+      <h1 id="bw-t">Borrow a sensor kit</h1>
+      <p>Choose the sensors you want to try and we'll mail you a kit. Set it up with your profile, practice in the simulators, and send it back when you're done. Nothing here is for sale.</p>
+    </section>
+
+    <ol class="bw-how" aria-label="How the loan works">
+      <li><b>STEP 1</b><span>Choose sensors</span><small>Pick from the menu below.</small></li>
+      <li><b>STEP 2</b><span>We mail the kit</span><small>Everything needed to connect is included.</small></li>
+      <li><b>STEP 3</b><span>Set up and practice</span><small>Calibrate and practice on your own, with family or friends, or with your therapist.</small></li>
+      <li><b>STEP 4</b><span>Send it back</span><small>Return the kit at the end of the loan.</small></li>
+    </ol>
+
+    <div class="catalog">
+      <section aria-labelledby="bw-menuTitle">
+        <div class="bw-head"><h2 id="bw-menuTitle">Sensor menu</h2><p>Select as many as you want to try. Every kit includes the interface box.</p></div>
+        <div class="items" id="bw-items">
+
+          <div class="item core">
+            <div class="top"><h3>Interface box</h3><span class="check">Always included</span></div>
+            <p>Connects any sensor to a computer, phone or tablet. It shows up as a standard keyboard, mouse or gamepad, so no special software is needed.</p>
+            <div class="bw-chips"><span class="bw-chip inc">In every kit</span><span class="bw-chip">USB</span><span class="bw-chip">Bluetooth</span></div>
+          </div>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Breath switch" data-kind="Breath">
+            <div class="top"><h3>Breath switch</h3><span class="check">Add</span></div>
+            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span><span class="bw-chip">Proportional</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="EMG switch" data-kind="Muscle">
+            <div class="top"><h3>EMG muscle switch</h3><span class="check">Add</span></div>
+            <p>Sticker electrodes pick up a small muscle contraction, even when there's little visible movement.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span><span class="bw-chip">Proportional</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Adaptive button switches" data-kind="Touch">
+            <div class="top"><h3>Adaptive button switches</h3><span class="check">Add</span></div>
+            <p>Buttons in different sizes and press forces, to place at your head, hand, cheek or knee.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Twitch switch" data-kind="Movement">
+            <div class="top"><h3>Twitch switch</h3><span class="check">Add</span></div>
+            <p>Detects a tiny movement such as a cheek, eyebrow or finger twitch.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Sound switch" data-kind="Sound">
+            <div class="top"><h3>Sound switch</h3><span class="check">Add</span></div>
+            <p>A hum, click or short vocal sound triggers an action. No words needed.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Proximity switch" data-kind="Movement">
+            <div class="top"><h3>Proximity switch</h3><span class="check">Add</span></div>
+            <p>Triggers when you move close to it. No touch or pressure needed.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Head tilt sensor" data-kind="Movement">
+            <div class="top"><h3>Head tilt sensor</h3><span class="check">Add</span></div>
+            <p>A motion sensor (IMU) on a cap or headset turns head tilts into pointing or steering.</p>
+            <div class="bw-chips"><span class="bw-chip">Proportional</span><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Eye tracker" data-kind="Eye gaze">
+            <div class="top"><h3>Eye tracking equipment</h3><span class="check">Add</span></div>
+            <p>An eye-gaze camera for a computer. Look to point, and dwell or use a switch to click.</p>
+            <div class="bw-chips"><span class="bw-chip">Pointing</span></div>
+          </button>
+
+          <div class="item soon">
+            <div class="top"><h3>More sensors</h3><span class="check">Coming</span></div>
+            <p>New sensors and equipment will be added to the menu over time.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <aside class="kit" aria-labelledby="bw-kitTitle">
+        <h2 id="bw-kitTitle">Your kit</h2>
+        <ul id="bw-kitList"><li><span>Interface box</span><span>Included</span></li></ul>
+        <p class="empty" id="bw-kitEmpty">Add sensors from the menu to build your kit.</p>
+        <button class="btn primary" id="bw-requestBtn" type="button" disabled>Request this kit</button>
+        <p class="note">Pilot draft. Requests aren't sent anywhere yet.</p>
+      </aside>
+    </div>
+
+  </div>
+</main>
+<main id="view-profile" class="view" hidden>
+  <div class="wrap backwrap"><div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div></div>
+
+  <div class="wrap">
+    <div class="col" id="pf-profileCol">
+      <div class="sample" id="pf-sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and Ace will help you build your own.</div>
+
+      <section class="card hl" id="pf-c-who" aria-labelledby="pf-whoName">
+        <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+          <span class="eyebrow">My profile</span><span class="example" id="pf-exTag">Sample profile</span>
+        </div>
+        <div class="pf-who">
+          <div class="avatar" id="pf-initials" aria-hidden="true">JR</div>
+          <div><h1 id="pf-whoName">Jordan R.</h1><p id="pf-whoLine">Building skills for the computer, phone and power chair</p></div>
+        </div>
+        <div class="facts" id="pf-facts"></div>
+      </section>
+
+      <section class="card" id="pf-c-skills" aria-labelledby="pf-skillsT">
+        <h2 id="pf-skillsT">Skills and qualifications <small>from assessments</small></h2>
+        <div class="skills" id="pf-skills"></div>
+      </section>
+
+      <section class="card" id="pf-c-tools" aria-labelledby="pf-toolsT">
+        <h2 id="pf-toolsT">Current tools <small>with Ace's take</small></h2>
+        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>Works well</th><th>Problems</th><th>Ace suggests</th></tr></thead><tbody id="pf-tools"></tbody></table></div>
+      </section>
+
+      <section class="card" id="pf-c-move" aria-labelledby="pf-moveT">
+        <h2 id="pf-moveT">Movement and senses</h2>
+        <div class="pf-chips" id="pf-move"></div>
+        <p class="empty" id="pf-moveNote"></p>
+      </section>
+
+      <section class="card" id="pf-c-pos" aria-labelledby="pf-posT">
+        <h2 id="pf-posT">Positions and routine</h2>
+        <div class="pos" id="pf-pos"></div>
+      </section>
+
+      <section class="card" id="pf-c-goals" aria-labelledby="pf-goalsT">
+        <h2 id="pf-goalsT">Goals</h2>
+        <ul class="plain" id="pf-goals"></ul>
+      </section>
+
+      <section class="card" id="pf-c-team" aria-labelledby="pf-teamT">
+        <h2 id="pf-teamT">Support and equipment</h2>
+        <ul class="plain" id="pf-team"></ul>
+      </section>
+
+      <section class="card" id="pf-c-next" aria-labelledby="pf-nextT">
+        <h2 id="pf-nextT">Next steps</h2>
+        <ul class="plain" id="pf-next"></ul>
+      </section>
+
+      <p class="note">Your profile is yours. In the finished site you choose what is saved and who can see it: just you, family, or your therapist.</p>
+    </div>
+
+    <aside class="card ace" aria-labelledby="pf-aceT">
+      <div class="acehead">
+        <canvas id="pf-aceFace" aria-hidden="true"></canvas>
+        <div><h2 id="pf-aceT">Build it with Ace</h2><p>Just talk. Ace asks questions and fills in your profile as you go.</p></div>
+      </div>
+      <div class="log" id="pf-log" aria-live="polite">
+        <div class="msg pf-ai">Hi, I'm Ace. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
+      </div>
+      <div class="quick" id="pf-quick">
+        <button class="btn primary" id="pf-startBtn" type="button">Start my profile</button>
+        <button class="btn" id="pf-assessBtn" type="button">Assess my current tools</button>
+      </div>
+      <form class="ask" id="pf-askForm" autocomplete="off">
+        <label class="sr" for="pf-askIn">Talk to Ace</label>
+        <textarea id="pf-askIn" rows="2" placeholder="Talk to Ace…"></textarea>
+        <button class="btn primary" id="pf-sendBtn" type="submit">Send</button>
+      </form>
+      <div class="toggles">
+        <button class="btn" id="pf-speakBtn" type="button" aria-pressed="false">Read replies aloud</button>
+        <button class="btn" id="pf-stopBtn" type="button" hidden>Stop</button>
+      </div>
+      <p class="note" id="pf-aceNote">Ace uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
+    </aside>
+  </div>
+</main>
+<main id="view-gesture" class="view" hidden>
+  <div class="wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+    <section class="gx" aria-labelledby="gxT">
+      <div class="gx-text">
+        <div class="eyebrow">Camera gesture self-assessment</div>
+        <h1 id="gxT">Gesture check with Ace</h1>
+        <p>Your webcam can turn small movements into switches. Ace watches your face, mirrors your expressions, and tests which gestures work best for you.</p>
+        <ul class="gx-list">
+          <li><b>Face switches</b><span>Smile, open mouth, raised eyebrows, long blink, pucker</span></li>
+          <li><b>Head switches</b><span>Tilt left and right, turn left and right, nod down, look up</span></li>
+          <li><b>Nose pointer</b><span>Steer a pointer with your nose and hold on targets that get smaller</span></li>
+          <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with Ace's top picks</span></li>
+        </ul>
+        <p class="gx-note">The camera is turned off inside this preview. Gesture Check runs on its own page, where your browser can use the camera. Your video stays on your device.</p>
+        <a class="btn primary" href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
+      </div>
+      <canvas id="gxFace" class="gx-face" role="img" aria-label="Ace, a wireframe face"></canvas>
+    </section>
+  </div>
+</main>
+<!-- views:end -->
+
 <footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between"><span>Access+ · for review by users, therapists and partners</span><span>Version 0.1 · Pilot draft · Updated October 31, 2026</span></div></footer>
+
+<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -442,6 +802,7 @@ function AceHead(canvas, opts) {
   function curve(fn, n) { var out = []; for (var k = 0; k <= n; k++) out.push(fn(k / n)); return out; }
 
   function frame(now) {
+    if (!canvas.offsetParent) { requestAnimationFrame(frame); return; }
     size();
     // idle motion or live smoothing
     if (live && now - lastLive > 1500) live = false;
@@ -453,6 +814,8 @@ function AceHead(canvas, opts) {
       tgt.blink = blinkStart > 0 && now - blinkStart < 160 ? 1 : 0;
     }
     if (now < talkUntil) tgt.open = 0.25 + 0.25 * Math.abs(Math.sin(now / 90));
+    // unwind full spins so the head never turns back the long way
+    while (cur.yaw - tgt.yaw > 180) cur.yaw -= 360; while (tgt.yaw - cur.yaw > 180) cur.yaw += 360;
     for (var key in cur) cur[key] += (tgt[key] - cur[key]) * (key === 'blink' ? 0.6 : 0.25);
     var D = Math.PI / 180, r = { yaw: cur.yaw * D, pitch: cur.pitch * D, roll: cur.roll * D };
 
@@ -562,7 +925,7 @@ function AceHead(canvas, opts) {
   var dests = [
     { label: 'GOALS', name: 'Goals', go: '#goals', a: -64 },
     { label: 'SIMULATORS', name: 'Simulators', go: '#simulators', a: -32 },
-    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: 'borrow.html', a: 0 },
+    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: '#borrow', a: 0 },
     { label: 'HOW IT WORKS', name: 'How it works', go: '#how', a: 32 },
     { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who', a: 64 }
   ];
@@ -584,11 +947,33 @@ function AceHead(canvas, opts) {
     remote: '<rect class="shape" x="-5" y="-13" width="10" height="26" rx="2.5"/><circle cx="0" cy="-7" r="2" fill="#ff6b5e"/><circle cx="0" cy="0" r="1.6" fill="#a9e4c4"/><circle cx="0" cy="5" r="1.6" fill="#a9e4c4"/>'
   };
   var objs = [
-    { key: 'cup', name: 'Cup of water', a: -8, said: 'Ahh', done: 'Taking a sip' },
-    { key: 'phone', name: 'Phone', a: 26, said: 'Hello?', done: 'Phone at your ear' },
-    { key: 'remote', name: 'TV remote', a: 58, said: 'Click', done: 'Remote in reach' }
+    { key: 'cup', name: 'Cup of water', a: -8, said: 'Ahh, thank you!', done: 'Ace is taking a sip' },
+    { key: 'phone', name: 'Phone', a: 26, said: 'Hello, I\u2019m Ace!', done: 'Ace is on the phone' },
+    { key: 'remote', name: 'TV remote', a: 58, said: 'Movie night!', done: 'Ace has the remote' }
   ];
   var FACE = -58;
+
+  var armAce = AceHead(document.getElementById('armAce'));
+  var aceWrap = document.getElementById('aceWrap'), aceSay = document.getElementById('aceSay'), aceSayT, aceHold;
+  function aceSays(text, ms) {
+    if (!text) { aceSay.hidden = true; return; }
+    aceSay.textContent = text; aceSay.hidden = false; clearTimeout(aceSayT);
+    aceSayT = setTimeout(function () { aceSay.hidden = true; }, ms || 2800);
+    armAce.talk(Math.min(2400, 300 + text.length * 70));
+  }
+  function aceExpr(p, ms) {
+    clearInterval(aceHold); var t0 = performance.now();
+    aceHold = setInterval(function () {
+      var u = (performance.now() - t0) / ms; if (u >= 1) { clearInterval(aceHold); return; }
+      armAce.set(typeof p === 'function' ? p(u) : p);
+    }, 50);
+  }
+  function aceReact(o) {
+    if (o.key === 'phone') { aceExpr(function (u) { return u < 0.4 ? { yaw: 360 * (u / 0.4), smile: 1, brow: 0.6 } : { yaw: 380, smile: 1, brow: 0.4, roll: -8 }; }, 3000); }
+    else if (o.key === 'cup') { aceExpr(function (u) { return { yaw: 24, pitch: u < 0.5 ? -10 : 0, smile: u < 0.5 ? 0.3 : 1, open: u < 0.5 ? 0.4 : 0, blink: u > 0.55 && u < 0.62 ? 1 : 0 }; }, 2800); }
+    else { aceExpr(function (u) { return { yaw: 18 + 10 * Math.sin(u * 12), smile: 1, brow: 0.8 }; }, 2600); }
+  }
+  setTimeout(function () { aceSays('Hi, I’m Ace!', 2600); aceExpr({ smile: 1, brow: 0.6, yaw: 15 }, 2400); }, 1200);
   objs.forEach(function (o, i) {
     var p = polar(o.a, 170);
     o.home = p;
@@ -612,6 +997,7 @@ function AceHead(canvas, opts) {
     aim(L[cur].a);
     L.forEach(function (d, j) { (d.el || d.g).classList.toggle('on', j === cur); if (d.label && d.label.setAttribute) d.label.classList && d.label.classList.toggle('on', j === cur); });
     sel.textContent = (mode === 'nav' ? 'Pointing at: ' : 'Reaching for: ') + L[cur].name;
+    if (typeof armAce !== 'undefined') aceExpr({ yaw: 8 + (L[cur].a + 64) / 128 * 26, pitch: -4, smile: 0.45 }, 1600);
     wake();
   }
   function lock(on) { busy = on; leftBtn.disabled = on || !!holding; rightBtn.disabled = on || !!holding; goBtn.disabled = on; }
@@ -621,14 +1007,11 @@ function AceHead(canvas, opts) {
     if (busy) return; wake();
     if (mode === 'nav') {
       var d = dests[cur]; lock(true);
-      sel.textContent = 'Going to: ' + d.name;
+      sel.textContent = 'Going to: ' + d.name; aceSays('Off to ' + d.name.toLowerCase() + '!', 1800);
       svg.classList.add('reach', 'closed'); await wait(650);
       svg.classList.remove('reach', 'closed'); lock(false);
-      if (d.go.charAt(0) === '#') {
-        var t = document.querySelector(d.go);
-        if (t) t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
-        sel.textContent = 'Pointing at: ' + d.name;
-      } else { location.href = d.go; }
+      if (location.hash === d.go) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = d.go;
+      sel.textContent = 'Pointing at: ' + d.name;
       return;
     }
     var o = objs[cur]; lock(true);
@@ -640,11 +1023,11 @@ function AceHead(canvas, opts) {
       o.g.setAttribute('transform', 'translate(200 86)'); o.g.classList.remove('on'); grip.appendChild(o.g);
       svg.classList.remove('reach'); await wait(400);
       aim(FACE); await wait(700);
-      holding = o; say(o.said);
+      holding = o; aceSays(o.said, 3200); aceReact(o);
       sel.textContent = o.done;
       goBtn.textContent = 'Put it back';
     } else {
-      o = holding; say('');
+      o = holding; aceSays('Thanks!', 1800); aceExpr({ smile: 0.8, yaw: 10 }, 1500);
       sel.textContent = 'Putting back: ' + o.name;
       aim(o.a); await wait(700);
       svg.classList.add('reach'); await wait(450);
@@ -666,6 +1049,8 @@ function AceHead(canvas, opts) {
     dial.setAttribute('visibility', m === 'nav' ? 'visible' : 'hidden');
     scene.setAttribute('visibility', m === 'play' ? 'visible' : 'hidden');
     goBtn.textContent = m === 'nav' ? 'Go' : 'Pick up';
+    aceWrap.classList.toggle('play', m === 'play');
+    aceSays(m === 'play' ? 'Bring me something!' : 'Where to next?', 2200);
     setCur(m === 'nav' ? 1 : 1);
   }
   modeNav.addEventListener('click', function () { setMode('nav'); });
@@ -750,4 +1135,272 @@ function AceHead(canvas, opts) {
   try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
   big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
 })();
+</script>
+<script>
+// views-js:start
+(function () {
+var __ID = function (x) { return document.getElementById('bw-' + x) || document.getElementById(x); };
+
+(function () {
+  var toast = __ID('toast'), timer;
+  function say(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 4000); }
+
+  var list = __ID('kitList'), empty = __ID('kitEmpty'), req = __ID('requestBtn');
+  var picks = [];
+  function render() {
+    list.innerHTML = '<li><span>Interface box</span><span>Included</span></li>';
+    picks.forEach(function (p) {
+      var li = document.createElement('li');
+      var a = document.createElement('span'); a.textContent = p.name;
+      var b = document.createElement('span'); b.textContent = p.kind;
+      li.append(a, b); list.appendChild(li);
+    });
+    empty.hidden = picks.length > 0;
+    req.disabled = picks.length === 0;
+  }
+  document.querySelectorAll('#view-borrow button.item').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.querySelector('.check').textContent = on ? 'Added' : 'Add';
+      if (on) picks.push({ name: b.dataset.name, kind: b.dataset.kind });
+      else picks = picks.filter(function (p) { return p.name !== b.dataset.name; });
+      render();
+    });
+  });
+  req.addEventListener('click', function () {
+    say('Kit of ' + (picks.length + 1) + ' items noted. In the working version, this sends your request to the Access+ loan team.');
+  });
+
+  })();
+
+})();
+var __ID = function (x) { return document.getElementById('pf-' + x) || document.getElementById(x); };
+
+(function () {
+  // ---------- data ----------
+  var EXAMPLE = {
+    name: 'Jordan R.',
+    headline: 'Building skills for the computer, phone and power chair',
+    facts: { 'Main condition': 'C4 spinal cord injury', 'Hand use': 'None', 'Best movements': 'Head, face, breath', 'Uses Access+': 'On own and with OT' },
+    skills: [
+      { name: 'Nose pointer', level: 3, status: 'Reliable', note: '9 of 10 targets, 2.1 s average' },
+      { name: 'Smile switch', level: 3, status: 'Reliable', note: '5 of 5, no accidental presses' },
+      { name: 'Long blink', level: 1, status: 'Not yet', note: '3 accidental presses while talking' },
+      { name: 'Head tilt switches', level: 2, status: 'Possible', note: 'Left reliable, right tires quickly' },
+      { name: 'Sip-and-puff', level: 1, status: 'Trying', note: 'Kit on loan, week 1' },
+      { name: 'Voice commands', level: 2, status: 'Possible', note: 'Good indoors, struggles with noise' }
+    ],
+    tools: [
+      { tool: 'OptiKey on-screen keyboard', use: 'Typing, mouse clicks', works: 'Fast once set up', issues: 'Keys small in bed', ace: 'Make a larger in-bed keyboard layout' },
+      { tool: 'Nose tracking webcam', use: 'Pointer control', works: 'Accurate seated', issues: 'Pillow limits movement in bed', ace: 'Re-calibrate a bed profile with more speed' },
+      { tool: 'Phone voice control', use: 'Calls and texts', works: 'Hands-free calls', issues: 'Fails in noisy rooms', ace: 'Try a headset mic from the sensor kit' },
+      { tool: 'Power chair joystick (chin)', use: 'Driving', works: 'Indoors', issues: 'Neck fatigue by evening', ace: 'Practice head-tilt driving in the simulator' }
+    ],
+    movement: ['Head turn: full', 'Head tilt: partial', 'Nod: full', 'Smile: strong', 'Eyebrows: strong', 'Breath: strong', 'Shoulders: slight', 'Voice: clear'],
+    moveNote: 'Gets tired by evening. Sensation is reduced below the shoulders.',
+    positions: [
+      { name: 'Power chair', note: 'Most of the day. Nose tracking and chin joystick.' },
+      { name: 'Tilted back', note: 'Pressure relief every hour. Screen needs re-centering.' },
+      { name: 'In bed', note: 'Mornings and some sick days. Voice and smile switch.' }
+    ],
+    goals: [
+      { text: 'Use the computer for work 4 hours a day', when: 'Now' },
+      { text: 'Answer the phone and text without help', when: 'Next month' },
+      { text: 'Try head-tilt driving as a backup to the chin joystick', when: 'This year' }
+    ],
+    team: [
+      { text: 'Occupational therapist', note: 'Reviews results monthly' },
+      { text: 'Spouse helps with setup', note: 'Places the switch mount' },
+      { text: 'Sensor kit on loan', note: 'Breath switch and interface box, returns in 3 weeks' }
+    ],
+    next: [
+      { text: 'Run the bed-position nose pointer test', note: 'Suggested by Ace' },
+      { text: 'Practice sip-and-puff clicks, level 1', note: 'Computer exercises simulator' },
+      { text: 'Share this month’s results with the OT', note: 'You choose what is shared' }
+    ]
+  };
+  var BLANK = { name: '', headline: '', facts: {}, skills: [], tools: [], movement: [], moveNote: '', positions: [], goals: [], team: [], next: [] };
+  var P = JSON.parse(JSON.stringify(EXAMPLE));
+  var isExample = true;
+
+  // ---------- render ----------
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function emptyLine(parent, text) { parent.appendChild(el('p', 'empty', text)); }
+  function render() {
+    __ID('exTag').hidden = !isExample;
+    __ID('sampleBanner').hidden = !isExample;
+    var name = P.name || 'Your name';
+    __ID('whoName').textContent = name;
+    __ID('whoLine').textContent = P.headline || 'Talk to Ace to fill in your profile';
+    __ID('initials').textContent = (P.name || '?').split(/\s+/).map(function (w) { return w.charAt(0); }).join('').slice(0, 2).toUpperCase() || '?';
+    var facts = __ID('facts'); facts.innerHTML = '';
+    var keys = Object.keys(P.facts || {});
+    if (!keys.length) { var d = el('div'); d.appendChild(el('span', '', 'Not filled in yet')); d.appendChild(el('b', '', 'Ace will ask')); facts.appendChild(d); }
+    keys.forEach(function (k) { var d = el('div'); d.appendChild(el('span', '', k)); d.appendChild(el('b', '', P.facts[k])); facts.appendChild(d); });
+
+    var sk = __ID('skills'); sk.innerHTML = '';
+    if (!P.skills.length) emptyLine(sk, 'No skills yet. They appear here when you run an assessment, like the gesture self-assessment or a simulator level.');
+    P.skills.forEach(function (s) {
+      var c = el('div', 'skill'); c.appendChild(el('b', '', s.name));
+      var lv = el('div', 'lvl'); for (var i = 1; i <= 4; i++) { var b = el('i'); if (i <= (s.level || 0)) b.className = 'on'; lv.appendChild(b); } c.appendChild(lv);
+      var cls = /reliable/i.test(s.status) ? 'good' : /not/i.test(s.status) ? 'no' : 'ok';
+      c.appendChild(el('span', 'pill ' + cls, s.status || 'Trying'));
+      if (s.note) c.appendChild(el('small', '', s.note));
+      sk.appendChild(c);
+    });
+
+    var tb = __ID('tools'); tb.innerHTML = '';
+    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell Ace what you use today: devices, apps, switches, anything.'); td.colSpan = 5; tr.appendChild(td); tb.appendChild(tr); }
+    P.tools.forEach(function (t) {
+      var tr = el('tr');
+      [t.tool, t.use, t.works, t.issues].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
+      tr.appendChild(el('td', 'ace', t.ace || '–')); tb.appendChild(tr);
+    });
+
+    var mv = __ID('move'); mv.innerHTML = '';
+    if (!P.movement.length) emptyLine(mv, 'Which movements you have, and how strong they are.');
+    P.movement.forEach(function (m) { mv.appendChild(el('span', 'pf-chip on', m)); });
+    __ID('moveNote').textContent = P.moveNote || '';
+
+    var ps = __ID('pos'); ps.innerHTML = '';
+    if (!P.positions.length) emptyLine(ps, 'Where you spend your day: chair, tilted, bed, outdoors.');
+    P.positions.forEach(function (p) { var d = el('div'); d.appendChild(el('b', '', p.name)); d.appendChild(el('small', '', p.note || '')); ps.appendChild(d); });
+
+    function list(id, items, emptyText, sub) {
+      var u = __ID(id); u.innerHTML = '';
+      if (!items.length) { u.appendChild(el('li', 'empty', emptyText)); return; }
+      items.forEach(function (it) { var li = el('li', '', it.text); var n = it[sub]; if (n) li.appendChild(el('small', '', n)); u.appendChild(li); });
+    }
+    list('goals', P.goals, 'What do you want to be able to do?', 'when');
+    list('team', P.team, 'Who helps you, and what equipment you have or have borrowed.', 'note');
+    list('next', P.next, 'Ace suggests next steps once your profile has some detail.', 'note');
+  }
+  render();
+
+  function flash(ids) { ids.forEach(function (id) { var c = __ID(id); if (!c) return; c.classList.remove('flash'); void c.offsetWidth; c.classList.add('flash'); }); }
+
+  // merge updates from Ace
+  var MAP = { name: 'c-who', headline: 'c-who', facts: 'c-who', skills: 'c-skills', tools: 'c-tools', movement: 'c-move', moveNote: 'c-move', positions: 'c-pos', goals: 'c-goals', team: 'c-team', next: 'c-next' };
+  function apply(up) {
+    if (!up || typeof up !== 'object') return;
+    var touched = [];
+    function strs(a) { return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string' && x.trim(); }).map(String) : []; }
+    function objs(a, keys) { return Array.isArray(a) ? a.filter(function (x) { return x && typeof x === 'object'; }).map(function (x) { var o = {}; keys.forEach(function (k) { if (x[k] != null) o[k] = typeof x[k] === 'number' ? x[k] : String(x[k]); }); return o; }) : []; }
+    if (typeof up.name === 'string' && up.name.trim()) { P.name = up.name.trim(); touched.push('name'); }
+    if (typeof up.headline === 'string' && up.headline.trim()) { P.headline = up.headline.trim(); touched.push('headline'); }
+    if (up.facts && typeof up.facts === 'object' && !Array.isArray(up.facts)) { Object.keys(up.facts).forEach(function (k) { if (up.facts[k] != null && String(up.facts[k]).trim()) P.facts[String(k)] = String(up.facts[k]); }); touched.push('facts'); }
+    if (up.tools) { P.tools = objs(up.tools, ['tool', 'use', 'works', 'issues', 'ace']); touched.push('tools'); }
+    if (up.movement) { P.movement = strs(up.movement); touched.push('movement'); }
+    if (typeof up.moveNote === 'string') { P.moveNote = up.moveNote; touched.push('moveNote'); }
+    if (up.positions) { P.positions = objs(up.positions, ['name', 'note']); touched.push('positions'); }
+    if (up.goals) { P.goals = objs(up.goals, ['text', 'when']); touched.push('goals'); }
+    if (up.team) { P.team = objs(up.team, ['text', 'note']); touched.push('team'); }
+    if (up.next) { P.next = objs(up.next, ['text', 'note']); touched.push('next'); }
+    if (up.skills) { P.skills = objs(up.skills, ['name', 'level', 'status', 'note']).map(function (s) { s.level = Math.max(0, Math.min(4, Number(s.level) || 1)); return s; }); touched.push('skills'); }
+    render(); flash(touched.map(function (k) { return MAP[k]; }));
+  }
+
+  // ---------- Ace ----------
+  var RULES = [
+    'You are Ace (Adaptive Control Expert), the AI guide on the Access+ website. Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, reviews technology and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
+    'Right now you are helping the person build their Access+ profile by conversation, so they do not have to fill in forms. Interview them warmly, ONE short question at a time, and fill in the profile from what they say. Cover, roughly in this order: what to call them; what they want to be able to do (goals); which movements and senses they have and how strong (head turn, tilt, nod, face, eyes, breath, voice, shoulders, arms, fingers; fatigue); positions they spend time in (chair, tilted, bed, outdoors); the tools they use today and how well each works; who supports them and what equipment they have. Skip anything they already told you. Never push for medical details; record only what they choose to share.',
+    'When they describe current tools, assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
+    'This site is a pilot draft: never claim you saved anything to an account or started a simulator. No diagnosis or medical advice; for health, skin, breathing, swallowing or seating concerns, suggest their therapist or clinician.',
+    'Reply with ONLY a JSON object: {"reply": string, "updates": object}. "reply" is what you say aloud: plain text, warm, under 70 words, ending with your next question when you have one. "updates" holds only the profile fields that changed, each given in full: name (string), headline (one-line summary string), facts (object of short label: value pairs, max 5), movement (array of short strings like "Head turn: full"), moveNote (string), positions (array of {name, note}), goals (array of {text, when}), tools (array of {tool, use, works, issues, ace}), team (array of {text, note}), next (array of {text, note}), skills (array of {name, level 1-4, status, note}). Use {} when nothing changed.'
+  ].join('\n\n');
+
+  var log = __ID('log'), form = __ID('askForm'), input = __ID('askIn');
+  var sendBtn = __ID('sendBtn'), stopBtn = __ID('stopBtn'), note = __ID('aceNote');
+  var speakBtn = __ID('speakBtn');
+  var turns = [], sampleFn = null, ctl = null, busy = false, speak = false;
+  var face = AceHead(__ID('aceFace'));
+
+  function bubble(cls, text) { var d = el('div', 'msg ' + cls, text); log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  function setBusy(on) { busy = on; sendBtn.disabled = on; stopBtn.hidden = !on; document.querySelectorAll('#pf-quick .btn').forEach(function (b) { b.disabled = on || !sampleFn; }); }
+  function say(text) {
+    if (!speak || !('speechSynthesis' in window)) return;
+    try { speechSynthesis.cancel(); var u = new SpeechSynthesisUtterance(text); u.rate = 1; speechSynthesis.speak(u); } catch (e) {}
+  }
+  speakBtn.addEventListener('click', function () {
+    speak = !speak; speakBtn.setAttribute('aria-pressed', speak ? 'true' : 'false');
+    if (!speak) { try { speechSynthesis.cancel(); } catch (e) {} }
+  });
+
+  function profileSnapshot() { return JSON.stringify(isExample ? BLANK : P); }
+  var errCopy = {
+    not_granted: 'Ace needs your permission to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude isn’t available on this account, so Ace is off.',
+    rate_limited: 'Ace is getting a lot of questions. Wait a minute and try again.',
+    session_expired: 'Please sign in to Claude again to talk with Ace.',
+    refused: 'Ace can’t help with that one. Try saying it another way.',
+    invalid_json: 'Ace got muddled. Please say that again.'
+  };
+
+  async function talk(userText, shown) {
+    if (!sampleFn || busy) return;
+    if (shown !== false) bubble('me', userText);
+    turns.push({ role: 'user', content: userText + '\n\n[Current profile JSON: ' + profileSnapshot() + ']' });
+    if (turns.length > 20) turns = turns.slice(-20);
+    while (turns.length && turns[0].role !== 'user') turns.shift();
+    var out = bubble('pf-ai thinking', 'Ace is thinking…');
+    setBusy(true); ctl = new AbortController();
+    try {
+      var data = await sampleFn.json([{ role: 'user', content: RULES }].concat(turns), { modelTier: 'quick', cache: false, signal: ctl.signal });
+      var reply = data && typeof data.reply === 'string' ? data.reply : 'Tell me a bit more?';
+      out.classList.remove('thinking'); out.textContent = reply; say(reply); face.talk(Math.min(6000, 400 + reply.length * 45));
+      turns.push({ role: 'assistant', content: JSON.stringify(data) });
+      if (isExample && data && data.updates && Object.keys(data.updates).length) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); }
+      apply(data && data.updates);
+    } catch (e) {
+      turns.pop(); out.classList.remove('thinking');
+      var code = e && e.code;
+      if (code === 'cancelled') out.textContent = 'Stopped.';
+      else if (['not_granted', 'sampling_disabled', 'not_declared', 'capability_disabled', 'capability_removed'].indexOf(code) >= 0) { out.textContent = errCopy[code] || 'Ace isn’t available here.'; sampleFn = null; form.hidden = true; }
+      else out.textContent = errCopy[code] || 'Something went wrong reaching Ace. Try again.';
+    } finally { setBusy(false); ctl = null; if (!form.hidden) input.focus(); }
+  }
+
+  form.addEventListener('submit', function (e) { e.preventDefault(); var t = input.value.trim(); if (!t) return; input.value = ''; talk(t); });
+  input.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
+  stopBtn.addEventListener('click', function () { if (ctl) ctl.abort(); try { speechSynthesis.cancel(); } catch (e) {} });
+  __ID('startBtn').addEventListener('click', function () {
+    isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = [];
+    log.innerHTML = '';
+    talk('Please start my profile interview. Greet me briefly and ask your first question.', false);
+  });
+  __ID('assessBtn').addEventListener('click', function () {
+    if (isExample) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = []; log.innerHTML = ''; }
+    talk('I’d like you to assess the tools I use today. Ask me what I use, one at a time.', true);
+  });
+
+  setBusy(true); note.textContent = 'Connecting Ace…';
+  (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
+    sampleFn = fn; setBusy(false);
+    if (!fn) { form.hidden = true; __ID('quick').hidden = true; note.textContent = 'Ace can talk with you when this page is opened in Claude while signed in. The profile shown is an example.'; return; }
+    note.textContent = 'Ace uses Claude on your own Claude account. For learning and practice, not medical advice.';
+  }).catch(function () { setBusy(false); form.hidden = true; note.textContent = 'Ace isn’t available here. The profile shown is an example.'; });
+
+  })();
+
+(function () {
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture'];
+  function route() {
+    var h = (location.hash || '#home').slice(1) || 'home';
+    var v = VIEWS.indexOf(h) >= 0 ? h : 'home';
+    VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
+    var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' ? h : 'home');
+    document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+  document.querySelectorAll('[data-back]').forEach(function (b) {
+    b.addEventListener('click', function () { if (history.length > 1) history.back(); else location.hash = 'home'; });
+  });
+  document.getElementById('toTop').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });
+  try { AceHead(document.getElementById('gxFace')); } catch (e) {}
+})();
+// views-js:end
 </script>

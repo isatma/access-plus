@@ -1,0 +1,239 @@
+"""Combine the Access+ pages into one site (website/index.html) with hash routes.
+
+Views: #home (with #simulators, #guide-ai, #how, #goals, #who), #borrow, #profile, #gesture.
+Run from the repo root:  python3 tools/build_site.py
+Sources: src/home.html, src/borrow.html, src/profile.html. Output: website/index.html (do not edit by hand).
+"""
+import re, sys, pathlib
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+GESTURE_URL = 'https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro'
+
+SKIP = re.compile(r'^(:root|\*|\[hidden\]|body|html|:focus-visible|\.wrap\b|\.bar\b|\.brand\b|\.tagline\b|\.nav\b|\.navrow\b|\.ver\b|a\b|h1, h2, h3|\.sr\b|\.toast\b|\.btn \{|\.btn\[aria-pressed|\.btn\.primary)')
+
+
+def split_rules(css):
+    """Yield (prelude, body) for top-level blocks."""
+    css = re.sub(r'/\*.*?\*/', '', css, flags=re.S)
+    i, n = 0, len(css)
+    while i < n:
+        j = css.find('{', i)
+        if j < 0:
+            break
+        prelude = css[i:j].strip()
+        depth, k = 1, j + 1
+        while k < n and depth:
+            if css[k] == '{': depth += 1
+            elif css[k] == '}': depth -= 1
+            k += 1
+        yield prelude, css[j + 1:k - 1]
+        i = k
+
+
+def scope(css, view):
+    out = []
+    for prelude, body in split_rules(css):
+        if prelude.startswith('@media'):
+            inner = scope(body, view)
+            if inner.strip():
+                out.append(prelude + ' {\n' + inner + '}')
+        elif prelude.startswith('@keyframes'):
+            out.append(prelude + ' {' + body + '}')
+        else:
+            if SKIP.match(prelude + ' {') or SKIP.match(prelude):
+                continue
+            sels = []
+            for sel in prelude.split(','):
+                sel = sel.strip()
+                if sel.startswith('main .wrap'):
+                    sels.append('#view-%s > .wrap' % view + sel[len('main .wrap'):])
+                else:
+                    sels.append('#view-%s %s' % (view, sel))
+            out.append(', '.join(sels) + ' {' + body + '}')
+    return '\n'.join(out) + '\n'
+
+
+def rename_classes(text, mapping, prefix_css=False):
+    def cls_attr(m):
+        toks = [mapping.get(t, t) for t in m.group(2).split()]
+        return m.group(1) + ' '.join(toks) + '"'
+    text = re.sub(r'(class=")([^"]*)"', cls_attr, text)
+    return text
+
+
+def css_rename(css, mapping):
+    for a, b in mapping.items():
+        css = re.sub(r'\.%s(?![\w-])' % re.escape(a), '.' + b, css)
+    return css
+
+
+def prefix_ids(html, js, pre, keep=()):
+    ids = set(re.findall(r'\bid="([^"]+)"', html))
+    ids -= set(keep)
+    def fix(m):
+        attr, val = m.group(1), m.group(2)
+        vals = [pre + v if v in ids else v for v in val.split()]
+        return '%s="%s"' % (attr, ' '.join(vals))
+    html = re.sub(r'\b(id|for|aria-labelledby|aria-controls|aria-describedby)="([^"]+)"', fix, html)
+    for i in sorted(ids, key=len, reverse=True):
+        js = re.sub(r"'#%s(?=[\s.'\[])" % re.escape(i), "'#" + pre + i, js)
+    js = 'var __ID = function (x) { return document.getElementById(%r + x) || document.getElementById(x); };\n' % pre + js.replace('document.getElementById(', '__ID(')
+    return html, js
+
+
+def strip_big_toggle(js):
+    i = js.find('var root = document.documentElement, big')
+    if i < 0: return js
+    j = js.find("big.addEventListener('click'", i)
+    j = js.find('\n', j)
+    return js[:i] + js[j + 1:]
+
+
+def fragment(path):
+    s = path.read_text()
+    css = re.search(r'<style>(.*?)</style>', s, re.S).group(1)
+    main = re.search(r'<main>(.*?)</main>', s, re.S).group(1)
+    js = re.findall(r'<script>(.*?)</script>', s, re.S)[-1]
+    return css, main, js
+
+
+def build():
+    home_p = ROOT / 'website' / 'index.html'
+    home = (ROOT / 'src' / 'home.html').read_text()
+
+    # ---------- borrow ----------
+    css, main, js = fragment(ROOT / 'src' / 'borrow.html')
+    bmap = {'intro': 'bw-intro', 'head': 'bw-head', 'chips': 'bw-chips', 'chip': 'bw-chip', 'how': 'bw-how'}
+    main = rename_classes(main, bmap); css = css_rename(css, bmap)
+    main, js = prefix_ids(main, js, 'bw-', keep=('toast',))
+    js = js.replace("  document.querySelectorAll('[data-msg]').forEach(function (b) { b.addEventListener('click', function () { say(b.dataset.msg); }); });\n", '')
+    js = js.replace("document.querySelectorAll('button.item')", "document.querySelectorAll('#view-borrow button.item')")
+    js = strip_big_toggle(js)
+    borrow = ('<main id="view-borrow" class="view" hidden>\n' + main.replace('<div class="wrap">', '<div class="wrap">\n    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>', 1) + '</main>\n',
+              scope(css, 'borrow'), js)
+
+    # ---------- profile ----------
+    css, main, js = fragment(ROOT / 'src' / 'profile.html')
+    pmap = {'chips': 'pf-chips', 'chip': 'pf-chip', 'who': 'pf-who', 'ai': 'pf-ai'}
+    main = rename_classes(main, pmap); css = css_rename(css, pmap)
+    js = js.replace("el('span', 'chip on', m)", "el('span', 'pf-chip on', m)").replace("bubble('ai thinking'", "bubble('pf-ai thinking'")
+    main, js = prefix_ids(main, js, 'pf-')
+    js = strip_big_toggle(js)
+    profile = ('<main id="view-profile" class="view" hidden>\n  <div class="wrap backwrap"><div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div></div>\n' + main + '</main>\n',
+               scope(css, 'profile'), js)
+
+    # ---------- gesture ----------
+    gesture_html = '''<main id="view-gesture" class="view" hidden>
+  <div class="wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+    <section class="gx" aria-labelledby="gxT">
+      <div class="gx-text">
+        <div class="eyebrow">Camera gesture self-assessment</div>
+        <h1 id="gxT">Gesture check with Ace</h1>
+        <p>Your webcam can turn small movements into switches. Ace watches your face, mirrors your expressions, and tests which gestures work best for you.</p>
+        <ul class="gx-list">
+          <li><b>Face switches</b><span>Smile, open mouth, raised eyebrows, long blink, pucker</span></li>
+          <li><b>Head switches</b><span>Tilt left and right, turn left and right, nod down, look up</span></li>
+          <li><b>Nose pointer</b><span>Steer a pointer with your nose and hold on targets that get smaller</span></li>
+          <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with Ace's top picks</span></li>
+        </ul>
+        <p class="gx-note">The camera is turned off inside this preview. Gesture Check runs on its own page, where your browser can use the camera. Your video stays on your device.</p>
+        <a class="btn primary" href="%s" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
+      </div>
+      <canvas id="gxFace" class="gx-face" role="img" aria-label="Ace, a wireframe face"></canvas>
+    </section>
+  </div>
+</main>
+''' % GESTURE_URL
+    gesture_css = '''#view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+#view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
+#view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
+#view-gesture p { margin: 0; color: var(--muted); max-width: 40em; }
+#view-gesture .gx-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+#view-gesture .gx-list li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+#view-gesture .gx-list b { font-weight: 600; }
+#view-gesture .gx-list span { color: var(--desc); font-size: 0.93em; }
+#view-gesture .gx-note { color: var(--desc); font-size: 0.9em; }
+#view-gesture .gx-face { width: 100%; height: 380px; display: block; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
+@media (max-width: 900px) { #view-gesture .gx { grid-template-columns: 1fr; } #view-gesture .gx-face { height: 280px; } }
+'''
+
+    # ---------- home edits ----------
+    # wrap home main as a view
+    home = home.replace('<main>\n  <div class="wrap">', '<main id="view-home" class="view">\n  <div class="wrap">', 1)
+    home = home.replace('main .wrap { padding-block: 44px 80px;', '.view > .wrap { padding-block: 28px 80px;', 1)
+    # remove previously merged views if rebuilding
+    home = re.sub(r'<!-- views:start -->.*?<!-- views:end -->\n', '', home, flags=re.S)
+    home = re.sub(r'/\* views-css:start \*/.*?/\* views-css:end \*/\n', '', home, flags=re.S)
+    home = re.sub(r'<script>\n// views-js:start.*?// views-js:end\n</script>\n', '', home, flags=re.S)
+
+    # links to hash routes
+    home = re.sub(r'href="https://claude\.ai/artifact/W2wmMHp9CfJrPfaQULxeqi"', 'href="#profile"', home)
+    home = home.replace('href="borrow.html"', 'href="#borrow"')
+    home = home.replace("go: 'borrow.html'", "go: '#borrow'")
+
+    # header: test-version badge, sign in button with demo tag, nav
+    home = home.replace('<div class="brand">ACCESS<span>+</span></div>', '<a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span>', 1)
+    home = re.sub(r'<a class="btn primary" href="#profile">My profile</a>', '<a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>', home, count=1)
+    nav = ('<nav class="nav" aria-label="Site">'
+           '<a href="#home" data-route="home">Home</a>'
+           '<a href="#simulators" data-route="simulators">Simulators</a>'
+           '<a href="#guide-ai" data-route="guide-ai">Meet Ace</a>'
+           '<a href="#gesture" data-route="gesture">Gesture check</a>'
+           '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
+           '<a href="#profile" data-route="profile">My profile</a></nav>')
+    home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', nav, home, count=1, flags=re.S)
+    if '.testbadge' not in home:
+        home = home.replace('/* hero */', '''.brand { text-decoration: none; }
+.testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
+.signin { gap: 10px; }
+.tagline { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.signin .demo { font: 500 0.78em var(--mono); letter-spacing: 0.1em; background: #ffc670; color: #231c05; padding: 2px 6px; }
+.backrow { display: flex; padding-bottom: 4px; }
+.backwrap { padding-block: 20px 0 !important; }
+.totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
+/* hero */''', 1)
+
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + gesture_html + '<!-- views:end -->\n'
+    home = re.sub(r'</main>\s*<footer>', lambda m: '</main>\n\n' + views_html + '\n<footer>', home, count=1)
+    if '<button class="btn totop"' not in home:
+        home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
+
+    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + gesture_css + '/* views-css:end */\n'
+    home = home.replace('</style>', views_css + '</style>', 1)
+
+    router = r'''
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture'];
+  function route() {
+    var h = (location.hash || '#home').slice(1) || 'home';
+    var v = VIEWS.indexOf(h) >= 0 ? h : 'home';
+    VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
+    var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' ? h : 'home');
+    document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', route);
+  route();
+  document.querySelectorAll('[data-back]').forEach(function (b) {
+    b.addEventListener('click', function () { if (history.length > 1) history.back(); else location.hash = 'home'; });
+  });
+  document.getElementById('toTop').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });
+  try { AceHead(document.getElementById('gxFace')); } catch (e) {}
+'''
+    views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
+    home = home.replace('</script>\n</body>', '</script>\n' + views_js + '</body>', 1) if '</body>' in home else home + views_js
+
+    # arm dial: all destinations go through the router
+    home = home.replace("""      if (d.go.charAt(0) === '#') {
+        var t = document.querySelector(d.go);
+        if (t) t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        sel.textContent = 'Pointing at: ' + d.name;
+      } else { location.href = d.go; }""", """      if (location.hash === d.go) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = d.go;
+      sel.textContent = 'Pointing at: ' + d.name;""")
+    home_p.write_text(home)
+    print('built', len(home), 'bytes')
+
+
+if __name__ == '__main__':
+    build()

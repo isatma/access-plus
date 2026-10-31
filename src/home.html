@@ -1,0 +1,789 @@
+<title>Access+ Home</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: instrument-panel console on a fine-line grid. Short hero, featured simulators up top (one large feature + four cards), then a compact three-step path, goal chips and who-it's-for. Detail menus live on their own pages. */
+:root {
+  --bg: #0b1220;
+  --panel: #0f1828;
+  --panel-hi: #15233a;
+  --ink: #f0f5fa;
+  --desc: #a9e4c4;
+  --muted: #c4d0dd;
+  --line: #22314a;
+  --line-hi: #3b5476;
+  --signal: #5fe0a8;
+  --signal-ink: #04201a;
+  --signal-soft: rgba(95,224,168,0.10);
+  --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+  --base: 18px;
+  --target: 80px;
+  color-scheme: dark;
+}
+:root.big { --base: 22px; --target: 104px; }
+
+* { box-sizing: border-box; }
+body {
+  background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px; background-attachment: fixed;
+  font-family: var(--body); font-size: var(--base); line-height: 1.55;
+}
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: 0.02em; }
+a { color: inherit; }
+.wrap { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
+.brand { font: 400 1.3em var(--display); letter-spacing: 0.08em; }
+.brand span { color: var(--signal); }
+.tagline { font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: auto; }
+@media (max-width: 640px) { .tagline { display: none; } }
+.btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
+.btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
+.btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+
+section[id] { scroll-margin-top: 150px; }
+.view > .wrap { padding-block: 28px 80px; display: grid; gap: 72px; }
+.eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
+
+.navrow { border-top: 1px solid var(--line); }
+.nav { display: flex; gap: 4px; overflow-x: auto; padding-block: 4px; scrollbar-width: thin; }
+.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 14px; text-decoration: none; color: var(--muted); font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid transparent; }
+.nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
+.nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
+
+.brand { text-decoration: none; }
+.testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
+.signin { gap: 10px; }
+.tagline { flex: 1 1 160px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.signin .demo { font: 500 0.78em var(--mono); letter-spacing: 0.1em; background: #ffc670; color: #231c05; padding: 2px 6px; }
+.backrow { display: flex; padding-bottom: 4px; }
+.backwrap { padding-block: 20px 0 !important; }
+.totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
+/* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: center; }
+.hero .intro { align-content: center; }
+.intro { display: grid; gap: 14px; max-width: 48em; }
+.intro h1 { font-size: 2.2em; line-height: 1.25; }
+.intro h1 span { color: var(--signal); }
+.intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
+.inline-link { color: var(--signal); }
+.intro .promise { color: var(--desc); font-weight: 600; border-left: 2px solid var(--signal); padding-left: 14px; }
+
+/* section heads */
+.head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; margin-bottom: 20px; }
+.head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+.head h2 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 0.08em; }
+.head p { margin: 0; color: var(--muted); }
+
+/* simulators */
+.sims { display: block; }
+.feature, .sim {
+  position: relative; display: grid; text-decoration: none; color: var(--ink);
+  background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line-hi);
+}
+.feature::before, .feature::after, .sim::before, .sim::after { content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--signal); border-style: solid; }
+.feature::before, .sim::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.feature::after, .sim::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
+.sim::after { border-width: 0 1px 1px 0; }
+.feature { grid-template-rows: auto 1fr; }
+.feature .viz { position: relative; }
+.arm-ace { position: absolute; left: 1%; top: 66%; width: 15%; pointer-events: none; transition: left .6s ease, top .6s ease, width .6s ease; }
+.arm-ace.play { left: 6.6%; top: 40%; width: 21%; }
+.arm-ace canvas { display: block; width: 100%; aspect-ratio: 1; }
+.ace-name { position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%); font: 500 10px var(--mono); letter-spacing: 0.14em; color: var(--signal); }
+.ace-say { position: absolute; left: calc(100% + 8px); top: 18%; white-space: nowrap; font: 500 12px var(--mono); letter-spacing: 0.04em; color: var(--signal-ink); background: var(--signal); padding: 5px 9px; }
+.ace-say::after { content: ""; position: absolute; right: 100%; top: 8px; border: 6px solid transparent; border-right-color: var(--signal); }
+.feature .viz { border-bottom: 1px solid var(--line-hi); background: linear-gradient(180deg, var(--signal-soft), transparent); }
+.feature svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.feature .body { display: grid; gap: 10px; padding: 22px; align-content: start; }
+.feature h3 { font-size: 1.35em; }
+.feature p, .sim p { margin: 0; color: var(--desc); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); border: 1px solid var(--signal); padding: 4px 8px; }
+.launch { justify-self: start; margin-top: 6px; }
+.side { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
+.sim { min-height: calc(var(--target) + 80px); gap: 8px; padding: 18px; align-content: start; }
+.sim svg { width: 40px; height: 40px; }
+.sim h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+.sim p { font-size: 0.88em; }
+.sim:hover, .feature:hover { background: var(--panel-hi); }
+.sim:hover::before, .sim:hover::after { border-color: var(--signal); }
+.more { margin-top: 14px; color: var(--muted); font-size: 0.95em; }
+.more b { color: var(--ink); font-weight: 600; }
+
+
+.feature .viz svg { cursor: default; }
+.arm-rot { transform-box: view-box; transform-origin: 200px 230px; }
+.fore { transform-box: view-box; transform-origin: 200px 148px; }
+.fore-bend { transform-box: view-box; transform-origin: 200px 148px; transform: rotate(18deg); }
+.reach .fore { transform: translateY(-34px); }
+.reach .fore-bend { transform: rotate(0deg); }
+.jaw-l { transform-box: view-box; transform-origin: 200px 100px; }
+.jaw-r { transform-box: view-box; transform-origin: 200px 100px; }
+.closed .jaw-l { transform: rotate(22deg); }
+.closed .jaw-r { transform: rotate(-22deg); }
+.obj { cursor: pointer; }
+.obj .shape { stroke: #a9e4c4; stroke-width: 1.6; fill: #0f1828; }
+.obj text { fill: #c4d0dd; }
+.obj.on .shape { stroke: #5fe0a8; stroke-width: 2.2; }
+.obj.on text { fill: #5fe0a8; }
+.obj .ring { stroke: transparent; stroke-dasharray: 3 4; }
+.obj.on .ring { stroke: #5fe0a8; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line-hi); }
+.mode { min-height: 52px; background: transparent; color: var(--muted); border: none; font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+.mode + .mode { border-left: 1px solid var(--line-hi); }
+.mode[aria-pressed="true"] { background: var(--signal-soft); color: var(--signal); }
+.armctl .btn:disabled { opacity: .4; cursor: not-allowed; }
+.dial-item { cursor: pointer; }
+.dial-item rect { fill: #0f1828; stroke: #3b5476; }
+.dial-item text { fill: #c4d0dd; }
+.dial-item.on rect { stroke: #5fe0a8; fill: rgba(95,224,168,0.14); }
+.dial-item.on text { fill: #5fe0a8; }
+.dial-item:focus-visible rect { stroke: #5fe0a8; stroke-width: 3; }
+.dial-item:focus { outline: none; }
+.armctl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
+.armctl .btn { min-height: var(--target); justify-content: center; font-size: 0.85em; }
+.armsel { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal) !important; }
+
+
+/* ai guide */
+.ai { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.ai-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 16px; }
+.ai-list li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+.ai-list b { font-weight: 600; }
+.ai-list span { color: var(--desc); font-size: 0.93em; }
+.chat { position: relative; display: grid; gap: 12px; padding: 20px; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line-hi); }
+.chat::before, .chat::after { content: ""; position: absolute; width: 14px; height: 14px; border: solid var(--signal); }
+.chat::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.chat::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.aceface { display: block; width: 100%; height: 220px; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line); }
+.chat-head { display: flex; justify-content: space-between; font: 500 0.72em var(--mono); letter-spacing: 0.14em; color: var(--signal); }
+.tag-ex { color: var(--muted); border: 1px solid var(--line-hi); padding: 1px 7px; }
+.msg { max-width: 88%; padding: 10px 14px; font-size: 0.93em; line-height: 1.5; }
+.msg.me { justify-self: end; background: var(--panel-hi); border: 1px solid var(--line-hi); }
+.msg.ai-msg { justify-self: start; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent); color: var(--ink); }
+.log { display: grid; gap: 12px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.msg { white-space: pre-wrap; }
+.msg.thinking { color: var(--muted); font-style: italic; }
+.starters { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip.small { min-height: 48px; padding: 0 14px; font-size: 0.85em; text-align: left; }
+.ask { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+.ask input { min-height: 56px; min-width: 0; padding: 0 14px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-hi); font: 400 1em var(--body); }
+.ask input:focus { outline: 3px solid var(--signal); outline-offset: 1px; }
+.ask .btn:disabled { opacity: .45; cursor: not-allowed; }
+.chat-note { margin: 0; color: var(--muted); font-size: 0.8em; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
+.step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
+.step .n { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.step h3 { font-size: 1em; line-height: 1.4; }
+.step p { margin: 0; color: var(--desc); font-size: 0.93em; }
+.step:hover { background: var(--panel-hi); box-shadow: inset 0 -3px 0 var(--signal); }
+
+/* goals and who */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { min-height: 56px; padding: 0 18px; display: inline-flex; align-items: center; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 600 0.95em var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--signal); color: var(--signal); }
+.who { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.who li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+.who b { font-weight: 600; }
+.who span { color: var(--desc); font-size: 0.93em; }
+
+footer { position: relative; z-index: 1; border-top: 1px solid var(--line-hi); color: var(--muted); font: 500 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+footer .wrap { padding-block: 22px; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 20; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: min(560px, calc(100% - 32px)); background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal); padding: 14px 18px; font-size: 0.9em; }
+
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .side { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) {
+  .step, .sim, .feature, .chip { transition: background .18s, border-color .18s, color .18s; }
+  .idle { animation: sway 5s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 230px; }
+  @keyframes sway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+  .arm-rot { transition: transform .6s cubic-bezier(.3,.7,.3,1); }
+  .fore { transition: transform .45s ease; }
+  .fore-bend, .jaw-l, .jaw-r { transition: transform .35s ease; }
+  .dial-item rect, .dial-item text { transition: stroke .2s, fill .2s; }
+}
+</style>
+
+<header class="bar" id="top">
+  <div class="wrap">
+    <a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><span class="tagline">AI-assisted skill building for assistive technology</span>
+    <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
+    <a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>
+  </div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">Meet Ace</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
+</header>
+
+<main id="view-home" class="view">
+  <div class="wrap">
+
+    <div class="hero">
+      <section class="intro" aria-labelledby="introTitle">
+            <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
+      <p>Create your own personal platform for building skills. Practice in simulators, borrow equipment on loan, and get free access to hardware and software solutions for the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
+      <p>Ace, your AI guide, coaches you along the way. <a href="#guide-ai" class="inline-link">Ask Ace a question</a>.</p>
+      <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
+    </section>
+      <div class="feature" id="guide">
+          <div class="viz">
+            <div class="arm-ace" id="aceWrap"><canvas id="armAce" aria-hidden="true"></canvas><span class="ace-name">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
+            <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
+              <g stroke="#3b5476" stroke-width="1">
+                <path d="M30 230 A170 170 0 0 1 370 230" stroke-dasharray="3 6"/>
+                <line x1="10" y1="244" x2="390" y2="244"/>
+              </g>
+              <g id="dial" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1"></g>
+              <g id="scene" visibility="hidden" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">
+                
+              </g>
+              <g id="armRot" class="arm-rot">
+                <g id="armIdle" class="idle">
+                  <line x1="200" y1="230" x2="200" y2="148" stroke="#f0f5fa" stroke-width="8"/>
+                  <g id="fore" class="fore">
+                    <g class="fore-bend">
+                      <line x1="200" y1="148" x2="200" y2="100" stroke="#f0f5fa" stroke-width="6"/>
+                      <circle cx="200" cy="148" r="7" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
+                      <g id="grip" class="grip">
+                        <path class="jaw-l" d="M200 100 l-9 -14" stroke="#5fe0a8" stroke-width="3.5"/>
+                        <path class="jaw-r" d="M200 100 l9 -14" stroke="#5fe0a8" stroke-width="3.5"/>
+                        <circle cx="200" cy="100" r="4" fill="#5fe0a8"/>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+              <rect x="176" y="226" width="48" height="18" fill="#0f1828" stroke="#f0f5fa" stroke-width="2"/>
+              <circle cx="200" cy="230" r="9" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
+            </svg>
+          </div>
+          <div class="body">
+            <span class="eyebrow">Try it now · Robotic arm</span>
+            <h3>Steer the guide arm</h3>
+            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and hand Ace a drink, the phone or the TV remote. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <div class="armctl" role="group" aria-label="Arm controls">
+              <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
+              <button class="btn primary" id="armGo" type="button">Go</button>
+              <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
+            </div>
+            <p class="armsel" id="armSel" aria-live="polite">Pointing at: Simulators</p>
+            <div class="modes" role="group" aria-label="Arm mode">
+              <button class="mode" id="modeNav" type="button" aria-pressed="true">Navigate the site</button>
+              <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <section id="simulators" aria-labelledby="simTitle">
+      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
+      <div class="sims">
+        <div class="side">
+          <a class="sim" href="#" data-msg="Robotic arm simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M8 34h14M15 34V22l9-9 6 3"/><circle cx="15" cy="22" r="2"/><circle cx="24" cy="13" r="2"/><path d="M30 16l3-4M30 16l4 1"/></svg>
+            <h3>Robotic arm</h3>
+            <p>Reach, grasp and drink, switching arm and gripper modes.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
+            <h3>Wheelchair driving</h3>
+            <p>Obstacle courses with levels, using any input.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Phone simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><line x1="18" y1="31" x2="22" y2="31"/></svg>
+            <h3>Cell phone</h3>
+            <p>Calls, texts and apps without touching the screen.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Computer exercises: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="7" width="30" height="20"/><path d="M14 33h12M20 27v6M17 14l4 9 1.5-3.5L26 18z"/></svg>
+            <h3>Computer exercises</h3>
+            <p>Point, click, drag, type and draw.</p>
+          </a>
+          <a class="sim" href="#" data-msg="More simulators: communication boards, exercise, voice, smart home and music are planned.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/><rect x="6" y="22" width="12" height="12"/><path d="M28 23v10M23 28h10"/></svg>
+            <h3>More simulators</h3>
+            <p>Communication, exercise, voice, smart home, music.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="guide-ai" aria-labelledby="aiTitle">
+      <div class="head"><h2 id="aiTitle">Meet Ace, your AI guide</h2><p>Ace, the Adaptive Control Expert, is an AI-powered coach that helps you build skills at every step.</p></div>
+      <div class="ai">
+        <ul class="ai-list">
+          <li><b>Finds a starting point</b><span>Asks about your goals, movement and positions, then suggests inputs and simulators to try.</span></li>
+          <li><b>Coaches while you practice</b><span>Gives tips during simulator sessions and adjusts the difficulty as you improve.</span></li>
+          <li><b>Tunes your setup</b><span>Recommends calibration changes such as dead zone, dwell time and sensitivity, based on how you did.</span></li>
+          <li><b>Helps you test and connect</b><span>Walks you through connecting a sensor from your kit and checking it works.</span></li>
+          <li><b>Tracks your progress</b><span>Summarizes results for you, your family or your therapist. You control what it saves.</span></li>
+        </ul>
+        <div class="chat" id="chat" aria-label="Chat with the AI guide">
+          <div class="chat-head"><span>ACE · AI GUIDE</span><span class="tag-ex" id="chatTag">Example</span></div>
+          <canvas id="aceFace" class="aceface" role="img" aria-label="Ace, a wireframe face"></canvas>
+          <div class="log" id="chatLog" aria-live="polite">
+            <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
+            <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
+          </div>
+          <div class="starters" id="starters">
+            <button class="chip small" type="button">What input should I try first?</button>
+            <button class="chip small" type="button">How does sip-and-puff work?</button>
+            <button class="chip small" type="button">I'm in bed this week. What changes?</button>
+          </div>
+          <form class="ask" id="askForm" autocomplete="off">
+            <label class="sr" for="askInput">Ask Ace</label>
+            <input id="askInput" type="text" placeholder="Ask Ace anything…" maxlength="600">
+            <button class="btn primary" id="askBtn" type="submit">Ask</button>
+            <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
+          </form>
+          <p class="chat-note" id="chatNote">The guide uses Claude on your own Claude account. It's for learning and practice, not medical advice.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" aria-labelledby="howTitle">
+      <div class="head"><h2 id="howTitle">How it works</h2></div>
+      <div class="steps">
+        <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
+        <a class="step" href="#borrow"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
+        <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice</h3><p>Build skills in simulators and carry them to real devices.</p></a>
+      </div>
+    </section>
+
+    <div class="two">
+      <section id="goals" aria-labelledby="goalsTitle">
+        <div class="head"><h2 id="goalsTitle">Start with a goal</h2></div>
+        <div class="chips">
+          <button class="chip" type="button">Mobility aids and wheelchairs</button>
+          <button class="chip" type="button">Use my phone</button>
+          <button class="chip" type="button">Use a computer</button>
+          <button class="chip" type="button">Communicate</button>
+          <button class="chip" type="button">Exercise</button>
+          <button class="chip" type="button">Control my home</button>
+          <button class="chip" type="button">Play and make music</button>
+        </div>
+      </section>
+      <section id="who" aria-labelledby="whoTitle">
+        <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
+        <ul class="who">
+          <li><b>On your own</b><span>Run self-trials at your own pace.</span></li>
+          <li><b>With family or friends</b><span>Someone can help set up sensors and track progress.</span></li>
+          <li><b>With your therapist</b><span>OTs, PTs and other professionals can guide trials and review results.</span></li>
+        </ul>
+      </section>
+    </div>
+
+  </div>
+</main>
+
+<footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between"><span>Access+ · for review by users, therapists and partners</span><span>Version 0.1 · Pilot draft · Updated October 31, 2026</span></div></footer>
+
+<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+/* Ace head: a 3D wireframe face mesh drawn on a canvas.
+   const head = AceHead(canvas); head.set({smile, open, blink, brow, yaw, pitch, roll}); head.talk(ms);
+   With no input it idles: slow head turns, blinks and a scan line. */
+function AceHead(canvas, opts) {
+  opts = opts || {};
+  var ctx = canvas.getContext('2d');
+  var GREEN = opts.color || '95,224,168', MINT = '169,228,196', WHITE = '240,245,250';
+  var A = 0.74, B = 1.0, C = 0.82;
+  var cur = { smile: 0, open: 0, blink: 0, brow: 0, yaw: 0, pitch: 0, roll: 0 };
+  var tgt = Object.assign({}, cur);
+  var live = false, lastLive = 0, talkUntil = 0, nextBlink = 2000, blinkStart = -1;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function taper(y) { var k = y < 0 ? Math.min(1, -y / B) : 0; return { x: 1 - 0.32 * k, z: 1 - 0.12 * k }; }
+  function surfZ(x, y) {
+    var t = taper(y), xs = x / t.x, v = 1 - (xs / A) * (xs / A) - (y / B) * (y / B);
+    return C * Math.sqrt(Math.max(0, v)) * t.z;
+  }
+  // mesh grid
+  var LAT = 18, LON = 28, grid = [];
+  for (var i = 0; i <= LAT; i++) {
+    var th = -1.22 + 2.42 * i / LAT, row = [];
+    for (var j = 0; j < LON; j++) {
+      var ph = 2 * Math.PI * j / LON;
+      var x = A * Math.cos(th) * Math.sin(ph), y = B * Math.sin(th), z = C * Math.cos(th) * Math.cos(ph);
+      var t = taper(y); row.push([x * t.x, y, z * t.z]);
+    }
+    grid.push(row);
+  }
+  function rot(p, r) {
+    var x = p[0], y = p[1], z = p[2], c, s, nx, ny, nz;
+    c = Math.cos(r.yaw); s = Math.sin(r.yaw); nx = x * c + z * s; nz = -x * s + z * c; x = nx; z = nz;
+    c = Math.cos(r.pitch); s = Math.sin(r.pitch); ny = y * c - z * s; nz = y * s + z * c; y = ny; z = nz;
+    c = Math.cos(r.roll); s = Math.sin(r.roll); nx = x * c - y * s; ny = x * s + y * c;
+    return [nx, ny, z];
+  }
+  var W, H, cx, cy, sc;
+  function size() {
+    var dpr = Math.min(2, window.devicePixelRatio || 1), rect = canvas.getBoundingClientRect();
+    var w = Math.max(40, rect.width || canvas.width), h = Math.max(40, rect.height || canvas.height);
+    if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); W = w; H = h; cx = w / 2; cy = h * 0.52; sc = Math.min(w, h) * 0.40;
+  }
+  function proj(p, r) { var q = rot(p, r), f = 3.2 / (3.2 - q[2]); return [cx + q[0] * sc * f, cy - q[1] * sc * f, q[2]]; }
+  function onFace(x, y, dz) { return [x, y, surfZ(x, y) + (dz || 0)]; }
+  function line(pts, r, rgb, a, w) {
+    ctx.beginPath(); var vis = 0;
+    for (var k = 0; k < pts.length; k++) { var q = proj(pts[k], r); if (q[2] > -0.15) vis++; k ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }
+    if (!vis) return; ctx.strokeStyle = 'rgba(' + rgb + ',' + a + ')'; ctx.lineWidth = w; ctx.stroke();
+  }
+  function curve(fn, n) { var out = []; for (var k = 0; k <= n; k++) out.push(fn(k / n)); return out; }
+
+  function frame(now) {
+    if (!canvas.offsetParent) { requestAnimationFrame(frame); return; }
+    size();
+    // idle motion or live smoothing
+    if (live && now - lastLive > 1500) live = false;
+    if (!live) {
+      var tt = reduce ? 0 : now / 1000;
+      tgt.yaw = 16 * Math.sin(tt / 3.1); tgt.pitch = 5 * Math.sin(tt / 4.3); tgt.roll = 3 * Math.sin(tt / 5.2);
+      tgt.smile = 0.25 + 0.15 * Math.sin(tt / 2.7); tgt.brow = 0.1; tgt.open = 0;
+      if (!reduce && now > nextBlink) { blinkStart = now; nextBlink = now + 2500 + Math.random() * 3500; }
+      tgt.blink = blinkStart > 0 && now - blinkStart < 160 ? 1 : 0;
+    }
+    if (now < talkUntil) tgt.open = 0.25 + 0.25 * Math.abs(Math.sin(now / 90));
+    // unwind full spins so the head never turns back the long way
+    while (cur.yaw - tgt.yaw > 180) cur.yaw -= 360; while (tgt.yaw - cur.yaw > 180) cur.yaw += 360;
+    for (var key in cur) cur[key] += (tgt[key] - cur[key]) * (key === 'blink' ? 0.6 : 0.25);
+    var D = Math.PI / 180, r = { yaw: cur.yaw * D, pitch: cur.pitch * D, roll: cur.roll * D };
+
+    ctx.clearRect(0, 0, W, H);
+    // halo
+    var g = ctx.createRadialGradient(cx, cy, sc * 0.2, cx, cy, sc * 1.5);
+    g.addColorStop(0, 'rgba(' + GREEN + ',0.10)'); g.addColorStop(1, 'rgba(' + GREEN + ',0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    // mesh: back first, then front
+    var P = grid.map(function (row) { return row.map(function (p) { return proj(p, r); }); });
+    ctx.lineWidth = 0.6;
+    for (var pass = 0; pass < 2; pass++) {
+      for (var i2 = 0; i2 <= LAT; i2++) for (var j2 = 0; j2 < LON; j2++) {
+        var a = P[i2][j2], b = P[i2][(j2 + 1) % LON], c2 = i2 < LAT ? P[i2 + 1][j2] : null, d = i2 < LAT ? P[i2 + 1][(j2 + 1) % LON] : null;
+        var zz = a[2];
+        if ((pass === 0) !== (zz < 0.05)) continue;
+        var al = zz < 0.05 ? 0.07 : 0.16 + 0.34 * Math.min(1, zz / C);
+        ctx.strokeStyle = 'rgba(' + GREEN + ',' + al.toFixed(3) + ')';
+        ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+        if (c2) { ctx.moveTo(a[0], a[1]); ctx.lineTo(c2[0], c2[1]); if (zz > 0.05) { ctx.moveTo(a[0], a[1]); ctx.lineTo(d[0], d[1]); } }
+        ctx.stroke();
+      }
+    }
+    // vertices on the front
+    ctx.fillStyle = 'rgba(' + GREEN + ',0.75)';
+    for (var i3 = 0; i3 <= LAT; i3++) for (var j3 = 0; j3 < LON; j3++) { var q = P[i3][j3]; if (q[2] > 0.25) ctx.fillRect(q[0] - 0.8, q[1] - 0.8, 1.6, 1.6); }
+
+    // features
+    ctx.save(); ctx.shadowColor = 'rgba(' + GREEN + ',0.9)'; ctx.shadowBlur = 6;
+    var s = cur.smile, o = cur.open, bl = cur.blink, br = cur.brow;
+    [-1, 1].forEach(function (side) {
+      var ex = 0.29 * side, ey = 0.13, ew = 0.13, open1 = Math.max(0.05, 1 - bl);
+      line(curve(function (u) { var x = ex + ew * (u * 2 - 1); return onFace(x, ey + 0.055 * open1 * Math.sin(Math.PI * u) - 0.012 * s, 0.01); }, 14), r, WHITE, 0.95, 1.4);
+      line(curve(function (u) { var x = ex + ew * (u * 2 - 1); return onFace(x, ey - (0.035 * open1 + 0.01 * s) * Math.sin(Math.PI * u), 0.01); }, 14), r, WHITE, 0.8, 1.2);
+      if (bl < 0.6) {
+        line(curve(function (u) { var an = u * Math.PI * 2; return onFace(ex + 0.038 * Math.cos(an), ey + 0.01 + 0.032 * Math.sin(an) * open1, 0.02); }, 20), r, GREEN, 1, 1.4);
+        line(curve(function (u) { var an = u * Math.PI * 2; return onFace(ex + 0.014 * Math.cos(an), ey + 0.01 + 0.012 * Math.sin(an), 0.025); }, 10), r, WHITE, 1, 1.2);
+      }
+      line(curve(function (u) { var x = ex + 0.16 * (u * 2 - 1) * 0.95; return onFace(x, 0.29 + 0.07 * br + 0.035 * Math.sin(Math.PI * (side > 0 ? u * 0.9 + 0.1 : u * 0.9)), 0.03); }, 12), r, MINT, 0.95, 2);
+      // cheekbone and jaw contours
+      line(curve(function (u) { return onFace(side * (0.2 + 0.32 * u), -0.05 - 0.08 * u + 0.02 * s, 0.005); }, 10), r, GREEN, 0.45, 1);
+      line(curve(function (u) { return onFace(side * (0.5 - 0.42 * u), -0.38 - 0.42 * Math.sin(u * Math.PI / 2), 0.0); }, 12), r, GREEN, 0.5, 1);
+      // nostril wing
+      line(curve(function (u) { var an = Math.PI * (0.2 + 1.1 * u); return onFace(side * (0.055 + 0.04 * Math.cos(an)), -0.17 + 0.03 * Math.sin(an), 0.13); }, 8), r, MINT, 0.85, 1.2);
+    });
+    // nose bridge and tip
+    line(curve(function (u) { return onFace(0, 0.18 - 0.36 * u, 0.02 + 0.13 * u * u); }, 10), r, MINT, 0.8, 1.2);
+    line(curve(function (u) { return onFace(-0.05 + 0.1 * u, -0.19 - 0.012 * Math.sin(Math.PI * u), 0.15); }, 6), r, WHITE, 0.85, 1.2);
+    // lips
+    var mw = 0.17 + 0.05 * s, my = -0.44, lift = 0.06 * s, drop = 0.16 * o;
+    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my + 0.03 * Math.sin(Math.PI * u) + lift * Math.pow(Math.abs(u * 2 - 1), 2) - 0.012 * Math.cos(u * Math.PI * 4) * (1 - s), 0.04); }, 20), r, WHITE, 0.95, 1.6);
+    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my + lift * Math.pow(Math.abs(u * 2 - 1), 2) - (0.01 + drop + 0.02 * s) * Math.sin(Math.PI * u), 0.04); }, 20), r, GREEN, 1, 1.6);
+    line(curve(function (u) { var x = mw * (u * 2 - 1); return onFace(x, my - 0.05 - drop - 0.02 * s - 0.03 * Math.sin(Math.PI * u) + lift * Math.pow(Math.abs(u * 2 - 1), 2) * 0.7, 0.03); }, 20), r, WHITE, 0.85, 1.4);
+    // chin and hairline
+    line(curve(function (u) { return onFace(0.12 * (u * 2 - 1), -0.8 - 0.03 * Math.sin(Math.PI * u), 0); }, 10), r, GREEN, 0.5, 1);
+    line(curve(function (u) { return onFace(0.5 * (u * 2 - 1), 0.62 + 0.06 * Math.sin(Math.PI * u), 0); }, 16), r, GREEN, 0.4, 1);
+    ctx.restore();
+
+    // scan line
+    if (!reduce) {
+      var period = 3600, sy = cy - sc * 1.15 + ((now % period) / period) * sc * 2.3;
+      var sg = ctx.createLinearGradient(0, sy - 18, 0, sy + 2);
+      sg.addColorStop(0, 'rgba(' + GREEN + ',0)'); sg.addColorStop(1, 'rgba(' + GREEN + ',0.22)');
+      ctx.fillStyle = sg; ctx.fillRect(cx - sc * 1.0, sy - 18, sc * 2.0, 20);
+      ctx.fillStyle = 'rgba(' + GREEN + ',0.6)'; ctx.fillRect(cx - sc * 1.0, sy, sc * 2.0, 1);
+    }
+    // corner ticks
+    ctx.strokeStyle = 'rgba(' + GREEN + ',0.55)'; ctx.lineWidth = 1.2;
+    var m = 6, L = Math.min(W, H) * 0.08;
+    [[m, m, 1, 1], [W - m, m, -1, 1], [m, H - m, 1, -1], [W - m, H - m, -1, -1]].forEach(function (k) {
+      ctx.beginPath(); ctx.moveTo(k[0], k[1] + L * k[3]); ctx.lineTo(k[0], k[1]); ctx.lineTo(k[0] + L * k[2], k[1]); ctx.stroke();
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  return {
+    set: function (p) { live = true; lastLive = performance.now(); for (var k in p) if (k in tgt && isFinite(p[k])) tgt[k] = p[k]; },
+    talk: function (ms) { talkUntil = performance.now() + (ms || 1200); }
+  };
+}
+
+</script>
+<script>
+(function () {
+  var toast = document.getElementById('toast'), timer;
+  function say(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500); }
+  document.querySelectorAll('[data-msg]').forEach(function (b) {
+    b.addEventListener('click', function (e) { e.preventDefault(); say(b.dataset.msg); });
+  });
+  document.querySelectorAll('#goals .chip').forEach(function (b) {
+    b.addEventListener('click', function () { say(b.textContent + ': goal pages are not built yet.'); });
+  });
+
+  // guide arm
+  var NS = 'http://www.w3.org/2000/svg';
+  var dial = document.getElementById('dial'), scene = document.getElementById('scene');
+  var rot = document.getElementById('armRot'), idle = document.getElementById('armIdle'), grip = document.getElementById('grip');
+  var svg = document.getElementById('armSvg'), sel = document.getElementById('armSel'), bubble = document.getElementById('bubble');
+  var goBtn = document.getElementById('armGo'), leftBtn = document.getElementById('armLeft'), rightBtn = document.getElementById('armRight');
+  var modeNav = document.getElementById('modeNav'), modePlay = document.getElementById('modePlay');
+  function el(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function polar(deg, r) { var a = deg * Math.PI / 180; return { x: 200 + r * Math.sin(a), y: 230 - r * Math.cos(a) }; }
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+
+  // navigation dial
+  var dests = [
+    { label: 'GOALS', name: 'Goals', go: '#goals', a: -64 },
+    { label: 'SIMULATORS', name: 'Simulators', go: '#simulators', a: -32 },
+    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: '#borrow', a: 0 },
+    { label: 'HOW IT WORKS', name: 'How it works', go: '#how', a: 32 },
+    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who', a: 64 }
+  ];
+  dests.forEach(function (d, i) {
+    var p = polar(d.a, 178), w = d.label.length * 7.4 + 20;
+    var g = el('g', { 'class': 'dial-item', tabindex: '0', role: 'button', 'aria-label': 'Go to ' + d.name });
+    var t = el('text', { x: p.x.toFixed(1), y: (p.y + 4).toFixed(1), 'text-anchor': 'middle' }); t.textContent = d.label;
+    g.append(el('rect', { x: (p.x - w / 2).toFixed(1), y: (p.y - 13).toFixed(1), width: w.toFixed(1), height: '26', 'stroke-width': '1.2' }), t);
+    dial.appendChild(g); d.el = g;
+    function pick() { setCur(i); act(); }
+    g.addEventListener('click', pick);
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+
+  // objects for pick-up mode
+  var shapes = {
+    cup: '<rect class="shape" x="-8" y="-11" width="16" height="22" rx="2"/><path class="shape" d="M8 -5 h4 a3.5 3.5 0 0 1 0 9 h-4" fill="none"/><line x1="-5" y1="-5" x2="5" y2="-5" stroke="#5fe0a8" stroke-width="1.2"/>',
+    phone: '<rect class="shape" x="-7" y="-13" width="14" height="26" rx="3"/><line x1="-2.5" y1="9" x2="2.5" y2="9" stroke="#a9e4c4" stroke-width="1.4"/>',
+    remote: '<rect class="shape" x="-5" y="-13" width="10" height="26" rx="2.5"/><circle cx="0" cy="-7" r="2" fill="#ff6b5e"/><circle cx="0" cy="0" r="1.6" fill="#a9e4c4"/><circle cx="0" cy="5" r="1.6" fill="#a9e4c4"/>'
+  };
+  var objs = [
+    { key: 'cup', name: 'Cup of water', a: -8, said: 'Ahh, thank you!', done: 'Ace is taking a sip' },
+    { key: 'phone', name: 'Phone', a: 26, said: 'Hello, I\u2019m Ace!', done: 'Ace is on the phone' },
+    { key: 'remote', name: 'TV remote', a: 58, said: 'Movie night!', done: 'Ace has the remote' }
+  ];
+  var FACE = -58;
+
+  var armAce = AceHead(document.getElementById('armAce'));
+  var aceWrap = document.getElementById('aceWrap'), aceSay = document.getElementById('aceSay'), aceSayT, aceHold;
+  function aceSays(text, ms) {
+    if (!text) { aceSay.hidden = true; return; }
+    aceSay.textContent = text; aceSay.hidden = false; clearTimeout(aceSayT);
+    aceSayT = setTimeout(function () { aceSay.hidden = true; }, ms || 2800);
+    armAce.talk(Math.min(2400, 300 + text.length * 70));
+  }
+  function aceExpr(p, ms) {
+    clearInterval(aceHold); var t0 = performance.now();
+    aceHold = setInterval(function () {
+      var u = (performance.now() - t0) / ms; if (u >= 1) { clearInterval(aceHold); return; }
+      armAce.set(typeof p === 'function' ? p(u) : p);
+    }, 50);
+  }
+  function aceReact(o) {
+    if (o.key === 'phone') { aceExpr(function (u) { return u < 0.4 ? { yaw: 360 * (u / 0.4), smile: 1, brow: 0.6 } : { yaw: 380, smile: 1, brow: 0.4, roll: -8 }; }, 3000); }
+    else if (o.key === 'cup') { aceExpr(function (u) { return { yaw: 24, pitch: u < 0.5 ? -10 : 0, smile: u < 0.5 ? 0.3 : 1, open: u < 0.5 ? 0.4 : 0, blink: u > 0.55 && u < 0.62 ? 1 : 0 }; }, 2800); }
+    else { aceExpr(function (u) { return { yaw: 18 + 10 * Math.sin(u * 12), smile: 1, brow: 0.8 }; }, 2600); }
+  }
+  setTimeout(function () { aceSays('Hi, I’m Ace!', 2600); aceExpr({ smile: 1, brow: 0.6, yaw: 15 }, 2400); }, 1200);
+  objs.forEach(function (o, i) {
+    var p = polar(o.a, 170);
+    o.home = p;
+    o.g = el('g', { 'class': 'obj', tabindex: '0', role: 'button', 'aria-label': 'Pick up the ' + o.name.toLowerCase() });
+    o.g.innerHTML = '<circle class="ring" r="22" fill="none"/>' + shapes[o.key];
+    o.label = el('text', { x: p.x.toFixed(1), y: (p.y + 36).toFixed(1), 'text-anchor': 'middle' });
+    o.label.textContent = o.name.toUpperCase();
+    o.g.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+    scene.append(o.g, o.label);
+    function pick() { if (busy) return; if (holding && holding !== o) return; setCur(i); act(); }
+    o.g.addEventListener('click', pick);
+    o.g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+
+  var mode = 'nav', cur = 1, busy = false, holding = null, idleTimer;
+  function list() { return mode === 'nav' ? dests : objs; }
+  function wake() { idle.classList.remove('idle'); clearTimeout(idleTimer); idleTimer = setTimeout(function () { if (!busy) idle.classList.add('idle'); }, 8000); }
+  function aim(deg) { rot.style.transform = 'rotate(' + deg + 'deg)'; }
+  function setCur(i) {
+    var L = list(); cur = Math.max(0, Math.min(L.length - 1, i));
+    aim(L[cur].a);
+    L.forEach(function (d, j) { (d.el || d.g).classList.toggle('on', j === cur); if (d.label && d.label.setAttribute) d.label.classList && d.label.classList.toggle('on', j === cur); });
+    sel.textContent = (mode === 'nav' ? 'Pointing at: ' : 'Reaching for: ') + L[cur].name;
+    if (typeof armAce !== 'undefined') aceExpr({ yaw: 8 + (L[cur].a + 64) / 128 * 26, pitch: -4, smile: 0.45 }, 1600);
+    wake();
+  }
+  function lock(on) { busy = on; leftBtn.disabled = on || !!holding; rightBtn.disabled = on || !!holding; goBtn.disabled = on; }
+  function say(text) { if (!text) { bubble.setAttribute('visibility', 'hidden'); return; } bubble.textContent = text; bubble.setAttribute('visibility', 'visible'); }
+
+  async function act() {
+    if (busy) return; wake();
+    if (mode === 'nav') {
+      var d = dests[cur]; lock(true);
+      sel.textContent = 'Going to: ' + d.name; aceSays('Off to ' + d.name.toLowerCase() + '!', 1800);
+      svg.classList.add('reach', 'closed'); await wait(650);
+      svg.classList.remove('reach', 'closed'); lock(false);
+      if (location.hash === d.go) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = d.go;
+      sel.textContent = 'Pointing at: ' + d.name;
+      return;
+    }
+    var o = objs[cur]; lock(true);
+    if (!holding) {
+      sel.textContent = 'Reaching for: ' + o.name;
+      aim(o.a); await wait(500);
+      svg.classList.add('reach'); await wait(450);
+      svg.classList.add('closed'); await wait(300);
+      o.g.setAttribute('transform', 'translate(200 86)'); o.g.classList.remove('on'); grip.appendChild(o.g);
+      svg.classList.remove('reach'); await wait(400);
+      aim(FACE); await wait(700);
+      holding = o; aceSays(o.said, 3200); aceReact(o);
+      sel.textContent = o.done;
+      goBtn.textContent = 'Put it back';
+    } else {
+      o = holding; aceSays('Thanks!', 1800); aceExpr({ smile: 0.8, yaw: 10 }, 1500);
+      sel.textContent = 'Putting back: ' + o.name;
+      aim(o.a); await wait(700);
+      svg.classList.add('reach'); await wait(450);
+      svg.classList.remove('closed');
+      o.g.setAttribute('transform', 'translate(' + o.home.x.toFixed(1) + ' ' + o.home.y.toFixed(1) + ')');
+      scene.insertBefore(o.g, o.label); await wait(250);
+      svg.classList.remove('reach');
+      holding = null; goBtn.textContent = 'Pick up';
+      setCur(objs.indexOf(o));
+    }
+    lock(false);
+  }
+
+  function setMode(m) {
+    if (busy || holding || m === mode) return;
+    mode = m;
+    modeNav.setAttribute('aria-pressed', m === 'nav' ? 'true' : 'false');
+    modePlay.setAttribute('aria-pressed', m === 'play' ? 'true' : 'false');
+    dial.setAttribute('visibility', m === 'nav' ? 'visible' : 'hidden');
+    scene.setAttribute('visibility', m === 'play' ? 'visible' : 'hidden');
+    goBtn.textContent = m === 'nav' ? 'Go' : 'Pick up';
+    aceWrap.classList.toggle('play', m === 'play');
+    aceSays(m === 'play' ? 'Bring me something!' : 'Where to next?', 2200);
+    setCur(m === 'nav' ? 1 : 1);
+  }
+  modeNav.addEventListener('click', function () { setMode('nav'); });
+  modePlay.addEventListener('click', function () { setMode('play'); });
+  leftBtn.addEventListener('click', function () { if (!holding) setCur(cur - 1); });
+  rightBtn.addEventListener('click', function () { if (!holding) setCur(cur + 1); });
+  goBtn.addEventListener('click', act);
+  document.getElementById('guide').addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
+    if (holding || busy) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setCur(cur - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); setCur(cur + 1); }
+  });
+  setCur(1); idle.classList.add('idle');
+
+
+  // AI guide chat
+  var RULES = [
+    'You are Ace, the Access+ AI guide, a friendly coach on the Access+ website. ACE stands for Adaptive Control Expert. If asked your name, say you are Ace.',
+    'Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It helps people practice and explore new ways to control the devices they depend on: power wheelchairs and other mobility aids, phones, computers, communication devices and emerging electronics.',
+    'Access+ does not sell anything. It lends sensor kits by mail, publishes independent technology reviews, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
+    'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',
+    'Simulators: robotic arm, wheelchair driving, cell phone, computer exercises (point, click, drag, type, draw); more planned for communication boards, exercise, voice, smart home and music. Profiles store goals, movement, posture and positions (bed, chair, tilt, outdoors) and calibration such as rest position, range, dead zone, smoothing, dwell time and thresholds.',
+    'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
+    'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
+    'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
+  ].join('\n\n');
+  var log = document.getElementById('chatLog'), form = document.getElementById('askForm'), input = document.getElementById('askInput');
+  var askBtn = document.getElementById('askBtn'), stopChat = document.getElementById('stopBtn'), note = document.getElementById('chatNote');
+  var tag = document.getElementById('chatTag'), starters = document.getElementById('starters');
+  var turns = [], ctl = null, started = false, sampleFn = null;
+  var aceFace = AceHead(document.getElementById('aceFace'));
+  function bubble(cls, text) { var d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  function setBusy(on) { askBtn.disabled = on; input.disabled = on; stopChat.hidden = !on; starters.querySelectorAll('button').forEach(function (b) { b.disabled = on; }); }
+  function unavailable(msg) { form.hidden = true; starters.hidden = true; note.textContent = msg; }
+  var copy = {
+    not_granted: 'The live guide needs your permission to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude isn’t available on this account, so the live guide is off.',
+    rate_limited: 'The guide is getting a lot of questions. Wait a minute and try again.',
+    session_expired: 'Please sign in to Claude again to use the guide.',
+    refused: 'The guide can’t help with that one. Try asking another way.',
+    prompt_too_large: 'That conversation got long. Reload the page to start fresh.'
+  };
+  async function ask(text) {
+    text = (text || '').trim();
+    if (!text || !sampleFn || (ctl && !ctl.signal.aborted && askBtn.disabled)) return;
+    if (!started) { started = true; log.innerHTML = ''; tag.textContent = 'Live'; }
+    bubble('me', text);
+    turns.push({ role: 'user', content: text });
+    if (turns.length > 16) turns = turns.slice(-16);
+    while (turns.length && turns[0].role !== 'user') turns.shift();
+    var out = bubble('ai-msg thinking', 'Thinking…');
+    input.value = ''; setBusy(true);
+    ctl = new AbortController();
+    try {
+      var res = await sampleFn([{ role: 'user', content: RULES }].concat(turns), {
+        modelTier: 'quick', cache: false, signal: ctl.signal,
+        onText: function (u) { out.classList.remove('thinking'); out.textContent = u.text; log.scrollTop = log.scrollHeight; aceFace.talk(700); }
+      });
+      out.classList.remove('thinking'); out.textContent = res.text;
+      turns.push({ role: 'assistant', content: res.text });
+    } catch (e) {
+      out.classList.remove('thinking');
+      if (e && e.code === 'cancelled') { out.textContent = (e.text || '') + (e.text ? ' …' : 'Stopped.'); if (e.text) turns.push({ role: 'assistant', content: e.text }); }
+      else if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled' || e.code === 'not_declared' || e.code === 'capability_disabled' || e.code === 'capability_removed')) { out.remove(); turns.pop(); unavailable(copy[e.code] || 'The live guide isn’t available here.'); }
+      else { out.textContent = (e && e.text) ? e.text + ' …' : (copy[e && e.code] || 'Something went wrong reaching the guide. Try again.'); turns.pop(); }
+    } finally { setBusy(false); ctl = null; if (!form.hidden) input.focus(); }
+  }
+  form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); });
+  stopChat.addEventListener('click', function () { if (ctl) ctl.abort(); });
+  starters.querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { ask(b.textContent); }); });
+  setBusy(true); askBtn.disabled = true; note.textContent = 'Connecting the guide…';
+  (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
+    sampleFn = fn;
+    if (!fn) { setBusy(false); unavailable('The live guide works when this page is opened in Claude while signed in. The conversation above is an example.'); return; }
+    setBusy(false);
+    note.textContent = 'The guide uses Claude on your own Claude account. It’s for learning and practice, not medical advice.';
+  }).catch(function () { setBusy(false); unavailable('The live guide isn’t available here. The conversation above is an example.'); });
+
+  var root = document.documentElement, big = document.getElementById('bigToggle');
+  function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
+  try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
+  big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
+})();
+</script>
