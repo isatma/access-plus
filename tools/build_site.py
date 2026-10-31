@@ -196,7 +196,7 @@ def build():
 
     views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + gesture_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*<footer>', lambda m: '</main>\n\n' + views_html + '\n<footer>', home, count=1)
-    if '<button class="btn totop"' not in home:
+    if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
     views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + gesture_css + '/* views-css:end */\n'
@@ -218,7 +218,17 @@ def build():
   document.querySelectorAll('[data-back]').forEach(function (b) {
     b.addEventListener('click', function () { if (history.length > 1) history.back(); else location.hash = 'home'; });
   });
-  document.getElementById('toTop').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });
+  var smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  document.getElementById('dockMenu').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: smooth });
+    var cur = document.querySelector('.nav a[aria-current]') || document.querySelector('.nav a');
+    setTimeout(function () { if (cur) cur.focus({ preventScroll: true }); }, 350);
+  });
+  document.getElementById('dockBack').addEventListener('click', function () {
+    var h = (location.hash || '#home').slice(1);
+    if (history.length > 1 && h !== 'home' && h !== '') history.back();
+    else window.scrollTo({ top: 0, behavior: smooth });
+  });
   try { AceHead(document.getElementById('gxFace')); } catch (e) {}
 '''
     views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {' + router + '})();\n// views-js:end\n</script>\n'

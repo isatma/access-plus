@@ -68,7 +68,16 @@ section[id] { scroll-margin-top: 150px; }
 .signin .demo { font: 500 0.78em var(--mono); letter-spacing: 0.1em; background: #ffc670; color: #231c05; padding: 2px 6px; }
 .backrow { display: flex; padding-bottom: 4px; }
 .backwrap { padding-block: 20px 0 !important; }
-.totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
+.dock { position: fixed; z-index: 8; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 0; border: 2px solid var(--signal); box-shadow: 0 6px 24px rgba(0,0,0,0.55), 0 0 18px rgba(95,224,168,0.25); background: var(--signal); }
+.dock button { min-height: 64px; min-width: 120px; padding: 0 20px; border: none; cursor: pointer; font: 600 0.95em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: var(--signal); color: var(--signal-ink); display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.dock button + button { border-left: 2px solid var(--signal-ink); }
+.dock button:hover { background: #7ff0bf; }
+.dock button:focus-visible { outline: 3px solid var(--ink); outline-offset: -5px; }
+.dock .ico { font-size: 1.3em; line-height: 1; }
+:root.big .dock button { min-height: 88px; min-width: 150px; }
+main.view > .wrap { padding-bottom: 120px !important; }
+footer { padding-bottom: 90px; }
+@media (max-width: 520px) { .dock { left: 16px; right: 16px; } .dock button { flex: 1; min-width: 0; } }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: center; }
 .hero .intro { align-content: center; }
@@ -744,7 +753,7 @@ footer .wrap { padding-block: 22px; }
 
 <footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between"><span>Access+ · for review by users, therapists and partners</span><span>Version 0.1 · Pilot draft · Updated October 31, 2026</span></div></footer>
 
-<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>
+<div class="dock" role="navigation" aria-label="Quick navigation"><button type="button" id="dockBack"><span class="ico" aria-hidden="true">&larr;</span>Back</button><button type="button" id="dockMenu"><span class="ico" aria-hidden="true">&#9776;</span>Menu</button></div>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
@@ -1435,7 +1444,17 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
   document.querySelectorAll('[data-back]').forEach(function (b) {
     b.addEventListener('click', function () { if (history.length > 1) history.back(); else location.hash = 'home'; });
   });
-  document.getElementById('toTop').addEventListener('click', function () { window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }); });
+  var smooth = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+  document.getElementById('dockMenu').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: smooth });
+    var cur = document.querySelector('.nav a[aria-current]') || document.querySelector('.nav a');
+    setTimeout(function () { if (cur) cur.focus({ preventScroll: true }); }, 350);
+  });
+  document.getElementById('dockBack').addEventListener('click', function () {
+    var h = (location.hash || '#home').slice(1);
+    if (history.length > 1 && h !== 'home' && h !== '') history.back();
+    else window.scrollTo({ top: 0, behavior: smooth });
+  });
   try { AceHead(document.getElementById('gxFace')); } catch (e) {}
 })();
 // views-js:end
