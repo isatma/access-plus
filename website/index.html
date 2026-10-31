@@ -105,6 +105,11 @@ main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
 .sub { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; text-transform: uppercase; margin: 8px 0 -6px; }
 .tile.later { border-style: dashed; }
+.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.whocard { display: grid; gap: 6px; align-content: start; padding: 20px; background: color-mix(in srgb, var(--panel) 90%, transparent); border: 1px solid var(--line); border-top: 2px solid var(--signal); }
+.whocard .n { font: 500 0.7em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.whocard h3 { font-size: 1em; line-height: 1.4; }
+.whocard p { margin: 0; color: var(--desc); font-size: 0.93em; }
 
 footer { position: relative; z-index: 1; border-top: 1px solid var(--line-hi); color: var(--muted); font: 500 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
 footer .wrap { padding-block: 22px; }
@@ -145,6 +150,15 @@ footer .wrap { padding-block: 22px; }
       <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice in simulators</h3><p>Test your skills, see your scores, and get options matched to you.</p></a>
     </section>
 
+    <section class="block" aria-labelledby="whoTitle">
+      <div class="head"><h2 id="whoTitle">Open to everyone</h2><p>Access+ is open to the whole community. Work the way that suits you.</p></div>
+      <div class="who">
+        <div class="whocard"><span class="n">ON YOUR OWN</span><h3>Self-trials</h3><p>Use the programs on the site to test sensors, set up your controls and practice at your own pace.</p></div>
+        <div class="whocard"><span class="n">WITH FAMILY OR FRIENDS</span><h3>Someone to help</h3><p>A family member, friend or caregiver can help place sensors, run sessions and track progress.</p></div>
+        <div class="whocard"><span class="n">WITH PROFESSIONALS</span><h3>Your therapist</h3><p>Occupational and physical therapists and other professionals can guide trials, review results and plan next steps.</p></div>
+      </div>
+    </section>
+
     <section class="block" aria-labelledby="goalsTitle">
       <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters most. We'll suggest technologies and simulators for it.</p></div>
       <div class="goals">
@@ -159,7 +173,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="block" id="profile" aria-labelledby="profileTitle">
-      <div class="head"><h2 id="profileTitle">1 · Your profile</h2><p>Everything about you and your setup, saved in one place you and your therapist can use.</p></div>
+      <div class="head"><h2 id="profileTitle">1 · Your profile</h2><p>Everything about you and your setup, saved in one place you can share with family, caregivers or your therapist.</p></div>
       <div class="sub">About you</div>
       <div class="tiles">
         <button class="tile" type="button">Movement and function<small>What you can move, and how much</small></button>
@@ -194,7 +208,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="block" id="simulators" aria-labelledby="simTitle">
-      <div class="head"><h2 id="simTitle">3 · Practice in simulators</h2><p>Practice in the browser before any hardware arrives. Each simulator has levels and a score to share with your therapist.</p></div>
+      <div class="head"><h2 id="simTitle">3 · Practice in simulators</h2><p>Practice in the browser before any hardware arrives. Run self-trials, test sensors you've set up, and track levels and scores on your own or with the people who help you.</p></div>
       <div class="tiles">
         <button class="tile" type="button">Wheelchair driving<small>Obstacle courses, with any input</small></button>
         <button class="tile" type="button">Computer skills<small>Point, click, drag, type, draw</small></button>
