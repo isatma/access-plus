@@ -107,8 +107,20 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .reach .fore-bend { transform: rotate(0deg); }
 .jaw-l { transform-box: view-box; transform-origin: 200px 100px; }
 .jaw-r { transform-box: view-box; transform-origin: 200px 100px; }
-.reach .jaw-l { transform: rotate(22deg); }
-.reach .jaw-r { transform: rotate(-22deg); }
+.closed .jaw-l { transform: rotate(22deg); }
+.closed .jaw-r { transform: rotate(-22deg); }
+.obj { cursor: pointer; }
+.obj .shape { stroke: #a9e4c4; stroke-width: 1.6; fill: #0f1828; }
+.obj text { fill: #c4d0dd; }
+.obj.on .shape { stroke: #5fe0a8; stroke-width: 2.2; }
+.obj.on text { fill: #5fe0a8; }
+.obj .ring { stroke: transparent; stroke-dasharray: 3 4; }
+.obj.on .ring { stroke: #5fe0a8; }
+.modes { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border: 1px solid var(--line-hi); }
+.mode { min-height: 52px; background: transparent; color: var(--muted); border: none; font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+.mode + .mode { border-left: 1px solid var(--line-hi); }
+.mode[aria-pressed="true"] { background: var(--signal-soft); color: var(--signal); }
+.armctl .btn:disabled { opacity: .4; cursor: not-allowed; }
 .dial-item { cursor: pointer; }
 .dial-item rect { fill: #0f1828; stroke: #3b5476; }
 .dial-item text { fill: #c4d0dd; }
@@ -182,6 +194,16 @@ footer .wrap { padding-block: 22px; }
                 <line x1="10" y1="244" x2="390" y2="244"/>
               </g>
               <g id="dial" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1"></g>
+              <g id="scene" visibility="hidden" font-family="IBM Plex Mono, monospace" font-size="10" letter-spacing="1">
+                <g id="face" transform="translate(62 150)">
+                  <circle r="26" fill="#0f1828" stroke="#a9e4c4" stroke-width="1.5"/>
+                  <path d="M22 -4 q8 4 0 10" stroke="#a9e4c4" stroke-width="1.5"/>
+                  <circle cx="10" cy="-6" r="2.2" fill="#a9e4c4"/>
+                  <path d="M8 10 q6 3 12 -1" stroke="#a9e4c4" stroke-width="1.5"/>
+                  <text y="44" text-anchor="middle" fill="#c4d0dd">YOU</text>
+                </g>
+                <text id="bubble" x="60" y="98" text-anchor="middle" fill="#5fe0a8" font-size="12" visibility="hidden"></text>
+              </g>
               <g id="armRot" class="arm-rot">
                 <g id="armIdle" class="idle">
                   <line x1="200" y1="230" x2="200" y2="148" stroke="#f0f5fa" stroke-width="8"/>
@@ -205,13 +227,17 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the guide arm</h3>
-            <p>Turn the arm to point at part of the site, then press Go. It works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and hand yourself a drink or your phone. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
             </div>
             <p class="armsel" id="armSel" aria-live="polite">Pointing at: Simulators</p>
+            <div class="modes" role="group" aria-label="Arm mode">
+              <button class="mode" id="modeNav" type="button" aria-pressed="true">Navigate the site</button>
+              <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
+            </div>
           </div>
         </div>
     </div>
@@ -262,7 +288,7 @@ footer .wrap { padding-block: 22px; }
       <section id="goals" aria-labelledby="goalsTitle">
         <div class="head"><h2 id="goalsTitle">Start with a goal</h2></div>
         <div class="chips">
-          <button class="chip" type="button">Get around</button>
+          <button class="chip" type="button">Mobility aids and wheelchairs</button>
           <button class="chip" type="button">Use my phone</button>
           <button class="chip" type="button">Use a computer</button>
           <button class="chip" type="button">Communicate</button>
@@ -300,68 +326,138 @@ footer .wrap { padding-block: 22px; }
   });
 
   // guide arm
-  var dests = [
-    { label: 'GOALS', name: 'Goals', go: '#goals' },
-    { label: 'SIMULATORS', name: 'Simulators', go: '#simulators' },
-    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: 'borrow.html' },
-    { label: 'HOW IT WORKS', name: 'How it works', go: '#how' },
-    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who' }
-  ];
-  var angles = [-64, -32, 0, 32, 64];
   var NS = 'http://www.w3.org/2000/svg';
-  var dial = document.getElementById('dial'), rot = document.getElementById('armRot'), idle = document.getElementById('armIdle');
-  var svg = document.getElementById('armSvg'), sel = document.getElementById('armSel');
-  var cur = 1, busy = false, idleTimer;
+  var dial = document.getElementById('dial'), scene = document.getElementById('scene');
+  var rot = document.getElementById('armRot'), idle = document.getElementById('armIdle'), grip = document.getElementById('grip');
+  var svg = document.getElementById('armSvg'), sel = document.getElementById('armSel'), bubble = document.getElementById('bubble');
+  var goBtn = document.getElementById('armGo'), leftBtn = document.getElementById('armLeft'), rightBtn = document.getElementById('armRight');
+  var modeNav = document.getElementById('modeNav'), modePlay = document.getElementById('modePlay');
+  function el(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
+  function polar(deg, r) { var a = deg * Math.PI / 180; return { x: 200 + r * Math.sin(a), y: 230 - r * Math.cos(a) }; }
+  var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+
+  // navigation dial
+  var dests = [
+    { label: 'GOALS', name: 'Goals', go: '#goals', a: -64 },
+    { label: 'SIMULATORS', name: 'Simulators', go: '#simulators', a: -32 },
+    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: 'borrow.html', a: 0 },
+    { label: 'HOW IT WORKS', name: 'How it works', go: '#how', a: 32 },
+    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who', a: 64 }
+  ];
   dests.forEach(function (d, i) {
-    var a = angles[i] * Math.PI / 180, x = 200 + 178 * Math.sin(a), y = 230 - 178 * Math.cos(a);
-    var w = d.label.length * 7.4 + 20;
-    var g = document.createElementNS(NS, 'g');
-    g.setAttribute('class', 'dial-item'); g.setAttribute('tabindex', '0'); g.setAttribute('role', 'button');
-    g.setAttribute('aria-label', 'Go to ' + d.name);
-    var r = document.createElementNS(NS, 'rect');
-    r.setAttribute('x', (x - w / 2).toFixed(1)); r.setAttribute('y', (y - 13).toFixed(1));
-    r.setAttribute('width', w.toFixed(1)); r.setAttribute('height', '26'); r.setAttribute('stroke-width', '1.2');
-    var t = document.createElementNS(NS, 'text');
-    t.setAttribute('x', x.toFixed(1)); t.setAttribute('y', (y + 4).toFixed(1)); t.setAttribute('text-anchor', 'middle');
-    t.textContent = d.label;
-    g.append(r, t); dial.appendChild(g); d.el = g;
-    g.addEventListener('click', function () { point(i); go(); });
-    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); point(i); go(); } });
+    var p = polar(d.a, 178), w = d.label.length * 7.4 + 20;
+    var g = el('g', { 'class': 'dial-item', tabindex: '0', role: 'button', 'aria-label': 'Go to ' + d.name });
+    var t = el('text', { x: p.x.toFixed(1), y: (p.y + 4).toFixed(1), 'text-anchor': 'middle' }); t.textContent = d.label;
+    g.append(el('rect', { x: (p.x - w / 2).toFixed(1), y: (p.y - 13).toFixed(1), width: w.toFixed(1), height: '26', 'stroke-width': '1.2' }), t);
+    dial.appendChild(g); d.el = g;
+    function pick() { setCur(i); act(); }
+    g.addEventListener('click', pick);
+    g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
   });
-  function wake() {
-    idle.classList.remove('idle'); clearTimeout(idleTimer);
-    idleTimer = setTimeout(function () { idle.classList.add('idle'); }, 8000);
-  }
-  function point(i) {
-    cur = Math.max(0, Math.min(dests.length - 1, i));
-    rot.style.transform = 'rotate(' + angles[cur] + 'deg)';
-    dests.forEach(function (d, j) { d.el.classList.toggle('on', j === cur); });
-    sel.textContent = 'Pointing at: ' + dests[cur].name;
+
+  // objects for pick-up mode
+  var shapes = {
+    cup: '<rect class="shape" x="-8" y="-11" width="16" height="22" rx="2"/><path class="shape" d="M8 -5 h4 a3.5 3.5 0 0 1 0 9 h-4" fill="none"/><line x1="-5" y1="-5" x2="5" y2="-5" stroke="#5fe0a8" stroke-width="1.2"/>',
+    phone: '<rect class="shape" x="-7" y="-13" width="14" height="26" rx="3"/><line x1="-2.5" y1="9" x2="2.5" y2="9" stroke="#a9e4c4" stroke-width="1.4"/>',
+    remote: '<rect class="shape" x="-5" y="-13" width="10" height="26" rx="2.5"/><circle cx="0" cy="-7" r="2" fill="#ff6b5e"/><circle cx="0" cy="0" r="1.6" fill="#a9e4c4"/><circle cx="0" cy="5" r="1.6" fill="#a9e4c4"/>'
+  };
+  var objs = [
+    { key: 'cup', name: 'Cup of water', a: -8, said: 'Ahh', done: 'Taking a sip' },
+    { key: 'phone', name: 'Phone', a: 26, said: 'Hello?', done: 'Phone at your ear' },
+    { key: 'remote', name: 'TV remote', a: 58, said: 'Click', done: 'Remote in reach' }
+  ];
+  var FACE = -58;
+  objs.forEach(function (o, i) {
+    var p = polar(o.a, 170);
+    o.home = p;
+    o.g = el('g', { 'class': 'obj', tabindex: '0', role: 'button', 'aria-label': 'Pick up the ' + o.name.toLowerCase() });
+    o.g.innerHTML = '<circle class="ring" r="22" fill="none"/>' + shapes[o.key];
+    o.label = el('text', { x: p.x.toFixed(1), y: (p.y + 36).toFixed(1), 'text-anchor': 'middle' });
+    o.label.textContent = o.name.toUpperCase();
+    o.g.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+    scene.append(o.g, o.label);
+    function pick() { if (busy) return; if (holding && holding !== o) return; setCur(i); act(); }
+    o.g.addEventListener('click', pick);
+    o.g.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+  });
+
+  var mode = 'nav', cur = 1, busy = false, holding = null, idleTimer;
+  function list() { return mode === 'nav' ? dests : objs; }
+  function wake() { idle.classList.remove('idle'); clearTimeout(idleTimer); idleTimer = setTimeout(function () { if (!busy) idle.classList.add('idle'); }, 8000); }
+  function aim(deg) { rot.style.transform = 'rotate(' + deg + 'deg)'; }
+  function setCur(i) {
+    var L = list(); cur = Math.max(0, Math.min(L.length - 1, i));
+    aim(L[cur].a);
+    L.forEach(function (d, j) { (d.el || d.g).classList.toggle('on', j === cur); if (d.label && d.label.setAttribute) d.label.classList && d.label.classList.toggle('on', j === cur); });
+    sel.textContent = (mode === 'nav' ? 'Pointing at: ' : 'Reaching for: ') + L[cur].name;
     wake();
   }
-  function go() {
-    if (busy) return; busy = true; wake();
-    var d = dests[cur];
-    sel.textContent = 'Going to: ' + d.name;
-    svg.classList.add('reach');
-    setTimeout(function () {
-      svg.classList.remove('reach'); busy = false;
+  function lock(on) { busy = on; leftBtn.disabled = on || !!holding; rightBtn.disabled = on || !!holding; goBtn.disabled = on; }
+  function say(text) { if (!text) { bubble.setAttribute('visibility', 'hidden'); return; } bubble.textContent = text; bubble.setAttribute('visibility', 'visible'); }
+
+  async function act() {
+    if (busy) return; wake();
+    if (mode === 'nav') {
+      var d = dests[cur]; lock(true);
+      sel.textContent = 'Going to: ' + d.name;
+      svg.classList.add('reach', 'closed'); await wait(650);
+      svg.classList.remove('reach', 'closed'); lock(false);
       if (d.go.charAt(0) === '#') {
-        var el = document.querySelector(d.go);
-        if (el) el.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        var t = document.querySelector(d.go);
+        if (t) t.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
         sel.textContent = 'Pointing at: ' + d.name;
-      } else { window.location.href = d.go; }
-    }, 650);
+      } else { location.href = d.go; }
+      return;
+    }
+    var o = objs[cur]; lock(true);
+    if (!holding) {
+      sel.textContent = 'Reaching for: ' + o.name;
+      aim(o.a); await wait(500);
+      svg.classList.add('reach'); await wait(450);
+      svg.classList.add('closed'); await wait(300);
+      o.g.setAttribute('transform', 'translate(200 86)'); o.g.classList.remove('on'); grip.appendChild(o.g);
+      svg.classList.remove('reach'); await wait(400);
+      aim(FACE); await wait(700);
+      holding = o; say(o.said);
+      sel.textContent = o.done;
+      goBtn.textContent = 'Put it back';
+    } else {
+      o = holding; say('');
+      sel.textContent = 'Putting back: ' + o.name;
+      aim(o.a); await wait(700);
+      svg.classList.add('reach'); await wait(450);
+      svg.classList.remove('closed');
+      o.g.setAttribute('transform', 'translate(' + o.home.x.toFixed(1) + ' ' + o.home.y.toFixed(1) + ')');
+      scene.insertBefore(o.g, o.label); await wait(250);
+      svg.classList.remove('reach');
+      holding = null; goBtn.textContent = 'Pick up';
+      setCur(objs.indexOf(o));
+    }
+    lock(false);
   }
-  document.getElementById('armLeft').addEventListener('click', function () { point(cur - 1); });
-  document.getElementById('armRight').addEventListener('click', function () { point(cur + 1); });
-  document.getElementById('armGo').addEventListener('click', go);
+
+  function setMode(m) {
+    if (busy || holding || m === mode) return;
+    mode = m;
+    modeNav.setAttribute('aria-pressed', m === 'nav' ? 'true' : 'false');
+    modePlay.setAttribute('aria-pressed', m === 'play' ? 'true' : 'false');
+    dial.setAttribute('visibility', m === 'nav' ? 'visible' : 'hidden');
+    scene.setAttribute('visibility', m === 'play' ? 'visible' : 'hidden');
+    goBtn.textContent = m === 'nav' ? 'Go' : 'Pick up';
+    setCur(m === 'nav' ? 1 : 1);
+  }
+  modeNav.addEventListener('click', function () { setMode('nav'); });
+  modePlay.addEventListener('click', function () { setMode('play'); });
+  leftBtn.addEventListener('click', function () { if (!holding) setCur(cur - 1); });
+  rightBtn.addEventListener('click', function () { if (!holding) setCur(cur + 1); });
+  goBtn.addEventListener('click', act);
   document.getElementById('guide').addEventListener('keydown', function (e) {
     if (e.target.tagName === 'BUTTON' && (e.key === 'Enter' || e.key === ' ')) return;
-    if (e.key === 'ArrowLeft') { e.preventDefault(); point(cur - 1); }
-    if (e.key === 'ArrowRight') { e.preventDefault(); point(cur + 1); }
+    if (holding || busy) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); setCur(cur - 1); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); setCur(cur + 1); }
   });
-  point(1); idle.classList.add('idle');
+  setCur(1); idle.classList.add('idle');
 
   var root = document.documentElement, big = document.getElementById('bigToggle');
   function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
