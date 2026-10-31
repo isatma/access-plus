@@ -255,12 +255,12 @@ def build():
            '<a href="#home" data-route="home">Home</a>'
            '<a href="#simulators" data-route="simulators">Simulators</a>'
            '<a href="#guide-ai" data-route="guide-ai">AI agent</a>'
-           '<a href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a>'
            '<a href="#software" data-route="software">Software solutions</a>'
            '<a href="#hardware" data-route="hardware">Hardware solutions</a>'
            '<a href="#advanced" data-route="advanced">Advanced tech</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
-           '<a href="#about" data-route="about">About</a></nav>')
+           '<a href="#about" data-route="about">About</a>'
+           '<a class="navsign" href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', nav, home, count=1, flags=re.S)
     if '.testbadge' not in home:
         home = home.replace('/* hero */', '''.brand { text-decoration: none; }
