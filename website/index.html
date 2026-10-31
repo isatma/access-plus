@@ -66,6 +66,7 @@ main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
 .intro h1 { font-size: 2.2em; line-height: 1.25; }
 .intro h1 span { color: var(--signal); }
 .intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
+.intro .promise { color: var(--desc); font-weight: 600; border-left: 2px solid var(--signal); padding-left: 14px; }
 
 /* three-step path */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
@@ -132,14 +133,15 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
 
     <section class="intro" aria-labelledby="introTitle">
-      <div class="eyebrow">Accessibility platform</div>
-      <h1 id="introTitle">Advanced control <span>for everyday life.</span></h1>
-      <p>Access+ helps people build life skills with new technology. Compare reviewed inputs, set up your posture and positions, practice in simulators, and bring advanced technologies together under one control profile for your computer, phone, wheelchair and home.</p>
+      <div class="eyebrow">Independent skill builder</div>
+      <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
+      <p>Practice and explore new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics. Read independent reviews, borrow equipment to try at home, and build your skills in custom simulators.</p>
+      <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
 
     <section class="steps" aria-label="How Access+ works">
       <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Sign in and record your goals, movement, posture, positions and routine.</p></a>
-      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try technologies</h3><p>Read reviews and compare software and hardware, from eye gaze to sip-and-puff.</p></a>
+      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews, then borrow equipment to try, from eye gaze to sip-and-puff.</p></a>
       <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice in simulators</h3><p>Test your skills, see your scores, and get options matched to you.</p></a>
     </section>
 
@@ -177,8 +179,9 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="block" id="technologies" aria-labelledby="techTitle">
-      <div class="head"><h2 id="techTitle">2 · Try technologies</h2><p>Reviews of software and hardware inputs: what each one is, what it costs, and who it suits.</p></div>
+      <div class="head"><h2 id="techTitle">2 · Try and borrow</h2><p>Independent reviews of software and hardware: what each one is, what it costs, and who it suits. Borrow what you want to try.</p></div>
       <div class="tiles">
+        <button class="tile" type="button">Borrow equipment<small>Loan program: try devices at home before you commit</small></button>
         <button class="tile" type="button">Eye gaze<small>Commercial, free, phone-based and DIY</small></button>
         <button class="tile" type="button">Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
         <button class="tile" type="button">Mouth joysticks and mice<small>Quadstick, QuadJoy, Jouse, IntegraMouse, LipSync</small></button>
