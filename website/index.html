@@ -2,30 +2,29 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@300;400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: instrument-panel console. Hairline grid ground, sticky status bar with stop, goal selector, then four numbered modules (02-05, the project's own section numbers) of fine-line tiles with corner ticks. Deliberately one dark look. */
+/* Layout: instrument-panel console on a fine-line grid. Tagline hero, three-step path (profile, try, practice), goal picker, then three sections matching the steps. One deliberate dark look; secondary text kept high-contrast. */
 :root {
   --bg: #0b1220;
   --panel: #0f1828;
-  --panel-hi: #142036;
-  --ink: #e4ecf5;
-  --muted: #8a9ab0;
-  --line: #24324a;
-  --line-hi: #3a5272;
-  --signal: #7cc4ff;
-  --signal-soft: rgba(124,196,255,0.10);
-  --amber: #ffb547;
-  --stop: #ff5a4e;
-  --stop-ink: #1a0503;
+  --panel-hi: #15233a;
+  --ink: #f0f5fa;
+  --desc: #a9e4c4;
+  --muted: #c4d0dd;
+  --line: #22314a;
+  --line-hi: #3b5476;
+  --signal: #5fe0a8;
+  --signal-ink: #04201a;
+  --signal-soft: rgba(95,224,168,0.10);
   --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
   --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
-  --base: 17px;
-  --target: 76px;
+  --base: 18px;
+  --target: 80px;
   color-scheme: dark;
 }
-:root.big { --base: 21px; --target: 100px; }
+:root.big { --base: 22px; --target: 104px; }
 
 * { box-sizing: border-box; }
 body {
@@ -36,117 +35,95 @@ body {
   background-size: 48px 48px;
   background-position: -1px -1px;
   background-attachment: fixed;
-  font-family: var(--body); font-weight: 300; font-size: var(--base); line-height: 1.55;
+  font-family: var(--body); font-weight: 400; font-size: var(--base); line-height: 1.55;
 }
-body::after {
-  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
-  background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%);
-}
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
-:focus-visible { outline: 2px solid var(--amber); outline-offset: 3px; }
-h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: 0.02em; }
-.mono { font-family: var(--mono); }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: 0.02em; }
 
 .wrap { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
-/* status bar */
-.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
-.bar .wrap { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding-block: 10px; }
-.brand { display: flex; align-items: baseline; gap: 14px; margin-right: auto; }
-.brand b { font: 400 1.35em var(--display); letter-spacing: 0.08em; }
-.brand b span { color: var(--signal); }
-.status { font: 500 0.7em var(--mono); color: var(--amber); letter-spacing: 0.12em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
-.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 8px var(--amber); }
+/* top bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
+.brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; }
+.brand span { color: var(--signal); }
+.draft { font: 500 0.66em var(--mono); color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--line-hi); padding: 4px 8px; }
 .btn {
-  min-height: 56px; padding: 0 18px;
-  background: transparent; color: var(--ink);
-  border: 1px solid var(--line-hi); border-radius: 2px;
-  font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+  min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer;
+  background: transparent; color: var(--ink); border: 1px solid var(--line-hi);
+  font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase;
 }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
-.btn.stop { background: var(--stop); color: var(--stop-ink); border-color: var(--stop); font-weight: 500; }
+.btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
 
-main .wrap { padding-block: 44px 72px; display: grid; gap: 64px; }
+main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
 
 /* hero */
-.intro { display: grid; gap: 18px; max-width: 52em; }
-.eyebrow { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
-.intro h1 { font-size: 1.95em; line-height: 1.3; }
-.intro p { margin: 0; color: var(--muted); max-width: 40em; }
-.flow { display: flex; flex-wrap: wrap; align-items: center; margin: 4px 0 0; padding: 0; list-style: none; font: 500 0.75em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
-.flow li { padding: 7px 12px; border: 1px solid var(--line-hi); color: var(--ink); background: var(--panel); }
-.flow li + li { border-left: none; }
-.flow li span { color: var(--signal); margin-right: 8px; }
+.intro { display: grid; gap: 16px; max-width: 50em; }
+.intro h1 { font-size: 2.2em; line-height: 1.25; }
+.intro h1 span { color: var(--signal); }
+.intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
+
+/* three-step path */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
+.step {
+  min-height: calc(var(--target) + 70px);
+  display: flex; flex-direction: column; gap: 8px; padding: 22px 22px 20px;
+  background: var(--panel); color: var(--ink); border: none; text-align: left; cursor: pointer;
+}
+.step .n { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.step h3 { font-size: 1.05em; line-height: 1.4; }
+.step p { margin: 0; color: var(--desc); font: 400 0.95em var(--body); }
+.step:hover { background: var(--panel-hi); box-shadow: inset 0 -3px 0 var(--signal); }
 
 /* goals */
-.goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
-.goal {
-  min-height: calc(var(--target) + 44px);
-  display: flex; flex-direction: column; justify-content: space-between; gap: 10px;
-  padding: 16px 18px; text-align: left;
-  background: var(--panel); color: var(--ink); border: none; cursor: pointer;
-  font: 600 1.02em var(--body);
-}
-.goal .code { font: 500 0.68em var(--mono); color: var(--muted); letter-spacing: 0.12em; }
-.goal small { display: block; font-weight: 300; font-size: 0.84em; color: var(--muted); margin-top: 2px; }
-.goal:hover { background: var(--panel-hi); box-shadow: inset 0 -2px 0 var(--signal); }
-.goal:hover .code { color: var(--signal); }
+.block { display: grid; gap: 18px; }
+.head { display: grid; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+.head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+.head h2 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 0.08em; }
+.head p { margin: 0; color: var(--muted); max-width: 46em; }
 
-/* modules */
-section.menu { display: grid; gap: 20px; }
-.menu-head { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
-.menu-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 1px; background: var(--signal); }
-.menu-head .num { font: 500 0.8em var(--mono); color: var(--signal); letter-spacing: 0.1em; }
-.menu-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
-.menu-head p { grid-column: 2; margin: 0; color: var(--muted); max-width: 48em; font-size: 0.95em; }
-
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 12px; }
+.goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
 .tile {
   position: relative; min-height: var(--target);
-  display: flex; flex-direction: column; justify-content: center; gap: 3px;
-  padding: 14px 18px 14px 18px; text-align: left;
-  background: color-mix(in srgb, var(--panel) 88%, transparent); color: var(--ink);
-  border: 1px solid var(--line); border-radius: 0; cursor: pointer;
-  font: 600 0.98em var(--body);
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+  padding: 14px 18px; text-align: left; cursor: pointer;
+  background: color-mix(in srgb, var(--panel) 90%, transparent); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 0;
+  font: 600 1em var(--body);
 }
 .tile::before, .tile::after { content: ""; position: absolute; width: 10px; height: 10px; border-color: var(--line-hi); border-style: solid; }
 .tile::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
 .tile::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-.tile .code { position: absolute; top: 8px; right: 10px; font: 500 0.62em var(--mono); color: var(--muted); letter-spacing: 0.1em; }
-.tile small { font-weight: 300; color: var(--muted); font-size: 0.86em; padding-right: 8px; }
-.tile:hover { border-color: var(--line-hi); background: var(--panel-hi); }
+.tile small { font-weight: 400; color: var(--desc); font-size: 0.88em; }
+.tile:hover { background: var(--panel-hi); border-color: var(--line-hi); }
 .tile:hover::before, .tile:hover::after { border-color: var(--signal); width: 16px; height: 16px; }
-.tile:hover .code { color: var(--signal); }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.sub { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; text-transform: uppercase; margin: 8px 0 -6px; }
 .tile.later { border-style: dashed; }
-.tile.later .code { color: var(--amber); }
 
-footer { position: relative; z-index: 1; border-top: 1px solid var(--line-hi); color: var(--muted); font: 400 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
-footer .wrap { padding-block: 22px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+footer { position: relative; z-index: 1; border-top: 1px solid var(--line-hi); color: var(--muted); font: 500 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
+footer .wrap { padding-block: 22px; }
 
 .toast {
   position: fixed; left: 50%; transform: translateX(-50%); z-index: 20;
   bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-  max-width: min(580px, calc(100% - 32px));
-  background: var(--panel-hi); color: var(--ink);
-  border: 1px solid var(--signal); padding: 14px 18px;
-  font: 400 0.82em var(--mono); letter-spacing: 0.03em;
+  max-width: min(560px, calc(100% - 32px));
+  background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal);
+  padding: 14px 18px; font: 400 0.9em var(--body);
 }
-@media (max-width: 520px) {
-  .intro h1 { font-size: 1.45em; }
-  .menu-head { grid-template-columns: 1fr; }
-  .menu-head p { grid-column: 1; }
-  .status { display: none; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .goal, .tile, .tile::before, .tile::after { transition: all .18s ease; }
-}
+@media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .draft { display: none; } }
+@media (prefers-reduced-motion: no-preference) { .step, .tile, .tile::before, .tile::after { transition: all .18s ease; } }
 </style>
 
 <header class="bar">
   <div class="wrap">
-    <div class="brand"><b>ACCESS<span>+</span></b><span class="status">Pilot draft · not connected to devices</span></div>
+    <div class="brand">ACCESS<span>+</span></div>
+    <span class="draft">Pilot draft</span>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
-    <button class="btn stop" id="stopBtn" type="button">Stop all</button>
+    <button class="btn primary" type="button" data-msg="Sign in: profiles are not built yet.">Sign in</button>
   </div>
 </header>
 
@@ -154,136 +131,101 @@ footer .wrap { padding-block: 22px; display: flex; flex-wrap: wrap; gap: 8px 24p
   <div class="wrap">
 
     <section class="intro" aria-labelledby="introTitle">
-      <div class="eyebrow">One profile · every device</div>
-      <h1 id="introTitle">What do you want to be able to do?</h1>
-      <p>Start with your goal. Try it in a simulator, review your results, and get input options matched to you. Your control profile then carries across computer, phone, wheelchair and home.</p>
-      <ol class="flow" aria-label="How it works">
-        <li><span>01</span>Goal</li>
-        <li><span>02</span>Simulator</li>
-        <li><span>03</span>Results</li>
-        <li><span>04</span>Matched options</li>
-      </ol>
+      <h1 id="introTitle">Learn it once. <span>Use it everywhere.</span></h1>
+      <p>Find the way of controlling technology that works for your body, practice it in simulators, and carry the same skills and settings to your computer, phone, wheelchair and home, even as your needs change.</p>
     </section>
 
-    <section class="goals" aria-label="Life goals">
-      <button class="goal" type="button"><span class="code">GOAL / MOBILITY</span><span>Get around<small>Power wheelchair driving</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / PHONE</span><span>Use my phone<small>Calls, texts, apps</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / COMPUTER</span><span>Use a computer<small>Point, click, type</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / AAC</span><span>Communicate<small>Speech and talking boards</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / EXERCISE</span><span>Exercise<small>Arm cranking, pulling</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / ENVIRONMENT</span><span>Control my home<small>Lights, bed, TV, call for help</small></span></button>
-      <button class="goal" type="button"><span class="code">GOAL / RECREATION</span><span>Play and make music<small>Games, recreation, instruments</small></span></button>
+    <section class="steps" aria-label="How Access+ works">
+      <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Sign in and tell us about your goals, movement, positions and routine.</p></a>
+      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try technologies</h3><p>Explore software and hardware inputs, from eye gaze to sip-and-puff.</p></a>
+      <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice in simulators</h3><p>Test your skills, see your scores, and get options matched to you.</p></a>
     </section>
 
-    <section class="menu" aria-labelledby="needsTitle" id="needs">
-      <div class="menu-head">
-        <span class="num">02</span><h2 id="needsTitle">Needs and goals</h2>
-        <p>Where you are now, where things may be heading, and what gets in the way.</p>
+    <section class="block" aria-labelledby="goalsTitle">
+      <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters most. We'll suggest technologies and simulators for it.</p></div>
+      <div class="goals">
+        <button class="tile" type="button">Get around<small>Drive a power wheelchair</small></button>
+        <button class="tile" type="button">Use my phone<small>Calls, texts, apps</small></button>
+        <button class="tile" type="button">Use a computer<small>Point, click, type</small></button>
+        <button class="tile" type="button">Communicate<small>Speech and talking boards</small></button>
+        <button class="tile" type="button">Exercise<small>Arm cranking, pulling</small></button>
+        <button class="tile" type="button">Control my home<small>Lights, bed, TV, call for help</small></button>
+        <button class="tile" type="button">Play and make music<small>Games, recreation, instruments</small></button>
       </div>
+    </section>
+
+    <section class="block" id="profile" aria-labelledby="profileTitle">
+      <div class="head"><h2 id="profileTitle">1 · Your profile</h2><p>Everything about you and your setup, saved in one place you and your therapist can use.</p></div>
+      <div class="sub">About you</div>
       <div class="tiles">
-        <button class="tile" type="button"><span class="code">ND-01</span>Function levels<small>Upper-limb impairment, C1 to C8</small></button>
-        <button class="tile" type="button"><span class="code">ND-02</span>Planning ahead<small>Progressive conditions such as ALS</small></button>
-        <button class="tile" type="button"><span class="code">ND-03</span>Positions and daily routine<small>Bed, chair, tilt, outdoors</small></button>
-        <button class="tile" type="button"><span class="code">ND-04</span>Barriers<small>Cost, setup, fatigue, trials, information</small></button>
+        <button class="tile" type="button">Movement and function<small>What you can move, and how much</small></button>
+        <button class="tile" type="button">Planning ahead<small>For progressive conditions such as ALS</small></button>
+        <button class="tile" type="button">Positions and routine<small>Bed, chair, tilt, outdoors</small></button>
+        <button class="tile" type="button">Barriers<small>Cost, setup, fatigue, trials, information</small></button>
+      </div>
+      <div class="sub">Your controls</div>
+      <div class="tiles">
+        <button class="tile" type="button">Connect a sensor<small>Gamepad, keyboard, MIDI, webcam, microphone, microcontroller</small></button>
+        <button class="tile" type="button">Calibrate<small>Rest, range, dead zone, smoothing, thresholds</small></button>
+        <button class="tile" type="button">Choose what each signal does<small>Map movements and switches to actions</small></button>
+        <button class="tile" type="button">Settings by position<small>Different setups for bed and chair</small></button>
+        <button class="tile" type="button">Safety stop<small>A way out that always works</small></button>
+        <button class="tile" type="button">Use on real devices<small>Carry your profile to chair, phone and computer</small></button>
       </div>
     </section>
 
-    <section class="menu" aria-labelledby="inputsTitle" id="inputs">
-      <div class="menu-head">
-        <span class="num">03</span><h2 id="inputsTitle">Input technologies</h2>
-        <p>Every way a body signal can become a control: what each one is, what it costs, and who it suits.</p>
-      </div>
+    <section class="block" id="technologies" aria-labelledby="techTitle">
+      <div class="head"><h2 id="techTitle">2 · Try technologies</h2><p>Software and hardware inputs: what each one is, what it costs, and who it suits.</p></div>
       <div class="tiles">
-        <button class="tile" type="button"><span class="code">IN-01</span>Eye gaze: commercial<small>Dedicated and subscription systems</small></button>
-        <button class="tile" type="button"><span class="code">IN-02</span>Eye gaze: free and DIY<small>OptiKey, iPhone, DIY glasses</small></button>
-        <button class="tile" type="button"><span class="code">IN-03</span>Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
-        <button class="tile" type="button"><span class="code">IN-04</span>Mouth joysticks and mice<small>Quadstick, QuadJoy, Jouse, IntegraMouse, LipSync</small></button>
-        <button class="tile" type="button"><span class="code">IN-05</span>Breath switches<small>Sip-and-puff, proportional and switched</small></button>
-        <button class="tile" type="button"><span class="code">IN-06</span>Sound and microphone switches<small>Hum, click or voice triggers</small></button>
-        <button class="tile" type="button"><span class="code">IN-07</span>Movement switches<small>Blink, twitch, proximity, tilt, IMU</small></button>
-        <button class="tile" type="button"><span class="code">IN-08</span>Buttons and head arrays<small>Commercial switches and switch interfaces</small></button>
-        <button class="tile" type="button"><span class="code">IN-09</span>Muscle and brain signals<small>EMG, MMG, brain-computer interfaces</small></button>
-        <button class="tile" type="button"><span class="code">IN-10</span>Voice control<small>Dictation and commands</small></button>
-        <button class="tile" type="button"><span class="code">IN-11</span>Open-source and DIY builds<small>Designs you can make or adapt</small></button>
+        <button class="tile" type="button">Eye gaze<small>Commercial, free, phone-based and DIY</small></button>
+        <button class="tile" type="button">Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
+        <button class="tile" type="button">Mouth joysticks and mice<small>Quadstick, QuadJoy, Jouse, IntegraMouse, LipSync</small></button>
+        <button class="tile" type="button">Breath switches<small>Sip-and-puff, proportional and switched</small></button>
+        <button class="tile" type="button">Switches<small>Buttons, head arrays, sound, blink, tilt, proximity</small></button>
+        <button class="tile" type="button">Muscle and brain signals<small>EMG, MMG, brain-computer interfaces</small></button>
+        <button class="tile" type="button">Voice control<small>Dictation and commands</small></button>
+        <button class="tile" type="button">Open-source and DIY builds<small>Designs you can make or adapt</small></button>
       </div>
     </section>
 
-    <section class="menu" aria-labelledby="simsTitle" id="simulators">
-      <div class="menu-head">
-        <span class="num">04</span><h2 id="simsTitle">Simulators</h2>
-        <p>Practice in the browser before any hardware arrives. Each one has levels and a score you can share with your therapist.</p>
-      </div>
+    <section class="block" id="simulators" aria-labelledby="simTitle">
+      <div class="head"><h2 id="simTitle">3 · Practice in simulators</h2><p>Practice in the browser before any hardware arrives. Each simulator has levels and a score to share with your therapist.</p></div>
       <div class="tiles">
-        <button class="tile" type="button"><span class="code">SIM-01</span>Power wheelchair driving<small>Obstacle courses with levels</small></button>
-        <button class="tile" type="button"><span class="code">SIM-02</span>Alternate wheelchair inputs<small>Drive with breath, head or arm</small></button>
-        <button class="tile" type="button"><span class="code">SIM-03</span>Cell phone<small>Phone use and accessories</small></button>
-        <button class="tile" type="button"><span class="code">SIM-04</span>Computer skills<small>Point, click, right click, drag, type, draw</small></button>
-        <button class="tile" type="button"><span class="code">SIM-05</span>Voice recognition<small>Accuracy, consistency, troubleshooting</small></button>
-        <button class="tile" type="button"><span class="code">SIM-06</span>Eye gaze skills<small>Dwell, targets, keyboards</small></button>
-        <button class="tile" type="button"><span class="code">SIM-07</span>Head and nose tracking skills<small>Smooth pointing and holding still</small></button>
-        <button class="tile" type="button"><span class="code">SIM-08</span>Facial gesture switches<small>Smile, mouth, eyebrow, blink</small></button>
-        <button class="tile" type="button"><span class="code">SIM-09</span>Robotic arm<small>Reach, grasp, feed</small></button>
-        <button class="tile" type="button"><span class="code">SIM-10</span>Exercise<small>Cranking and pulling games</small></button>
-        <button class="tile" type="button"><span class="code">SIM-11</span>Communication boards<small>Build and use a talking board</small></button>
-        <button class="tile" type="button"><span class="code">SIM-12</span>Levels and scoring<small>How progress is measured</small></button>
-        <button class="tile later" type="button"><span class="code">PHASE 2</span>Smart home, music, recreation<small>Planned for a later phase</small></button>
-      </div>
-    </section>
-
-    <section class="menu" aria-labelledby="panelTitle" id="control-panel">
-      <div class="menu-head">
-        <span class="num">05</span><h2 id="panelTitle">Control panel and sensors</h2>
-        <p>Set up your inputs once, then use the same profile everywhere. Built for you and your therapist working together.</p>
-      </div>
-      <div class="tiles">
-        <button class="tile" type="button"><span class="code">CP-01</span>Channels<small>Analog and switch signals</small></button>
-        <button class="tile" type="button"><span class="code">CP-02</span>Connect a sensor<small>Gamepad, keyboard, MIDI, webcam, microphone, microcontroller</small></button>
-        <button class="tile" type="button"><span class="code">CP-03</span>Calibration<small>Rest, range, dead zone, smoothing, thresholds</small></button>
-        <button class="tile" type="button"><span class="code">CP-04</span>Map channels to actions<small>Which signal does what</small></button>
-        <button class="tile" type="button"><span class="code">CP-05</span>Profiles<small>By person and by position</small></button>
-        <button class="tile" type="button"><span class="code">CP-06</span>Safety and stop<small>Supervisor and emergency stop</small></button>
-        <button class="tile" type="button"><span class="code">CP-07</span>Session logs<small>Record and export results</small></button>
-        <button class="tile" type="button"><span class="code">CP-08</span>Use on real devices<small>Carry your profile to chair, phone and computer</small></button>
+        <button class="tile" type="button">Wheelchair driving<small>Obstacle courses, with any input</small></button>
+        <button class="tile" type="button">Computer skills<small>Point, click, drag, type, draw</small></button>
+        <button class="tile" type="button">Phone<small>Phone use and accessories</small></button>
+        <button class="tile" type="button">Eye, head and face<small>Gaze, nose tracking and facial gestures</small></button>
+        <button class="tile" type="button">Voice<small>Accuracy, consistency, troubleshooting</small></button>
+        <button class="tile" type="button">Communication boards<small>Build and use a talking board</small></button>
+        <button class="tile" type="button">Exercise and robotic arm<small>Cranking, pulling, reaching</small></button>
+        <button class="tile later" type="button">Coming later<small>Smart home, music, recreation</small></button>
       </div>
     </section>
 
   </div>
 </main>
 
-<footer><div class="wrap"><span>Access+ pilot website · draft for review</span><span>Users · occupational therapists · partners</span></div></footer>
+<footer><div class="wrap">Access+ pilot website · draft for review by users, therapists and partners</div></footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 (function () {
-  var toast = document.getElementById('toast');
-  var timer;
+  var toast = document.getElementById('toast'), timer;
   function say(msg) {
-    toast.textContent = msg;
-    toast.hidden = false;
-    clearTimeout(timer);
-    timer = setTimeout(function () { toast.hidden = true; }, 3500);
+    toast.textContent = msg; toast.hidden = false;
+    clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500);
   }
-  function label(b) {
-    var n = b.querySelector('.goal > span:not(.code)') || b;
-    var t = '';
-    n.childNodes.forEach(function (c) { if (c.nodeType === 3) t += c.textContent; });
-    return t.trim();
-  }
-  document.querySelectorAll('.goal, .tile').forEach(function (b) {
+  document.querySelectorAll('.tile, [data-msg]').forEach(function (b) {
     b.addEventListener('click', function () {
-      var code = b.querySelector('.code');
-      say((code ? code.textContent + ' · ' : '') + label(b) + ' — module not built yet.');
+      if (b.dataset.msg) return say(b.dataset.msg);
+      var t = ''; b.childNodes.forEach(function (c) { if (c.nodeType === 3) t += c.textContent; });
+      say(t.trim() + ': this page is not built yet.');
     });
   });
-  document.getElementById('stopBtn').addEventListener('click', function () {
-    say('STOP ALL · In the working version this halts every simulator and device output.');
-  });
-  var root = document.documentElement;
-  var big = document.getElementById('bigToggle');
+  var root = document.documentElement, big = document.getElementById('bigToggle');
   function setBig(on) {
-    root.classList.toggle('big', on);
-    big.setAttribute('aria-pressed', on ? 'true' : 'false');
+    root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false');
     try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {}
   }
   try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
