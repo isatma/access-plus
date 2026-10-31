@@ -89,7 +89,7 @@ main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
 
 .goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
 .tile {
-  position: relative; min-height: var(--target);
+  position: relative; text-decoration: none; min-height: var(--target);
   display: flex; flex-direction: column; justify-content: center; gap: 4px;
   padding: 14px 18px; text-align: left; cursor: pointer;
   background: color-mix(in srgb, var(--panel) 90%, transparent); color: var(--ink);
@@ -181,7 +181,7 @@ footer .wrap { padding-block: 22px; }
     <section class="block" id="technologies" aria-labelledby="techTitle">
       <div class="head"><h2 id="techTitle">2 · Try and borrow</h2><p>Independent reviews of software and hardware: what each one is, what it costs, and who it suits. Borrow what you want to try.</p></div>
       <div class="tiles">
-        <button class="tile" type="button">Borrow equipment<small>Loan program: try devices at home before you commit</small></button>
+        <a class="tile" href="borrow.html">Borrow a sensor kit<small>Choose sensors and we mail them to you to try</small></a>
         <button class="tile" type="button">Eye gaze<small>Commercial, free, phone-based and DIY</small></button>
         <button class="tile" type="button">Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
         <button class="tile" type="button">Mouth joysticks and mice<small>Quadstick, QuadJoy, Jouse, IntegraMouse, LipSync</small></button>
@@ -221,7 +221,7 @@ footer .wrap { padding-block: 22px; }
     toast.textContent = msg; toast.hidden = false;
     clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500);
   }
-  document.querySelectorAll('.tile, [data-msg]').forEach(function (b) {
+  document.querySelectorAll('button.tile, [data-msg]').forEach(function (b) {
     b.addEventListener('click', function () {
       if (b.dataset.msg) return say(b.dataset.msg);
       var t = ''; b.childNodes.forEach(function (c) { if (c.nodeType === 3) t += c.textContent; });

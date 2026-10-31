@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>Access+ Sensor Kits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: same console look as the home page. Loan steps, then a two-column catalog: sensor cards on the left, sticky "Your kit" panel on the right (stacks on phones). */
+:root {
+  --bg: #0b1220; --panel: #0f1828; --panel-hi: #15233a;
+  --ink: #f0f5fa; --desc: #a9e4c4; --muted: #c4d0dd;
+  --line: #22314a; --line-hi: #3b5476;
+  --signal: #5fe0a8; --signal-ink: #04201a; --signal-soft: rgba(95,224,168,0.10);
+  --amber: #ffc670;
+  --display: "Michroma", "Eurostile", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Consolas", monospace;
+  --base: 18px; --target: 80px;
+  color-scheme: dark;
+}
+:root.big { --base: 22px; --target: 104px; }
+* { box-sizing: border-box; }
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body {
+  margin: 0; background-color: var(--bg); color: var(--ink);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px; background-attachment: fixed;
+  font-family: var(--body); font-size: var(--base); line-height: 1.55;
+}
+body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: 0.02em; }
+a { color: inherit; }
+.wrap { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
+.bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
+.brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; text-decoration: none; }
+.brand span { color: var(--signal); }
+.btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
+.btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
+.btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
+.eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
+.intro { display: grid; gap: 14px; max-width: 50em; }
+.intro h1 { font-size: 1.9em; line-height: 1.3; }
+.intro p { margin: 0; color: var(--muted); max-width: 42em; }
+
+.how { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); margin: 0; padding: 0; list-style: none; }
+.how li { background: var(--panel); padding: 18px 20px; display: grid; gap: 6px; }
+.how b { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.how span { font-weight: 600; }
+.how small { color: var(--desc); font-size: 0.88em; }
+
+.catalog { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 28px; align-items: start; }
+.head { padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; margin-bottom: 18px; display: grid; gap: 4px; }
+.head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+.head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+.head p { margin: 0; color: var(--muted); }
+
+.items { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+.item {
+  position: relative; min-height: calc(var(--target) + 60px);
+  display: grid; align-content: start; gap: 8px; padding: 18px 18px 16px;
+  background: color-mix(in srgb, var(--panel) 90%, transparent); color: var(--ink);
+  border: 1px solid var(--line); text-align: left; cursor: pointer; font: inherit;
+}
+.item::before, .item::after { content: ""; position: absolute; width: 10px; height: 10px; border-color: var(--line-hi); border-style: solid; }
+.item::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.item::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+.item:hover { background: var(--panel-hi); }
+.item[aria-pressed="true"] { border-color: var(--signal); background: var(--signal-soft); }
+.item[aria-pressed="true"]::before, .item[aria-pressed="true"]::after { border-color: var(--signal); width: 16px; height: 16px; }
+.item .top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.item h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+.check { flex: none; font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-hi); padding: 3px 7px; }
+.item[aria-pressed="true"] .check { color: var(--signal-ink); background: var(--signal); border-color: var(--signal); }
+.item p { margin: 0; color: var(--desc); font-size: 0.9em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-hi); padding: 2px 7px; }
+.item.core { grid-column: 1 / -1; min-height: 0; }
+.item.core .chip.inc { color: var(--amber); border-color: var(--amber); }
+.item.soon { border-style: dashed; cursor: default; }
+.item.soon .check { color: var(--amber); border-color: var(--amber); }
+
+.kit { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 96px); background: var(--panel); border: 1px solid var(--line-hi); padding: 20px; display: grid; gap: 14px; }
+.kit h2 { font-size: 0.95em; text-transform: uppercase; letter-spacing: 0.1em; }
+.kit ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.kit li { display: flex; justify-content: space-between; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.kit li span:last-child { font: 500 0.7em var(--mono); color: var(--desc); letter-spacing: 0.08em; text-transform: uppercase; align-self: center; }
+.kit .empty { color: var(--muted); font-size: 0.92em; margin: 0; }
+.kit .note { color: var(--muted); font-size: 0.82em; margin: 0; }
+.kit .btn { width: 100%; justify-content: center; }
+
+.toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 20; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: min(560px, calc(100% - 32px)); background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal); padding: 14px 18px; font-size: 0.9em; }
+
+@media (max-width: 860px) { .catalog { grid-template-columns: 1fr; } .kit { position: static; } }
+@media (max-width: 520px) { .intro h1 { font-size: 1.45em; } }
+@media (prefers-reduced-motion: no-preference) { .item, .item::before, .item::after { transition: all .18s ease; } }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="index.html">ACCESS<span>+</span></a>
+    <a class="btn" href="index.html">Home</a>
+    <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
+    <button class="btn primary" type="button" data-msg="Sign in: profiles are not built yet.">Sign in</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <section class="intro" aria-labelledby="t">
+      <div class="eyebrow">Equipment loan program</div>
+      <h1 id="t">Borrow a sensor kit</h1>
+      <p>Choose the sensors you want to try and we'll mail you a kit. Set it up with your profile, practice in the simulators, and send it back when you're done. Nothing here is for sale.</p>
+    </section>
+
+    <ol class="how" aria-label="How the loan works">
+      <li><b>STEP 1</b><span>Choose sensors</span><small>Pick from the menu below.</small></li>
+      <li><b>STEP 2</b><span>We mail the kit</span><small>Everything needed to connect is included.</small></li>
+      <li><b>STEP 3</b><span>Set up and practice</span><small>Calibrate in your profile, then train in the simulators.</small></li>
+      <li><b>STEP 4</b><span>Send it back</span><small>Return the kit at the end of the loan.</small></li>
+    </ol>
+
+    <div class="catalog">
+      <section aria-labelledby="menuTitle">
+        <div class="head"><h2 id="menuTitle">Sensor menu</h2><p>Select as many as you want to try. Every kit includes the interface box.</p></div>
+        <div class="items" id="items">
+
+          <div class="item core">
+            <div class="top"><h3>Interface box</h3><span class="check">Always included</span></div>
+            <p>Connects any sensor to a computer, phone or tablet. It shows up as a standard keyboard, mouse or gamepad, so no special software is needed.</p>
+            <div class="chips"><span class="chip inc">In every kit</span><span class="chip">USB</span><span class="chip">Bluetooth</span></div>
+          </div>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Breath switch" data-kind="Breath">
+            <div class="top"><h3>Breath switch</h3><span class="check">Add</span></div>
+            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control.</p>
+            <div class="chips"><span class="chip">Switched</span><span class="chip">Proportional</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="EMG switch" data-kind="Muscle">
+            <div class="top"><h3>EMG muscle switch</h3><span class="check">Add</span></div>
+            <p>Sticker electrodes pick up a small muscle contraction, even when there's little visible movement.</p>
+            <div class="chips"><span class="chip">Switched</span><span class="chip">Proportional</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Adaptive button switches" data-kind="Touch">
+            <div class="top"><h3>Adaptive button switches</h3><span class="check">Add</span></div>
+            <p>Buttons in different sizes and press forces, to place at your head, hand, cheek or knee.</p>
+            <div class="chips"><span class="chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Twitch switch" data-kind="Movement">
+            <div class="top"><h3>Twitch switch</h3><span class="check">Add</span></div>
+            <p>Detects a tiny movement such as a cheek, eyebrow or finger twitch.</p>
+            <div class="chips"><span class="chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Sound switch" data-kind="Sound">
+            <div class="top"><h3>Sound switch</h3><span class="check">Add</span></div>
+            <p>A hum, click or short vocal sound triggers an action. No words needed.</p>
+            <div class="chips"><span class="chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Proximity switch" data-kind="Movement">
+            <div class="top"><h3>Proximity switch</h3><span class="check">Add</span></div>
+            <p>Triggers when you move close to it. No touch or pressure needed.</p>
+            <div class="chips"><span class="chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Head tilt sensor" data-kind="Movement">
+            <div class="top"><h3>Head tilt sensor</h3><span class="check">Add</span></div>
+            <p>A motion sensor (IMU) on a cap or headset turns head tilts into pointing or steering.</p>
+            <div class="chips"><span class="chip">Proportional</span><span class="chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Eye tracker" data-kind="Eye gaze">
+            <div class="top"><h3>Eye tracking equipment</h3><span class="check">Add</span></div>
+            <p>An eye-gaze camera for a computer. Look to point, and dwell or use a switch to click.</p>
+            <div class="chips"><span class="chip">Pointing</span></div>
+          </button>
+
+          <div class="item soon">
+            <div class="top"><h3>More sensors</h3><span class="check">Coming</span></div>
+            <p>New sensors and equipment will be added to the menu over time.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <aside class="kit" aria-labelledby="kitTitle">
+        <h2 id="kitTitle">Your kit</h2>
+        <ul id="kitList"><li><span>Interface box</span><span>Included</span></li></ul>
+        <p class="empty" id="kitEmpty">Add sensors from the menu to build your kit.</p>
+        <button class="btn primary" id="requestBtn" type="button" disabled>Request this kit</button>
+        <p class="note">Pilot draft. Requests aren't sent anywhere yet.</p>
+      </aside>
+    </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+(function () {
+  var toast = document.getElementById('toast'), timer;
+  function say(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 4000); }
+  document.querySelectorAll('[data-msg]').forEach(function (b) { b.addEventListener('click', function () { say(b.dataset.msg); }); });
+
+  var list = document.getElementById('kitList'), empty = document.getElementById('kitEmpty'), req = document.getElementById('requestBtn');
+  var picks = [];
+  function render() {
+    list.innerHTML = '<li><span>Interface box</span><span>Included</span></li>';
+    picks.forEach(function (p) {
+      var li = document.createElement('li');
+      var a = document.createElement('span'); a.textContent = p.name;
+      var b = document.createElement('span'); b.textContent = p.kind;
+      li.append(a, b); list.appendChild(li);
+    });
+    empty.hidden = picks.length > 0;
+    req.disabled = picks.length === 0;
+  }
+  document.querySelectorAll('button.item').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      b.querySelector('.check').textContent = on ? 'Added' : 'Add';
+      if (on) picks.push({ name: b.dataset.name, kind: b.dataset.kind });
+      else picks = picks.filter(function (p) { return p.name !== b.dataset.name; });
+      render();
+    });
+  });
+  req.addEventListener('click', function () {
+    say('Kit of ' + (picks.length + 1) + ' items noted. In the working version, this sends your request to the Access+ loan team.');
+  });
+
+  var root = document.documentElement, big = document.getElementById('bigToggle');
+  function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
+  try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
+  big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
+})();
+</script>
+</body>
+</html>
