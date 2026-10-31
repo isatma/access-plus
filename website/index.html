@@ -60,6 +60,7 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .intro h1 { font-size: 2.2em; line-height: 1.25; }
 .intro h1 span { color: var(--signal); }
 .intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
+.inline-link { color: var(--signal); }
 .intro .promise { color: var(--desc); font-weight: 600; border-left: 2px solid var(--signal); padding-left: 14px; }
 
 /* section heads */
@@ -148,7 +149,18 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .msg { max-width: 88%; padding: 10px 14px; font-size: 0.93em; line-height: 1.5; }
 .msg.me { justify-self: end; background: var(--panel-hi); border: 1px solid var(--line-hi); }
 .msg.ai-msg { justify-self: start; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent); color: var(--ink); }
-.chat-btn { justify-self: start; margin-top: 4px; }
+.log { display: grid; gap: 12px; max-height: 420px; overflow-y: auto; padding-right: 4px; }
+.msg { white-space: pre-wrap; }
+.msg.thinking { color: var(--muted); font-style: italic; }
+.starters { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip.small { min-height: 48px; padding: 0 14px; font-size: 0.85em; text-align: left; }
+.ask { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 8px; }
+.ask input { min-height: 56px; min-width: 0; padding: 0 14px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-hi); font: 400 1em var(--body); }
+.ask input:focus { outline: 3px solid var(--signal); outline-offset: 1px; }
+.ask .btn:disabled { opacity: .45; cursor: not-allowed; }
+.chat-note { margin: 0; color: var(--muted); font-size: 0.8em; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
 @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
 
 /* steps */
@@ -203,7 +215,7 @@ footer .wrap { padding-block: 22px; }
       <div class="eyebrow">Independent skill builder</div>
       <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Practice new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
-      <p>An AI guide coaches you along the way.</p>
+      <p>An AI guide coaches you along the way. <a href="#guide-ai" class="inline-link">Ask it a question</a>.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
@@ -305,13 +317,24 @@ footer .wrap { padding-block: 22px; }
           <li><b>Helps you test and connect</b><span>Walks you through connecting a sensor from your kit and checking it works.</span></li>
           <li><b>Tracks your progress</b><span>Summarizes results for you, your family or your therapist. You control what it saves.</span></li>
         </ul>
-        <div class="chat" aria-label="Example conversation with the AI guide">
-          <div class="chat-head"><span>AI GUIDE</span><span class="tag-ex">Example</span></div>
-          <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
-          <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
-          <div class="msg me">OK, start the exercise.</div>
-          <div class="msg ai-msg">Starting Computer exercises, level 1, with your in-bed profile.</div>
-          <button class="btn primary chat-btn" type="button" data-msg="The AI guide isn't connected yet in this draft.">Ask the guide</button>
+        <div class="chat" id="chat" aria-label="Chat with the AI guide">
+          <div class="chat-head"><span>AI GUIDE</span><span class="tag-ex" id="chatTag">Example</span></div>
+          <div class="log" id="chatLog" aria-live="polite">
+            <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
+            <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
+          </div>
+          <div class="starters" id="starters">
+            <button class="chip small" type="button">What input should I try first?</button>
+            <button class="chip small" type="button">How does sip-and-puff work?</button>
+            <button class="chip small" type="button">I'm in bed this week. What changes?</button>
+          </div>
+          <form class="ask" id="askForm" autocomplete="off">
+            <label class="sr" for="askInput">Ask the AI guide</label>
+            <input id="askInput" type="text" placeholder="Ask the guide anything…" maxlength="600">
+            <button class="btn primary" id="askBtn" type="submit">Ask</button>
+            <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
+          </form>
+          <p class="chat-note" id="chatNote">The guide uses Claude on your own Claude account. It's for learning and practice, not medical advice.</p>
         </div>
       </div>
     </section>
@@ -362,7 +385,7 @@ footer .wrap { padding-block: 22px; }
   document.querySelectorAll('[data-msg]').forEach(function (b) {
     b.addEventListener('click', function (e) { e.preventDefault(); say(b.dataset.msg); });
   });
-  document.querySelectorAll('.chip').forEach(function (b) {
+  document.querySelectorAll('#goals .chip').forEach(function (b) {
     b.addEventListener('click', function () { say(b.textContent + ': goal pages are not built yet.'); });
   });
 
@@ -499,6 +522,69 @@ footer .wrap { padding-block: 22px; }
     if (e.key === 'ArrowRight') { e.preventDefault(); setCur(cur + 1); }
   });
   setCur(1); idle.classList.add('idle');
+
+
+  // AI guide chat
+  var RULES = [
+    'You are the Access+ AI guide, a friendly coach on the Access+ website.',
+    'Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It helps people practice and explore new ways to control the devices they depend on: power wheelchairs and other mobility aids, phones, computers, communication devices and emerging electronics.',
+    'Access+ does not sell anything. It lends sensor kits by mail, publishes independent technology reviews, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
+    'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',
+    'Simulators: robotic arm, wheelchair driving, cell phone, computer exercises (point, click, drag, type, draw); more planned for communication boards, exercise, voice, smart home and music. Profiles store goals, movement, posture and positions (bed, chair, tilt, outdoors) and calibration such as rest position, range, dead zone, smoothing, dwell time and thresholds.',
+    'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
+    'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
+    'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
+  ].join('\n\n');
+  var log = document.getElementById('chatLog'), form = document.getElementById('askForm'), input = document.getElementById('askInput');
+  var askBtn = document.getElementById('askBtn'), stopChat = document.getElementById('stopBtn'), note = document.getElementById('chatNote');
+  var tag = document.getElementById('chatTag'), starters = document.getElementById('starters');
+  var turns = [], ctl = null, started = false, sampleFn = null;
+  function bubble(cls, text) { var d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  function setBusy(on) { askBtn.disabled = on; input.disabled = on; stopChat.hidden = !on; starters.querySelectorAll('button').forEach(function (b) { b.disabled = on; }); }
+  function unavailable(msg) { form.hidden = true; starters.hidden = true; note.textContent = msg; }
+  var copy = {
+    not_granted: 'The live guide needs your permission to use Claude. Reload the page to be asked again.',
+    sampling_disabled: 'Claude isn’t available on this account, so the live guide is off.',
+    rate_limited: 'The guide is getting a lot of questions. Wait a minute and try again.',
+    session_expired: 'Please sign in to Claude again to use the guide.',
+    refused: 'The guide can’t help with that one. Try asking another way.',
+    prompt_too_large: 'That conversation got long. Reload the page to start fresh.'
+  };
+  async function ask(text) {
+    text = (text || '').trim();
+    if (!text || !sampleFn || (ctl && !ctl.signal.aborted && askBtn.disabled)) return;
+    if (!started) { started = true; log.innerHTML = ''; tag.textContent = 'Live'; }
+    bubble('me', text);
+    turns.push({ role: 'user', content: text });
+    if (turns.length > 16) turns = turns.slice(-16);
+    while (turns.length && turns[0].role !== 'user') turns.shift();
+    var out = bubble('ai-msg thinking', 'Thinking…');
+    input.value = ''; setBusy(true);
+    ctl = new AbortController();
+    try {
+      var res = await sampleFn([{ role: 'user', content: RULES }].concat(turns), {
+        modelTier: 'quick', cache: false, signal: ctl.signal,
+        onText: function (u) { out.classList.remove('thinking'); out.textContent = u.text; log.scrollTop = log.scrollHeight; }
+      });
+      out.classList.remove('thinking'); out.textContent = res.text;
+      turns.push({ role: 'assistant', content: res.text });
+    } catch (e) {
+      out.classList.remove('thinking');
+      if (e && e.code === 'cancelled') { out.textContent = (e.text || '') + (e.text ? ' …' : 'Stopped.'); if (e.text) turns.push({ role: 'assistant', content: e.text }); }
+      else if (e && (e.code === 'not_granted' || e.code === 'sampling_disabled' || e.code === 'not_declared' || e.code === 'capability_disabled' || e.code === 'capability_removed')) { out.remove(); turns.pop(); unavailable(copy[e.code] || 'The live guide isn’t available here.'); }
+      else { out.textContent = (e && e.text) ? e.text + ' …' : (copy[e && e.code] || 'Something went wrong reaching the guide. Try again.'); turns.pop(); }
+    } finally { setBusy(false); ctl = null; if (!form.hidden) input.focus(); }
+  }
+  form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); });
+  stopChat.addEventListener('click', function () { if (ctl) ctl.abort(); });
+  starters.querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { ask(b.textContent); }); });
+  setBusy(true); askBtn.disabled = true; note.textContent = 'Connecting the guide…';
+  (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
+    sampleFn = fn;
+    if (!fn) { setBusy(false); unavailable('The live guide works when this page is opened in Claude while signed in. The conversation above is an example.'); return; }
+    setBusy(false);
+    note.textContent = 'The guide uses Claude on your own Claude account. It’s for learning and practice, not medical advice.';
+  }).catch(function () { setBusy(false); unavailable('The live guide isn’t available here. The conversation above is an example.'); });
 
   var root = document.documentElement, big = document.getElementById('bigToggle');
   function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
