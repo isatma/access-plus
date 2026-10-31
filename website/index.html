@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Michroma&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
-/* Layout: instrument-panel console on a fine-line grid. Tagline hero, three-step path (profile, try, practice), goal picker, then three sections matching the steps. One deliberate dark look; secondary text kept high-contrast. */
+/* Layout: instrument-panel console on a fine-line grid. Short hero, featured simulators up top (one large feature + four cards), then a compact three-step path, goal chips and who-it's-for. Detail menus live on their own pages. */
 :root {
   --bg: #0b1220;
   --panel: #0f1828;
@@ -29,19 +29,15 @@
 * { box-sizing: border-box; }
 body {
   background-color: var(--bg); color: var(--ink);
-  background-image:
-    linear-gradient(var(--line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 48px 48px;
-  background-position: -1px -1px;
-  background-attachment: fixed;
-  font-family: var(--body); font-weight: 400; font-size: var(--base); line-height: 1.55;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px; background-position: -1px -1px; background-attachment: fixed;
+  font-family: var(--body); font-size: var(--base); line-height: 1.55;
 }
 body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; background: radial-gradient(ellipse at 50% 0%, transparent 0%, var(--bg) 75%); }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
 :focus-visible { outline: 3px solid var(--signal); outline-offset: 3px; }
 h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; letter-spacing: 0.02em; }
-
+a { color: inherit; }
 .wrap { position: relative; z-index: 1; max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 /* top bar */
@@ -49,86 +45,93 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; text-wrap: balance; 
 .bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
 .brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; }
 .brand span { color: var(--signal); }
-.draft { font: 500 0.66em var(--mono); color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; border: 1px solid var(--line-hi); padding: 4px 8px; }
-.btn {
-  min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer;
-  background: transparent; color: var(--ink); border: 1px solid var(--line-hi);
-  font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase;
-}
+.btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
 
-main .wrap { padding-block: 48px 80px; display: grid; gap: 64px; }
+main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
+.eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 
 /* hero */
-.intro { display: grid; gap: 16px; max-width: 50em; }
-.eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
+.intro { display: grid; gap: 14px; max-width: 48em; }
 .intro h1 { font-size: 2.2em; line-height: 1.25; }
 .intro h1 span { color: var(--signal); }
 .intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
 .intro .promise { color: var(--desc); font-weight: 600; border-left: 2px solid var(--signal); padding-left: 14px; }
 
-/* three-step path */
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
-.step {
-  min-height: calc(var(--target) + 70px);
-  display: flex; flex-direction: column; gap: 8px; padding: 22px 22px 20px;
-  background: var(--panel); color: var(--ink); border: none; text-align: left; cursor: pointer;
-}
-.step .n { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
-.step h3 { font-size: 1.05em; line-height: 1.4; }
-.step p { margin: 0; color: var(--desc); font: 400 0.95em var(--body); }
-.step:hover { background: var(--panel-hi); box-shadow: inset 0 -3px 0 var(--signal); }
-
-/* goals */
-.block { display: grid; gap: 18px; }
-.head { display: grid; gap: 6px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+/* section heads */
+.head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; margin-bottom: 20px; }
 .head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
 .head h2 { font-size: 1.2em; text-transform: uppercase; letter-spacing: 0.08em; }
-.head p { margin: 0; color: var(--muted); max-width: 46em; }
+.head p { margin: 0; color: var(--muted); }
 
-.goals { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-.tile {
-  position: relative; text-decoration: none; min-height: var(--target);
-  display: flex; flex-direction: column; justify-content: center; gap: 4px;
-  padding: 14px 18px; text-align: left; cursor: pointer;
-  background: color-mix(in srgb, var(--panel) 90%, transparent); color: var(--ink);
-  border: 1px solid var(--line); border-radius: 0;
-  font: 600 1em var(--body);
+/* simulators */
+.sims { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+.feature, .sim {
+  position: relative; display: grid; text-decoration: none; color: var(--ink);
+  background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line-hi);
 }
-.tile::before, .tile::after { content: ""; position: absolute; width: 10px; height: 10px; border-color: var(--line-hi); border-style: solid; }
-.tile::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
-.tile::after { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
-.tile small { font-weight: 400; color: var(--desc); font-size: 0.88em; }
-.tile:hover { background: var(--panel-hi); border-color: var(--line-hi); }
-.tile:hover::before, .tile:hover::after { border-color: var(--signal); width: 16px; height: 16px; }
-.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
-.sub { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; text-transform: uppercase; margin: 8px 0 -6px; }
-.tile.later { border-style: dashed; }
-.who { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
-.whocard { display: grid; gap: 6px; align-content: start; padding: 20px; background: color-mix(in srgb, var(--panel) 90%, transparent); border: 1px solid var(--line); border-top: 2px solid var(--signal); }
-.whocard .n { font: 500 0.7em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
-.whocard h3 { font-size: 1em; line-height: 1.4; }
-.whocard p { margin: 0; color: var(--desc); font-size: 0.93em; }
+.feature::before, .feature::after, .sim::before, .sim::after { content: ""; position: absolute; width: 14px; height: 14px; border-color: var(--signal); border-style: solid; }
+.feature::before, .sim::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.feature::after, .sim::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
+.sim::after { border-width: 0 1px 1px 0; }
+.feature { grid-row: span 2; grid-template-rows: auto 1fr; }
+.feature .viz { border-bottom: 1px solid var(--line-hi); background: linear-gradient(180deg, var(--signal-soft), transparent); }
+.feature svg { display: block; width: 100%; height: auto; max-width: 100%; }
+.feature .body { display: grid; gap: 10px; padding: 22px; align-content: start; }
+.feature h3 { font-size: 1.35em; }
+.feature p, .sim p { margin: 0; color: var(--desc); }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); border: 1px solid var(--signal); padding: 4px 8px; }
+.launch { justify-self: start; margin-top: 6px; }
+.side { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.sim { min-height: calc(var(--target) + 80px); gap: 8px; padding: 18px; align-content: start; }
+.sim svg { width: 40px; height: 40px; }
+.sim h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+.sim p { font-size: 0.88em; }
+.sim:hover, .feature:hover { background: var(--panel-hi); }
+.sim:hover::before, .sim:hover::after { border-color: var(--signal); }
+.more { margin-top: 14px; color: var(--muted); font-size: 0.95em; }
+.more b { color: var(--ink); font-weight: 600; }
+
+/* steps */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
+.step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
+.step .n { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.step h3 { font-size: 1em; line-height: 1.4; }
+.step p { margin: 0; color: var(--desc); font-size: 0.93em; }
+.step:hover { background: var(--panel-hi); box-shadow: inset 0 -3px 0 var(--signal); }
+
+/* goals and who */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { min-height: 56px; padding: 0 18px; display: inline-flex; align-items: center; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 600 0.95em var(--body); cursor: pointer; }
+.chip:hover { border-color: var(--signal); color: var(--signal); }
+.who { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+.who li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+.who b { font-weight: 600; }
+.who span { color: var(--desc); font-size: 0.93em; }
 
 footer { position: relative; z-index: 1; border-top: 1px solid var(--line-hi); color: var(--muted); font: 500 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
 footer .wrap { padding-block: 22px; }
 
-.toast {
-  position: fixed; left: 50%; transform: translateX(-50%); z-index: 20;
-  bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-  max-width: min(560px, calc(100% - 32px));
-  background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal);
-  padding: 14px 18px; font: 400 0.9em var(--body);
+.toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 20; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: min(560px, calc(100% - 32px)); background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal); padding: 14px 18px; font-size: 0.9em; }
+
+@media (max-width: 900px) { .sims { grid-template-columns: 1fr; } .feature { grid-row: auto; } .two { grid-template-columns: 1fr; } }
+@media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .side { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) {
+  .step, .sim, .feature, .chip { transition: background .18s, border-color .18s, color .18s; }
+  .arm-swing { animation: swing 6s ease-in-out infinite; transform-origin: 150px 196px; }
+  .arm-fore { animation: fore 6s ease-in-out infinite; transform-origin: 236px 120px; }
+  @keyframes swing { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(-10deg); } }
+  @keyframes fore { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(16deg); } }
 }
-@media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .draft { display: none; } }
-@media (prefers-reduced-motion: no-preference) { .step, .tile, .tile::before, .tile::after { transition: all .18s ease; } }
 </style>
 
 <header class="bar">
   <div class="wrap">
     <div class="brand">ACCESS<span>+</span></div>
-    <span class="draft">Pilot draft</span>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
     <button class="btn primary" type="button" data-msg="Sign in: profiles are not built yet.">Sign in</button>
   </div>
@@ -140,113 +143,123 @@ footer .wrap { padding-block: 22px; }
     <section class="intro" aria-labelledby="introTitle">
       <div class="eyebrow">Independent skill builder</div>
       <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
-      <p>Practice and explore new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics. Read independent reviews, borrow equipment to try at home, and build your skills in custom simulators.</p>
+      <p>Practice new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
 
-    <section class="steps" aria-label="How Access+ works">
-      <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Sign in and record your goals, movement, posture, positions and routine.</p></a>
-      <a class="step" href="#technologies"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews, then borrow equipment to try, from eye gaze to sip-and-puff.</p></a>
-      <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice in simulators</h3><p>Test your skills, see your scores, and get options matched to you.</p></a>
+    <section id="simulators" aria-labelledby="simTitle">
+      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
+      <div class="sims">
+
+        <a class="feature" href="#" data-msg="Robotic arm simulator: coming next.">
+          <div class="viz" aria-hidden="true">
+            <svg viewBox="0 0 400 230" fill="none" stroke-linecap="round">
+              <g stroke="#3b5476" stroke-width="1">
+                <line x1="20" y1="206" x2="380" y2="206"/>
+                <line x1="40" y1="200" x2="40" y2="212"/><line x1="80" y1="200" x2="80" y2="212"/><line x1="120" y1="200" x2="120" y2="212"/><line x1="160" y1="200" x2="160" y2="212"/><line x1="200" y1="200" x2="200" y2="212"/><line x1="240" y1="200" x2="240" y2="212"/><line x1="280" y1="200" x2="280" y2="212"/><line x1="320" y1="200" x2="320" y2="212"/><line x1="360" y1="200" x2="360" y2="212"/>
+                <circle cx="150" cy="196" r="62" stroke-dasharray="3 5"/>
+              </g>
+              <rect x="300" y="160" width="34" height="46" stroke="#a9e4c4" stroke-width="1.5"/>
+              <line x1="296" y1="160" x2="338" y2="160" stroke="#a9e4c4" stroke-width="1.5"/>
+              <rect x="128" y="190" width="44" height="16" fill="#0f1828" stroke="#f0f5fa" stroke-width="2"/>
+              <g class="arm-swing">
+                <line x1="150" y1="196" x2="236" y2="120" stroke="#f0f5fa" stroke-width="7"/>
+                <circle cx="150" cy="196" r="8" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
+                <g class="arm-fore">
+                  <line x1="236" y1="120" x2="300" y2="150" stroke="#f0f5fa" stroke-width="5"/>
+                  <circle cx="236" cy="120" r="7" fill="#0b1220" stroke="#5fe0a8" stroke-width="2"/>
+                  <path d="M300 150 l14 -6 M300 150 l14 8" stroke="#5fe0a8" stroke-width="3"/>
+                  <circle cx="300" cy="150" r="4" fill="#5fe0a8"/>
+                </g>
+              </g>
+              <text x="24" y="28" fill="#5fe0a8" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.5">MODE: ARM · TARGET: CUP</text>
+            </svg>
+          </div>
+          <div class="body">
+            <span class="eyebrow">Featured simulator</span>
+            <h3>Robotic arm</h3>
+            <p>Reach, grasp and lift a cup using only your pointer. Switch between arm and gripper modes the way real assistive arms do.</p>
+            <div class="badges"><span class="badge">Nose tracking</span><span class="badge">Eye gaze</span><span class="badge">Switch</span></div>
+            <span class="btn primary launch">Launch simulator</span>
+          </div>
+        </a>
+
+        <div class="side">
+          <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
+            <h3>Wheelchair driving</h3>
+            <p>Obstacle courses with levels, using any input.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Phone simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><line x1="18" y1="31" x2="22" y2="31"/></svg>
+            <h3>Cell phone</h3>
+            <p>Calls, texts and apps without touching the screen.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Computer exercises: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="7" width="30" height="20"/><path d="M14 33h12M20 27v6M17 14l4 9 1.5-3.5L26 18z"/></svg>
+            <h3>Computer exercises</h3>
+            <p>Point, click, drag, type and draw.</p>
+          </a>
+          <a class="sim" href="#" data-msg="More simulators: communication boards, exercise, voice, smart home and music are planned.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/><rect x="6" y="22" width="12" height="12"/><path d="M28 23v10M23 28h10"/></svg>
+            <h3>More simulators</h3>
+            <p>Communication, exercise, voice, smart home, music.</p>
+          </a>
+        </div>
+      </div>
     </section>
 
-    <section class="block" aria-labelledby="whoTitle">
-      <div class="head"><h2 id="whoTitle">Open to everyone</h2><p>Access+ is open to the whole community. Work the way that suits you.</p></div>
-      <div class="who">
-        <div class="whocard"><span class="n">ON YOUR OWN</span><h3>Self-trials</h3><p>Use the programs on the site to test sensors, set up your controls and practice at your own pace.</p></div>
-        <div class="whocard"><span class="n">WITH FAMILY OR FRIENDS</span><h3>Someone to help</h3><p>A family member, friend or caregiver can help place sensors, run sessions and track progress.</p></div>
-        <div class="whocard"><span class="n">WITH PROFESSIONALS</span><h3>Your therapist</h3><p>Occupational and physical therapists and other professionals can guide trials, review results and plan next steps.</p></div>
+    <section aria-labelledby="howTitle">
+      <div class="head"><h2 id="howTitle">How it works</h2></div>
+      <div class="steps">
+        <a class="step" href="#" data-msg="Profiles: not built yet."><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
+        <a class="step" href="borrow.html"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
+        <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice</h3><p>Build skills in simulators and carry them to real devices.</p></a>
       </div>
     </section>
 
-    <section class="block" aria-labelledby="goalsTitle">
-      <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters most. We'll suggest technologies and simulators for it.</p></div>
-      <div class="goals">
-        <button class="tile" type="button">Get around<small>Drive a power wheelchair</small></button>
-        <button class="tile" type="button">Use my phone<small>Calls, texts, apps</small></button>
-        <button class="tile" type="button">Use a computer<small>Point, click, type</small></button>
-        <button class="tile" type="button">Communicate<small>Speech and talking boards</small></button>
-        <button class="tile" type="button">Exercise<small>Arm cranking, pulling</small></button>
-        <button class="tile" type="button">Control my home<small>Lights, bed, TV, call for help</small></button>
-        <button class="tile" type="button">Play and make music<small>Games, recreation, instruments</small></button>
-      </div>
-    </section>
-
-    <section class="block" id="profile" aria-labelledby="profileTitle">
-      <div class="head"><h2 id="profileTitle">1 · Your profile</h2><p>Everything about you and your setup, saved in one place you can share with family, caregivers or your therapist.</p></div>
-      <div class="sub">About you</div>
-      <div class="tiles">
-        <button class="tile" type="button">Movement and function<small>What you can move, and how much</small></button>
-        <button class="tile" type="button">Planning ahead<small>For progressive conditions such as ALS</small></button>
-        <button class="tile" type="button">Posture and positions<small>Seating, bed, tilt, outdoors, daily routine</small></button>
-        <button class="tile" type="button">Barriers<small>Cost, setup, fatigue, trials, information</small></button>
-      </div>
-      <div class="sub">Your controls</div>
-      <div class="tiles">
-        <button class="tile" type="button">Connect a sensor<small>Gamepad, keyboard, MIDI, webcam, microphone, microcontroller</small></button>
-        <button class="tile" type="button">Calibrate<small>Rest, range, dead zone, smoothing, thresholds</small></button>
-        <button class="tile" type="button">Choose what each signal does<small>Map movements and switches to actions</small></button>
-        <button class="tile" type="button">Settings by position<small>Different setups for bed and chair</small></button>
-        <button class="tile" type="button">Safety stop<small>A way out that always works</small></button>
-        <button class="tile" type="button">Use on real devices<small>Carry your profile to chair, phone and computer</small></button>
-      </div>
-    </section>
-
-    <section class="block" id="technologies" aria-labelledby="techTitle">
-      <div class="head"><h2 id="techTitle">2 · Try and borrow</h2><p>Independent reviews of software and hardware: what each one is, what it costs, and who it suits. Borrow what you want to try.</p></div>
-      <div class="tiles">
-        <a class="tile" href="borrow.html">Borrow a sensor kit<small>Choose sensors and we mail them to you to try</small></a>
-        <button class="tile" type="button">Eye gaze<small>Commercial, free, phone-based and DIY</small></button>
-        <button class="tile" type="button">Head and nose tracking<small>FaceNav, MotionInput, Project Gameface, head mice</small></button>
-        <button class="tile" type="button">Mouth joysticks and mice<small>Quadstick, QuadJoy, Jouse, IntegraMouse, LipSync</small></button>
-        <button class="tile" type="button">Breath switches<small>Sip-and-puff, proportional and switched</small></button>
-        <button class="tile" type="button">Switches<small>Buttons, head arrays, sound, blink, tilt, proximity</small></button>
-        <button class="tile" type="button">Muscle and brain signals<small>EMG, MMG, brain-computer interfaces</small></button>
-        <button class="tile" type="button">Voice control<small>Dictation and commands</small></button>
-        <button class="tile" type="button">Open-source and DIY builds<small>Designs you can make or adapt</small></button>
-      </div>
-    </section>
-
-    <section class="block" id="simulators" aria-labelledby="simTitle">
-      <div class="head"><h2 id="simTitle">3 · Practice in simulators</h2><p>Practice in the browser before any hardware arrives. Run self-trials, test sensors you've set up, and track levels and scores on your own or with the people who help you.</p></div>
-      <div class="tiles">
-        <button class="tile" type="button">Wheelchair driving<small>Obstacle courses, with any input</small></button>
-        <button class="tile" type="button">Computer skills<small>Point, click, drag, type, draw</small></button>
-        <button class="tile" type="button">Phone<small>Phone use and accessories</small></button>
-        <button class="tile" type="button">Eye, head and face<small>Gaze, nose tracking and facial gestures</small></button>
-        <button class="tile" type="button">Voice<small>Accuracy, consistency, troubleshooting</small></button>
-        <button class="tile" type="button">Communication boards<small>Build and use a talking board</small></button>
-        <button class="tile" type="button">Exercise and robotic arm<small>Cranking, pulling, reaching</small></button>
-        <button class="tile later" type="button">Coming later<small>Smart home, music, recreation</small></button>
-      </div>
-    </section>
+    <div class="two">
+      <section aria-labelledby="goalsTitle">
+        <div class="head"><h2 id="goalsTitle">Start with a goal</h2></div>
+        <div class="chips">
+          <button class="chip" type="button">Get around</button>
+          <button class="chip" type="button">Use my phone</button>
+          <button class="chip" type="button">Use a computer</button>
+          <button class="chip" type="button">Communicate</button>
+          <button class="chip" type="button">Exercise</button>
+          <button class="chip" type="button">Control my home</button>
+          <button class="chip" type="button">Play and make music</button>
+        </div>
+      </section>
+      <section aria-labelledby="whoTitle">
+        <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
+        <ul class="who">
+          <li><b>On your own</b><span>Run self-trials at your own pace.</span></li>
+          <li><b>With family or friends</b><span>Someone can help set up sensors and track progress.</span></li>
+          <li><b>With your therapist</b><span>OTs, PTs and other professionals can guide trials and review results.</span></li>
+        </ul>
+      </section>
+    </div>
 
   </div>
 </main>
 
-<footer><div class="wrap">Access+ pilot website · draft for review by users, therapists and partners</div></footer>
+<footer><div class="wrap">Access+ pilot draft · for review by users, therapists and partners</div></footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
 (function () {
   var toast = document.getElementById('toast'), timer;
-  function say(msg) {
-    toast.textContent = msg; toast.hidden = false;
-    clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500);
-  }
-  document.querySelectorAll('button.tile, [data-msg]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      if (b.dataset.msg) return say(b.dataset.msg);
-      var t = ''; b.childNodes.forEach(function (c) { if (c.nodeType === 3) t += c.textContent; });
-      say(t.trim() + ': this page is not built yet.');
-    });
+  function say(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500); }
+  document.querySelectorAll('[data-msg]').forEach(function (b) {
+    b.addEventListener('click', function (e) { e.preventDefault(); say(b.dataset.msg); });
+  });
+  document.querySelectorAll('.chip').forEach(function (b) {
+    b.addEventListener('click', function () { say(b.textContent + ': goal pages are not built yet.'); });
   });
   var root = document.documentElement, big = document.getElementById('bigToggle');
-  function setBig(on) {
-    root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false');
-    try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {}
-  }
+  function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
   try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
   big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
 })();
