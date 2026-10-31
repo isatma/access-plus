@@ -281,6 +281,11 @@ footer { padding-bottom: 90px; }
 /* goals and who */
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.goal-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; }
+.goal-group { display: grid; gap: 10px; align-content: start; }
+.goal-group h3 { font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+#goals .chip { min-height: 52px; font-size: 0.9em; }
+@media (max-width: 760px) { .goal-groups { grid-template-columns: 1fr; } }
 .chip { min-height: 56px; padding: 0 18px; display: inline-flex; align-items: center; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 600 0.95em var(--body); cursor: pointer; }
 .chip:hover { border-color: var(--signal); color: var(--signal); }
 .who { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
@@ -903,19 +908,20 @@ footer .wrap { padding-block: 22px; }
       </div>
     </section>
 
-    <div class="two">
-      <section id="goals" aria-labelledby="goalsTitle">
-        <div class="head"><h2 id="goalsTitle">Start with a goal</h2></div>
-        <div class="chips">
-          <button class="chip" type="button">Mobility aids and wheelchairs</button>
-          <button class="chip" type="button">Use my phone</button>
-          <button class="chip" type="button">Use a computer</button>
-          <button class="chip" type="button">Communicate</button>
-          <button class="chip" type="button">Exercise</button>
-          <button class="chip" type="button">Control my home</button>
-          <button class="chip" type="button">Play and make music</button>
-        </div>
-      </section>
+    <section id="goals" aria-labelledby="goalsTitle">
+      <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters to you. The AI agent will suggest where to begin.</p></div>
+      <div class="goal-groups">
+        <div class="goal-group"><h3>Daily living</h3><div class="chips"><button class="chip" type="button">Give myself a drink</button><button class="chip" type="button">Feed myself</button><button class="chip" type="button">Use my phone</button><button class="chip" type="button">Use a computer</button><button class="chip" type="button">Control my home</button></div></div>
+        <div class="goal-group"><h3>Safety</h3><div class="chips"><button class="chip" type="button">Call for help in more than one way</button><button class="chip" type="button">Emergency response at night</button></div></div>
+        <div class="goal-group"><h3>Comfort and position</h3><div class="chips"><button class="chip" type="button">Sit without fatigue</button><button class="chip" type="button">Use my technology lying in bed</button><button class="chip" type="button">Switch functions between bed and chair</button><button class="chip" type="button">Move my hospital bed myself</button></div></div>
+        <div class="goal-group"><h3>Communication</h3><div class="chips"><button class="chip" type="button">Communicate</button><button class="chip" type="button">Be heard: raise my voice volume</button></div></div>
+        <div class="goal-group"><h3>Getting around</h3><div class="chips"><button class="chip" type="button">Mobility aids and wheelchairs</button><button class="chip" type="button">Transfers and lifts</button></div></div>
+        <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
+        <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
+      </div>
+    </section>
+
+    <div>
       <section id="who" aria-labelledby="whoTitle">
         <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
         <ul class="who">
@@ -1984,12 +1990,17 @@ function AgentCloud(canvas, opts) {
 <script>
 (function () {
   var toast = document.getElementById('toast'), timer;
-  function say(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500); }
+  function toastSay(msg) { toast.textContent = msg; toast.hidden = false; clearTimeout(timer); timer = setTimeout(function () { toast.hidden = true; }, 3500); }
   document.querySelectorAll('[data-msg]').forEach(function (b) {
-    b.addEventListener('click', function (e) { e.preventDefault(); say(b.dataset.msg); });
+    b.addEventListener('click', function (e) { e.preventDefault(); toastSay(b.dataset.msg); });
   });
   document.querySelectorAll('#goals .chip').forEach(function (b) {
-    b.addEventListener('click', function () { say(b.textContent + ': goal pages are not built yet.'); });
+    b.addEventListener('click', function () {
+      var f = document.getElementById('askForm'), inp = document.getElementById('askInput');
+      location.hash = 'guide-ai';
+      if (f && inp && !f.hidden && !inp.disabled) { inp.value = 'My goal: ' + b.textContent + '. Where should I start?'; f.requestSubmit(); }
+      else if (inp) { inp.value = 'My goal: ' + b.textContent + '. Where should I start?'; toastSay('Goal added to the AI agent box.'); }
+    });
   });
 
   // guide arm
@@ -2183,6 +2194,7 @@ function AgentCloud(canvas, opts) {
     'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
     'Your purpose, from the Access+ research proposal: you are the personalization part of Access+. You learn how a person expresses intent (head movement, gaze, breath, switches, EMG, voice) rather than how one device works, and help one personal access profile follow them across computer, phone, wheelchair, communication device, home controls and, in demonstrations, a robotic arm. During short practice tasks you compare inputs and find the most reliable combination; over time you watch precision, speed and fatigue, so a new input can be introduced before an old one becomes unreliable. You adjust guidance to need: shorter for familiar methods, more practice for new ones. Whenever you suggest a change, say what you noticed, what you propose and why, what evidence supports it, and what will feel different, and remind them they decide and can undo. You never diagnose, and you defer to their therapist or clinician.',
     'Example users (fictional, from the proposal; say so if asked): Marcus, 32, veteran with a high cervical spinal cord injury, uses voice and facial EMG to prove he can safely run a robotic arm, and the report supports funding. Maria uses a head-controlled wheelchair, eye-gaze communication and apartment switches; one profile ties all three together. Elena has ALS and uses a light-touch joystick and voice; brief sessions track strength, precision and fatigue so eye gaze is introduced early and her layouts carry over. Jamal, 19, has cerebral palsy; head movement plus two switches carry from games to schoolwork to coding, and he shares his own mappings. Ruth has a high spinal cord injury in rural upstate New York; a mailed sensor kit and a video session with an OT replace a clinic visit, then a preconfigured setup arrives. D. has a C5 spinal cord injury and works in scheduling and intake; eye gaze moves the cursor, EMG clicks, nose tracking takes over while reading, a facial gesture mutes calls, rehearsed in a workplace simulator, because his voice is busy on the phone.',
+    'Goals people often bring: giving yourself a drink, feeding yourself, redundant ways to call for help in an emergency, sitting without fatigue, using technology lying in bed and switching functions between bed and chair, moving a hospital bed yourself, communicating and raising voice volume, playing music, painting and adaptive art, adaptive photography, and adaptive sport such as electronic sailboats, adaptive skis like the Tetra ski, bowling and golf. For each, suggest practical options, the skills to practice, and where on this site to start.',
     'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
     'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
   ].join('\n\n');
