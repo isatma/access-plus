@@ -132,6 +132,25 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .armctl .btn { min-height: var(--target); justify-content: center; font-size: 0.85em; }
 .armsel { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal) !important; }
 
+
+/* ai guide */
+.ai { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+.ai-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 16px; }
+.ai-list li { display: grid; gap: 2px; padding-left: 14px; border-left: 2px solid var(--signal); }
+.ai-list b { font-weight: 600; }
+.ai-list span { color: var(--desc); font-size: 0.93em; }
+.chat { position: relative; display: grid; gap: 12px; padding: 20px; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line-hi); }
+.chat::before, .chat::after { content: ""; position: absolute; width: 14px; height: 14px; border: solid var(--signal); }
+.chat::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+.chat::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+.chat-head { display: flex; justify-content: space-between; font: 500 0.72em var(--mono); letter-spacing: 0.14em; color: var(--signal); }
+.tag-ex { color: var(--muted); border: 1px solid var(--line-hi); padding: 1px 7px; }
+.msg { max-width: 88%; padding: 10px 14px; font-size: 0.93em; line-height: 1.5; }
+.msg.me { justify-self: end; background: var(--panel-hi); border: 1px solid var(--line-hi); }
+.msg.ai-msg { justify-self: start; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 40%, transparent); color: var(--ink); }
+.chat-btn { justify-self: start; margin-top: 4px; }
+@media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
+
 /* steps */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
 .step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
@@ -184,6 +203,7 @@ footer .wrap { padding-block: 22px; }
       <div class="eyebrow">Independent skill builder</div>
       <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Practice new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
+      <p>An AI guide coaches you along the way.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
@@ -271,6 +291,27 @@ footer .wrap { padding-block: 22px; }
             <h3>More simulators</h3>
             <p>Communication, exercise, voice, smart home, music.</p>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="guide-ai" aria-labelledby="aiTitle">
+      <div class="head"><h2 id="aiTitle">Your AI guide</h2><p>An AI-powered coach that helps you build skills at every step.</p></div>
+      <div class="ai">
+        <ul class="ai-list">
+          <li><b>Finds a starting point</b><span>Asks about your goals, movement and positions, then suggests inputs and simulators to try.</span></li>
+          <li><b>Coaches while you practice</b><span>Gives tips during simulator sessions and adjusts the difficulty as you improve.</span></li>
+          <li><b>Tunes your setup</b><span>Recommends calibration changes such as dead zone, dwell time and sensitivity, based on how you did.</span></li>
+          <li><b>Helps you test and connect</b><span>Walks you through connecting a sensor from your kit and checking it works.</span></li>
+          <li><b>Tracks your progress</b><span>Summarizes results for you, your family or your therapist. You control what it saves.</span></li>
+        </ul>
+        <div class="chat" aria-label="Example conversation with the AI guide">
+          <div class="chat-head"><span>AI GUIDE</span><span class="tag-ex">Example</span></div>
+          <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
+          <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
+          <div class="msg me">OK, start the exercise.</div>
+          <div class="msg ai-msg">Starting Computer exercises, level 1, with your in-bed profile.</div>
+          <button class="btn primary chat-btn" type="button" data-msg="The AI guide isn't connected yet in this draft.">Ask the guide</button>
         </div>
       </div>
     </section>
