@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dave_Keyboard.xml  -  custom OptiKey dynamic keyboard
+
+  Layout (8 rows x 21 columns: edge column each side):
+    Row 0  Scratchpad (typed text)
+    Row 1  Word suggestions
+    Row 2  UTILITY ROW: Quit | Menu | Left click | Right click |
+                        Double click | Drag | dash key at far right (-> Dave_Mouse.xml) | Scroll up | Scroll down
+    Rows 3-7  Full Windows On-Screen-Keyboard layout, including the nav block
+              (Home/PgUp, End/PgDn, Insert/Pause, PrtScn/ScrLk, Speak/Clear)
+
+  Install: Management Console (Alt+M) -> Visuals -> Startup keyboard -> "Custom Keyboard File"
+           and point it at this file, then OK.  Adjust Width / Height below if it does not fit.
+-->
+<Keyboard>
+    <Name>Dave_Keyboard</Name>
+    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>
+    <PersistNewState>True</PersistNewState>
+    <WindowState>Floating</WindowState>
+    <Position>Top</Position>
+    <Width>50%</Width>
+    <Height>35%</Height>
+    <HorizontalOffset>0</HorizontalOffset>
+    <VerticalOffset>0</VerticalOffset>
+    <BackgroundColor>Black</BackgroundColor>
+    <BorderColor>Gray</BorderColor>
+    <BorderThickness>1,1,1,1</BorderThickness>
+    <SymbolMargin>6</SymbolMargin>
+
+    <Grid>
+        <Rows>8</Rows>
+        <Cols>21</Cols>
+    </Grid>
+
+    <!-- Colour groups so the special rows stand out -->
+    <KeyGroup Name="Utility"  SharedSizeGroup="Top" />
+    <KeyGroup Name="MouseKey" SharedSizeGroup="Top" />
+        <KeyGroup Name="Quit"     BackgroundColor="#A86868" ForegroundColor="White" KeyDownBackground="#C89090" />
+    <KeyGroup Name="NavKey"   BackgroundColor="#525D9A" ForegroundColor="White" KeyDownBackground="#7A85C2" SharedSizeGroup="Nav" />
+    <KeyGroup Name="Dual"     BackgroundColor="#4B5690" ForegroundColor="White" KeyDownBackground="#7A85C2" />
+    <KeyGroup Name="Dim"      BackgroundColor="#3C4675" ForegroundColor="#D0D4E8" KeyDownBackground="#7A85C2" />
+    <KeyGroup Name="Edge"     BackgroundColor="#5A5A5A" ForegroundColor="White" KeyDownBackground="#8A8A8A" Opacity="0.45" />
+    <KeyGroup Name="UtilityDash" BackgroundColor="#A86868" ForegroundColor="White" KeyDownBackground="#C89090" SharedSizeGroup="Dash" />
+    <KeyGroup Name="MouseDash"   BackgroundColor="#5A65A2" ForegroundColor="White" KeyDownBackground="#7A85C2" SharedSizeGroup="Dash" />
+    <KeyGroup Name="NavIcon"  BackgroundColor="#525D9A" ForegroundColor="White" KeyDownBackground="#7A85C2" />
+    <KeyGroup Name="ArrowKey" BackgroundColor="#5A65A2" ForegroundColor="White" KeyDownBackground="#7A85C2" />
+    <KeyGroup Name="SpaceBar" SharedSizeGroup="SpaceBar" />
+    <KeyGroup Name="ShiftKey" SharedSizeGroup="ShiftKey" />
+
+    <Content>
+        <!-- Left edge: corner jumps and a centring key -->
+        <DynamicKey Row="0" Col="0" Height="3"><KeyGroup>Edge</KeyGroup><Label>◤</Label><Action>MoveToTopAndLeftBoundaries</Action></DynamicKey>
+        <DynamicKey Row="3" Col="0" Height="2"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere="False">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>
+        <DynamicKey Row="5" Col="0" Height="3"><KeyGroup>Edge</KeyGroup><Label>◣</Label><Action>MoveToBottomAndLeftBoundaries</Action></DynamicKey>
+        <!-- Right edge: corner jumps and a centring key -->
+        <DynamicKey Row="0" Col="20" Height="3"><KeyGroup>Edge</KeyGroup><Label>◥</Label><Action>MoveToTopAndRightBoundaries</Action></DynamicKey>
+        <DynamicKey Row="3" Col="20" Height="2"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere="False">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>
+        <DynamicKey Row="5" Col="20" Height="3"><KeyGroup>Edge</KeyGroup><Label>◢</Label><Action>MoveToBottomAndRightBoundaries</Action></DynamicKey>
+
+        <!-- ===================== Row 0 : scratchpad ===================== -->
+        <Scratchpad Row="0" Col="1" Width="17" Height="1" BackgroundColor="#202020" Opacity="1" />
+        <!-- Yellow keys: jump the keyboard to a screen corner (keeps its size; corner moves never dock) -->
+        <!-- Home key: reloads this keyboard so it returns to its default spot (top, centred) -->
+        <!-- Hide key (upper right): swaps to the tiny Dave_Mini.xml restore button -->
+        <DynamicKey Row="0" Col="18">
+            <KeyGroup>UtilityDash</KeyGroup>
+            <Label>▬</Label>
+            <ChangeKeyboard>Dave_Mini.xml</ChangeKeyboard>
+        </DynamicKey>
+
+        <!-- ===================== Row 1 : suggestions ==================== -->
+        <SuggestionRow Row="1" Col="1" Width="19" Height="1" />
+
+        <!-- ===================== Row 2 : UTILITY ROW ==================== -->
+        <!-- Quit OptiKey (OptiKey asks for confirmation first) -->
+        <DynamicKey Row="0" Col="19" Width="1">
+            <KeyGroup>Quit</KeyGroup>
+            <Label>X</Label>
+            <Action>Quit</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="1" Width="2">
+            <KeyGroup>Utility</KeyGroup>
+            <Label>Menu</Label>
+            <Action>MenuKeyboard</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="4" Width="3">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Left\nclick</Label>
+            <Action>MouseMoveAndLeftClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="7" Width="3">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Right\nclick</Label>
+            <Action>MouseMoveAndRightClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="10" Width="3">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Double\nclick</Label>
+            <Action>MouseMoveAndLeftDoubleClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="13" Width="3">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Drag</Label>
+            <Action>MouseDrag</Action>
+        </DynamicKey>
+                <DynamicKey Row="2" Col="16" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Scroll\nup</Label>
+            <Action>MouseMoveAndScrollToTop</Action>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="3" Width="1">
+            <KeyGroup>MouseDash</KeyGroup>
+            <Symbol>MouseIcon</Symbol>
+            <ChangeKeyboard>Dave_Mouse.xml</ChangeKeyboard>
+        </DynamicKey>
+        <DynamicKey Row="2" Col="18" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Scroll\ndown</Label>
+            <Action>MouseMoveAndScrollToBottom</Action>
+        </DynamicKey>
+
+        <!-- ===================== Row 3 : Esc ` 1-0 - = Backspace | Home PgUp ===================== -->
+        <DynamicKey Row="3" Col="1" SharedSizeGroup="L3"><Label>Esc</Label><Action>Escape</Action></DynamicKey>
+        <DynamicKey Row="3" Col="2" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>`\n~</Label><ShiftDownLabel>~</ShiftDownLabel><Text>`</Text></DynamicKey>
+        <DynamicKey Row="3" Col="3" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>1\n!</Label><ShiftDownLabel>!</ShiftDownLabel><Text>1</Text></DynamicKey>
+        <DynamicKey Row="3" Col="4" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>2\n@</Label><ShiftDownLabel>@</ShiftDownLabel><Text>2</Text></DynamicKey>
+        <DynamicKey Row="3" Col="5" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>3\n#</Label><ShiftDownLabel>#</ShiftDownLabel><Text>3</Text></DynamicKey>
+        <DynamicKey Row="3" Col="6" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>4\n$</Label><ShiftDownLabel>$</ShiftDownLabel><Text>4</Text></DynamicKey>
+        <DynamicKey Row="3" Col="7" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>5\n%</Label><ShiftDownLabel>%</ShiftDownLabel><Text>5</Text></DynamicKey>
+        <DynamicKey Row="3" Col="8" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>6\n^</Label><ShiftDownLabel>^</ShiftDownLabel><Text>6</Text></DynamicKey>
+        <DynamicKey Row="3" Col="9" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>7\n&amp;</Label><ShiftDownLabel>&amp;</ShiftDownLabel><Text>7</Text></DynamicKey>
+        <DynamicKey Row="3" Col="10" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>8\n*</Label><ShiftDownLabel>*</ShiftDownLabel><Text>8</Text></DynamicKey>
+        <DynamicKey Row="3" Col="11" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>9\n(</Label><ShiftDownLabel>(</ShiftDownLabel><Text>9</Text></DynamicKey>
+        <DynamicKey Row="3" Col="12" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>Ø\n)</Label><ShiftDownLabel>)</ShiftDownLabel><Text>0</Text></DynamicKey>
+        <DynamicKey Row="3" Col="13" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>-\n_</Label><ShiftDownLabel>_</ShiftDownLabel><Text>-</Text></DynamicKey>
+        <DynamicKey Row="3" Col="14" Width="2" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>=\n+</Label><ShiftDownLabel>+</ShiftDownLabel><Text>=</Text></DynamicKey>
+        <DynamicKey Row="3" Col="16" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Home</Label><Action>Home</Action></DynamicKey>
+        <DynamicKey Row="3" Col="18" Width="2"><KeyGroup>NavKey</KeyGroup><Label>PgUp</Label><Action>PgUp</Action></DynamicKey>
+
+        <!-- ===================== Row 4 : Tab q-p [ ] \ Del | End PgDn ===================== -->
+        <DynamicKey Row="4" Col="1" SharedSizeGroup="L3"><Label>Tab</Label><KeyDown>TAB</KeyDown><KeyUp>TAB</KeyUp></DynamicKey>
+        <DynamicKey Row="4" Col="2"><Label>q</Label><ShiftDownLabel>Q</ShiftDownLabel><Text>q</Text></DynamicKey>
+        <DynamicKey Row="4" Col="3"><Label>w</Label><ShiftDownLabel>W</ShiftDownLabel><Text>w</Text></DynamicKey>
+        <DynamicKey Row="4" Col="4"><Label>e</Label><ShiftDownLabel>E</ShiftDownLabel><Text>e</Text></DynamicKey>
+        <DynamicKey Row="4" Col="5"><Label>r</Label><ShiftDownLabel>R</ShiftDownLabel><Text>r</Text></DynamicKey>
+        <DynamicKey Row="4" Col="6"><Label>t</Label><ShiftDownLabel>T</ShiftDownLabel><Text>t</Text></DynamicKey>
+        <DynamicKey Row="4" Col="7"><Label>y</Label><ShiftDownLabel>Y</ShiftDownLabel><Text>y</Text></DynamicKey>
+        <DynamicKey Row="4" Col="8"><Label>u</Label><ShiftDownLabel>U</ShiftDownLabel><Text>u</Text></DynamicKey>
+        <DynamicKey Row="4" Col="9"><Label>i</Label><ShiftDownLabel>I</ShiftDownLabel><Text>i</Text></DynamicKey>
+        <DynamicKey Row="4" Col="10"><Label>o</Label><ShiftDownLabel>O</ShiftDownLabel><Text>o</Text></DynamicKey>
+        <DynamicKey Row="4" Col="11"><Label>p</Label><ShiftDownLabel>P</ShiftDownLabel><Text>p</Text></DynamicKey>
+        <DynamicKey Row="4" Col="12" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>[\n{</Label><ShiftDownLabel>{</ShiftDownLabel><Text>[</Text></DynamicKey>
+        <DynamicKey Row="4" Col="13" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>]\n}</Label><ShiftDownLabel>}</ShiftDownLabel><Text>]</Text></DynamicKey>
+        <DynamicKey Row="4" Col="14" Width="2" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>\\n|</Label><ShiftDownLabel>|</ShiftDownLabel><Text>\</Text></DynamicKey>
+        <DynamicKey Row="4" Col="16" Width="2"><KeyGroup>NavKey</KeyGroup><Label>End</Label><Action>End</Action></DynamicKey>
+        <DynamicKey Row="4" Col="18" Width="2"><KeyGroup>NavKey</KeyGroup><Label>PgDn</Label><Action>PgDn</Action></DynamicKey>
+
+        <!-- ===================== Row 5 : Caps a-l ; ' Enter | Insert Pause ===================== -->
+        <DynamicKey Row="5" Col="1" SharedSizeGroup="L4"><KeyGroup>Dim</KeyGroup><Label>Caps</Label><KeyToggle>CAPITAL</KeyToggle></DynamicKey>
+        <DynamicKey Row="5" Col="2"><Label>a</Label><ShiftDownLabel>A</ShiftDownLabel><Text>a</Text></DynamicKey>
+        <DynamicKey Row="5" Col="3"><Label>s</Label><ShiftDownLabel>S</ShiftDownLabel><Text>s</Text></DynamicKey>
+        <DynamicKey Row="5" Col="4"><Label>d</Label><ShiftDownLabel>D</ShiftDownLabel><Text>d</Text></DynamicKey>
+        <DynamicKey Row="5" Col="5"><Label>f</Label><ShiftDownLabel>F</ShiftDownLabel><Text>f</Text></DynamicKey>
+        <DynamicKey Row="5" Col="6"><Label>g</Label><ShiftDownLabel>G</ShiftDownLabel><Text>g</Text></DynamicKey>
+        <DynamicKey Row="5" Col="7"><Label>h</Label><ShiftDownLabel>H</ShiftDownLabel><Text>h</Text></DynamicKey>
+        <DynamicKey Row="5" Col="8"><Label>j</Label><ShiftDownLabel>J</ShiftDownLabel><Text>j</Text></DynamicKey>
+        <DynamicKey Row="5" Col="9"><Label>k</Label><ShiftDownLabel>K</ShiftDownLabel><Text>k</Text></DynamicKey>
+        <DynamicKey Row="5" Col="10"><Label>l</Label><ShiftDownLabel>L</ShiftDownLabel><Text>l</Text></DynamicKey>
+        <DynamicKey Row="5" Col="11" SharedSizeGroup="Semi"><KeyGroup>Dual</KeyGroup><Label>●\n❟</Label><ShiftDownLabel>:</ShiftDownLabel><Text>;</Text></DynamicKey>
+        <DynamicKey Row="5" Col="12" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>'\n"</Label><ShiftDownLabel>"</ShiftDownLabel><Text>'</Text></DynamicKey>
+        <DynamicKey Row="7" Col="13" Width="3" SharedSizeGroup="EnterKey"><Label>Enter</Label><KeyDown>RETURN</KeyDown><KeyUp>RETURN</KeyUp></DynamicKey>
+        <DynamicKey Row="5" Col="16" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Esc</Label><Action>Escape</Action></DynamicKey>
+        <DynamicKey Row="5" Col="18" Width="2"><KeyGroup>NavIcon</KeyGroup><Label>🎤</Label><KeyDown>LWIN</KeyDown><KeyDown>VK_H</KeyDown><KeyUp>VK_H</KeyUp><KeyUp>LWIN</KeyUp></DynamicKey>
+
+        <!-- ===================== Row 6 : Shift z-m , . / Up Shift | PrtScn ScrLk ===================== -->
+        <DynamicKey Row="6" Col="1" Width="2"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>
+        <DynamicKey Row="6" Col="3"><Label>z</Label><ShiftDownLabel>Z</ShiftDownLabel><Text>z</Text></DynamicKey>
+        <DynamicKey Row="6" Col="4"><Label>x</Label><ShiftDownLabel>X</ShiftDownLabel><Text>x</Text></DynamicKey>
+        <DynamicKey Row="6" Col="5"><Label>c</Label><ShiftDownLabel>C</ShiftDownLabel><Text>c</Text></DynamicKey>
+        <DynamicKey Row="6" Col="6"><Label>v</Label><ShiftDownLabel>V</ShiftDownLabel><Text>v</Text></DynamicKey>
+        <DynamicKey Row="6" Col="7"><Label>b</Label><ShiftDownLabel>B</ShiftDownLabel><Text>b</Text></DynamicKey>
+        <DynamicKey Row="6" Col="8"><Label>n</Label><ShiftDownLabel>N</ShiftDownLabel><Text>n</Text></DynamicKey>
+        <DynamicKey Row="6" Col="9"><Label>m</Label><ShiftDownLabel>M</ShiftDownLabel><Text>m</Text></DynamicKey>
+        <DynamicKey Row="6" Col="10" SharedSizeGroup="Comma"><KeyGroup>Dual</KeyGroup><Label>❟\n&lt;</Label><ShiftDownLabel>&lt;</ShiftDownLabel><Text>,</Text></DynamicKey>
+        <DynamicKey Row="6" Col="11" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>●\n&gt;</Label><ShiftDownLabel>&gt;</ShiftDownLabel><Text>.</Text></DynamicKey>
+        <DynamicKey Row="6" Col="12" SharedSizeGroup="Sym"><KeyGroup>Dual</KeyGroup><Label>/\n?</Label><ShiftDownLabel>?</ShiftDownLabel><Text>/</Text></DynamicKey>
+        <DynamicKey Row="6" Col="13"><KeyGroup>ArrowKey</KeyGroup><Symbol>UpArrowKeyIcon</Symbol><Action>ArrowUp</Action></DynamicKey>
+        <DynamicKey Row="6" Col="14" Width="2"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>
+        <DynamicKey Row="6" Col="16" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Copy</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_C</KeyDown><KeyUp>VK_C</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>
+        <DynamicKey Row="6" Col="18" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Paste</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_V</KeyDown><KeyUp>VK_V</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>
+
+        <!-- ===================== Row 7 : Ctrl Win Alt Space Alt Ctrl Left Down Right | Speak Clear ===================== -->
+        <DynamicKey Row="7" Col="1" Width="2" SharedSizeGroup="Mods"><KeyGroup>Dim</KeyGroup><Label>Ctrl</Label><Action>LeftCtrl</Action></DynamicKey>
+        <DynamicKey Row="7" Col="3" Width="2"><KeyGroup>Dim</KeyGroup><Symbol>WinIcon</Symbol><Action>LeftWin</Action></DynamicKey>
+        <DynamicKey Row="7" Col="5" Width="2" SharedSizeGroup="Mods"><KeyGroup>Dim</KeyGroup><Label>Alt</Label><Action>LeftAlt</Action></DynamicKey>
+        <DynamicKey Row="7" Col="7" Width="6"><KeyGroup>SpaceBar</KeyGroup><Label>SPACE</Label><KeyDown>SPACE</KeyDown><KeyUp>SPACE</KeyUp></DynamicKey>
+        <DynamicKey Row="5" Col="13"><KeyGroup>ArrowKey</KeyGroup><Symbol>LeftArrowKeyIcon</Symbol><Action>ArrowLeft</Action></DynamicKey>
+        <DynamicKey Row="5" Col="14"><KeyGroup>ArrowKey</KeyGroup><Symbol>DownArrowKeyIcon</Symbol><Action>ArrowDown</Action></DynamicKey>
+        <DynamicKey Row="5" Col="15"><KeyGroup>ArrowKey</KeyGroup><Symbol>RightArrowKeyIcon</Symbol><Action>ArrowRight</Action></DynamicKey>
+        <DynamicKey Row="7" Col="16" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Bksp</Label><Action>BackOne</Action></DynamicKey>
+        <DynamicKey Row="7" Col="18" Width="2"><KeyGroup>NavKey</KeyGroup><Label>Del</Label><Action>Delete</Action></DynamicKey>
+
+    </Content>
+</Keyboard>

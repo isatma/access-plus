@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ Tech Guide</title>
+<style>
+.tg-wrap { gap: 40px !important; }
+.tg-intro { display: grid; gap: 12px; max-width: 52em; }
+.tg-intro h1 { font-size: 1.8em; line-height: 1.25; }
+.tg-intro p { margin: 0; color: var(--muted); }
+.tg-intro .lead { color: var(--desc); }
+.tg-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.tg-flow .st { border: 1px solid var(--line-hi); background: var(--panel); padding: 16px; display: grid; gap: 4px; align-content: start; }
+.tg-flow .st b { font: 500 0.7em var(--mono); letter-spacing: 0.14em; color: var(--signal); text-transform: uppercase; }
+.tg-flow .st span { font-weight: 600; }
+.tg-flow .st small { color: var(--desc); font-size: 0.88em; }
+.tg-flow .ar { display: grid; place-items: center; color: var(--signal); font-size: 1.6em; }
+.tg-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+.tg-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+.tg-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+.tg-head p { margin: 0; color: var(--muted); }
+.tg-cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tg-cat { display: grid; gap: 6px; align-content: start; padding: 16px; min-height: 120px; text-align: left; cursor: pointer; background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); border: 1px solid var(--line-hi); font: inherit; }
+.tg-cat:hover { border-color: var(--signal); }
+.tg-cat[aria-pressed="true"] { border-color: var(--signal); background: rgba(95,224,168,0.10); }
+.tg-cat b { font-weight: 600; }
+.tg-cat small { color: var(--desc); font-size: 0.86em; }
+.tg-cat .st8 { font: 500 0.64em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.tg-cat[aria-pressed="true"] .st8, .tg-cat.ready .st8 { color: var(--signal); }
+.tg-panel { display: grid; gap: 22px; }
+.tg-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.tg-item { display: grid; gap: 8px; align-content: start; padding: 18px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); position: relative; }
+.tg-item::before { content: ""; position: absolute; top: -1px; left: -1px; width: 12px; height: 12px; border: solid var(--signal); border-width: 2px 0 0 2px; }
+.tg-item .kind { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+.tg-item h3 { font: 600 1.05em var(--body); letter-spacing: 0; }
+.tg-item p { margin: 0; color: var(--desc); font-size: 0.93em; }
+.tg-item ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.9em; display: grid; gap: 3px; }
+.tg-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.tg-links a { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); text-decoration: none; border: 1px solid var(--line-hi); padding: 8px 10px; min-height: 40px; display: inline-flex; align-items: center; }
+.tg-links a:hover { border-color: var(--signal); }
+.tg-pilot { padding: 18px 20px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.06); display: grid; gap: 8px; }
+.tg-pilot b.k { font: 500 0.68em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+.tg-pilot p { margin: 0; color: var(--ink); font-size: 0.95em; }
+.tg-safe { margin: 0; padding-left: 14px; border-left: 2px solid var(--signal); color: var(--desc); font-size: 0.92em; }
+.tg-soon { padding: 24px; border: 1px dashed var(--line-hi); color: var(--muted); display: grid; gap: 8px; }
+.tg-soon ul { margin: 0; padding-left: 18px; color: var(--desc); }
+.tg-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+@media (max-width: 900px) { .tg-cats { grid-template-columns: repeat(2, minmax(0, 1fr)); } .tg-items { grid-template-columns: 1fr; } .tg-flow { grid-template-columns: 1fr; } .tg-flow .ar { transform: rotate(90deg); } }
+@media (max-width: 520px) { .tg-cats { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap tg-wrap">
+    <section class="tg-intro" aria-labelledby="tgT">
+      <div class="eyebrow">Hardware and software guide</div>
+      <h1 id="tgT">How the technology fits together</h1>
+      <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
+      <p>This guide walks through the hardware and software in each area, what each piece does, who it suits, and how to try it. It is independent: Access+ doesn't sell any of it.</p>
+    </section>
+
+    <div class="tg-flow" aria-label="Input, interface, device">
+      <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
+      <div class="ar" aria-hidden="true">&rarr;</div>
+      <div class="st"><b>2 · Interface</b><span>What translates it</span><small>A wheelchair input module, a switch interface, a keyboard and mouse adapter, software</small></div>
+      <div class="ar" aria-hidden="true">&rarr;</div>
+      <div class="st"><b>3 · Device</b><span>What it controls</span><small>Power wheelchair, computer, phone, robotic arm, smart home, communication device</small></div>
+    </div>
+
+    <section aria-labelledby="tgCatsT" style="display:grid;gap:18px">
+      <div class="tg-head"><h2 id="tgCatsT">Choose an area</h2><p>Wheelchairs are ready to explore. The others are coming next.</p></div>
+      <div class="tg-cats" id="cats" role="group" aria-label="Technology areas">
+        <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
+        <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>On-screen keyboards, eye trackers, head and nose tracking</small></button>
+        <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, Bluetooth switch interfaces</small></button>
+        <button class="tg-cat" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Coming next</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+        <button class="tg-cat" type="button" data-cat="home" aria-pressed="false"><span class="st8">Coming next</span><b>Smart home and safety</b><small>Lights, doors, bed, TV, calling for help</small></button>
+        <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech devices, soundboards</small></button>
+        <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches and interfaces</b><small>Button, breath, sound, EMG, proximity, adapters</small></button>
+        <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Adaptive controllers, hands-free games, instruments</small></button>
+      </div>
+    </section>
+
+    <section class="tg-panel" id="panel-wheel" aria-labelledby="wheelT">
+      <div class="tg-head"><h2 id="wheelT">Power wheelchairs</h2><p>Driving and controlling the chair with inputs other than a hand joystick.</p></div>
+      <div class="tg-items">
+        <article class="tg-item">
+          <span class="kind">Drive system · electronics</span>
+          <h3>R-Net control system</h3>
+          <p>The electronics platform inside many power wheelchairs, made by Curtiss-Wright and used by Permobil and other manufacturers. The joystick, power module, seating and add-on modules plug into one network, so new input modules can be added without replacing the chair.</p>
+          <ul><li>Other chairs use different systems, such as Invacare's LiNX or Quantum's Q-Logic</li><li>Which system your chair has decides which input modules fit it</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Interface · specialty input module</span>
+          <h3>Omni2 (Permobil / R-Net)</h3>
+          <p>A specialty input display that lets alternative controls drive an R-Net chair: head arrays, sip-and-puff, mini joysticks and switches. It also has built-in Bluetooth and infrared, so the same input can operate a computer, phone, TV and other devices.</p>
+          <ul><li>Manufacturer-supported, so the chair's own safety system stays in charge</li><li>One input can drive, run seating functions and reach other devices</li></ul>
+          <div class="tg-links"><a href="https://www.permobil.com/en-nz/products/electronics/permobil-omni2" target="_blank" rel="noopener">Permobil Omni2 &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Interface · input module</span>
+          <h3>R-Net Input/Output Module</h3>
+          <p>A simpler R-Net module that accepts switch or proportional inputs, such as mini joysticks, for driving and functions when a full specialty display isn't needed.</p>
+          <div class="tg-links"><a href="https://www.cw-industrial.com/en-gb/medical-mobility/rnet/input-output-module" target="_blank" rel="noopener">Curtiss-Wright I/O Module &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Inputs · alternate drive controls</span>
+          <h3>Ways to drive without a hand joystick</h3>
+          <ul>
+            <li><b>Head array:</b> switches or sensors in the headrest; press back, left or right</li>
+            <li><b>Sip-and-puff drive:</b> hard and soft sips and puffs choose direction</li>
+            <li><b>Mini and chin joysticks:</b> very light-touch proportional control</li>
+            <li><b>Switch driving:</b> one or more switches, momentary or latched</li>
+            <li><b>Proportional head control:</b> head movement measured continuously</li>
+          </ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Beyond driving</span>
+          <h3>What else the chair can control</h3>
+          <ul>
+            <li>Seating: tilt, recline, leg rests, seat height</li>
+            <li>Mouse and keyboard on a computer or tablet over Bluetooth</li>
+            <li>TV and other devices by infrared</li>
+            <li>Mounts for phones, screens and switches</li>
+          </ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Practice first</span>
+          <h3>Try it in the simulator</h3>
+          <p>Practice driving with a head array, sip-and-puff, switches or a mini joystick on obstacle courses before you try a real chair, and bring your scores to your seating clinic.</p>
+          <div class="tg-links"><a href="#simulators">Wheelchair simulator</a><a href="#guide-ai">Ask Ace about drive controls</a></div>
+        </article>
+      </div>
+      <div class="tg-pilot">
+        <b class="k">Access+ pilot work</b>
+        <p>Three RPI student teams are building new wheelchair inputs on a donated Permobil M3 Corpus with R-Net: an arm-crank exercise drive, a rowing pull trainer, and an upper-arm movement controller. The Omni specialty input module is under evaluation as the connection, so the chair's own fail-safe stays in charge.</p>
+      </div>
+      <p class="tg-safe">Safety first: anything that drives a real wheelchair should be set up and tested with your seating specialist or supplier. Access+ sensor kits never connect to a wheelchair; driving practice happens in the simulator.</p>
+    </section>
+
+    <section class="tg-soon" id="panel-soon" hidden aria-live="polite">
+      <b id="soonT"></b>
+      <span>This part of the guide is coming next. It will cover:</span>
+      <ul id="soonList"></ul>
+    </section>
+
+    <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
+  </div>
+</main>
+<script>
+(function () {
+  var SOON = {
+    computer: ['Computer access', ['On-screen keyboards such as OptiKey (see the Keyboards page)', 'Eye trackers, commercial and low-cost', 'Head and nose tracking: MotionInput, FaceNav, Project Gameface, head mice', 'Voice control and dictation', 'Mouth joysticks and alternative mice']],
+    phone: ['Phones and tablets', ['Built-in switch control and voice control on iPhone and Android', 'Bluetooth switch interfaces', 'Head and eye tracking on phones', 'Mounts for bed and chair']],
+    arm: ['Robotic arms', ['Assistive arms for eating, drinking and reaching', 'Controlling an arm from wheelchair inputs', 'Practicing in the robotic arm simulator']],
+    home: ['Smart home and safety', ['Lights, doors, thermostat and TV', 'Bed positioning', 'Calling for help at night', 'Voice assistants and switch control']],
+    aac: ['Communication', ['Talking boards and speech-generating devices', 'Soundboards and phrase boards', 'Picture boards such as CommuniKate']],
+    'switch': ['Switches and interfaces', ['Button, breath, sound, twitch, EMG and proximity switches', 'Switch interfaces that act as a keyboard, mouse or gamepad', 'Open-source and DIY builds']],
+    play: ['Gaming and music', ['Adaptive game controllers', 'Hands-free gaming with MotionInput', 'Breath-played instruments such as Jamboxx']]
+  };
+  var cats = document.querySelectorAll('#view-tech .tg-cat, .tg-cat');
+  var wheel = document.getElementById('panel-wheel'), soon = document.getElementById('panel-soon');
+  if (!wheel || !soon) return;
+  cats.forEach(function (b) {
+    b.addEventListener('click', function () {
+      cats.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      var c = b.dataset.cat;
+      if (c === 'wheel') { wheel.hidden = false; soon.hidden = true; return; }
+      wheel.hidden = true; soon.hidden = false;
+      document.getElementById('soonT').textContent = SOON[c][0];
+      var ul = document.getElementById('soonList'); ul.innerHTML = '';
+      SOON[c][1].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+    });
+  });
+})();
+</script>
+</body>
+</html>

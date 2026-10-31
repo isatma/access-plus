@@ -27,6 +27,7 @@
 :root.big { --base: 22px; --target: 104px; }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   background-color: var(--bg); color: var(--ink);
   background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -425,6 +426,12 @@ footer .wrap { padding-block: 22px; }
 #view-keyboards .kb-key.util { border-color: var(--signal); color: var(--signal); background: rgba(95,224,168,0.08); }
 #view-keyboards .kb-key.big { min-height: 40px; font-size: 11px; }
 #view-keyboards .kb-key.phrase { min-height: 34px; font-size: 9.5px; text-transform: none; white-space: normal; text-align: center; line-height: 1.15; color: var(--ink); }
+#view-keyboards .kb-card.wide { grid-column: 1 / -1; }
+#view-keyboards .kb-real { display: grid; gap: 3px; grid-auto-rows: 30px; }
+#view-keyboards .kb-rk { display: grid; place-items: center; padding: 0 2px; background: #2a3446; color: #e8edf5; border-radius: 3px; font: 500 10px/1.05 var(--body); text-align: center; white-space: pre-line; overflow: hidden; }
+#view-keyboards .kb-rk.pad { background: #202020; color: var(--muted); font-style: italic; }
+#view-keyboards .kb-rk.sug { background: #182235; color: var(--muted); font-style: italic; }
+#view-keyboards .kb-card:not(.wide) .kb-real { grid-auto-rows: 34px; }
 #view-keyboards .kb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 #view-keyboards .kb-actions .btn { min-height: 52px; font-size: 0.7em; }
 #view-keyboards .kb-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -454,6 +461,56 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 520px) {
 #view-keyboards .kb-steps { grid-template-columns: 1fr; }
 }
+#view-tech .tg-wrap { gap: 40px !important; }
+#view-tech .tg-intro { display: grid; gap: 12px; max-width: 52em; }
+#view-tech .tg-intro h1 { font-size: 1.8em; line-height: 1.25; }
+#view-tech .tg-intro p { margin: 0; color: var(--muted); }
+#view-tech .tg-intro .lead { color: var(--desc); }
+#view-tech .tg-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: stretch; }
+#view-tech .tg-flow .st { border: 1px solid var(--line-hi); background: var(--panel); padding: 16px; display: grid; gap: 4px; align-content: start; }
+#view-tech .tg-flow .st b { font: 500 0.7em var(--mono); letter-spacing: 0.14em; color: var(--signal); text-transform: uppercase; }
+#view-tech .tg-flow .st span { font-weight: 600; }
+#view-tech .tg-flow .st small { color: var(--desc); font-size: 0.88em; }
+#view-tech .tg-flow .ar { display: grid; place-items: center; color: var(--signal); font-size: 1.6em; }
+#view-tech .tg-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+#view-tech .tg-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+#view-tech .tg-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+#view-tech .tg-head p { margin: 0; color: var(--muted); }
+#view-tech .tg-cats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+#view-tech .tg-cat { display: grid; gap: 6px; align-content: start; padding: 16px; min-height: 120px; text-align: left; cursor: pointer; background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); border: 1px solid var(--line-hi); font: inherit; }
+#view-tech .tg-cat:hover { border-color: var(--signal); }
+#view-tech .tg-cat[aria-pressed="true"] { border-color: var(--signal); background: rgba(95,224,168,0.10); }
+#view-tech .tg-cat b { font-weight: 600; }
+#view-tech .tg-cat small { color: var(--desc); font-size: 0.86em; }
+#view-tech .tg-cat .st8 { font: 500 0.64em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-tech .tg-cat[aria-pressed="true"] .st8, #view-tech .tg-cat.ready .st8 { color: var(--signal); }
+#view-tech .tg-panel { display: grid; gap: 22px; }
+#view-tech .tg-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+#view-tech .tg-item { display: grid; gap: 8px; align-content: start; padding: 18px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); position: relative; }
+#view-tech .tg-item::before { content: ""; position: absolute; top: -1px; left: -1px; width: 12px; height: 12px; border: solid var(--signal); border-width: 2px 0 0 2px; }
+#view-tech .tg-item .kind { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+#view-tech .tg-item h3 { font: 600 1.05em var(--body); letter-spacing: 0; }
+#view-tech .tg-item p { margin: 0; color: var(--desc); font-size: 0.93em; }
+#view-tech .tg-item ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 0.9em; display: grid; gap: 3px; }
+#view-tech .tg-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+#view-tech .tg-links a { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); text-decoration: none; border: 1px solid var(--line-hi); padding: 8px 10px; min-height: 40px; display: inline-flex; align-items: center; }
+#view-tech .tg-links a:hover { border-color: var(--signal); }
+#view-tech .tg-pilot { padding: 18px 20px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.06); display: grid; gap: 8px; }
+#view-tech .tg-pilot b.k { font: 500 0.68em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+#view-tech .tg-pilot p { margin: 0; color: var(--ink); font-size: 0.95em; }
+#view-tech .tg-safe { margin: 0; padding-left: 14px; border-left: 2px solid var(--signal); color: var(--desc); font-size: 0.92em; }
+#view-tech .tg-soon { padding: 24px; border: 1px dashed var(--line-hi); color: var(--muted); display: grid; gap: 8px; }
+#view-tech .tg-soon ul { margin: 0; padding-left: 18px; color: var(--desc); }
+#view-tech .tg-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+@media (max-width: 900px) {
+#view-tech .tg-cats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#view-tech .tg-items { grid-template-columns: 1fr; }
+#view-tech .tg-flow { grid-template-columns: 1fr; }
+#view-tech .tg-flow .ar { transform: rotate(90deg); }
+}
+@media (max-width: 520px) {
+#view-tech .tg-cats { grid-template-columns: 1fr; }
+}
 #view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 #view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
 #view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
@@ -474,7 +531,7 @@ footer .wrap { padding-block: 22px; }
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
     <a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">Meet Ace</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">Meet Ace</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#tech" data-route="tech">Tech guide</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
 </header>
 
 <main id="view-home" class="view">
@@ -886,6 +943,105 @@ footer .wrap { padding-block: 22px; }
       </ul>
     </section>
     <p class="kb-note">OptiKey is an independent open-source project. Access+ doesn't make or sell it; the library shares layouts made for it.</p>
+  </div>
+</main>
+<main id="view-tech" class="view" hidden>
+
+  <div class="wrap tg-wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+    <section class="tg-intro" aria-labelledby="tg-tgT">
+      <div class="eyebrow">Hardware and software guide</div>
+      <h1 id="tg-tgT">How the technology fits together</h1>
+      <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
+      <p>This guide walks through the hardware and software in each area, what each piece does, who it suits, and how to try it. It is independent: Access+ doesn't sell any of it.</p>
+    </section>
+
+    <div class="tg-flow" aria-label="Input, interface, device">
+      <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
+      <div class="ar" aria-hidden="true">&rarr;</div>
+      <div class="st"><b>2 · Interface</b><span>What translates it</span><small>A wheelchair input module, a switch interface, a keyboard and mouse adapter, software</small></div>
+      <div class="ar" aria-hidden="true">&rarr;</div>
+      <div class="st"><b>3 · Device</b><span>What it controls</span><small>Power wheelchair, computer, phone, robotic arm, smart home, communication device</small></div>
+    </div>
+
+    <section aria-labelledby="tg-tgCatsT" style="display:grid;gap:18px">
+      <div class="tg-head"><h2 id="tg-tgCatsT">Choose an area</h2><p>Wheelchairs are ready to explore. The others are coming next.</p></div>
+      <div class="tg-cats" id="tg-cats" role="group" aria-label="Technology areas">
+        <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
+        <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>On-screen keyboards, eye trackers, head and nose tracking</small></button>
+        <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, Bluetooth switch interfaces</small></button>
+        <button class="tg-cat" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Coming next</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+        <button class="tg-cat" type="button" data-cat="home" aria-pressed="false"><span class="st8">Coming next</span><b>Smart home and safety</b><small>Lights, doors, bed, TV, calling for help</small></button>
+        <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech devices, soundboards</small></button>
+        <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches and interfaces</b><small>Button, breath, sound, EMG, proximity, adapters</small></button>
+        <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Adaptive controllers, hands-free games, instruments</small></button>
+      </div>
+    </section>
+
+    <section class="tg-panel" id="tg-panel-wheel" aria-labelledby="tg-wheelT">
+      <div class="tg-head"><h2 id="tg-wheelT">Power wheelchairs</h2><p>Driving and controlling the chair with inputs other than a hand joystick.</p></div>
+      <div class="tg-items">
+        <article class="tg-item">
+          <span class="kind">Drive system · electronics</span>
+          <h3>R-Net control system</h3>
+          <p>The electronics platform inside many power wheelchairs, made by Curtiss-Wright and used by Permobil and other manufacturers. The joystick, power module, seating and add-on modules plug into one network, so new input modules can be added without replacing the chair.</p>
+          <ul><li>Other chairs use different systems, such as Invacare's LiNX or Quantum's Q-Logic</li><li>Which system your chair has decides which input modules fit it</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Interface · specialty input module</span>
+          <h3>Omni2 (Permobil / R-Net)</h3>
+          <p>A specialty input display that lets alternative controls drive an R-Net chair: head arrays, sip-and-puff, mini joysticks and switches. It also has built-in Bluetooth and infrared, so the same input can operate a computer, phone, TV and other devices.</p>
+          <ul><li>Manufacturer-supported, so the chair's own safety system stays in charge</li><li>One input can drive, run seating functions and reach other devices</li></ul>
+          <div class="tg-links"><a href="https://www.permobil.com/en-nz/products/electronics/permobil-omni2" target="_blank" rel="noopener">Permobil Omni2 &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Interface · input module</span>
+          <h3>R-Net Input/Output Module</h3>
+          <p>A simpler R-Net module that accepts switch or proportional inputs, such as mini joysticks, for driving and functions when a full specialty display isn't needed.</p>
+          <div class="tg-links"><a href="https://www.cw-industrial.com/en-gb/medical-mobility/rnet/input-output-module" target="_blank" rel="noopener">Curtiss-Wright I/O Module &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Inputs · alternate drive controls</span>
+          <h3>Ways to drive without a hand joystick</h3>
+          <ul>
+            <li><b>Head array:</b> switches or sensors in the headrest; press back, left or right</li>
+            <li><b>Sip-and-puff drive:</b> hard and soft sips and puffs choose direction</li>
+            <li><b>Mini and chin joysticks:</b> very light-touch proportional control</li>
+            <li><b>Switch driving:</b> one or more switches, momentary or latched</li>
+            <li><b>Proportional head control:</b> head movement measured continuously</li>
+          </ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Beyond driving</span>
+          <h3>What else the chair can control</h3>
+          <ul>
+            <li>Seating: tilt, recline, leg rests, seat height</li>
+            <li>Mouse and keyboard on a computer or tablet over Bluetooth</li>
+            <li>TV and other devices by infrared</li>
+            <li>Mounts for phones, screens and switches</li>
+          </ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Practice first</span>
+          <h3>Try it in the simulator</h3>
+          <p>Practice driving with a head array, sip-and-puff, switches or a mini joystick on obstacle courses before you try a real chair, and bring your scores to your seating clinic.</p>
+          <div class="tg-links"><a href="#simulators">Wheelchair simulator</a><a href="#guide-ai">Ask Ace about drive controls</a></div>
+        </article>
+      </div>
+      <div class="tg-pilot">
+        <b class="k">Access+ pilot work</b>
+        <p>Three RPI student teams are building new wheelchair inputs on a donated Permobil M3 Corpus with R-Net: an arm-crank exercise drive, a rowing pull trainer, and an upper-arm movement controller. The Omni specialty input module is under evaluation as the connection, so the chair's own fail-safe stays in charge.</p>
+      </div>
+      <p class="tg-safe">Safety first: anything that drives a real wheelchair should be set up and tested with your seating specialist or supplier. Access+ sensor kits never connect to a wheelchair; driving practice happens in the simulator.</p>
+    </section>
+
+    <section class="tg-soon" id="tg-panel-soon" hidden aria-live="polite">
+      <b id="tg-soonT"></b>
+      <span>This part of the guide is coming next. It will cover:</span>
+      <ul id="tg-soonList"></ul>
+    </section>
+
+    <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
   </div>
 </main>
 <main id="view-gesture" class="view" hidden>
@@ -1599,19 +1755,22 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
 (function () {
 var __ID = function (x) { return document.getElementById('kb-' + x) || document.getElementById(x); };
 
+var KB_FILES = {"Dave_Keyboard2": {"layout": {"rows": 8, "cols": 21, "keys": [{"r": 0, "c": 0, "w": 1, "h": 3, "t": "◤", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 0, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 0, "w": 1, "h": 3, "t": "◣", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 20, "w": 1, "h": 3, "t": "◥", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 20, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 20, "w": 1, "h": 3, "t": "◢", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 1, "w": 17, "h": 1, "t": "Typed text appears here", "k": "pad"}, {"r": 0, "c": 18, "w": 1, "h": 1, "t": "▬", "bg": "#A86868", "fg": "White"}, {"r": 1, "c": 1, "w": 19, "h": 1, "t": "Word suggestions", "k": "sug"}, {"r": 0, "c": 19, "w": 1, "h": 1, "t": "X", "bg": "#A86868", "fg": "White"}, {"r": 2, "c": 1, "w": 2, "h": 1, "t": "Menu"}, {"r": 2, "c": 4, "w": 3, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 7, "w": 3, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 10, "w": 3, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 13, "w": 3, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 2, "c": 16, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 2, "c": 3, "w": 1, "h": 1, "t": "🖱", "bg": "#5A65A2", "fg": "White"}, {"r": 2, "c": 18, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}, {"r": 3, "c": 1, "w": 1, "h": 1, "t": "Esc"}, {"r": 3, "c": 2, "w": 1, "h": 1, "t": "`\n~", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 3, "w": 1, "h": 1, "t": "1\n!", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 4, "w": 1, "h": 1, "t": "2\n@", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 5, "w": 1, "h": 1, "t": "3\n#", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 6, "w": 1, "h": 1, "t": "4\n$", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 7, "w": 1, "h": 1, "t": "5\n%", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 8, "w": 1, "h": 1, "t": "6\n^", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 9, "w": 1, "h": 1, "t": "7\n&", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 10, "w": 1, "h": 1, "t": "8\n*", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 11, "w": 1, "h": 1, "t": "9\n(", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 12, "w": 1, "h": 1, "t": "Ø\n)", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 13, "w": 1, "h": 1, "t": "-\n_", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 14, "w": 2, "h": 1, "t": "=\n+", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 16, "w": 2, "h": 1, "t": "Home", "bg": "#525D9A", "fg": "White"}, {"r": 3, "c": 18, "w": 2, "h": 1, "t": "PgUp", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 1, "w": 1, "h": 1, "t": "Tab"}, {"r": 4, "c": 2, "w": 1, "h": 1, "t": "q"}, {"r": 4, "c": 3, "w": 1, "h": 1, "t": "w"}, {"r": 4, "c": 4, "w": 1, "h": 1, "t": "e"}, {"r": 4, "c": 5, "w": 1, "h": 1, "t": "r"}, {"r": 4, "c": 6, "w": 1, "h": 1, "t": "t"}, {"r": 4, "c": 7, "w": 1, "h": 1, "t": "y"}, {"r": 4, "c": 8, "w": 1, "h": 1, "t": "u"}, {"r": 4, "c": 9, "w": 1, "h": 1, "t": "i"}, {"r": 4, "c": 10, "w": 1, "h": 1, "t": "o"}, {"r": 4, "c": 11, "w": 1, "h": 1, "t": "p"}, {"r": 4, "c": 12, "w": 1, "h": 1, "t": "[\n{", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 13, "w": 1, "h": 1, "t": "]\n}", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 14, "w": 2, "h": 1, "t": "\\\n|", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 16, "w": 2, "h": 1, "t": "End", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 18, "w": 2, "h": 1, "t": "PgDn", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 1, "w": 1, "h": 1, "t": "Caps", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 5, "c": 2, "w": 1, "h": 1, "t": "a"}, {"r": 5, "c": 3, "w": 1, "h": 1, "t": "s"}, {"r": 5, "c": 4, "w": 1, "h": 1, "t": "d"}, {"r": 5, "c": 5, "w": 1, "h": 1, "t": "f"}, {"r": 5, "c": 6, "w": 1, "h": 1, "t": "g"}, {"r": 5, "c": 7, "w": 1, "h": 1, "t": "h"}, {"r": 5, "c": 8, "w": 1, "h": 1, "t": "j"}, {"r": 5, "c": 9, "w": 1, "h": 1, "t": "k"}, {"r": 5, "c": 10, "w": 1, "h": 1, "t": "l"}, {"r": 5, "c": 11, "w": 1, "h": 1, "t": "●\n❟", "bg": "#4B5690", "fg": "White"}, {"r": 5, "c": 12, "w": 1, "h": 1, "t": "'\n\"", "bg": "#4B5690", "fg": "White"}, {"r": 7, "c": 13, "w": 3, "h": 1, "t": "Enter"}, {"r": 5, "c": 16, "w": 2, "h": 1, "t": "Esc", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 18, "w": 2, "h": 1, "t": "🎤", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 1, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 3, "w": 1, "h": 1, "t": "z"}, {"r": 6, "c": 4, "w": 1, "h": 1, "t": "x"}, {"r": 6, "c": 5, "w": 1, "h": 1, "t": "c"}, {"r": 6, "c": 6, "w": 1, "h": 1, "t": "v"}, {"r": 6, "c": 7, "w": 1, "h": 1, "t": "b"}, {"r": 6, "c": 8, "w": 1, "h": 1, "t": "n"}, {"r": 6, "c": 9, "w": 1, "h": 1, "t": "m"}, {"r": 6, "c": 10, "w": 1, "h": 1, "t": "❟\n<", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 11, "w": 1, "h": 1, "t": "●\n>", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 12, "w": 1, "h": 1, "t": "/\n?", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 13, "w": 1, "h": 1, "t": "↑", "bg": "#5A65A2", "fg": "White"}, {"r": 6, "c": 14, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 16, "w": 2, "h": 1, "t": "Copy", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 18, "w": 2, "h": 1, "t": "Paste", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 1, "w": 2, "h": 1, "t": "Ctrl", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 3, "w": 2, "h": 1, "t": "⊞", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 5, "w": 2, "h": 1, "t": "Alt", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 7, "w": 6, "h": 1, "t": "SPACE"}, {"r": 5, "c": 13, "w": 1, "h": 1, "t": "←", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 14, "w": 1, "h": 1, "t": "↓", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 15, "w": 1, "h": 1, "t": "→", "bg": "#5A65A2", "fg": "White"}, {"r": 7, "c": 16, "w": 2, "h": 1, "t": "Bksp", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 18, "w": 2, "h": 1, "t": "Del", "bg": "#525D9A", "fg": "White"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Keyboard.xml  -  custom OptiKey dynamic keyboard\n\n  Layout (8 rows x 21 columns: edge column each side):\n    Row 0  Scratchpad (typed text)\n    Row 1  Word suggestions\n    Row 2  UTILITY ROW: Quit | Menu | Left click | Right click |\n                        Double click | Drag | dash key at far right (-> Dave_Mouse.xml) | Scroll up | Scroll down\n    Rows 3-7  Full Windows On-Screen-Keyboard layout, including the nav block\n              (Home/PgUp, End/PgDn, Insert/Pause, PrtScn/ScrLk, Speak/Clear)\n\n  Install: Management Console (Alt+M) -> Visuals -> Startup keyboard -> \"Custom Keyboard File\"\n           and point it at this file, then OK.  Adjust Width / Height below if it does not fit.\n-->\n<Keyboard>\n    <Name>Dave_Keyboard</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>50%</Width>\n    <Height>35%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>8</Rows>\n        <Cols>21</Cols>\n    </Grid>\n\n    <!-- Colour groups so the special rows stand out -->\n    <KeyGroup Name=\"Utility\"  SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n        <KeyGroup Name=\"Quit\"     BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" />\n    <KeyGroup Name=\"NavKey\"   BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Nav\" />\n    <KeyGroup Name=\"Dual\"     BackgroundColor=\"#4B5690\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Dim\"      BackgroundColor=\"#3C4675\" ForegroundColor=\"#D0D4E8\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Edge\"     BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" Opacity=\"0.45\" />\n    <KeyGroup Name=\"UtilityDash\" BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"MouseDash\"   BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"NavIcon\"  BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"ArrowKey\" BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"SpaceBar\" SharedSizeGroup=\"SpaceBar\" />\n    <KeyGroup Name=\"ShiftKey\" SharedSizeGroup=\"ShiftKey\" />\n\n    <Content>\n        <!-- Left edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◤</Label><Action>MoveToTopAndLeftBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"0\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◣</Label><Action>MoveToBottomAndLeftBoundaries</Action></DynamicKey>\n        <!-- Right edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◥</Label><Action>MoveToTopAndRightBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"20\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◢</Label><Action>MoveToBottomAndRightBoundaries</Action></DynamicKey>\n\n        <!-- ===================== Row 0 : scratchpad ===================== -->\n        <Scratchpad Row=\"0\" Col=\"1\" Width=\"17\" Height=\"1\" BackgroundColor=\"#202020\" Opacity=\"1\" />\n        <!-- Yellow keys: jump the keyboard to a screen corner (keeps its size; corner moves never dock) -->\n        <!-- Home key: reloads this keyboard so it returns to its default spot (top, centred) -->\n        <!-- Hide key (upper right): swaps to the tiny Dave_Mini.xml restore button -->\n        <DynamicKey Row=\"0\" Col=\"18\">\n            <KeyGroup>UtilityDash</KeyGroup>\n            <Label>▬</Label>\n            <ChangeKeyboard>Dave_Mini.xml</ChangeKeyboard>\n        </DynamicKey>\n\n        <!-- ===================== Row 1 : suggestions ==================== -->\n        <SuggestionRow Row=\"1\" Col=\"1\" Width=\"19\" Height=\"1\" />\n\n        <!-- ===================== Row 2 : UTILITY ROW ==================== -->\n        <!-- Quit OptiKey (OptiKey asks for confirmation first) -->\n        <DynamicKey Row=\"0\" Col=\"19\" Width=\"1\">\n            <KeyGroup>Quit</KeyGroup>\n            <Label>X</Label>\n            <Action>Quit</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"1\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Label>Menu</Label>\n            <Action>MenuKeyboard</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"4\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"7\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"10\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"13\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n                <DynamicKey Row=\"2\" Col=\"16\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"3\" Width=\"1\">\n            <KeyGroup>MouseDash</KeyGroup>\n            <Symbol>MouseIcon</Symbol>\n            <ChangeKeyboard>Dave_Mouse.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"18\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n\n        <!-- ===================== Row 3 : Esc ` 1-0 - = Backspace | Home PgUp ===================== -->\n        <DynamicKey Row=\"3\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>`\\n~</Label><ShiftDownLabel>~</ShiftDownLabel><Text>`</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"3\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>1\\n!</Label><ShiftDownLabel>!</ShiftDownLabel><Text>1</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"4\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>2\\n@</Label><ShiftDownLabel>@</ShiftDownLabel><Text>2</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"5\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>3\\n#</Label><ShiftDownLabel>#</ShiftDownLabel><Text>3</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"6\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>4\\n$</Label><ShiftDownLabel>$</ShiftDownLabel><Text>4</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"7\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>5\\n%</Label><ShiftDownLabel>%</ShiftDownLabel><Text>5</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"8\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>6\\n^</Label><ShiftDownLabel>^</ShiftDownLabel><Text>6</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"9\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>7\\n&amp;</Label><ShiftDownLabel>&amp;</ShiftDownLabel><Text>7</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"10\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>8\\n*</Label><ShiftDownLabel>*</ShiftDownLabel><Text>8</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>9\\n(</Label><ShiftDownLabel>(</ShiftDownLabel><Text>9</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>Ø\\n)</Label><ShiftDownLabel>)</ShiftDownLabel><Text>0</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>-\\n_</Label><ShiftDownLabel>_</ShiftDownLabel><Text>-</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>=\\n+</Label><ShiftDownLabel>+</ShiftDownLabel><Text>=</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Home</Label><Action>Home</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgUp</Label><Action>PgUp</Action></DynamicKey>\n\n        <!-- ===================== Row 4 : Tab q-p [ ] \\ Del | End PgDn ===================== -->\n        <DynamicKey Row=\"4\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Tab</Label><KeyDown>TAB</KeyDown><KeyUp>TAB</KeyUp></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"2\"><Label>q</Label><ShiftDownLabel>Q</ShiftDownLabel><Text>q</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"3\"><Label>w</Label><ShiftDownLabel>W</ShiftDownLabel><Text>w</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"4\"><Label>e</Label><ShiftDownLabel>E</ShiftDownLabel><Text>e</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"5\"><Label>r</Label><ShiftDownLabel>R</ShiftDownLabel><Text>r</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"6\"><Label>t</Label><ShiftDownLabel>T</ShiftDownLabel><Text>t</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"7\"><Label>y</Label><ShiftDownLabel>Y</ShiftDownLabel><Text>y</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"8\"><Label>u</Label><ShiftDownLabel>U</ShiftDownLabel><Text>u</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"9\"><Label>i</Label><ShiftDownLabel>I</ShiftDownLabel><Text>i</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"10\"><Label>o</Label><ShiftDownLabel>O</ShiftDownLabel><Text>o</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"11\"><Label>p</Label><ShiftDownLabel>P</ShiftDownLabel><Text>p</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>[\\n{</Label><ShiftDownLabel>{</ShiftDownLabel><Text>[</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>]\\n}</Label><ShiftDownLabel>}</ShiftDownLabel><Text>]</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>\\\\n|</Label><ShiftDownLabel>|</ShiftDownLabel><Text>\\</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>End</Label><Action>End</Action></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgDn</Label><Action>PgDn</Action></DynamicKey>\n\n        <!-- ===================== Row 5 : Caps a-l ; ' Enter | Insert Pause ===================== -->\n        <DynamicKey Row=\"5\" Col=\"1\" SharedSizeGroup=\"L4\"><KeyGroup>Dim</KeyGroup><Label>Caps</Label><KeyToggle>CAPITAL</KeyToggle></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"2\"><Label>a</Label><ShiftDownLabel>A</ShiftDownLabel><Text>a</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"3\"><Label>s</Label><ShiftDownLabel>S</ShiftDownLabel><Text>s</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"4\"><Label>d</Label><ShiftDownLabel>D</ShiftDownLabel><Text>d</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"5\"><Label>f</Label><ShiftDownLabel>F</ShiftDownLabel><Text>f</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"6\"><Label>g</Label><ShiftDownLabel>G</ShiftDownLabel><Text>g</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"7\"><Label>h</Label><ShiftDownLabel>H</ShiftDownLabel><Text>h</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"8\"><Label>j</Label><ShiftDownLabel>J</ShiftDownLabel><Text>j</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"9\"><Label>k</Label><ShiftDownLabel>K</ShiftDownLabel><Text>k</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"10\"><Label>l</Label><ShiftDownLabel>L</ShiftDownLabel><Text>l</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"11\" SharedSizeGroup=\"Semi\"><KeyGroup>Dual</KeyGroup><Label>●\\n❟</Label><ShiftDownLabel>:</ShiftDownLabel><Text>;</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>'\\n\"</Label><ShiftDownLabel>\"</ShiftDownLabel><Text>'</Text></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"13\" Width=\"3\" SharedSizeGroup=\"EnterKey\"><Label>Enter</Label><KeyDown>RETURN</KeyDown><KeyUp>RETURN</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"18\" Width=\"2\"><KeyGroup>NavIcon</KeyGroup><Label>🎤</Label><KeyDown>LWIN</KeyDown><KeyDown>VK_H</KeyDown><KeyUp>VK_H</KeyUp><KeyUp>LWIN</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 6 : Shift z-m , . / Up Shift | PrtScn ScrLk ===================== -->\n        <DynamicKey Row=\"6\" Col=\"1\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"3\"><Label>z</Label><ShiftDownLabel>Z</ShiftDownLabel><Text>z</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"4\"><Label>x</Label><ShiftDownLabel>X</ShiftDownLabel><Text>x</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"5\"><Label>c</Label><ShiftDownLabel>C</ShiftDownLabel><Text>c</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"6\"><Label>v</Label><ShiftDownLabel>V</ShiftDownLabel><Text>v</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"7\"><Label>b</Label><ShiftDownLabel>B</ShiftDownLabel><Text>b</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"8\"><Label>n</Label><ShiftDownLabel>N</ShiftDownLabel><Text>n</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"9\"><Label>m</Label><ShiftDownLabel>M</ShiftDownLabel><Text>m</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"10\" SharedSizeGroup=\"Comma\"><KeyGroup>Dual</KeyGroup><Label>❟\\n&lt;</Label><ShiftDownLabel>&lt;</ShiftDownLabel><Text>,</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>●\\n&gt;</Label><ShiftDownLabel>&gt;</ShiftDownLabel><Text>.</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>/\\n?</Label><ShiftDownLabel>?</ShiftDownLabel><Text>/</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>UpArrowKeyIcon</Symbol><Action>ArrowUp</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"14\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Copy</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_C</KeyDown><KeyUp>VK_C</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Paste</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_V</KeyDown><KeyUp>VK_V</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 7 : Ctrl Win Alt Space Alt Ctrl Left Down Right | Speak Clear ===================== -->\n        <DynamicKey Row=\"7\" Col=\"1\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Ctrl</Label><Action>LeftCtrl</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"3\" Width=\"2\"><KeyGroup>Dim</KeyGroup><Symbol>WinIcon</Symbol><Action>LeftWin</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"5\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Alt</Label><Action>LeftAlt</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"7\" Width=\"6\"><KeyGroup>SpaceBar</KeyGroup><Label>SPACE</Label><KeyDown>SPACE</KeyDown><KeyUp>SPACE</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>LeftArrowKeyIcon</Symbol><Action>ArrowLeft</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"14\"><KeyGroup>ArrowKey</KeyGroup><Symbol>DownArrowKeyIcon</Symbol><Action>ArrowDown</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"15\"><KeyGroup>ArrowKey</KeyGroup><Symbol>RightArrowKeyIcon</Symbol><Action>ArrowRight</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Bksp</Label><Action>BackOne</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Del</Label><Action>Delete</Action></DynamicKey>\n\n    </Content>\n</Keyboard>\n"}, "Dave_Mouse": {"layout": {"rows": 1, "cols": 14, "keys": [{"r": 0, "c": 12, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 0, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 2, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 4, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 6, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 8, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 10, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>14</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"12\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"2\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"4\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"6\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"8\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"10\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}, "Dave_Mini": {"layout": {"rows": 1, "cols": 16, "keys": [{"r": 0, "c": 0, "w": 1, "h": 1, "t": "◤", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 13, "w": 1, "h": 1, "t": "◥", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 14, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 1, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 3, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 5, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 7, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 9, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 11, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>16</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"Nudge\"    BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◤</Label>\n            <Action>MoveToTopAndLeftBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"13\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◥</Label>\n            <Action>MoveToTopAndRightBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"14\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"1\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"3\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"5\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"7\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"9\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"11\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}};
+
 (function () {
   var toast = __ID('toast'), tt;
   function note(msg) { if (!toast) return; toast.textContent = msg; toast.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toast.hidden = true; }, 3500); }
   var QWERTY = [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L','↵'],['⇧','Z','X','C','V','B','N','M','⌫','.'],['Ctrl','Alt','Space','Tab','Esc']];
   var KB = [
-    { name: 'Floating utility keyboard', by: 'Dave (Access+)', real: true,
-      text: 'A full Windows keyboard with a top row of window and mouse tools: minimize, move and size, click and drag, right click. Runs in OptiKey’s floating mode beside your apps.',
-      inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed',
-      rows: [[['Minimize','util'],['Move / size','util'],['Click','util'],['Drag','util'],['Right click','util']]].concat(QWERTY) },
-    { name: 'Mouse keyboard', by: 'Dave (Access+)', real: true,
-      text: 'Every mouse action as a large key: left, right and double click, click and drag, scroll, and fine movement, so the pointer can be controlled precisely without a physical mouse.',
-      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed',
-      rows: [[['Left click','util'],['Right click','util'],['Double click','util'],['Drag','util']],[['Scroll \u2191',''],['Scroll \u2193',''],['Move \u2190',''],['Move \u2192','']],[['Move \u2191',''],['Move \u2193',''],['Magnify',''],['Keyboard','util']]] },
+    { name: 'Full floating keyboard', by: 'Dave (Access+)', real: true, file: 'Dave_Keyboard2', wide: true,
+      text: 'A full Windows keyboard that floats over your apps, built for nose tracking. Typed text and word suggestions on top, then a utility row of mouse actions (left, right and double click, drag, scroll) and a menu key. Includes Home, End and page keys, copy and paste, a microphone key for Windows voice typing, edge keys that jump the keyboard to any screen corner, and one-press switches to the mouse strip or a hidden mini bar.',
+      inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed' },
+    { name: 'Mouse strip', by: 'Dave (Access+)', real: true, file: 'Dave_Mouse',
+      text: 'A thin bar of mouse keys only: left, right and double click, drag, scroll up and down. Leaves the screen clear, with one key back to the full keyboard.',
+      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed' },
+    { name: 'Mini mouse strip with corner jumps', by: 'Dave (Access+)', real: true, file: 'Dave_Mini',
+      text: 'The mouse strip with two extra keys that jump it to the top-left or top-right corner, so it can be moved out of the way.',
+      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed' },
     { name: 'Big-key bed keyboard', by: 'Sample layout', real: false,
       text: 'Fewer, larger keys for lying down, when head range is smaller and the screen is farther away. Letters in alphabetical blocks with word prediction.',
       inputs: ['Eye gaze', 'Nose tracking'], pos: 'In bed',
@@ -1625,12 +1784,31 @@ var __ID = function (x) { return document.getElementById('kb-' + x) || document.
       inputs: ['Nose tracking', 'Mouse'], pos: 'Seated',
       rows: [[['Play','util'],['Stop','util'],['Record','util'],['Loop','util'],['Undo','util']],[['Track ↑',''],['Track ↓',''],['Zoom +',''],['Zoom −',''],['Save','util']]] }
   ];
+  var dl = null;
+  if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { dl = d; }).catch(function () {});
+  function download(name, text) {
+    if (!dl) { note('Downloading works when this page is opened in Claude. The file is also in the Access+ GitHub repository.'); return; }
+    dl.save({ filename: name, data: text }).then(function (r) { if (r && r.status === 'saved') note('Saved ' + name + '. Load it from OptiKey\u2019s Management Console.'); })
+      .catch(function (e) { if (!e || e.code !== 'cancelled') note('The download didn\u2019t finish. Please try again.'); });
+  }
   var grid = __ID('kbGrid');
   if (!grid) return;
   KB.forEach(function (k) {
-    var c = document.createElement('article'); c.className = 'kb-card' + (k.real ? ' mine' : '');
+    var c = document.createElement('article'); c.className = 'kb-card' + (k.real ? ' mine' : '') + (k.wide ? ' wide' : '');
     var prev = document.createElement('div'); prev.className = 'kb-prev'; prev.setAttribute('aria-hidden', 'true');
-    k.rows.forEach(function (r) {
+    var F = k.file && typeof KB_FILES !== 'undefined' ? KB_FILES[k.file] : null;
+    if (F) {
+      var L = F.layout, g = document.createElement('div'); g.className = 'kb-real';
+      g.style.gridTemplateColumns = 'repeat(' + L.cols + ', minmax(0, 1fr))';
+      L.keys.forEach(function (key) {
+        var e = document.createElement('span'); e.className = 'kb-rk' + (key.k ? ' ' + key.k : '');
+        e.style.gridRow = (key.r + 1) + ' / span ' + key.h; e.style.gridColumn = (key.c + 1) + ' / span ' + key.w;
+        if (key.bg) e.style.background = key.bg; if (key.fg) e.style.color = key.fg; if (key.op) e.style.opacity = key.op;
+        e.textContent = key.t; g.appendChild(e);
+      });
+      prev.appendChild(g);
+    }
+    (F ? [] : k.rows).forEach(function (r) {
       var row = document.createElement('div'); row.className = 'kb-row';
       row.style.gridTemplateColumns = 'repeat(' + r.length + ', minmax(0, 1fr))';
       r.forEach(function (key) {
@@ -1650,7 +1828,12 @@ var __ID = function (x) { return document.getElementById('kb-' + x) || document.
     var act = document.createElement('div'); act.className = 'kb-actions';
     [['Try in simulator', 'The computer simulator isn’t built yet. Soon you’ll test this layout there first.', true], ['Download', 'Downloads aren’t connected yet in this draft.', false], ['Adapt', 'Editing a copy of a layout is planned for a later version.', false]].forEach(function (a) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (a[2] ? ' primary' : ''); b.textContent = a[0];
-      b.addEventListener('click', function () { note(k.name + ': ' + a[1]); }); act.appendChild(b);
+      b.addEventListener('click', function () {
+        if (a[0] === 'Download' && F) { download(k.file + '.xml', F.xml); return; }
+        note(k.name + ': ' + a[1]);
+      });
+      if (a[0] === 'Download' && F) b.textContent = 'Download ' + k.file + '.xml';
+      act.appendChild(b);
     });
     c.append(prev, h, meta, p, ins, act); grid.appendChild(c);
   });
@@ -1659,7 +1842,37 @@ var __ID = function (x) { return document.getElementById('kb-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards'];
+var __ID = function (x) { return document.getElementById('tg-' + x) || document.getElementById(x); };
+
+(function () {
+  var SOON = {
+    computer: ['Computer access', ['On-screen keyboards such as OptiKey (see the Keyboards page)', 'Eye trackers, commercial and low-cost', 'Head and nose tracking: MotionInput, FaceNav, Project Gameface, head mice', 'Voice control and dictation', 'Mouth joysticks and alternative mice']],
+    phone: ['Phones and tablets', ['Built-in switch control and voice control on iPhone and Android', 'Bluetooth switch interfaces', 'Head and eye tracking on phones', 'Mounts for bed and chair']],
+    arm: ['Robotic arms', ['Assistive arms for eating, drinking and reaching', 'Controlling an arm from wheelchair inputs', 'Practicing in the robotic arm simulator']],
+    home: ['Smart home and safety', ['Lights, doors, thermostat and TV', 'Bed positioning', 'Calling for help at night', 'Voice assistants and switch control']],
+    aac: ['Communication', ['Talking boards and speech-generating devices', 'Soundboards and phrase boards', 'Picture boards such as CommuniKate']],
+    'switch': ['Switches and interfaces', ['Button, breath, sound, twitch, EMG and proximity switches', 'Switch interfaces that act as a keyboard, mouse or gamepad', 'Open-source and DIY builds']],
+    play: ['Gaming and music', ['Adaptive game controllers', 'Hands-free gaming with MotionInput', 'Breath-played instruments such as Jamboxx']]
+  };
+  var cats = document.querySelectorAll('#view-tech .tg-cat');
+  var wheel = __ID('panel-wheel'), soon = __ID('panel-soon');
+  if (!wheel || !soon) return;
+  cats.forEach(function (b) {
+    b.addEventListener('click', function () {
+      cats.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      var c = b.dataset.cat;
+      if (c === 'wheel') { wheel.hidden = false; soon.hidden = true; return; }
+      wheel.hidden = true; soon.hidden = false;
+      __ID('soonT').textContent = SOON[c][0];
+      var ul = __ID('soonList'); ul.innerHTML = '';
+      SOON[c][1].forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+    });
+  });
+})();
+
+})();
+(function () {
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var v = VIEWS.indexOf(h) >= 0 ? h : 'home';

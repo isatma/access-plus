@@ -33,6 +33,12 @@
 .kb-key.util { border-color: var(--signal); color: var(--signal); background: rgba(95,224,168,0.08); }
 .kb-key.big { min-height: 40px; font-size: 11px; }
 .kb-key.phrase { min-height: 34px; font-size: 9.5px; text-transform: none; white-space: normal; text-align: center; line-height: 1.15; color: var(--ink); }
+.kb-card.wide { grid-column: 1 / -1; }
+.kb-real { display: grid; gap: 3px; grid-auto-rows: 30px; }
+.kb-rk { display: grid; place-items: center; padding: 0 2px; background: #2a3446; color: #e8edf5; border-radius: 3px; font: 500 10px/1.05 var(--body); text-align: center; white-space: pre-line; overflow: hidden; }
+.kb-rk.pad { background: #202020; color: var(--muted); font-style: italic; }
+.kb-rk.sug { background: #182235; color: var(--muted); font-style: italic; }
+.kb-card:not(.wide) .kb-real { grid-auto-rows: 34px; }
 .kb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .kb-actions .btn { min-height: 52px; font-size: 0.7em; }
 .kb-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -106,19 +112,21 @@
   </div>
 </main>
 <script>
+/*KB_DATA*/
 (function () {
   var toast = document.getElementById('toast'), tt;
   function note(msg) { if (!toast) return; toast.textContent = msg; toast.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toast.hidden = true; }, 3500); }
   var QWERTY = [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L','↵'],['⇧','Z','X','C','V','B','N','M','⌫','.'],['Ctrl','Alt','Space','Tab','Esc']];
   var KB = [
-    { name: 'Floating utility keyboard', by: 'Dave (Access+)', real: true,
-      text: 'A full Windows keyboard with a top row of window and mouse tools: minimize, move and size, click and drag, right click. Runs in OptiKey’s floating mode beside your apps.',
-      inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed',
-      rows: [[['Minimize','util'],['Move / size','util'],['Click','util'],['Drag','util'],['Right click','util']]].concat(QWERTY) },
-    { name: 'Mouse keyboard', by: 'Dave (Access+)', real: true,
-      text: 'Every mouse action as a large key: left, right and double click, click and drag, scroll, and fine movement, so the pointer can be controlled precisely without a physical mouse.',
-      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed',
-      rows: [[['Left click','util'],['Right click','util'],['Double click','util'],['Drag','util']],[['Scroll \u2191',''],['Scroll \u2193',''],['Move \u2190',''],['Move \u2192','']],[['Move \u2191',''],['Move \u2193',''],['Magnify',''],['Keyboard','util']]] },
+    { name: 'Full floating keyboard', by: 'Dave (Access+)', real: true, file: 'Dave_Keyboard2', wide: true,
+      text: 'A full Windows keyboard that floats over your apps, built for nose tracking. Typed text and word suggestions on top, then a utility row of mouse actions (left, right and double click, drag, scroll) and a menu key. Includes Home, End and page keys, copy and paste, a microphone key for Windows voice typing, edge keys that jump the keyboard to any screen corner, and one-press switches to the mouse strip or a hidden mini bar.',
+      inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed' },
+    { name: 'Mouse strip', by: 'Dave (Access+)', real: true, file: 'Dave_Mouse',
+      text: 'A thin bar of mouse keys only: left, right and double click, drag, scroll up and down. Leaves the screen clear, with one key back to the full keyboard.',
+      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed' },
+    { name: 'Mini mouse strip with corner jumps', by: 'Dave (Access+)', real: true, file: 'Dave_Mini',
+      text: 'The mouse strip with two extra keys that jump it to the top-left or top-right corner, so it can be moved out of the way.',
+      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed' },
     { name: 'Big-key bed keyboard', by: 'Sample layout', real: false,
       text: 'Fewer, larger keys for lying down, when head range is smaller and the screen is farther away. Letters in alphabetical blocks with word prediction.',
       inputs: ['Eye gaze', 'Nose tracking'], pos: 'In bed',
@@ -132,12 +140,31 @@
       inputs: ['Nose tracking', 'Mouse'], pos: 'Seated',
       rows: [[['Play','util'],['Stop','util'],['Record','util'],['Loop','util'],['Undo','util']],[['Track ↑',''],['Track ↓',''],['Zoom +',''],['Zoom −',''],['Save','util']]] }
   ];
+  var dl = null;
+  if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { dl = d; }).catch(function () {});
+  function download(name, text) {
+    if (!dl) { note('Downloading works when this page is opened in Claude. The file is also in the Access+ GitHub repository.'); return; }
+    dl.save({ filename: name, data: text }).then(function (r) { if (r && r.status === 'saved') note('Saved ' + name + '. Load it from OptiKey\u2019s Management Console.'); })
+      .catch(function (e) { if (!e || e.code !== 'cancelled') note('The download didn\u2019t finish. Please try again.'); });
+  }
   var grid = document.getElementById('kbGrid');
   if (!grid) return;
   KB.forEach(function (k) {
-    var c = document.createElement('article'); c.className = 'kb-card' + (k.real ? ' mine' : '');
+    var c = document.createElement('article'); c.className = 'kb-card' + (k.real ? ' mine' : '') + (k.wide ? ' wide' : '');
     var prev = document.createElement('div'); prev.className = 'kb-prev'; prev.setAttribute('aria-hidden', 'true');
-    k.rows.forEach(function (r) {
+    var F = k.file && typeof KB_FILES !== 'undefined' ? KB_FILES[k.file] : null;
+    if (F) {
+      var L = F.layout, g = document.createElement('div'); g.className = 'kb-real';
+      g.style.gridTemplateColumns = 'repeat(' + L.cols + ', minmax(0, 1fr))';
+      L.keys.forEach(function (key) {
+        var e = document.createElement('span'); e.className = 'kb-rk' + (key.k ? ' ' + key.k : '');
+        e.style.gridRow = (key.r + 1) + ' / span ' + key.h; e.style.gridColumn = (key.c + 1) + ' / span ' + key.w;
+        if (key.bg) e.style.background = key.bg; if (key.fg) e.style.color = key.fg; if (key.op) e.style.opacity = key.op;
+        e.textContent = key.t; g.appendChild(e);
+      });
+      prev.appendChild(g);
+    }
+    (F ? [] : k.rows).forEach(function (r) {
       var row = document.createElement('div'); row.className = 'kb-row';
       row.style.gridTemplateColumns = 'repeat(' + r.length + ', minmax(0, 1fr))';
       r.forEach(function (key) {
@@ -157,7 +184,12 @@
     var act = document.createElement('div'); act.className = 'kb-actions';
     [['Try in simulator', 'The computer simulator isn’t built yet. Soon you’ll test this layout there first.', true], ['Download', 'Downloads aren’t connected yet in this draft.', false], ['Adapt', 'Editing a copy of a layout is planned for a later version.', false]].forEach(function (a) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (a[2] ? ' primary' : ''); b.textContent = a[0];
-      b.addEventListener('click', function () { note(k.name + ': ' + a[1]); }); act.appendChild(b);
+      b.addEventListener('click', function () {
+        if (a[0] === 'Download' && F) { download(k.file + '.xml', F.xml); return; }
+        note(k.name + ': ' + a[1]);
+      });
+      if (a[0] === 'Download' && F) b.textContent = 'Download ' + k.file + '.xml';
+      act.appendChild(b);
     });
     c.append(prev, h, meta, p, ins, act); grid.appendChild(c);
   });

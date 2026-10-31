@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.
+  The blue "Full kbd" key returns to Dave_Keyboard2.xml.
+  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.
+-->
+<Keyboard>
+    <Name>Dave_Mouse</Name>
+    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>
+    <PersistNewState>True</PersistNewState>
+    <WindowState>Floating</WindowState>
+    <Position>Top</Position>
+    <Width>45%</Width>
+    <Height>5%</Height>
+    <HorizontalOffset>0</HorizontalOffset>
+    <VerticalOffset>0</VerticalOffset>
+    <BackgroundColor>Black</BackgroundColor>
+    <BorderColor>Gray</BorderColor>
+    <BorderThickness>1,1,1,1</BorderThickness>
+    <SymbolMargin>6</SymbolMargin>
+
+    <Grid>
+        <Rows>1</Rows>
+        <Cols>14</Cols>
+    </Grid>
+
+    <KeyGroup Name="Utility"  BackgroundColor="#5A65A2" ForegroundColor="White" KeyDownBackground="#7A85C2" SharedSizeGroup="Top" />
+    <KeyGroup Name="MouseKey" SharedSizeGroup="Top" />
+
+    <Content>
+        <DynamicKey Row="0" Col="12" Width="2">
+            <KeyGroup>Utility</KeyGroup>
+            <Symbol>KeyboardIcon</Symbol>
+            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="0" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Left\nclick</Label>
+            <Action>MouseMoveAndLeftClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="2" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Right\nclick</Label>
+            <Action>MouseMoveAndRightClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="4" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Double\nclick</Label>
+            <Action>MouseMoveAndLeftDoubleClick</Action>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="6" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Drag</Label>
+            <Action>MouseDrag</Action>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="8" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Scroll\nup</Label>
+            <Action>MouseMoveAndScrollToTop</Action>
+        </DynamicKey>
+        <DynamicKey Row="0" Col="10" Width="2">
+            <KeyGroup>MouseKey</KeyGroup>
+            <Label>Scroll\ndown</Label>
+            <Action>MouseMoveAndScrollToBottom</Action>
+        </DynamicKey>
+    </Content>
+</Keyboard>
