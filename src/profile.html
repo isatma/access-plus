@@ -134,6 +134,14 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 .note { margin: 0; color: var(--muted); font-size: 0.8em; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
+.steps4 { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.st4 { display: grid; gap: 6px; align-content: start; text-align: left; padding: 16px; min-height: 120px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); color: var(--ink); font: inherit; text-decoration: none; cursor: pointer; }
+.st4:hover { border-color: var(--signal); }
+.st4 .n { font: 500 0.66em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+.st4 b { font-weight: 600; }
+.st4 small { color: var(--desc); font-size: 0.86em; }
+@media (max-width: 960px) { .steps4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .steps4 { grid-template-columns: 1fr; } }
 @media (max-width: 960px) { main .wrap { grid-template-columns: 1fr; } .ace { position: static; order: -1; } }
 @media (prefers-reduced-motion: reduce) { .card.flash { animation: none; } }
 </style>
@@ -150,6 +158,12 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 
 <main>
   <div class="wrap">
+    <div class="steps4" aria-label="Build your AI custom profile">
+      <button class="st4" type="button" id="stepAsk"><span class="n">Step 1</span><b>Tell the AI agent what you want to accomplish</b><small>A few easy questions about your goals, movement, positions and the tools you use now.</small></button>
+      <a class="st4" href="#gesture"><span class="n">Step 2</span><b>Do the gesture check</b><small>Your webcam tests smile, nose, head tilt and turn to find your most reliable movements.</small></a>
+      <a class="st4" href="#simulators"><span class="n">Step 3</span><b>Practice in a simulator</b><small>Build skills with the methods that suit you.</small></a>
+      <a class="st4" href="#borrow"><span class="n">Step 4</span><b>Borrow a kit</b><small>Try real sensors at home, alone or with your therapist.</small></a>
+    </div>
     <div class="col" id="profileCol">
       <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and the AI agent will help you build your own.</div>
 
@@ -214,6 +228,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
       <div class="quick" id="quick">
         <button class="btn primary" id="startBtn" type="button">Start my profile</button>
         <button class="btn" id="assessBtn" type="button">Assess my current tools</button>
+        <a class="btn" href="#gesture">Do the gesture check</a>
       </div>
       <form class="ask" id="askForm" autocomplete="off">
         <label class="sr" for="askIn">Talk to the AI agent</label>
@@ -229,7 +244,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.7765 · Pilot draft · Updated 2026-10-31 23:31 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.7765 · Pilot draft · Updated 2026-10-31 23:38 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
@@ -489,7 +504,11 @@ function AgentCloud(canvas, opts) {
   document.getElementById('startBtn').addEventListener('click', function () {
     isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = [];
     log.innerHTML = '';
-    talk('Please start my profile interview. Greet me briefly and ask your first question.', false);
+    talk('Please start my profile interview. Greet me briefly, then ask first what I want to accomplish, then continue with your questions.', false);
+  });
+  document.getElementById('stepAsk').addEventListener('click', function () {
+    document.getElementById('startBtn').click();
+    var a = document.querySelector('.ace'); if (a) a.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   document.getElementById('assessBtn').addEventListener('click', function () {
     if (isExample) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = []; log.innerHTML = ''; }

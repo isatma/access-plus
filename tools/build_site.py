@@ -148,7 +148,7 @@ def build():
     <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
     <section class="gx" aria-labelledby="gxT">
       <div class="gx-text">
-        <div class="eyebrow">Head, nose and face tracking</div>
+        <div class="eyebrow">AI custom profile · Step 2</div>
         <h1 id="gxT">Gesture check</h1>
         <p>Your webcam can turn small movements into switches. The camera page mirrors your expressions on a face model and tests which gestures work best for you.</p>
         <ul class="gx-list">
@@ -157,6 +157,7 @@ def build():
           <li><b>Nose pointer</b><span>Steer a pointer with your nose and hold on targets that get smaller</span></li>
           <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with the AI agent's top picks</span></li>
         </ul>
+        <p><a class="btn primary" href="#profile">Back to my AI custom profile</a></p>
         <p class="gx-note">The camera is turned off inside this preview. Gesture Check runs on its own page, where your browser can use the camera. Your video stays on your device.</p>
         <a class="btn primary" href="%s" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
       </div>
@@ -312,13 +313,13 @@ def build():
            '<a href="#home" data-route="home">Home</a>'
            '<a href="#goals" data-route="goals">Goals</a>'
            '<a href="#simulators" data-route="simulators">Simulators</a>'
-           '<a href="#guide-ai" data-route="guide-ai">AI custom profile</a>'
+           '<a href="#profile" data-route="profile">AI custom profile</a>'
            '<a href="#software" data-route="software">Software solutions</a>'
            '<a href="#hardware" data-route="hardware">Hardware solutions</a>'
            '<a href="#advanced" data-route="advanced">Advanced tech reviews</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
            '<a href="#about" data-route="about">About</a>'
-           '<a class="navsign" href="#profile" data-route="profile">Sign in · My profile<span class="navdemo">Demo</span></a></nav>')
+           '<a class="navsign" href="#profile" data-route="signin">Sign in · My profile<span class="navdemo">Demo</span></a></nav>')
     nav += ('</div>\n  <div class="wrap navrow aud"><nav class="nav2" aria-label="Who it is for"><span class="nav2-k">Get involved:</span>'
             '<a href="#join-everyone" data-route="join-everyone">Open to everyone</a>'
             '<a href="#join-participants" data-route="join-participants">Become a participant</a>'
@@ -355,7 +356,8 @@ def build():
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
     var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' || h === 'goals' ? h : 'home');
     if (v === 'tech') navKey = h === 'tech' ? 'hardware' : h;
-    if (v === 'gesture' || v === 'keyboards') navKey = 'software';
+    if (v === 'keyboards') navKey = 'software';
+    if (v === 'gesture') navKey = 'profile';
     document.querySelectorAll('.nav2 a').forEach(function (a) { if (a.dataset.route === h) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'join') {
       document.querySelectorAll('#view-join .jn-sec').forEach(function (x) { x.classList.toggle('hl', x.id === h); });
