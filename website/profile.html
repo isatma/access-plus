@@ -64,6 +64,8 @@ main .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: min
 @keyframes flash { 0% { background: var(--signal-soft); } 100% { background: color-mix(in srgb, var(--panel) 94%, transparent); } }
 .eyebrow { font: 500 0.7em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
 .empty { color: var(--muted); font-size: 0.92em; margin: 0; }
+.sample { border: 1px dashed var(--warn); color: var(--ink); background: rgba(255,198,112,0.08); padding: 12px 16px; font-size: 0.95em; }
+.sample b { color: var(--warn); }
 .example { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--warn); border: 1px solid var(--warn); padding: 3px 8px; }
 
 .who { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: center; }
@@ -142,10 +144,11 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 <main>
   <div class="wrap">
     <div class="col" id="profileCol">
+      <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and Ace will help you build your own.</div>
 
       <section class="card hl" id="c-who" aria-labelledby="whoName">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-          <span class="eyebrow">My profile</span><span class="example" id="exTag">Example profile</span>
+          <span class="eyebrow">My profile</span><span class="example" id="exTag">Sample profile</span>
         </div>
         <div class="who">
           <div class="avatar" id="initials" aria-hidden="true">JR</div>
@@ -199,7 +202,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
         <div><h2 id="aceT">Build it with Ace</h2><p>Just talk. Ace asks questions and fills in your profile as you go.</p></div>
       </div>
       <div class="log" id="log" aria-live="polite">
-        <div class="msg ai">Hi, I'm Ace. This is an example profile so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
+        <div class="msg ai">Hi, I'm Ace. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
       </div>
       <div class="quick" id="quick">
         <button class="btn primary" id="startBtn" type="button">Start my profile</button>
@@ -272,6 +275,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   function emptyLine(parent, text) { parent.appendChild(el('p', 'empty', text)); }
   function render() {
     document.getElementById('exTag').hidden = !isExample;
+    document.getElementById('sampleBanner').hidden = !isExample;
     var name = P.name || 'Your name';
     document.getElementById('whoName').textContent = name;
     document.getElementById('whoLine').textContent = P.headline || 'Talk to Ace to fill in your profile';
