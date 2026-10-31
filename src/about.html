@@ -23,7 +23,9 @@
 .ab-prin li { background: var(--panel); padding: 16px 18px; display: grid; gap: 4px; }
 .ab-prin b { font-weight: 600; }
 .ab-prin span { color: var(--desc); font-size: 0.9em; }
-.ab-partners { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.ab-partners { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ab-uc { display: inline-block; vertical-align: middle; margin-left: 10px; font: 500 0.55em var(--mono); letter-spacing: 0.12em; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 8px; }
+.ab-more { margin: 0; color: var(--muted); font-size: 0.92em; }
 .ab-p { position: relative; display: grid; gap: 10px; align-content: start; padding: 20px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--signal); }
 .ab-p .role { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
 .ab-p h3 { font: 600 1.1em var(--body); letter-spacing: 0; }
@@ -56,6 +58,33 @@
 <body>
 <main>
   <div class="wrap ab-wrap">
+    <section aria-labelledby="abPartT" style="display:grid;gap:20px">
+      <div class="ab-head"><h2 id="abPartT">Partners <span class="ab-uc">Under construction</span></h2><p>A growing list, and not an exclusive one. Several invitations are out.</p></div>
+      <div class="ab-partners">
+        <article class="ab-p">
+          <span class="role">Community partner</span>
+          <h3>Center for Disability Services</h3>
+          <span class="where">Albany, New York · formerly the Center for the Disabled</span>
+          <p>A Capital Region nonprofit that has served children and adults with disabilities and their families for decades. The Center is a home base for Access+ in the community, linking the project to the people and therapists it is meant to serve.</p>
+          <ul><li>Grant writing and software volunteering</li><li>A route for placing prototypes with people who can use them</li><li>Jamboxx breath-played instruments assembled and placed through the Center</li></ul>
+        </article>
+        <article class="ab-p">
+          <span class="role">University partner</span>
+          <h3>Rensselaer Polytechnic Institute</h3>
+          <span class="where">Troy, New York</span>
+          <p>Research staff and student design teams at RPI are building and testing new wheelchair inputs, using a donated Permobil power wheelchair with R-Net electronics.</p>
+          <ul><li>An arm-crank exercise drive</li><li>A rowing pull trainer for people with biceps but no triceps or grip</li><li>An upper-arm movement controller for people who can't feel a joystick</li></ul>
+        </article>
+        <article class="ab-p">
+          <span class="role">Rehabilitation partner</span>
+          <h3>Sunnyview Rehabilitation Hospital</h3>
+          <span class="where">Schenectady, New York</span>
+          <p>A Capital Region rehabilitation hospital serving people with spinal cord injury, brain injury, stroke and other conditions.</p>
+        </article>
+      </div>
+      <p class="ab-more">This section is under construction. Several other groups have been invited, and the list will grow as partnerships are confirmed.</p>
+    </section>
+
     <section class="ab-intro" aria-labelledby="abT">
       <div class="txt">
         <div class="eyebrow">About Access+</div>
@@ -79,7 +108,7 @@
         </div>
         <div>
           <h3>Built together</h3>
-          <p>Access+ is a collaborative effort with the Center for Disability Services and partners in research and education. It is shaped by people who use hands-free technology every day, including nose tracking, on-screen keyboards, breath control, head sensors and adapted switches, working alongside students, researchers and developers.</p>
+          <p>Access+ is a collaborative effort with the Center for Disability Services, Sunnyview Rehabilitation Hospital, Rensselaer Polytechnic Institute and a growing group of partners in research and education. It is shaped by people who use hands-free technology every day, including nose tracking, on-screen keyboards, breath control, head sensors and adapted switches, working alongside students, researchers and developers.</p>
         </div>
       </div>
     </section>
@@ -96,25 +125,6 @@
       </ul>
     </section>
 
-    <section aria-labelledby="abPartT" style="display:grid;gap:20px">
-      <div class="ab-head"><h2 id="abPartT">Partners</h2><p>The organizations helping build Access+.</p></div>
-      <div class="ab-partners">
-        <article class="ab-p">
-          <span class="role">Community partner</span>
-          <h3>Center for Disability Services</h3>
-          <span class="where">Albany, New York · formerly the Center for the Disabled</span>
-          <p>A Capital Region nonprofit that has served children and adults with disabilities and their families for decades. The Center is a home base for Access+ in the community, linking the project to the people and therapists it is meant to serve.</p>
-          <ul><li>Grant writing and software volunteering</li><li>A route for placing prototypes with people who can use them</li><li>Jamboxx breath-played instruments assembled and placed through the Center</li></ul>
-        </article>
-        <article class="ab-p">
-          <span class="role">University partner</span>
-          <h3>Rensselaer Polytechnic Institute</h3>
-          <span class="where">Troy, New York</span>
-          <p>Student teams in biomedical engineering and engineering at RPI are building new wheelchair inputs as their design projects, using a donated Permobil power wheelchair with R-Net electronics.</p>
-          <ul><li>An arm-crank exercise drive</li><li>A rowing pull trainer for people with biceps but no triceps or grip</li><li>An upper-arm movement controller for people who can't feel a joystick</li></ul>
-        </article>
-      </div>
-    </section>
 
     <section aria-labelledby="abCollabT" style="display:grid;gap:20px">
       <div class="ab-head"><h2 id="abCollabT">Collaborators and a growing network</h2><p>More partners are being added. Dashed cards are open invitations.</p></div>
