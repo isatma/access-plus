@@ -559,6 +559,7 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 560px) {
 #view-about .ab-story, #view-about .ab-prin, #view-about .ab-list, #view-about .ab-comm { grid-template-columns: 1fr; }
 }
+#view-gesture .wrap { gap: 48px !important; }
 #view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 #view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
 #view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
@@ -569,6 +570,30 @@ footer .wrap { padding-block: 22px; }
 #view-gesture .gx-list span { color: var(--desc); font-size: 0.93em; }
 #view-gesture .gx-note { color: var(--desc); font-size: 0.9em; }
 #view-gesture .gx-face { width: 100%; height: 380px; display: block; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
+#view-gesture .hx { display: grid; gap: 18px; }
+#view-gesture .hx-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+#view-gesture .hx-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+#view-gesture .hx-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+#view-gesture .hx-head p { margin: 0; color: var(--muted); }
+#view-gesture .hx-legend, #view-gesture .hx-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+#view-gesture .hx-tag { font: 500 0.64em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--line-hi); color: var(--muted); }
+#view-gesture .hx-tag.free { color: var(--signal); border-color: var(--signal); }
+#view-gesture .hx-tag.paid { color: #ffc670; border-color: #ffc670; }
+#view-gesture .hx-tag.built { color: #7cc4ff; border-color: #7cc4ff; }
+#view-gesture .hx-group { font: 500 0.78em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); margin: 10px 0 -4px; }
+#view-gesture .hx-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#view-gesture .hx-card { display: grid; gap: 8px; align-content: start; padding: 16px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); }
+#view-gesture .hx-card h4 { margin: 0; font: 600 1em var(--body); }
+#view-gesture .hx-card p { margin: 0; color: var(--desc); font-size: 0.9em; }
+#view-gesture .hx-card dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; font-size: 0.85em; }
+#view-gesture .hx-card dt { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+#view-gesture .hx-card dd { margin: 0; color: var(--ink); }
+#view-gesture .hx-link { justify-self: start; font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal); text-decoration: none; border: 1px solid var(--line-hi); padding: 8px 10px; min-height: 40px; display: inline-flex; align-items: center; }
+#view-gesture .hx-link:hover { border-color: var(--signal); }
+#view-gesture .hx-pending { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+#view-gesture .hx-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+@media (max-width: 1000px) { #view-gesture .hx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { #view-gesture .hx-grid { grid-template-columns: 1fr; } }
 @media (max-width: 900px) { #view-gesture .gx { grid-template-columns: 1fr; } #view-gesture .gx-face { height: 280px; } }
 /* views-css:end */
 </style>
@@ -579,7 +604,7 @@ footer .wrap { padding-block: 22px; }
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
     <a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#gesture" data-route="gesture">Gesture check</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#tech" data-route="tech">Tech guide</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a><a href="#about" data-route="about">About</a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#gesture" data-route="gesture">Head &amp; face tracking</a><a href="#keyboards" data-route="keyboards">Keyboards</a><a href="#tech" data-route="tech">Tech guide</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a><a href="#about" data-route="about">About</a></nav></div>
 </header>
 <div class="band band-top" aria-hidden="true"><span class="bd orb g" style="left:2.0%;--d:6s"></span><span class="bd ring" style="left:9.4%;--d:13s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5fe0a8" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="4" stroke="#7cc4ff" stroke-width="1.2"/></svg></span><span class="bd wave" style="left:16.8%;--d:11s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#7cc4ff" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd tri" style="left:24.2%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#ffc670" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:31.5%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#ffc670"/><circle cx="12" cy="5" r="2" fill="#5fe0a8"/><circle cx="20" cy="5" r="2" fill="#7cc4ff"/><circle cx="28" cy="5" r="2" fill="#f7b2c4"/></svg></span><span class="bd orb p" style="left:38.9%;--d:14s"></span><span class="bd hex" style="left:46.3%;--d:12s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#f7b2c4" stroke-width="1.6"/></svg></span><span class="bd plus" style="left:53.7%;--d:10s"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2 V14 M2 8 H14" stroke="#5fe0a8" stroke-width="2" stroke-linecap="round"/></svg></span><span class="bd cube" style="left:61.1%;--d:8s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z M3 7 L12 12 L21 7 M12 12 V22" stroke="#5fe0a8" stroke-width="1.3"/></svg></span><span class="bd orb b" style="left:68.5%;--d:6s"></span><span class="bd wave" style="left:75.8%;--d:13s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#f7b2c4" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd ring" style="left:83.2%;--d:11s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ffc670" stroke-width="1.5" stroke-dasharray="3 3"/></svg></span><span class="bd tri" style="left:90.6%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#7cc4ff" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:98.0%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#5fe0a8"/><circle cx="12" cy="5" r="2" fill="#f7b2c4"/><circle cx="20" cy="5" r="2" fill="#ffc670"/><circle cx="28" cy="5" r="2" fill="#7cc4ff"/></svg></span></div>
 
@@ -1194,7 +1219,7 @@ footer .wrap { padding-block: 22px; }
     <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
     <section class="gx" aria-labelledby="gxT">
       <div class="gx-text">
-        <div class="eyebrow">Camera gesture self-assessment</div>
+        <div class="eyebrow">Head, nose and face tracking</div>
         <h1 id="gxT">Gesture check</h1>
         <p>Your webcam can turn small movements into switches. The camera page mirrors your expressions on a face model and tests which gestures work best for you.</p>
         <ul class="gx-list">
@@ -1207,6 +1232,37 @@ footer .wrap { padding-block: 22px; }
         <a class="btn primary" href="https://claude.ai/artifact/7oGn9ccZY4vL6n8731dXro" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
       </div>
       <canvas id="gxFace" class="gx-face" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+    </section>
+
+    <section class="hx" aria-labelledby="hxT">
+      <div class="hx-head"><h2 id="hxT">Head, nose and face tracking: what's available</h2><p>Independent summaries, not endorsements. Hands-on reviews and simulator scores are coming.</p></div>
+      <div class="hx-legend"><span class="hx-tag free">Free</span><span class="hx-tag paid">Commercial</span><span class="hx-tag built">Built in</span><span class="hx-tag">Webcam</span><span class="hx-tag">Worn sensor</span></div>
+      <h3 class="hx-group">Free webcam software</h3>
+      <div class="hx-grid">
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>FaceNav</h4><p>Facial and nose navigation software for hands-free mouse control, developed alongside the Access+ work with MotionInput.</p><dl><dt>Clicking</dt><dd>Nose and head movement for the pointer; facial gestures for clicks</dd><dt>Works on</dt><dd>Details and download link to be added</dd></dl><span class="hx-pending">Link coming soon</span></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>UCL MotionInput / MotionInput Games</h4><p>Touchless computing from University College London: nose navigation, facial gestures, eye gaze, hand gestures and speech commands. Development continues at the MotionInput Games spin-off.</p><dl><dt>Clicking</dt><dd>Nose navigation moves the pointer; smiles, raised eyebrows, open mouth or speech click</dd><dt>Works on</dt><dd>Windows 10 and 11; free for non-commercial personal use</dd></dl><a class="hx-link" href="https://students.cs.ucl.ac.uk/software/MotionInput/v2/MotionInput.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Project Gameface (Google)</h4><p>Open-source hands-free mouse built for gaming. Head movement moves the cursor, with speed set separately for each direction and smoothing to cut jitter.</p><dl><dt>Clicking</dt><dd>Facial expressions such as raised eyebrows or an open mouth mapped to clicks, scrolling or keys, each with its own threshold</dd><dt>Works on</dt><dd>Open source on GitHub</dd></dl><a class="hx-link" href="https://developers.googleblog.com/2023/06/project-gameface.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Enable Viacam (eViacam)</h4><p>Long-standing free, open-source head mouse that follows head movement through a standard webcam.</p><dl><dt>Clicking</dt><dd>Dwell clicking: rest the pointer to click</dd><dt>Works on</dt><dd>Windows and Linux</dd></dl><a class="hx-link" href="https://fosshub.com/Enable-Viacam.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Camera Mouse</h4><p>Free program that tracks a chosen point on the face, such as the nose, through a webcam. Developed at Boston College and widely used in schools.</p><dl><dt>Clicking</dt><dd>Dwell clicking</dd><dt>Works on</dt><dd>Windows</dd></dl><a class="hx-link" href="https://www.senteacher.org/app/popular/11/Free-Camera-Mouse-Disabilities.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+      </div>
+<h3 class="hx-group">Built into your device</h3>
+      <div class="hx-grid">
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag built">Built in</span><span class="hx-tag">Webcam</span></div><h4>Apple Head Pointer (Mac)</h4><p>Turn on Head Pointer in Accessibility settings and the Mac camera moves the pointer with your head. Facial expressions can be set to click and drag.</p><dl><dt>Clicking</dt><dd>Facial expressions, dwell, or a switch</dd><dt>Works on</dt><dd>macOS; iPhone and iPad offer head movements in Switch Control</dd></dl><a class="hx-link" href="https://support.apple.com/en-il/guide/mac-help/mchl654a7cc7" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag built">Built in</span><span class="hx-tag">Webcam</span></div><h4>Android Camera Switches and Project Activate</h4><p>Camera Switches turns the front camera into switches using six facial gestures: look left, right or up, smile, raise eyebrows, open mouth. Project Activate uses the same gestures to speak a phrase, send a text, call or play audio.</p><dl><dt>Clicking</dt><dd>Facial gestures as switches, with adjustable size and hold time</dd><dt>Works on</dt><dd>Android; Project Activate in English in the U.S., U.K., Canada and Australia</dd></dl><a class="hx-link" href="https://blog.google/outreach-initiatives/accessibility/making-android-more-accessible/" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+      </div>
+<h3 class="hx-group">Commercial software</h3>
+      <div class="hx-grid">
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Webcam</span></div><h4>Smyle Mouse (Perceptive Devices)</h4><p>Webcam software that moves the pointer with head movement and uses facial gestures, including smiling, to click.</p><dl><dt>Clicking</dt><dd>Smile and other facial gestures</dd><dt>Works on</dt><dd>Check the maker for current platforms</dd></dl><a class="hx-link" href="https://askjan.org/products/Smyle-Mouse.cfm" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+      </div>
+<h3 class="hx-group">Hardware head mice</h3>
+      <div class="hx-grid">
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>HeadMouse Nano (Origin Instruments)</h4><p>An optical sensor tracks a small disposable target dot worn on the forehead, glasses or a hat, and moves the pointer as your head moves. Plugs in as a standard USB mouse with no special software.</p><dl><dt>Clicking</dt><dd>Dwell software, or wireless switches through its built-in receiver</dd><dt>Works on</dt><dd>Computers, tablets, phones and speech devices that accept a USB mouse</dd></dl><a class="hx-link" href="https://orin.com/access/headmouse/" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>Quha Zono</h4><p>A small wireless gyroscopic mouse worn on the head, or on another part of the body that moves, that turns movement into pointer movement.</p><dl><dt>Clicking</dt><dd>Built-in options or an external switch; check current models</dd><dt>Works on</dt><dd>Wireless; works as a standard mouse</dd></dl><a class="hx-link" href="https://support.inclusive.com/article/quha-zono-mouse-range" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>Glassouse</h4><p>Glasses with motion sensors that turn head movement into mouse or trackpad input over Bluetooth, with a battery that lasts up to about 10 days.</p><dl><dt>Clicking</dt><dd>See the maker for clicking options</dd><dt>Works on</dt><dd>Windows, macOS, Linux, Android and Apple mobile devices</dd></dl><a class="hx-link" href="https://newmobility.com/glassouse/" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>SmartNav (NaturalPoint)</h4><p>An infrared camera that follows a small reflective dot worn on the head. A long-established option; check current availability.</p><dl><dt>Clicking</dt><dd>Dwell software or switches</dd><dt>Works on</dt><dd>Windows</dd></dl><a class="hx-link" href="https://askjan.org/products/smartNAV.cfm" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+      </div>
+
+      <p class="hx-note">Details change often. Check the maker's site for current versions, prices and platforms. Have a product we've missed, or a review to share? Tell us on the About page.</p>
     </section>
   </div>
 </main>
