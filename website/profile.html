@@ -41,8 +41,10 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; letter-sp
 
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
 .bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
-.brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; text-decoration: none; }
+.brand { font: 400 1.3em var(--display); letter-spacing: 0.08em; text-decoration: none; }
 .brand span { color: var(--signal); }
+.tagline { font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: auto; }
+@media (max-width: 640px) { .tagline { display: none; } }
 .btn { min-height: 56px; padding: 0 18px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.76em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
@@ -131,7 +133,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 
 <header class="bar">
   <div class="wrap">
-    <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a>
+    <a class="brand" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">ACCESS<span>+</span></a><span class="tagline">Skill building for assistive technology</span>
     <a class="btn" href="https://claude.ai/artifact/UGNdX4R34iJPWaK2rNEhWd">Home</a>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
   </div>

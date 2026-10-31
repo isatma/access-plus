@@ -43,8 +43,10 @@ a { color: inherit; }
 /* top bar */
 .bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--panel) 94%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--line-hi); }
 .bar .wrap { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding-block: 10px; }
-.brand { margin-right: auto; font: 400 1.3em var(--display); letter-spacing: 0.08em; }
+.brand { font: 400 1.3em var(--display); letter-spacing: 0.08em; }
 .brand span { color: var(--signal); }
+.tagline { font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-right: auto; }
+@media (max-width: 640px) { .tagline { display: none; } }
 .btn { min-height: 56px; padding: 0 20px; border-radius: 2px; cursor: pointer; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; text-decoration: none; }
 .btn[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
 .btn.primary { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
@@ -201,7 +203,7 @@ footer .wrap { padding-block: 22px; }
 
 <header class="bar">
   <div class="wrap">
-    <div class="brand">ACCESS<span>+</span></div>
+    <div class="brand">ACCESS<span>+</span></div><span class="tagline">Skill building for assistive technology</span>
     <button class="btn" id="bigToggle" type="button" aria-pressed="false">Larger targets</button>
     <a class="btn primary" href="https://claude.ai/artifact/W2wmMHp9CfJrPfaQULxeqi">My profile</a>
   </div>
