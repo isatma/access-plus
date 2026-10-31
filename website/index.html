@@ -54,6 +54,8 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
 
 /* hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: center; }
+.hero .intro { align-content: center; }
 .intro { display: grid; gap: 14px; max-width: 48em; }
 .intro h1 { font-size: 2.2em; line-height: 1.25; }
 .intro h1 span { color: var(--signal); }
@@ -67,7 +69,7 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .head p { margin: 0; color: var(--muted); }
 
 /* simulators */
-.sims { display: grid; grid-template-columns: 1.3fr 1fr; gap: 14px; }
+.sims { display: block; }
 .feature, .sim {
   position: relative; display: grid; text-decoration: none; color: var(--ink);
   background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--line-hi);
@@ -77,7 +79,7 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .feature::after, .sim::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 .sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
 .sim::after { border-width: 0 1px 1px 0; }
-.feature { grid-row: span 2; grid-template-rows: auto 1fr; }
+.feature { grid-template-rows: auto 1fr; }
 .feature .viz { border-bottom: 1px solid var(--line-hi); background: linear-gradient(180deg, var(--signal-soft), transparent); }
 .feature svg { display: block; width: 100%; height: auto; max-width: 100%; }
 .feature .body { display: grid; gap: 10px; padding: 22px; align-content: start; }
@@ -86,7 +88,7 @@ main .wrap { padding-block: 44px 80px; display: grid; gap: 72px; }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; }
 .badge { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal); border: 1px solid var(--signal); padding: 4px 8px; }
 .launch { justify-self: start; margin-top: 6px; }
-.side { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.side { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; }
 .sim { min-height: calc(var(--target) + 80px); gap: 8px; padding: 18px; align-content: start; }
 .sim svg { width: 40px; height: 40px; }
 .sim h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
@@ -141,7 +143,7 @@ footer .wrap { padding-block: 22px; }
 
 .toast { position: fixed; left: 50%; transform: translateX(-50%); z-index: 20; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); max-width: min(560px, calc(100% - 32px)); background: var(--panel-hi); color: var(--ink); border: 1px solid var(--signal); padding: 14px 18px; font-size: 0.9em; }
 
-@media (max-width: 900px) { .sims { grid-template-columns: 1fr; } .feature { grid-row: auto; } .two { grid-template-columns: 1fr; } }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .two { grid-template-columns: 1fr; } }
 @media (max-width: 520px) { .intro h1 { font-size: 1.5em; } .side { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: no-preference) {
   .step, .sim, .feature, .chip { transition: background .18s, border-color .18s, color .18s; }
@@ -165,18 +167,14 @@ footer .wrap { padding-block: 22px; }
 <main>
   <div class="wrap">
 
-    <section class="intro" aria-labelledby="introTitle">
+    <div class="hero">
+      <section class="intro" aria-labelledby="introTitle">
       <div class="eyebrow">Independent skill builder</div>
       <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Practice new ways to control the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
-
-    <section id="simulators" aria-labelledby="simTitle">
-      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
-      <div class="sims">
-
-        <div class="feature" id="guide">
+      <div class="feature" id="guide">
           <div class="viz">
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
               <g stroke="#3b5476" stroke-width="1">
@@ -205,7 +203,7 @@ footer .wrap { padding-block: 22px; }
             </svg>
           </div>
           <div class="body">
-            <span class="eyebrow">Featured · Robotic arm</span>
+            <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the guide arm</h3>
             <p>Turn the arm to point at part of the site, then press Go. It works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
@@ -216,8 +214,17 @@ footer .wrap { padding-block: 22px; }
             <p class="armsel" id="armSel" aria-live="polite">Pointing at: Simulators</p>
           </div>
         </div>
+    </div>
 
+    <section id="simulators" aria-labelledby="simTitle">
+      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
+      <div class="sims">
         <div class="side">
+          <a class="sim" href="#" data-msg="Robotic arm simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M8 34h14M15 34V22l9-9 6 3"/><circle cx="15" cy="22" r="2"/><circle cx="24" cy="13" r="2"/><path d="M30 16l3-4M30 16l4 1"/></svg>
+            <h3>Robotic arm</h3>
+            <p>Reach, grasp and drink, switching arm and gripper modes.</p>
+          </a>
           <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
             <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
             <h3>Wheelchair driving</h3>
