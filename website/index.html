@@ -233,6 +233,23 @@ footer { padding-bottom: 90px; }
 
 @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
 
+.cases { display: grid; gap: 16px; margin-top: 28px; }
+.cases-head { display: grid; gap: 4px; }
+.cases-head h3 { font-size: 1em; text-transform: uppercase; letter-spacing: 0.08em; }
+.cases-head p { margin: 0; color: var(--muted); }
+.case-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.case { display: grid; gap: 6px; align-content: start; text-align: left; padding: 16px; min-height: 150px; cursor: pointer; color: var(--ink); font: inherit; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); position: relative; }
+.case:hover, .case[aria-pressed="true"] { border-color: var(--signal); background: var(--panel-hi); }
+.case .who { display: flex; align-items: center; gap: 10px; }
+.case .av { width: 36px; height: 36px; flex: none; border-radius: 50%; display: grid; place-items: center; font: 600 0.95em var(--body); color: var(--signal-ink); }
+.case b { font-weight: 600; font-size: 1.02em; }
+.case small { color: var(--muted); font-size: 0.82em; }
+.case .hl { color: var(--desc); font-size: 0.92em; }
+.case .ins { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+.case .ins span { font: 500 0.62em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--line-hi); padding: 2px 6px; }
+.case .ex { position: absolute; top: 10px; right: 10px; font: 500 0.58em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 2px 6px; }
+@media (max-width: 900px) { .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .case-grid { grid-template-columns: 1fr; } }
 /* steps */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
 .step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
@@ -752,11 +769,11 @@ footer .wrap { padding-block: 22px; }
       <div class="head"><h2 id="aiTitle">Your AI agent</h2><p>An AI agent that helps you build skills at every step: finding a starting point, coaching practice, tuning your setup and tracking progress.</p></div>
       <div class="ai">
         <ul class="ai-list">
-          <li><b>Finds a starting point</b><span>Asks about your goals, movement and positions, then suggests inputs and simulators to try.</span></li>
-          <li><b>Coaches while you practice</b><span>Gives tips during simulator sessions and adjusts the difficulty as you improve.</span></li>
-          <li><b>Tunes your setup</b><span>Recommends calibration changes such as dead zone, dwell time and sensitivity, based on how you did.</span></li>
-          <li><b>Helps you test and connect</b><span>Walks you through connecting a sensor from your kit and checking it works.</span></li>
-          <li><b>Tracks your progress</b><span>Summarizes results for you, your family or your therapist. You control what it saves.</span></li>
+          <li><b>Finds your best way in</b><span>Compares inputs like head tracking, breath, switches, gaze and EMG during short tasks, and suggests the strongest combination for you.</span></li>
+          <li><b>Learns how you express intent</b><span>Builds one profile of how you control technology, not how one device works, so it can follow you from computer to phone, chair and home.</span></li>
+          <li><b>Notices change early</b><span>Tracks precision, speed and fatigue over time, and helps you start learning a new input before the old one becomes unreliable.</span></li>
+          <li><b>Explains every suggestion</b><span>Says what it noticed, what it proposes and why, and what will feel different. You decide, and you can always undo.</span></li>
+          <li><b>Builds your evidence</b><span>Turns practice results into clear reports for you, your therapist, and funding reviews.</span></li>
         </ul>
         <div class="chat" id="chat" aria-label="Chat with the AI guide">
           <div class="chat-head"><span>ACCESS+ AI AGENT</span><span class="tag-ex" id="chatTag">Example</span></div>
@@ -778,6 +795,10 @@ footer .wrap { padding-block: 22px; }
           </form>
           <p class="chat-note" id="chatNote">The guide uses Claude on your own Claude account. It's for learning and practice, not medical advice.</p>
         </div>
+      </div>
+      <div class="cases">
+        <div class="cases-head"><h3>Meet example users</h3><p>Six fictional stories from the Access+ research proposal, based on real clinical patterns. Pick one and the AI agent walks you through it.</p></div>
+        <div class="case-grid" id="caseGrid"></div>
       </div>
     </section>
 
@@ -1754,6 +1775,8 @@ function AgentCloud(canvas, opts) {
     'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',
     'Simulators: robotic arm, wheelchair driving, cell phone, computer exercises (point, click, drag, type, draw); more planned for communication boards, exercise, voice, smart home and music. Profiles store goals, movement, posture and positions (bed, chair, tilt, outdoors) and calibration such as rest position, range, dead zone, smoothing, dwell time and thresholds.',
     'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
+    'Your purpose, from the Access+ research proposal: you are the personalization part of Access+. You learn how a person expresses intent (head movement, gaze, breath, switches, EMG, voice) rather than how one device works, and help one personal access profile follow them across computer, phone, wheelchair, communication device, home controls and, in demonstrations, a robotic arm. During short practice tasks you compare inputs and find the most reliable combination; over time you watch precision, speed and fatigue, so a new input can be introduced before an old one becomes unreliable. You adjust guidance to need: shorter for familiar methods, more practice for new ones. Whenever you suggest a change, say what you noticed, what you propose and why, what evidence supports it, and what will feel different, and remind them they decide and can undo. You never diagnose, and you defer to their therapist or clinician.',
+    'Example users (fictional, from the proposal; say so if asked): Marcus, 32, veteran with a high cervical spinal cord injury, uses voice and facial EMG to prove he can safely run a robotic arm, and the report supports funding. Maria uses a head-controlled wheelchair, eye-gaze communication and apartment switches; one profile ties all three together. Elena has ALS and uses a light-touch joystick and voice; brief sessions track strength, precision and fatigue so eye gaze is introduced early and her layouts carry over. Jamal, 19, has cerebral palsy; head movement plus two switches carry from games to schoolwork to coding, and he shares his own mappings. Ruth has a high spinal cord injury in rural upstate New York; a mailed sensor kit and a video session with an OT replace a clinic visit, then a preconfigured setup arrives. D. has a C5 spinal cord injury and works in scheduling and intake; eye gaze moves the cursor, EMG clicks, nose tracking takes over while reading, a facial gesture mutes calls, rehearsed in a workplace simulator, because his voice is busy on the phone.',
     'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
     'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
   ].join('\n\n');
@@ -1762,7 +1785,57 @@ function AgentCloud(canvas, opts) {
   var tag = document.getElementById('chatTag'), starters = document.getElementById('starters');
   var turns = [], ctl = null, started = false, sampleFn = null;
   var aceFace = AgentCloud(document.getElementById('aceFace'));
-  function bubble(cls, text) { var d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
+  var CASES = [
+    { name: 'Marcus', color: '#5fe0a8', about: '32 · veteran · high cervical spinal cord injury', hl: 'Turning “too complex” into proven capability', ins: ['Voice', 'Facial EMG', 'Robotic arm'],
+      story: 'Marcus’s rehabilitation team thinks a robotic arm would make him more independent, but funders want evidence he can use one safely. In Access+ he practices structured tasks in the robotic arm simulator using voice and facial EMG. I measure his accuracy and timing, find his most reliable control strategy, and produce a clear report the funding review can act on. When the arm arrives, the same profile sets it up, and later his computer, phone and home controls too.',
+      ask: ['What would Marcus practice first in the simulator?', 'What goes into the report for funders?'] },
+    { name: 'Maria', color: '#7cc4ff', about: 'Uses a head-controlled wheelchair, eye-gaze communication and switches', hl: 'From three systems to one seamless day', ins: ['Head control', 'Eye gaze', 'Switches'],
+      story: 'Maria already uses three good systems: a head-controlled wheelchair, an eye-tracking communication device, and switches for her apartment. Each works, but none work together, so every change of task means changing posture, device and method. Access+ leaves her equipment in place and learns how she naturally combines head movement, gaze and switches into one profile that follows her across all three.',
+      ask: ['How would one profile work across her three systems?', 'Where would Maria start on this site?'] },
+    { name: 'Elena', color: '#f7b2c4', about: 'Lives with ALS · uses a light-touch joystick and voice', hl: 'Never losing access as ALS progresses', ins: ['Mini joystick', 'Voice', 'Eye gaze'],
+      story: 'Elena controls her computer and communication device with a light-touch joystick and voice, and she knows that will change, just not when. Usually, losing hand function means new evaluations, funding requests and months of retraining at the worst time. With Access+, brief practice sessions track her strength, precision and fatigue, and I suggest adding eye gaze alongside the joystick well before it becomes unreliable. Her layouts and shortcuts carry over; only the input changes. Access+ can’t slow ALS, but it keeps her technology from moving backward with it.',
+      ask: ['How would Elena practice eye gaze early?', 'What signs would suggest it’s time to add gaze?'] },
+    { name: 'Jamal', color: '#ffc670', about: '19 · cerebral palsy · loves gaming', hl: 'From user to developer on the same platform', ins: ['Head movement', 'Two switches'],
+      story: 'Standard game controllers need hand movements Jamal can’t make consistently. Access+ finds that head movement and two adaptive switches are his most reliable signals, and that profile carries from games to schoolwork to coding tools. Because Access+ is open, Jamal starts editing his own control mappings, then shares them with other users. Calibration becomes technical training.',
+      ask: ['How could Jamal share his mappings with others?', 'Which simulators would suit Jamal?'] },
+    { name: 'Ruth', color: '#a9e4c4', about: 'High spinal cord injury · rural upstate New York', hl: 'Reaching rural users without a clinic', ins: ['Head tracking', 'Breath', 'Switches'],
+      story: 'Ruth lives hours from the nearest assistive technology clinic. Her Access+ journey starts with a mailed sensor kit and a video session: with an occupational therapist guiding her, she completes a structured assessment at her kitchen table while I compare head tracking, breath control and switches. A preconfigured setup arrives days later, ready for her phone, computer and home devices, and later adjustments happen remotely.',
+      ask: ['What comes in Ruth’s sensor kit?', 'How does the remote assessment work?'] },
+    { name: 'D.', color: '#b9a4ff', about: 'C5 spinal cord injury · part-time scheduling and intake', hl: 'Multitasking at work', ins: ['Eye gaze', 'EMG', 'Nose tracking', 'Facial gesture'],
+      story: 'D. talks on the phone while updating records, so voice control can’t help: his voice is already busy. Access+ runs his computer on parallel channels: eye gaze moves the cursor, an EMG switch clicks, nose tracking takes over while his eyes are reading, and a facial gesture mutes the call. Speed matters as much as ability, so he rehearses the combination in a workplace simulator before his shift. D. was always qualified for the job; the interface was the barrier.',
+      ask: ['How would D. practice in a workplace simulator?', 'Why not just use voice control?'] }
+  ];
+  var caseGrid = document.getElementById('caseGrid');
+  CASES.forEach(function (c, i) {
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'case'; b.setAttribute('aria-pressed', 'false');
+    b.innerHTML = '<span class="ex">Example</span><span class="who"><span class="av"></span><span><b></b><br><small></small></span></span><span class="hl"></span><span class="ins"></span>';
+    b.querySelector('.av').textContent = c.name.charAt(0); b.querySelector('.av').style.background = c.color;
+    b.querySelector('b').textContent = c.name; b.querySelector('small').textContent = c.about; b.querySelector('.hl').textContent = c.hl;
+    c.ins.forEach(function (t) { var x = document.createElement('span'); x.textContent = t; b.querySelector('.ins').appendChild(x); });
+    b.addEventListener('click', function () { showCase(i); });
+    caseGrid.appendChild(b);
+  });
+  function showCase(i) {
+    var c = CASES[i];
+    caseGrid.querySelectorAll('.case').forEach(function (x, j) { x.setAttribute('aria-pressed', j === i ? 'true' : 'false'); });
+    if (!started) { started = true; log.innerHTML = ''; }
+    tag.textContent = 'Example user: ' + c.name;
+    chatBubble('me', 'Show me how Access+ helps ' + c.name + '.');
+    var out = chatBubble('ai-msg', c.story);
+    aceFace.talk(Math.min(6000, 400 + c.story.length * 25)); aceFace.pulse(c.color);
+    turns.push({ role: 'user', content: 'Show me how Access+ helps the example user ' + c.name + ' (' + c.about + ').' });
+    turns.push({ role: 'assistant', content: c.story });
+    starters.innerHTML = '';
+    c.ask.forEach(function (q) {
+      var qb = document.createElement('button'); qb.type = 'button'; qb.className = 'chip small'; qb.textContent = q;
+      qb.addEventListener('click', function () { if (sampleFn) ask(q); else { chatBubble('me', q); chatBubble('ai-msg', 'Live answers work when this page is opened in Claude while signed in.'); } });
+      starters.appendChild(qb);
+    });
+    starters.hidden = false;
+    document.getElementById('chat').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  function chatBubble(cls, text) { var d = document.createElement('div'); d.className = 'msg ' + cls; d.textContent = text; log.appendChild(d); log.scrollTop = log.scrollHeight; return d; }
   function setBusy(on) { askBtn.disabled = on; input.disabled = on; stopChat.hidden = !on; starters.querySelectorAll('button').forEach(function (b) { b.disabled = on; }); }
   function unavailable(msg) { form.hidden = true; starters.hidden = true; note.textContent = msg; }
   var copy = {
@@ -1777,11 +1850,11 @@ function AgentCloud(canvas, opts) {
     text = (text || '').trim();
     if (!text || !sampleFn || (ctl && !ctl.signal.aborted && askBtn.disabled)) return;
     if (!started) { started = true; log.innerHTML = ''; tag.textContent = 'Live'; }
-    bubble('me', text);
+    chatBubble('me', text);
     turns.push({ role: 'user', content: text });
     if (turns.length > 16) turns = turns.slice(-16);
     while (turns.length && turns[0].role !== 'user') turns.shift();
-    var out = bubble('ai-msg thinking', 'Thinking…');
+    var out = chatBubble('ai-msg thinking', 'Thinking…');
     input.value = ''; setBusy(true);
     ctl = new AbortController();
     try {
