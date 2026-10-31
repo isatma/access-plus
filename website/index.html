@@ -62,7 +62,7 @@ section[id] { scroll-margin-top: 170px; }
 .navrow { border-top: 1px solid var(--line); }
 .nav { display: flex; flex-wrap: wrap; gap: 0 2px; padding-block: 4px; flex: 1 1 auto; width: 100%; }
 @media (max-width: 640px) { .nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; } }
-.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 8px; text-decoration: none; color: var(--muted); font: 500 0.7em var(--mono); letter-spacing: 0.04em; text-transform: uppercase; border-bottom: 2px solid transparent; }
+.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 8px; text-decoration: none; color: var(--muted); font: 500 0.68em var(--mono); letter-spacing: 0.03em; text-transform: uppercase; border-bottom: 2px solid transparent; }
 .nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
 .nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
 
@@ -564,6 +564,12 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 520px) {
 #view-tech .tg-cat.wide { grid-column: auto; }
 }
+#view-tech .tg-neutral { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; padding: 16px 20px; border: 1px solid var(--signal); background: rgba(95,224,168,0.06); }
+#view-tech .tg-neutral b { font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); white-space: nowrap; }
+#view-tech .tg-neutral p { margin: 0; color: var(--ink); font-size: 0.95em; }
+@media (max-width: 640px) {
+#view-tech .tg-neutral { grid-template-columns: 1fr; }
+}
 #view-tech .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 #view-tech .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 #view-tech .tg-tag.com { color: #ffc670; }
@@ -709,7 +715,7 @@ footer .wrap { padding-block: 22px; }
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">ACCESS<span>+</span></a><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div><span class="tagline">AI-assisted skill building for assistive technology</span></div>
     <p class="mission"><b>A nonprofit coalition</b> striving to help people with complex disabilities find better access to assistive technology.</p>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#software" data-route="software">Software solutions</a><a href="#hardware" data-route="hardware">Hardware solutions</a><a href="#advanced" data-route="advanced">Advanced tech</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#about" data-route="about">About</a><a class="navsign" href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">AI agent</a><a href="#software" data-route="software">Software solutions</a><a href="#hardware" data-route="hardware">Hardware solutions</a><a href="#advanced" data-route="advanced">Advanced tech reviews</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#about" data-route="about">About</a><a class="navsign" href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a></nav></div>
 </header>
 <div class="band band-top" aria-hidden="true"><span class="bd orb g" style="left:2.0%;--d:6s"></span><span class="bd ring" style="left:9.4%;--d:13s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5fe0a8" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="4" stroke="#7cc4ff" stroke-width="1.2"/></svg></span><span class="bd wave" style="left:16.8%;--d:11s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#7cc4ff" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd tri" style="left:24.2%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#ffc670" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:31.5%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#ffc670"/><circle cx="12" cy="5" r="2" fill="#5fe0a8"/><circle cx="20" cy="5" r="2" fill="#7cc4ff"/><circle cx="28" cy="5" r="2" fill="#f7b2c4"/></svg></span><span class="bd orb p" style="left:38.9%;--d:14s"></span><span class="bd hex" style="left:46.3%;--d:12s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#f7b2c4" stroke-width="1.6"/></svg></span><span class="bd plus" style="left:53.7%;--d:10s"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2 V14 M2 8 H14" stroke="#5fe0a8" stroke-width="2" stroke-linecap="round"/></svg></span><span class="bd cube" style="left:61.1%;--d:8s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z M3 7 L12 12 L21 7 M12 12 V22" stroke="#5fe0a8" stroke-width="1.3"/></svg></span><span class="bd orb b" style="left:68.5%;--d:6s"></span><span class="bd wave" style="left:75.8%;--d:13s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#f7b2c4" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd ring" style="left:83.2%;--d:11s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ffc670" stroke-width="1.5" stroke-dasharray="3 3"/></svg></span><span class="bd tri" style="left:90.6%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#7cc4ff" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd dots" style="left:98.0%;--d:7s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#5fe0a8"/><circle cx="12" cy="5" r="2" fill="#f7b2c4"/><circle cx="20" cy="5" r="2" fill="#ffc670"/><circle cx="28" cy="5" r="2" fill="#7cc4ff"/></svg></span></div>
 
@@ -1160,8 +1166,12 @@ footer .wrap { padding-block: 22px; }
       <div class="eyebrow" id="tg-tgEyebrow">Solutions guide</div>
       <h1 id="tg-tgT">How the technology fits together</h1>
       <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
-      <p>This guide walks through the hardware and software in each area, what each piece does, who it suits, and how to try it. It is independent: Access+ doesn't sell any of it.</p>
     </section>
+
+    <div class="tg-neutral">
+      <b>Independent reviews</b>
+      <p>Access+ reviews technology the way an independent consumer guide does. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word.</p>
+    </div>
 
     <div class="tg-flow" aria-label="Input, interface, device">
       <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
@@ -2627,7 +2637,7 @@ var __ID = function (x) { return document.getElementById('tg-' + x) || document.
   var MODES = {
     software: { g: 'sw', first: 'voice', eb: 'Software solutions', h: 'Software that turns your movement into control', p: 'Tracking, virtual keyboards, voice and phone accessibility. Most of it is free or already built into your devices.' },
     hardware: { g: 'hw', first: 'wheel', eb: 'Hardware solutions', h: 'The devices, inputs and interfaces you use', p: 'Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.' },
-    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology', h: 'What is coming next', p: 'Research-stage technology, explained plainly: what it can do today, who is building it, and how close it is to everyday use.' }
+    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology reviews', h: 'Independent reviews of what is coming next', p: 'Research-stage technology, reviewed plainly: what it can do today, who is building it, what it costs, and how close it is to everyday use.' }
   };
   window.tgMode = function (m) {
     var M = MODES[m] || MODES.hardware;

@@ -60,6 +60,10 @@ a.tg-cat { text-decoration: none; }
 .tg-group .tg-cats { grid-template-columns: 1fr 1fr; }
 .tg-cat.wide { grid-column: span 2; min-height: 0; }
 @media (max-width: 520px) { .tg-cat.wide { grid-column: auto; } }
+.tg-neutral { display: grid; grid-template-columns: auto 1fr; gap: 6px 18px; align-items: baseline; padding: 16px 20px; border: 1px solid var(--signal); background: rgba(95,224,168,0.06); }
+.tg-neutral b { font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); white-space: nowrap; }
+.tg-neutral p { margin: 0; color: var(--ink); font-size: 0.95em; }
+@media (max-width: 640px) { .tg-neutral { grid-template-columns: 1fr; } }
 .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 .tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
@@ -98,8 +102,12 @@ a.tg-cat { text-decoration: none; }
       <div class="eyebrow" id="tgEyebrow">Solutions guide</div>
       <h1 id="tgT">How the technology fits together</h1>
       <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
-      <p>This guide walks through the hardware and software in each area, what each piece does, who it suits, and how to try it. It is independent: Access+ doesn't sell any of it.</p>
     </section>
+
+    <div class="tg-neutral">
+      <b>Independent reviews</b>
+      <p>Access+ reviews technology the way an independent consumer guide does. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word.</p>
+    </div>
 
     <div class="tg-flow" aria-label="Input, interface, device">
       <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
@@ -497,7 +505,7 @@ a.tg-cat { text-decoration: none; }
   var MODES = {
     software: { g: 'sw', first: 'voice', eb: 'Software solutions', h: 'Software that turns your movement into control', p: 'Tracking, virtual keyboards, voice and phone accessibility. Most of it is free or already built into your devices.' },
     hardware: { g: 'hw', first: 'wheel', eb: 'Hardware solutions', h: 'The devices, inputs and interfaces you use', p: 'Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.' },
-    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology', h: 'What is coming next', p: 'Research-stage technology, explained plainly: what it can do today, who is building it, and how close it is to everyday use.' }
+    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology reviews', h: 'Independent reviews of what is coming next', p: 'Research-stage technology, reviewed plainly: what it can do today, who is building it, what it costs, and how close it is to everyday use.' }
   };
   window.tgMode = function (m) {
     var M = MODES[m] || MODES.hardware;
