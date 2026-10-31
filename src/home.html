@@ -110,6 +110,17 @@ footer { padding-bottom: 90px; }
 .intro h1 span { color: var(--signal); }
 .intro p { margin: 0; color: var(--muted); font-size: 1.05em; max-width: 40em; }
 .inline-link { color: var(--signal); }
+.hero-agent { display: flex; align-items: center; gap: 18px; margin-bottom: 6px; }
+.hero-agent canvas { width: 132px; height: 132px; flex: none; display: block; }
+.hero-agent .ha-text { display: grid; gap: 6px; }
+.hero-agent .ha-label { font: 500 0.72em var(--mono); letter-spacing: 0.16em; text-transform: uppercase; color: var(--signal); }
+.hero-agent .ha-line { color: var(--desc); font-size: 1em; max-width: 26em; }
+.hero-agent .ha-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.hero-agent .ha-acts a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border: 1px solid var(--signal); color: var(--signal); }
+.hero-agent .ha-acts a.primary { background: var(--signal); color: var(--signal-ink); }
+.hero-agent .ha-acts a:hover { background: var(--signal-soft); }
+.hero-agent .ha-acts a.primary:hover { background: var(--signal); filter: brightness(1.08); }
+@media (max-width: 520px) { .hero-agent canvas { width: 96px; height: 96px; } }
 .intro .promise { color: var(--desc); font-weight: 600; border-left: 2px solid var(--signal); padding-left: 14px; }
 
 /* section heads */
@@ -136,13 +147,11 @@ footer { padding-bottom: 90px; }
   .led.l2 { animation-delay: .6s; } .led.l3 { animation-delay: 1.2s; } .led.l4 { animation-delay: 1.8s; }
   @keyframes ledblink { 0%,100% { opacity: .95; } 50% { opacity: .25; } }
 }
-#armAce, .arm-face { transition: opacity .7s ease, transform .7s ease; }
-.arm-face { position: absolute; inset: 0; width: 100%; aspect-ratio: 1; opacity: 0; transform: scale(1.35); }
-.arm-ace.play #armAce { opacity: 0; transform: scale(.35) rotate(90deg); }
+.arm-face { transition: opacity .7s ease, transform .7s ease; opacity: 0; transform: scale(.6); }
 .arm-ace.play .arm-face { opacity: 1; transform: scale(1); }
+.arm-ace:not(.play) { visibility: hidden; transition: visibility 0s .7s; }
 .feature .viz { position: relative; }
-.arm-ace { position: absolute; left: 1.5%; top: 3%; width: 15%; pointer-events: none; transition: left .6s ease, top .6s ease, width .6s ease; }
-.arm-ace.play { left: 3%; top: 33%; width: 26%; }
+.arm-ace { position: absolute; left: 3%; top: 33%; width: 26%; pointer-events: none; }
 .arm-ace canvas { display: block; width: 100%; aspect-ratio: 1; }
 .ace-name { position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%); font: 500 10px var(--mono); letter-spacing: 0.14em; color: var(--signal); }
 .ace-say { position: absolute; left: calc(100% + 8px); top: 18%; white-space: nowrap; font: 500 12px var(--mono); letter-spacing: 0.04em; color: var(--signal-ink); background: var(--signal); padding: 5px 9px; }
@@ -301,14 +310,21 @@ footer .wrap { padding-block: 22px; }
 
     <div class="hero">
       <section class="intro" aria-labelledby="introTitle">
+      <div class="hero-agent">
+        <canvas id="heroAgent" aria-hidden="true"></canvas>
+        <div class="ha-text">
+          <span class="ha-label">Your AI agent</span>
+          <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
+          <span class="ha-acts"><a class="primary" href="#profile">Build my profile</a><a href="#guide-ai">Ask a question</a></span>
+        </div>
+      </div>
                   <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Create your own personal platform for building skills. Practice in simulators, borrow equipment on loan, and get free access to hardware and software solutions for the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
-      <p>An AI agent guides you along the way. <a href="#guide-ai" class="inline-link">Ask it a question</a>.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
           <div class="viz">
-            <div class="arm-ace" id="aceWrap"><canvas id="armAce" aria-hidden="true"></canvas><canvas id="armFace" class="arm-face" aria-hidden="true"></canvas><span class="ace-name" id="aceName">AI AGENT</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
+            <div class="arm-ace" id="aceWrap"><canvas id="armFace" class="arm-face" aria-hidden="true"></canvas><span class="ace-name" id="aceName">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
               <defs>
                 <linearGradient id="gUpper" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#5fe0a8"/><stop offset="1" stop-color="#7cc4ff"/></linearGradient>
@@ -368,7 +384,7 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and bring a drink, the phone or a cupcake over to the AI agent. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and bring a drink, the phone or a cupcake over to Ace. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
@@ -801,12 +817,13 @@ function AgentCloud(canvas, opts) {
   ];
   var FACE = -58;
 
-  var armAce = AgentCloud(document.getElementById('armAce'));
+  var heroAgent = AgentCloud(document.getElementById('heroAgent'));
+  var armAce = heroAgent;
   var armFace = AceHead(document.getElementById('armFace'));
   var aceName = document.getElementById('aceName');
   var aceWrap = document.getElementById('aceWrap'), aceSay = document.getElementById('aceSay'), aceSayT, aceHold;
   function aceSays(text, ms) {
-    if (!text) { aceSay.hidden = true; return; }
+    if (!text || mode !== 'play') { aceSay.hidden = true; if (text) heroAgent.talk(1200); return; }
     aceSay.textContent = text; aceSay.hidden = false; clearTimeout(aceSayT);
     aceSayT = setTimeout(function () { aceSay.hidden = true; }, ms || 2800);
     armAce.talk(Math.min(2400, 300 + text.length * 70)); armFace.talk(Math.min(2400, 300 + text.length * 70));
@@ -841,7 +858,7 @@ function AgentCloud(canvas, opts) {
       setTimeout(function () { if (holding === o) aceSays('Mmm, cupcake!', 2400); }, 2500);
     } else { aceExpr(function (u) { return { yaw: 18 + 10 * Math.sin(u * 12), smile: 1, brow: 0.8 }; }, 2600); }
   }
-  setTimeout(function () { aceSays('Hello. I\u2019m the Access+ AI agent.', 3000); armAce.pulse('#5fe0a8'); }, 1200);
+  setTimeout(function () { heroAgent.pulse('#5fe0a8'); heroAgent.talk(1800); }, 900);
   objs.forEach(function (o, i) {
     var p = polar(o.a, 170);
     o.home = p;
@@ -920,9 +937,8 @@ function AgentCloud(canvas, opts) {
     scene.setAttribute('visibility', m === 'play' ? 'visible' : 'hidden');
     goBtn.textContent = m === 'nav' ? 'Go' : 'Pick up';
     aceWrap.classList.toggle('play', m === 'play');
-    aceName.textContent = m === 'play' ? 'ACE' : 'AI AGENT';
     if (m === 'play') { armAce.set({ energy: 1 }); setTimeout(function () { armAce.set({ energy: 0 }); }, 700); aceSays('Hi, I\u2019m Ace! Bring me something.', 2600); aceExpr({ smile: 1, brow: 0.6, yaw: 15 }, 2000); }
-    else { armAce.pulse('#7cc4ff'); aceSays('Back to the AI agent. Choose a destination.', 2400); }
+    else { aceSay.hidden = true; }
     setCur(m === 'nav' ? 1 : 1);
   }
   modeNav.addEventListener('click', function () { setMode('nav'); });
