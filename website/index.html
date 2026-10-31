@@ -427,6 +427,19 @@ footer .wrap { padding-block: 22px; }
 #view-keyboards .kb-key.phrase { min-height: 34px; font-size: 9.5px; text-transform: none; white-space: normal; text-align: center; line-height: 1.15; color: var(--ink); }
 #view-keyboards .kb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 #view-keyboards .kb-actions .btn { min-height: 52px; font-size: 0.7em; }
+#view-keyboards .kb-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#view-keyboards .kb-link { display: grid; gap: 4px; align-content: start; padding: 16px 18px; min-height: 120px; text-decoration: none; color: var(--ink); background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); }
+#view-keyboards .kb-link:hover { border-color: var(--signal); background: var(--panel-hi); }
+#view-keyboards .kb-link b { font-weight: 600; }
+#view-keyboards .kb-link b::after { content: " \2197"; color: var(--signal); }
+#view-keyboards .kb-link small { color: var(--desc); font-size: 0.88em; }
+#view-keyboards .kb-src { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+@media (max-width: 900px) {
+#view-keyboards .kb-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+#view-keyboards .kb-links { grid-template-columns: 1fr; }
+}
 #view-keyboards .kb-share { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; padding: 20px; border: 1px dashed var(--line-hi); background: color-mix(in srgb, var(--panel) 80%, transparent); }
 #view-keyboards .kb-share h3 { font-size: 1em; }
 #view-keyboards .kb-share p { margin: 0; color: var(--muted); }
@@ -845,6 +858,18 @@ footer .wrap { padding-block: 22px; }
     <section aria-labelledby="kb-kbLibT" style="display:grid;gap:18px">
       <div class="kb-head"><h2 id="kb-kbLibT">Keyboard library</h2><p>Dashed tags are sample layouts for this draft.</p></div>
       <div class="kb-grid" id="kb-kbGrid"></div>
+    </section>
+
+    <section aria-labelledby="kb-kbWebT" style="display:grid;gap:18px">
+      <div class="kb-head"><h2 id="kb-kbWebT">OptiKey keyboards and tools online</h2><p>Free resources from the OptiKey community. Links open in a new tab.</p></div>
+      <div class="kb-links">
+        <a class="kb-link" href="https://github.com/Optikey/Optikey/wiki" target="_blank" rel="noopener"><span class="kb-src">OptiKey wiki</span><b>Official OptiKey guide</b><small>Setup, settings and how to build your own dynamic keyboards.</small></a>
+        <a class="kb-link" href="https://github.com/Optikey/Optikey/wiki/Alternative-keyboard-layouts" target="_blank" rel="noopener"><span class="kb-src">OptiKey wiki</span><b>Alternative keyboard layouts</b><small>Simplified three-letter keys, alphabetical order, picture boards and custom keyboards.</small></a>
+        <a class="kb-link" href="https://github.com/OptiKey/OptiKey/wiki/Support-for-CommuniKate-boards" target="_blank" rel="noopener"><span class="kb-src">OptiKey wiki</span><b>CommuniKate picture boards</b><small>Free symbol-based talking boards that run inside OptiKey.</small></a>
+        <a class="kb-link" href="https://www.github.com/Hizoul/optikey-boardlayout" target="_blank" rel="noopener"><span class="kb-src">GitHub · Hizoul</span><b>Board layout editor</b><small>Design or rearrange an OptiKey keyboard visually in the browser.</small></a>
+        <a class="kb-link" href="https://github.com/kmcnaught/optikey-keyboard-scripts" target="_blank" rel="noopener"><span class="kb-src">GitHub · kmcnaught</span><b>Keyboard scripts</b><small>Scripts that generate and edit dynamic keyboards, for makers.</small></a>
+        <a class="kb-link" href="https://www.github.com/SpecialEffect/EyeMine/wiki/Customising-keyboards" target="_blank" rel="noopener"><span class="kb-src">SpecialEffect · EyeMine</span><b>EyeMine gaming keyboards</b><small>OptiKey-based keyboards for playing Minecraft with eye gaze, and how to customize them.</small></a>
+      </div>
     </section>
 
     <section class="kb-share" aria-labelledby="kb-kbShareT">
@@ -1583,6 +1608,10 @@ var __ID = function (x) { return document.getElementById('kb-' + x) || document.
       text: 'A full Windows keyboard with a top row of window and mouse tools: minimize, move and size, click and drag, right click. Runs in OptiKey’s floating mode beside your apps.',
       inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed',
       rows: [[['Minimize','util'],['Move / size','util'],['Click','util'],['Drag','util'],['Right click','util']]].concat(QWERTY) },
+    { name: 'Mouse keyboard', by: 'Dave (Access+)', real: true,
+      text: 'Every mouse action as a large key: left, right and double click, click and drag, scroll, and fine movement, so the pointer can be controlled precisely without a physical mouse.',
+      inputs: ['Nose tracking', 'Eye gaze'], pos: 'Seated and in bed',
+      rows: [[['Left click','util'],['Right click','util'],['Double click','util'],['Drag','util']],[['Scroll \u2191',''],['Scroll \u2193',''],['Move \u2190',''],['Move \u2192','']],[['Move \u2191',''],['Move \u2193',''],['Magnify',''],['Keyboard','util']]] },
     { name: 'Big-key bed keyboard', by: 'Sample layout', real: false,
       text: 'Fewer, larger keys for lying down, when head range is smaller and the screen is farther away. Letters in alphabetical blocks with word prediction.',
       inputs: ['Eye gaze', 'Nose tracking'], pos: 'In bed',
