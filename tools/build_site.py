@@ -148,16 +148,16 @@ def build():
     <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
     <section class="gx" aria-labelledby="gxT">
       <div class="gx-text">
-        <div class="eyebrow">AI custom profile · Step 2</div>
+        <div class="eyebrow">Assessment and software solution</div>
         <h1 id="gxT">Gesture check</h1>
-        <p>Your webcam can turn small movements into switches. The camera page mirrors your expressions on a face model and tests which gestures work best for you.</p>
+        <p>Your webcam can turn small movements into switches. The gesture check does two jobs: as part of your AI custom profile, it calibrates and measures which movements are most reliable for you; as a software solution, those same gestures can work as switches and custom controls for your computer, phone and other devices.</p>
         <ul class="gx-list">
           <li><b>Face switches</b><span>Smile, open mouth, raised eyebrows, long blink, pucker</span></li>
           <li><b>Head switches</b><span>Tilt left and right, turn left and right, nod down, look up</span></li>
           <li><b>Nose pointer</b><span>Steer a pointer with your nose and hold on targets that get smaller</span></li>
           <li><b>Results</b><span>Each gesture rated Reliable, Possible or Not yet, with the AI agent's top picks</span></li>
         </ul>
-        <p><a class="btn primary" href="#profile">Back to my AI custom profile</a></p>
+        <p style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#profile">Back to my AI custom profile</a><a class="btn" href="#software">More software solutions</a></p>
         <p class="gx-note">The camera is turned off inside this preview. Gesture Check runs on its own page, where your browser can use the camera. Your video stays on your device.</p>
         <a class="btn primary" href="%s" target="_blank" rel="noopener">Open Gesture Check (new tab)</a>
       </div>
@@ -357,7 +357,8 @@ def build():
     var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' || h === 'goals' ? h : 'home');
     if (v === 'tech') navKey = h === 'tech' ? 'hardware' : h;
     if (v === 'keyboards') navKey = 'software';
-    if (v === 'gesture') navKey = 'profile';
+    if (v === 'gesture') navKey = (window.__lastRoute === 'software' || window.__lastRoute === 'keyboards') ? 'software' : 'profile';
+    window.__lastRoute = v === 'tech' ? h : (v === 'gesture' ? window.__lastRoute : v);
     document.querySelectorAll('.nav2 a').forEach(function (a) { if (a.dataset.route === h) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'join') {
       document.querySelectorAll('#view-join .jn-sec').forEach(function (x) { x.classList.toggle('hl', x.id === h); });
