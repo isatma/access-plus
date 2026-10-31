@@ -78,6 +78,34 @@ section[id] { scroll-margin-top: 150px; }
 main.view > .wrap { padding-bottom: 120px !important; }
 footer { padding-bottom: 90px; }
 @media (max-width: 520px) { .dock { left: 16px; right: 16px; } .dock button { flex: 1; min-width: 0; } }
+.floaters { position: relative; height: 190px; margin-bottom: -6px; pointer-events: none; }
+.fl { position: absolute; display: block; }
+.orb { border-radius: 50%; filter: blur(6px); opacity: .55; }
+.o1 { width: 120px; height: 120px; left: 0; top: 30px; background: radial-gradient(circle at 35% 35%, rgba(95,224,168,.9), rgba(95,224,168,0) 70%); }
+.o2 { width: 90px; height: 90px; left: 46%; top: 0; background: radial-gradient(circle at 40% 40%, rgba(124,196,255,.9), rgba(124,196,255,0) 70%); }
+.o3 { width: 70px; height: 70px; left: 78%; top: 90px; background: radial-gradient(circle at 40% 40%, rgba(247,178,196,.85), rgba(247,178,196,0) 70%); }
+.f-ring { width: 96px; left: 12%; top: 40px; }
+.f-tri { width: 58px; left: 40%; top: 86px; }
+.f-hex { width: 64px; left: 62%; top: 22px; }
+.f-wave { width: 130px; left: 26%; top: 8px; }
+.f-plus { width: 26px; left: 86%; top: 10px; }
+.f-dots { width: 44px; left: 3%; top: 140px; }
+.f-cube { width: 50px; left: 82%; top: 128px; }
+@media (prefers-reduced-motion: no-preference) {
+  .o1 { animation: drift 14s ease-in-out infinite; } .o2 { animation: drift 11s ease-in-out infinite reverse; } .o3 { animation: drift 16s ease-in-out infinite; }
+  .f-ring { animation: spin 22s linear infinite, bob 7s ease-in-out infinite; }
+  .f-tri { animation: drift 9s ease-in-out infinite, tilt 12s ease-in-out infinite; }
+  .f-hex { animation: spin 30s linear infinite reverse; }
+  .f-wave { animation: bob 6s ease-in-out infinite; }
+  .f-plus { animation: spin 10s linear infinite; }
+  .f-dots { animation: bob 8s ease-in-out infinite reverse; }
+  .f-cube { animation: tilt 9s ease-in-out infinite, bob 10s ease-in-out infinite; }
+  @keyframes drift { 0%,100% { translate: 0 0; } 33% { translate: 18px -12px; } 66% { translate: -10px 10px; } }
+  @keyframes bob { 0%,100% { translate: 0 0; } 50% { translate: 0 -14px; } }
+  @keyframes spin { to { rotate: 360deg; } }
+  @keyframes tilt { 0%,100% { rotate: -12deg; } 50% { rotate: 14deg; } }
+}
+@media (max-width: 900px) { .floaters { height: 130px; } }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: center; }
 .hero .intro { align-content: center; }
@@ -246,7 +274,17 @@ footer .wrap { padding-block: 22px; }
 
     <div class="hero">
       <section class="intro" aria-labelledby="introTitle">
-            <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
+      <div class="floaters" aria-hidden="true">
+        <span class="fl orb o1"></span><span class="fl orb o2"></span><span class="fl orb o3"></span>
+        <svg class="fl f-ring" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="40" stroke="#5fe0a8" stroke-width="2" stroke-dasharray="6 8"/><circle cx="50" cy="50" r="26" stroke="#7cc4ff" stroke-width="1.5"/><circle cx="90" cy="50" r="4" fill="#5fe0a8"/></svg>
+        <svg class="fl f-tri" viewBox="0 0 100 100" fill="none"><path d="M50 8 L92 84 H8 Z" stroke="#ffc670" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 36 L70 72 H30 Z" fill="rgba(255,198,112,0.25)"/></svg>
+        <svg class="fl f-hex" viewBox="0 0 100 100" fill="none"><path d="M50 6 L88 28 V72 L50 94 L12 72 V28 Z" stroke="#f7b2c4" stroke-width="2.5"/><path d="M50 6 V94 M12 28 L88 72 M88 28 L12 72" stroke="#f7b2c4" stroke-width="1" opacity=".5"/></svg>
+        <svg class="fl f-wave" viewBox="0 0 160 40" fill="none"><path d="M2 20 Q22 2 42 20 T82 20 T122 20 T158 20" stroke="#7cc4ff" stroke-width="2.5" stroke-linecap="round"/></svg>
+        <svg class="fl f-plus" viewBox="0 0 40 40" fill="none"><path d="M20 4 V36 M4 20 H36" stroke="#5fe0a8" stroke-width="4" stroke-linecap="round"/></svg>
+        <svg class="fl f-dots" viewBox="0 0 60 60"><circle cx="10" cy="10" r="3.5" fill="#ffc670"/><circle cx="30" cy="10" r="3.5" fill="#5fe0a8"/><circle cx="50" cy="10" r="3.5" fill="#7cc4ff"/><circle cx="10" cy="30" r="3.5" fill="#f7b2c4"/><circle cx="30" cy="30" r="3.5" fill="#ffc670"/><circle cx="50" cy="30" r="3.5" fill="#5fe0a8"/><circle cx="10" cy="50" r="3.5" fill="#7cc4ff"/><circle cx="30" cy="50" r="3.5" fill="#f7b2c4"/><circle cx="50" cy="50" r="3.5" fill="#ffc670"/></svg>
+        <svg class="fl f-cube" viewBox="0 0 100 100" fill="none"><path d="M50 10 L88 30 L88 72 L50 92 L12 72 L12 30 Z M12 30 L50 50 L88 30 M50 50 V92" stroke="#5fe0a8" stroke-width="2"/></svg>
+      </div>
+                  <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       <p>Create your own personal platform for building skills. Practice in simulators, borrow equipment on loan, and get free access to hardware and software solutions for the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
       <p>Ace, your AI guide, coaches you along the way. <a href="#guide-ai" class="inline-link">Ask Ace a question</a>.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
