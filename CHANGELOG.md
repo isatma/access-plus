@@ -1,5 +1,12 @@
 # Access+ changelog
 
+## Version 0.7765 · Pilot draft · 2026-10-31 23:19 UTC
+
+- Menu reorganized: Home, Goals, Simulators, AI custom profile, Software, Hardware, Advanced tech reviews, Borrow a kit, About, Sign in
+- Get involved row and page: everyone, participants, therapists and clinicians, families, partners
+- Tech guide: robotic arms, brain-computer interfaces, voice control, MotionInput, lifts and supports, community reviews, company listings
+- Goals expanded; example users in the AI agent; nonprofit coalition mission
+
 ## Version 0.1 · Pilot draft · October 31, 2026
 
 First pilot website for feedback.

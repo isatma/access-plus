@@ -196,6 +196,63 @@ def build():
   </div>
 </main>
 ''' % GESTURE_URL
+    join_html = '''<main id="view-join" class="view" hidden>
+  <div class="wrap jn-wrap">
+    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
+    <section class="jn-intro">
+      <div class="eyebrow">Get involved</div>
+      <h1>Access+ is for everyone, and we're looking for people to help build it</h1>
+      <p>We are inviting people with complex disabilities, families and caregivers, therapists and clinicians, and partners to take part in the pilot.</p>
+    </section>
+    <section class="jn-sec" id="join-everyone">
+      <div class="jn-k">Open to everyone</div>
+      <h2>Use it free, your way</h2>
+      <p>Anyone can try the simulators, read the reviews, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
+      <div class="jn-acts"><a class="btn primary" href="#goals">Start with a goal</a><a class="btn" href="#simulators">Try a simulator</a></div>
+    </section>
+    <section class="jn-sec" id="join-participants">
+      <div class="jn-k">Become a participant</div>
+      <h2>We're looking for pilot participants</h2>
+      <p>If you live with quadriplegia, ALS, or another condition that limits hand use, help us shape Access+. Participants try the simulators and sensor kits, tell us what works and what doesn't, and can review the technology they use.</p>
+      <ul class="jn-list"><li>Take part from home, on your own schedule</li><li>Borrow sensor kits by mail</li><li>Your feedback shapes what we build next</li></ul>
+      <div class="jn-acts"><a class="btn primary" href="#profile">Start a profile (sample)</a><a class="btn" href="#borrow">See the sensor kit</a></div>
+    </section>
+    <section class="jn-sec" id="join-clinicians">
+      <div class="jn-k">Therapists and clinicians</div>
+      <h2>A tool for your practice</h2>
+      <p>Occupational, physical and speech therapists, seating specialists and rehabilitation engineers can use Access+ with the people they serve.</p>
+      <ul class="jn-list"><li>Order sensor kits for clients and run hands-on trials</li><li>Describe a client's needs, positions and goals in a shared profile</li><li>Use simulator results as evidence for equipment and funding decisions</li><li>Follow progress over time, in person or by telehealth</li><li>Help shape the simulators and reviews</li></ul>
+      <div class="jn-acts"><a class="btn primary" href="#borrow">Request a kit (preview)</a><a class="btn" href="#guide-ai">Ask the AI agent</a></div>
+    </section>
+    <section class="jn-sec" id="join-families">
+      <div class="jn-k">Families and caregivers</div>
+      <h2>Help someone get started</h2>
+      <p>Set up sensors, practice together, and keep track of what's working. You can also share your experience in a community review.</p>
+      <div class="jn-acts"><a class="btn primary" href="#goals">Pick a goal together</a><a class="btn" href="#hardware">Browse solutions</a></div>
+    </section>
+    <section class="jn-sec" id="join-supporters">
+      <div class="jn-k">Partners and supporters</div>
+      <h2>Join the coalition</h2>
+      <p>We would like to build a large network of organizations, universities, makers, manufacturers and funders. See the open invitations on the About page.</p>
+      <div class="jn-acts"><a class="btn primary" href="#about">See partners and invitations</a></div>
+    </section>
+    <p class="jn-note">Sign-ups open when the pilot launches. Forms on this site are previews and don't send anything yet.</p>
+  </div>
+</main>
+'''
+    join_css = '''#view-join .jn-wrap { gap: 28px !important; }
+#view-join .jn-intro { display: grid; gap: 12px; max-width: 52em; }
+#view-join .jn-intro h1 { font-size: 1.8em; line-height: 1.25; }
+#view-join .jn-intro p { margin: 0; color: var(--desc); }
+#view-join .jn-sec { display: grid; gap: 10px; padding: 22px 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); scroll-margin-top: 200px; }
+#view-join .jn-sec:target, #view-join .jn-sec.hl { border-color: var(--signal); }
+#view-join .jn-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+#view-join h2 { font: 600 1.2em var(--body); letter-spacing: 0; text-transform: none; }
+#view-join .jn-sec p { margin: 0; color: var(--desc); max-width: 48em; }
+#view-join .jn-list { margin: 0; padding-left: 20px; display: grid; gap: 4px; color: var(--muted); }
+#view-join .jn-acts { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+#view-join .jn-note { margin: 0; color: var(--muted); font-size: 0.88em; }
+'''
     gesture_css = '''#view-gesture .wrap { gap: 48px !important; }
 #view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 #view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
@@ -253,15 +310,22 @@ def build():
     home = re.sub(r'<a class="btn primary" href="#profile">My profile</a>', '<a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>', home, count=1)
     nav = ('<nav class="nav" aria-label="Site">'
            '<a href="#home" data-route="home">Home</a>'
+           '<a href="#goals" data-route="goals">Goals</a>'
            '<a href="#simulators" data-route="simulators">Simulators</a>'
-           '<a href="#guide-ai" data-route="guide-ai">AI agent</a>'
+           '<a href="#guide-ai" data-route="guide-ai">AI custom profile</a>'
            '<a href="#software" data-route="software">Software solutions</a>'
            '<a href="#hardware" data-route="hardware">Hardware solutions</a>'
            '<a href="#advanced" data-route="advanced">Advanced tech reviews</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
            '<a href="#about" data-route="about">About</a>'
-           '<a class="navsign" href="#profile" data-route="profile">Sign in / My profile<span class="navdemo">Demo</span></a></nav>')
-    home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', nav, home, count=1, flags=re.S)
+           '<a class="navsign" href="#profile" data-route="profile">Sign in · My profile<span class="navdemo">Demo</span></a></nav>')
+    nav += ('</div>\n  <div class="wrap navrow aud"><nav class="nav2" aria-label="Who it is for"><span class="nav2-k">Get involved:</span>'
+            '<a href="#join-everyone" data-route="join-everyone">Open to everyone</a>'
+            '<a href="#join-participants" data-route="join-participants">Become a participant</a>'
+            '<a href="#join-clinicians" data-route="join-clinicians">Therapists and clinicians</a>'
+            '<a href="#join-families" data-route="join-families">Families and caregivers</a>'
+            '<a href="#join-supporters" data-route="join-supporters">Partners and supporters</a></nav>')
+    home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if '.testbadge' not in home:
         home = home.replace('/* hero */', '''.brand { text-decoration: none; }
 .testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
@@ -273,25 +337,31 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer>', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer>', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
-    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + keyboards[1] + tech[1] + about[1] + gesture_css + '/* views-css:end */\n'
+    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + keyboards[1] + tech[1] + about[1] + gesture_css + join_css + '/* views-css:end */\n'
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech' };
-    var v = MODE[h] || (VIEWS.indexOf(h) >= 0 ? h : 'home');
+    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (VIEWS.indexOf(h) >= 0 ? h : 'home'));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
-    var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' ? h : 'home');
+    var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' || h === 'goals' ? h : 'home');
     if (v === 'tech') navKey = h === 'tech' ? 'hardware' : h;
     if (v === 'gesture' || v === 'keyboards') navKey = 'software';
+    document.querySelectorAll('.nav2 a').forEach(function (a) { if (a.dataset.route === h) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (v === 'join') {
+      document.querySelectorAll('#view-join .jn-sec').forEach(function (x) { x.classList.toggle('hl', x.id === h); });
+      var js = document.getElementById(h);
+      if (js && h !== 'join') { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); return; }
+    }
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
     window.scrollTo(0, 0);
