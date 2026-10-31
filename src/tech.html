@@ -64,6 +64,7 @@ a.tg-cat { text-decoration: none; }
 .tg-neutral b { font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); white-space: nowrap; }
 .tg-neutral p { margin: 0; color: var(--ink); font-size: 0.95em; }
 @media (max-width: 640px) { .tg-neutral { grid-template-columns: 1fr; } }
+.tg-joinrev { color: var(--signal); white-space: nowrap; background: none; border: 0; border-bottom: 1px solid var(--signal); padding: 4px 0; font: inherit; cursor: pointer; min-height: 32px; }
 .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 .tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
@@ -106,7 +107,7 @@ a.tg-cat { text-decoration: none; }
 
     <div class="tg-neutral">
       <b>Independent reviews</b>
-      <p>Access+ reviews critical technology the way an independent consumer guide does: wheelchairs, robotic arms, communication devices, lifts and transfer equipment, adjustable tables, trapezes and mounting, as well as software. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word.</p>
+      <p>Access+ reviews critical technology the way an independent consumer guide does: wheelchairs, robotic arms, communication devices, lifts and transfer equipment, adjustable tables, trapezes and mounting, as well as software. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word. <button type="button" class="tg-joinrev" id="joinRev">Become a community reviewer</button></p>
     </div>
 
     <div class="tg-flow" aria-label="Input, interface, device">
@@ -444,6 +445,31 @@ a.tg-cat { text-decoration: none; }
     </section>
 
 
+    <section aria-labelledby="revT" style="display:grid;gap:18px">
+      <div class="tg-head"><h2 id="revT">Review it yourself: join our community reviewers</h2><p>Volunteer reviews from the people who use the technology every day.</p></div>
+      <div class="tg-reg">
+        <div class="tg-rules">
+          <p style="margin:0;color:var(--desc)">Do you use a wheelchair, a robotic arm, a lift, a communication device, a switch, an app or anything else in this guide? Sign up as a volunteer reviewer and share what it's really like, so the next person can decide with real information. Family members, caregivers and therapists are welcome too.</p>
+          <ul class="tg-steps">
+            <li><b>Your experience counts.</b> Every review uses the same simple questions, so reviews can be compared.</li>
+            <li><b>Your words, unchanged.</b> Makers can't edit or remove reviews. We only remove personal details or abuse.</li>
+            <li><b>Your choice of name.</b> Post with your first name, initials, or anonymously.</li>
+            <li><b>Any way you like.</b> Type, dictate, or talk it through with the AI agent and approve the summary.</li>
+          </ul>
+        </div>
+        <form class="tg-form" id="tgRev" novalidate>
+          <span class="k">Preview form · not sent anywhere yet</span>
+          <div class="row"><label>Product you use<input name="product" placeholder="For example, a lift, an arm, an app"></label><label>How long you've used it<input name="length" placeholder="Weeks, months, years"></label></div>
+          <div class="row"><label>How you control it<input name="input" placeholder="Head array, switches, voice…"></label><label>You are<select name="role"><option>A user</option><option>Family or caregiver</option><option>A therapist or clinician</option></select></label></div>
+          <div class="row"><label>Ease of setup<select name="setup"><option>Choose</option><option>Easy</option><option>Manageable</option><option>Needed a lot of help</option></select></label><label>Day-to-day reliability<select name="rel"><option>Choose</option><option>Very reliable</option><option>Mostly reliable</option><option>Often a problem</option></select></label></div>
+          <label>What does it let you do?<textarea name="does"></textarea></label>
+          <label>What would you warn someone about?<textarea name="warn"></textarea></label>
+          <button type="submit">Sign up and preview my review</button>
+          <p class="done" id="tgRevDone" hidden>Thank you. This is a preview, so nothing was sent. Reviewer sign-up opens when the pilot launches.</p>
+        </form>
+      </div>
+    </section>
+
     <section aria-labelledby="regT" style="display:grid;gap:18px">
       <div class="tg-head"><h2 id="regT">For companies and developers: list your product</h2><p>Free, neutral listings. Nothing here is for sale.</p></div>
       <div class="tg-reg">
@@ -522,6 +548,10 @@ a.tg-cat { text-decoration: none; }
     var flow = document.querySelector('#view-tech .tg-flow'); if (flow) flow.hidden = m !== 'hardware';
     var b = document.querySelector('#view-tech .tg-cat[data-cat="' + M.first + '"]'); if (b) b.click();
   };
+  var jr = document.getElementById('joinRev'), rh = document.getElementById('revT');
+  if (jr && rh) jr.addEventListener('click', function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo({ top: rh.getBoundingClientRect().top + window.scrollY - off, behavior: 'smooth' }); });
+  var rev = document.getElementById('tgRev');
+  if (rev) rev.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('tgRevDone').hidden = false; });
   var reg = document.getElementById('tgReg');
   if (reg) reg.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('tgRegDone').hidden = false; });
 })();
