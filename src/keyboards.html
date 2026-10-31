@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ Keyboards</title>
+<style>
+.kb-wrap { gap: 36px !important; }
+.kb-intro { display: grid; gap: 12px; max-width: 52em; }
+.kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
+.kb-intro p { margin: 0; color: var(--muted); }
+.kb-intro .lead { color: var(--desc); }
+.kb-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); margin: 0; padding: 0; list-style: none; }
+.kb-steps li { background: var(--panel); padding: 16px 18px; display: grid; gap: 4px; }
+.kb-steps b { font: 500 0.7em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
+.kb-steps span { font-weight: 600; }
+.kb-steps small { color: var(--desc); font-size: 0.88em; }
+.kb-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
+.kb-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
+.kb-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
+.kb-head p { margin: 0; color: var(--muted); }
+.kb-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.kb-card { position: relative; display: grid; gap: 12px; padding: 18px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); align-content: start; }
+.kb-card.mine { border-color: var(--signal); }
+.kb-card h3 { font: 600 1.05em var(--body); letter-spacing: 0; }
+.kb-meta { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.85em; color: var(--muted); }
+.kb-tag { font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid var(--line-hi); color: var(--muted); }
+.kb-tag.real { color: var(--signal); border-color: var(--signal); }
+.kb-tag.sample { color: #ffc670; border-color: #ffc670; border-style: dashed; }
+.kb-card p { margin: 0; color: var(--desc); font-size: 0.93em; }
+.kb-prev { display: grid; gap: 3px; padding: 10px; background: #060b14; border: 1px solid var(--line); overflow: hidden; }
+.kb-row { display: grid; gap: 3px; }
+.kb-key { min-height: 22px; display: grid; place-items: center; padding: 0 2px; border: 1px solid #2c3f5c; background: #0f1828; color: var(--muted); font: 500 9px var(--mono); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; overflow: hidden; }
+.kb-key.util { border-color: var(--signal); color: var(--signal); background: rgba(95,224,168,0.08); }
+.kb-key.big { min-height: 40px; font-size: 11px; }
+.kb-key.phrase { min-height: 34px; font-size: 9.5px; text-transform: none; white-space: normal; text-align: center; line-height: 1.15; color: var(--ink); }
+.kb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.kb-actions .btn { min-height: 52px; font-size: 0.7em; }
+.kb-share { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; align-items: start; padding: 20px; border: 1px dashed var(--line-hi); background: color-mix(in srgb, var(--panel) 80%, transparent); }
+.kb-share h3 { font-size: 1em; }
+.kb-share p { margin: 0; color: var(--muted); }
+.kb-share ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.kb-share li { padding-left: 12px; border-left: 2px solid var(--signal); color: var(--desc); font-size: 0.93em; }
+.kb-share li b { color: var(--ink); font-weight: 600; }
+.kb-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+@media (max-width: 900px) { .kb-grid, .kb-share { grid-template-columns: 1fr; } .kb-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .kb-steps { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap kb-wrap">
+    <section class="kb-intro" aria-labelledby="kbT">
+      <div class="eyebrow">Shared keyboard library</div>
+      <h1 id="kbT">OptiKey keyboards, made to share</h1>
+      <p class="lead">OptiKey is a free, open-source on-screen keyboard and mouse that works with eye gaze, head or nose tracking, or a mouse. Its custom keyboards are small files anyone can make, so a layout that works for one person can help many others.</p>
+      <p>Browse layouts built by users and therapists, try them in the computer simulator, download the ones you like, adapt them, and share your version back. Your keyboard settings, like dwell time and key size, travel with your Access+ profile.</p>
+    </section>
+
+    <ol class="kb-steps" aria-label="How sharing works">
+      <li><b>STEP 1</b><span>Browse</span><small>Find layouts by task, input and position.</small></li>
+      <li><b>STEP 2</b><span>Try it</span><small>Test it in the computer simulator first.</small></li>
+      <li><b>STEP 3</b><span>Download and adapt</span><small>Load it into OptiKey and change what you need.</small></li>
+      <li><b>STEP 4</b><span>Share back</span><small>Post your version with a note on who it suits.</small></li>
+    </ol>
+
+    <section aria-labelledby="kbLibT" style="display:grid;gap:18px">
+      <div class="kb-head"><h2 id="kbLibT">Keyboard library</h2><p>Dashed tags are sample layouts for this draft.</p></div>
+      <div class="kb-grid" id="kbGrid"></div>
+    </section>
+
+    <section class="kb-share" aria-labelledby="kbShareT">
+      <div style="display:grid;gap:10px">
+        <h3 id="kbShareT">Share your keyboard</h3>
+        <p>Made a layout that works well? Share it so others with similar needs can start from something proven instead of from scratch.</p>
+        <div class="kb-actions"><button class="btn primary" type="button" data-kbmsg="Uploading keyboards isn't connected yet in this draft.">Upload a keyboard</button></div>
+      </div>
+      <ul>
+        <li><b>What to include:</b> the keyboard file, a picture, and a sentence on who it helps.</li>
+        <li><b>Inputs it suits:</b> eye gaze, nose or head tracking, mouse, or switch scanning.</li>
+        <li><b>Positions:</b> seated, tilted, or in bed, since key size and placement often change.</li>
+        <li><b>Credit and license:</b> your name or a nickname, and permission for others to adapt it.</li>
+      </ul>
+    </section>
+    <p class="kb-note">OptiKey is an independent open-source project. Access+ doesn't make or sell it; the library shares layouts made for it.</p>
+  </div>
+</main>
+<script>
+(function () {
+  var toast = document.getElementById('toast'), tt;
+  function note(msg) { if (!toast) return; toast.textContent = msg; toast.hidden = false; clearTimeout(tt); tt = setTimeout(function () { toast.hidden = true; }, 3500); }
+  var QWERTY = [['Q','W','E','R','T','Y','U','I','O','P'],['A','S','D','F','G','H','J','K','L','↵'],['⇧','Z','X','C','V','B','N','M','⌫','.'],['Ctrl','Alt','Space','Tab','Esc']];
+  var KB = [
+    { name: 'Floating utility keyboard', by: 'Dave (Access+)', real: true,
+      text: 'A full Windows keyboard with a top row of window and mouse tools: minimize, move and size, click and drag, right click. Runs in OptiKey’s floating mode beside your apps.',
+      inputs: ['Nose tracking', 'Eye gaze', 'Mouse'], pos: 'Seated and in bed',
+      rows: [[['Minimize','util'],['Move / size','util'],['Click','util'],['Drag','util'],['Right click','util']]].concat(QWERTY) },
+    { name: 'Big-key bed keyboard', by: 'Sample layout', real: false,
+      text: 'Fewer, larger keys for lying down, when head range is smaller and the screen is farther away. Letters in alphabetical blocks with word prediction.',
+      inputs: ['Eye gaze', 'Nose tracking'], pos: 'In bed',
+      rows: [[['A B C D','big'],['E F G H','big'],['I J K L','big'],['Predict','big util']],[['M N O P','big'],['Q R S T','big'],['U V W X Y Z','big'],['Space','big util']]] },
+    { name: 'Quick phrases board', by: 'Sample layout', real: false,
+      text: 'One-press phrases for daily care and conversation, alongside a small keyboard for anything else. Works as a talking board with OptiKey’s speech.',
+      inputs: ['Eye gaze', 'Switch scanning'], pos: 'Any',
+      rows: [[['I need help','phrase'],['Yes','phrase'],['No','phrase'],['Thank you','phrase']],[['Please reposition me','phrase'],['I’m thirsty','phrase'],['Call my nurse','phrase'],['Speak','phrase util']]] },
+    { name: 'Music production shortcuts', by: 'Sample layout', real: false,
+      text: 'Shortcut keys for a music program: play, stop, record, loop, undo, zoom and track selection, so composing doesn’t need tiny mouse moves.',
+      inputs: ['Nose tracking', 'Mouse'], pos: 'Seated',
+      rows: [[['Play','util'],['Stop','util'],['Record','util'],['Loop','util'],['Undo','util']],[['Track ↑',''],['Track ↓',''],['Zoom +',''],['Zoom −',''],['Save','util']]] }
+  ];
+  var grid = document.getElementById('kbGrid');
+  if (!grid) return;
+  KB.forEach(function (k) {
+    var c = document.createElement('article'); c.className = 'kb-card' + (k.real ? ' mine' : '');
+    var prev = document.createElement('div'); prev.className = 'kb-prev'; prev.setAttribute('aria-hidden', 'true');
+    k.rows.forEach(function (r) {
+      var row = document.createElement('div'); row.className = 'kb-row';
+      row.style.gridTemplateColumns = 'repeat(' + r.length + ', minmax(0, 1fr))';
+      r.forEach(function (key) {
+        var lab = typeof key === 'string' ? key : key[0], cls = typeof key === 'string' ? '' : key[1];
+        var e = document.createElement('span'); e.className = 'kb-key ' + cls; e.textContent = lab; row.appendChild(e);
+      });
+      prev.appendChild(row);
+    });
+    var h = document.createElement('h3'); h.textContent = k.name;
+    var meta = document.createElement('div'); meta.className = 'kb-meta';
+    var tag = document.createElement('span'); tag.className = 'kb-tag ' + (k.real ? 'real' : 'sample'); tag.textContent = k.real ? 'Shared' : 'Sample';
+    var by = document.createElement('span'); by.textContent = k.by + ' · ' + k.pos;
+    meta.append(tag, by);
+    var p = document.createElement('p'); p.textContent = k.text;
+    var ins = document.createElement('div'); ins.className = 'kb-meta';
+    k.inputs.forEach(function (i) { var t = document.createElement('span'); t.className = 'kb-tag'; t.textContent = i; ins.appendChild(t); });
+    var act = document.createElement('div'); act.className = 'kb-actions';
+    [['Try in simulator', 'The computer simulator isn’t built yet. Soon you’ll test this layout there first.', true], ['Download', 'Downloads aren’t connected yet in this draft.', false], ['Adapt', 'Editing a copy of a layout is planned for a later version.', false]].forEach(function (a) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'btn' + (a[2] ? ' primary' : ''); b.textContent = a[0];
+      b.addEventListener('click', function () { note(k.name + ': ' + a[1]); }); act.appendChild(b);
+    });
+    c.append(prev, h, meta, p, ins, act); grid.appendChild(c);
+  });
+  document.querySelectorAll('[data-kbmsg]').forEach(function (b) { b.addEventListener('click', function () { note(b.dataset.kbmsg); }); });
+})();
+</script>
+</body>
+</html>

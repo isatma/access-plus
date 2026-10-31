@@ -122,6 +122,12 @@ def build():
     profile = ('<main id="view-profile" class="view" hidden>\n  <div class="wrap backwrap"><div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div></div>\n' + main + '</main>\n',
                scope(css, 'profile'), js)
 
+    # ---------- keyboards ----------
+    css, main, js = fragment(ROOT / 'src' / 'keyboards.html')
+    main, js = prefix_ids(main, js, 'kb-', keep=('toast',))
+    keyboards = ('<main id="view-keyboards" class="view" hidden>\n' + main.replace('<div class="wrap kb-wrap">', '<div class="wrap kb-wrap">\n    <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>', 1) + '</main>\n',
+                 scope(css, 'keyboards'), js)
+
     # ---------- gesture ----------
     gesture_html = '''<main id="view-gesture" class="view" hidden>
   <div class="wrap">
@@ -180,6 +186,7 @@ def build():
            '<a href="#simulators" data-route="simulators">Simulators</a>'
            '<a href="#guide-ai" data-route="guide-ai">Meet Ace</a>'
            '<a href="#gesture" data-route="gesture">Gesture check</a>'
+           '<a href="#keyboards" data-route="keyboards">Keyboards</a>'
            '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
            '<a href="#profile" data-route="profile">My profile</a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', nav, home, count=1, flags=re.S)
@@ -194,16 +201,16 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + gesture_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + gesture_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*<footer>', lambda m: '</main>\n\n' + views_html + '\n<footer>', home, count=1)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
-    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + gesture_css + '/* views-css:end */\n'
+    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + keyboards[1] + gesture_css + '/* views-css:end */\n'
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var v = VIEWS.indexOf(h) >= 0 ? h : 'home';
@@ -231,7 +238,7 @@ def build():
   });
   try { AceHead(document.getElementById('gxFace')); } catch (e) {}
 '''
-    views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
+    views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {\n' + keyboards[2] + '\n})();\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
     home = home.replace('</script>\n</body>', '</script>\n' + views_js + '</body>', 1) if '</body>' in home else home + views_js
 
     # arm dial: all destinations go through the router
