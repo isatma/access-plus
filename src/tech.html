@@ -65,6 +65,13 @@ a.tg-cat { text-decoration: none; }
 .tg-neutral p { margin: 0; color: var(--ink); font-size: 0.95em; }
 @media (max-width: 640px) { .tg-neutral { grid-template-columns: 1fr; } }
 .tg-joinrev { color: var(--signal); white-space: nowrap; background: none; border: 0; border-bottom: 1px solid var(--signal); padding: 4px 0; font: inherit; cursor: pointer; min-height: 32px; }
+.mi-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.mi-g { padding: 16px 18px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); display: grid; gap: 8px; align-content: start; }
+.mi-g h4 { margin: 0; font: 500 0.72em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #7cc4ff; }
+.mi-g ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; color: var(--desc); font-size: 0.9em; }
+.mi-g b { color: var(--ink); font-weight: 600; }
+@media (max-width: 900px) { .mi-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .mi-grid { grid-template-columns: 1fr; } }
 .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 .tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
@@ -137,6 +144,7 @@ a.tg-cat { text-decoration: none; }
         <div class="tg-group sw">
           <header><b>Software</b><span>Programs and settings that turn your movement into control: tracking, keyboards, voice, and phone accessibility.</span></header>
           <div class="tg-cats" role="group" aria-label="Software areas">
+            <button class="tg-cat ready" type="button" data-cat="mi" aria-pressed="false"><span class="st8">Guide ready</span><b>MotionInput (UCL)</b><small>24 camera, speech and gesture features in one Windows app</small></button>
             <a class="tg-cat ready" href="#gesture"><span class="st8">Guide ready · opens page</span><b>Head and face tracking</b><small>Webcam head, nose and face control, and a self-check</small></a>
             <a class="tg-cat ready" href="#keyboards"><span class="st8">Guide ready · opens page</span><b>Virtual keyboards</b><small>On-screen keyboards like OptiKey, with shareable layouts</small></a>
             <button class="tg-cat ready" type="button" data-cat="voice" aria-pressed="false"><span class="st8">Guide ready</span><b>Voice control and microphones</b><small>Running a Mac, PC or phone by voice, and the mic that makes it work</small></button>
@@ -298,6 +306,51 @@ a.tg-cat { text-decoration: none; }
         </article>
       </div>
       <p class="tg-safe">Information is gathered from public sources and checked for neutrality, not paid for. Prices and coverage change; confirm with the maker, your clinic and your insurer.</p>
+    </section>
+
+    <section class="tg-panel" id="panel-mi" hidden aria-labelledby="miT">
+      <div class="tg-head"><h2 id="miT">MotionInput</h2><p>Camera-based hands-free control from a University College London spinout.</p></div>
+      <div class="tg-items">
+        <article class="tg-item tg-listing">
+          <span class="kind">Windows software · webcam</span><span class="tg-tag com">Commercial</span><span class="tg-tag res">Research</span>
+          <h3>MotionInput (MotionInput Games Ltd., UCL Computer Science spinout)</h3>
+          <dl>
+            <dt>What it does</dt><dd>Turns an ordinary webcam and microphone into a controller: nose, eye and face tracking, hand and body gestures, and speech, in 24 AI features that run on your own computer.</dd>
+            <dt>How you control it</dt><dd>Whatever movement you have: nose, eyes, blinks, facial expressions, hands, elbows, knees, leaning, or voice, including speech affected by dysarthria.</dd>
+            <dt>What you need</dt><dd>A Windows 10 or 11 PC and a webcam. Game controller support uses ViGEmBus; the app also needs Microsoft .NET.</dd>
+            <dt>Cost</dt><dd>Not listed on the features page. Check the MotionInput site.</dd>
+            <dt>Who uses it</dt><dd>People with limited hand use who want to run a computer or play games hands-free, plus exercise and rehabilitation uses.</dd>
+            <dt>Skills you'd need</dt><dd>Steady head or hand movement within the camera's view, picking which features to switch on, and calibrating in your usual seat or bed position.</dd>
+            <dt>Disclosure</dt><dd>Access+ advises MotionInput Games on hands-free gaming and facial navigation. Following our listing rules, this is shown openly.</dd>
+          </dl>
+          <div class="tg-links">
+            <a href="https://www.motioninputgames.com/index.html" target="_blank" rel="noopener">MotionInput home &#8599;</a>
+            <a href="https://www.motioninputgames.com/features.html" target="_blank" rel="noopener">All 24 features &#8599;</a>
+            <a href="https://www.motioninputgames.com/gaming.html" target="_blank" rel="noopener">Gaming &#8599;</a>
+            <a href="https://www.motioninputgames.com/equitable.html" target="_blank" rel="noopener">Equitable access &#8599;</a>
+            <a href="https://www.motioninputgames.com/reality.html" target="_blank" rel="noopener">Reality &#8599;</a>
+            <a href="https://www.motioninputgames.com/team.html" target="_blank" rel="noopener">Team &#8599;</a>
+            <a href="https://www.youtube.com/@motioninput" target="_blank" rel="noopener">Videos on YouTube &#8599;</a>
+            <a href="https://linktr.ee/motioninput" target="_blank" rel="noopener">More links &#8599;</a>
+          </div>
+        </article>
+      </div>
+      <div class="tg-head"><h2 id="miFT">The 24 features</h2><p>Grouped by the movement they use.</p></div>
+      <div class="mi-grid"><div class="mi-g"><h4>Face and eyes</h4><ul><li><b>Facial Navigation</b> Nose or eye movement moves the mouse; facial expressions click or trigger speech. Includes a Nose Tracker mode.</li><li><b>Eyegaze Navigator</b> Auto-calibrating eye tracking that estimates where you are looking.</li><li><b>Blinking and Noise Detection</b> Blinks as triggers, with filtering for noise.</li></ul></div><div class="mi-g"><h4>Hands and arms</h4><ul><li><b>Hand Gestures</b> Hand gestures mapped to keys, mouse movement and more.</li><li><b>In-air Multitouch and Touchless Mouse</b> Multitouch gestures made in the air.</li><li><b>In-air 3D Mouse Motion</b> Move in three dimensions with your hand.</li><li><b>Raised Hand to Type</b> Raising a hand starts typing mode.</li><li><b>Driving Hands</b> Steering-wheel motions for racing games.</li><li><b>Finger Painting</b> Draw and paint in the air with a finger.</li><li><b>Fingerspelling</b> Recognizes sign-language fingerspelling.</li></ul></div><div class="mi-g"><h4>Body and space</h4><ul><li><b>Bodypoint Navigator</b> Set exercises and tag regions of the space around you.</li><li><b>Elbows and Knees Interaction</b> Elbows and knees as inputs.</li><li><b>Leaning as Input</b> The direction you lean steers or navigates.</li><li><b>In-air Forcefields</b> Invisible zones in the air, each linked to an action.</li><li><b>Running on the Spot</b> Running in place moves you forward in games.</li><li><b>Multicamera Motion Mapping</b> More than one camera for steadier tracking.</li></ul></div><div class="mi-g"><h4>Speech and voice</h4><ul><li><b>Speech Commands</b> Voice commands for clicks, shortcuts and custom phrases.</li><li><b>Speech Transcribe</b> Real-time speech to text.</li><li><b>Speech Synthesis</b> Text to speech.</li><li><b>Dysarthric Speech Input</b> Speech recognition designed for people with speech impairments.</li></ul></div><div class="mi-g"><h4>Tuning and customizing</h4><ul><li><b>Jitter Compensation</b> Smooths out unintended movement.</li><li><b>Colour and Sounds Detection</b> Colours and sounds as alternative inputs.</li><li><b>Custom Motion Icons</b> Your own visual indicators for movements.</li><li><b>Custom Shape Movements</b> Define your own gestures and movement patterns.</li></ul></div></div>
+      <div class="tg-two">
+        <article class="tg-item">
+          <span class="kind">Try it here first</span>
+          <h3>Check your face and head movement</h3>
+          <p>The Access+ gesture check tests smile, nose, head tilt and turn, so you know which MotionInput features will suit you.</p>
+          <div class="tg-links"><a href="#gesture">Head and face tracking</a><a href="#guide-ai">Ask the AI agent about MotionInput</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Good to know</span>
+          <h3>Tips</h3>
+          <ul><li>Good, even lighting on your face helps tracking</li><li>Turn on Jitter Compensation if the pointer shakes</li><li>Set up a separate profile for bed and for your chair</li></ul>
+        </article>
+      </div>
+      <p class="tg-safe">Feature descriptions are from MotionInput's features page as of October 2026. Product details change; check the MotionInput site.</p>
     </section>
 
     <section class="tg-panel" id="panel-bci" hidden aria-labelledby="bciT">
