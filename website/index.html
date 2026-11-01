@@ -3050,7 +3050,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:20 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:29 UTC</span></div>
   </div>
 </footer>
 
@@ -3810,7 +3810,7 @@ function AgentCloud(canvas, opts) {
   for (var c2 = 0; c2 < 44; c2++) { var d2 = TOTAL * c2 / 44, Q = at(d2), side = c2 % 2 ? 1 : -1, off = 2.3 + (c2 % 3) * 0.3, cx0 = Q[0] + Math.cos(Q[2]) * off * side, cz0 = Q[1] - Math.sin(Q[2]) * off * side; var l0 = local(cx0, cz0); if (Math.abs(l0[0]) < BR_LEN + 2.5 && Math.abs(l0[1]) < BR_W + 1) continue; CONES.push({ x: cx0, z: cz0 }); }
   var ZONES = [[HILL_D - 6, 'STEEP HILL', 'Slow and steady'], [BR_D - BR_LEN, 'NARROW BRIDGE', 'Fine control over the water'], [SIDE_D - 4, 'SIDE SLOPE', 'Watch your tilt']];
   var INPUTS = [['HEAD ARRAY', '#5fe0a8'], ['SIP AND PUFF', '#7cc4ff'], ['SWITCH SCANNING', '#ffc670'], ['MINI JOYSTICK', '#f7b2c4']];
-  var dist = 0, last = performance.now(), W = 0, H = 0, sparks = [], lap = 0, lapT = 0, gatesHit = 0, best = null, camYs = null, horS = null, rollS = 0;
+  var dist = 0, last = performance.now(), W = 0, H = 0, sparks = [], lap = 0, lapT = 0, gatesHit = 0, best = null, camYs = null, horS = null, rollS = 0, spPrev = 0, brakeT = 0;
   function size() { var dpr = Math.min(2, window.devicePixelRatio || 1), r = cv.getBoundingClientRect(); var w = Math.max(200, r.width), h = Math.max(160, r.height); if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)) { cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); } ctx.setTransform(dpr,0,0,dpr,0,0); W = w; H = h; }
   function frame(now) {
     requestAnimationFrame(frame);
@@ -3823,6 +3823,7 @@ function AgentCloud(canvas, opts) {
     var onBridge = inWater(here[0], here[1]);
     var speed = 5.4 * (1 - Math.min(0.35, Math.abs(turn) * 0.6)) * (1 - Math.min(0.55, Math.abs(slope) * 1.6)) * (onBridge ? 0.7 : 1);
     dist += dt * speed; lapT += dt;
+    if (dt > 0) { var dv = (speed - spPrev) / dt; spPrev = speed; brakeT = dv < -2 ? 0.45 : Math.max(0, brakeT - dt); } var braking = brakeT > 0;
     if (dist >= TOTAL * (lap + 1)) { lap++; best = best === null ? lapT : Math.min(best, lapT); lapT = 0; gatesHit = 0; GATES.forEach(function (g) { g.lit = 0; }); }
     var inp = INPUTS[lap % INPUTS.length];
     var camBack = 5.5, camH = 2.6, F = Math.min(W, H) * 0.95;
@@ -3921,50 +3922,132 @@ function AgentCloud(canvas, opts) {
     ctx.globalCompositeOperation = 'lighter';
     sparks = sparks.filter(function (sp) { sp.t += dt; sp.x += sp.vx*dt; sp.z += sp.vz*dt; sp.vy -= 6*dt; sp.y = Math.max(sp.fl, sp.y + sp.vy*dt); var pr = proj(sp.x, sp.z, sp.y); if (pr) { ctx.fillStyle = sp.c; ctx.globalAlpha = Math.max(0, 1 - sp.t / 1.1); ctx.beginPath(); ctx.arc(pr[0], pr[1], Math.max(1, F / pr[2] * 0.05), 0, 6.283); ctx.fill(); } return sp.t < 1.1; });
     ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
-    // chair
+    // chair: detailed rear view of a power wheelchair with its user
     var base = proj(here[0], here[1], yHere); if (base) {
       var s = F / base[2], bx = base[0], by = base[1], tiltDeg = Math.atan(rollS) * 57.3, risky = Math.abs(tiltDeg) > 9;
+      var cmdC = Math.abs(turn) < 0.06 ? 'F' : turn > 0 ? 'R' : 'L', pulse = 0.5 + 0.5 * Math.sin(now / 160), flick = 0.85 + 0.15 * Math.sin(now / 60);
+      function rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r); ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h); ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r); ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath(); }
+      function lg(y0, y1, c0, c1) { var g2 = ctx.createLinearGradient(0, y0, 0, y1); g2.addColorStop(0, c0); g2.addColorStop(1, c1); return g2; }
+      function hg(x0, x1, stops) { var g2 = ctx.createLinearGradient(x0, 0, x1, 0); stops.forEach(function (st) { g2.addColorStop(st[0], st[1]); }); return g2; }
+      function glowDot(x, y, r, col, a2) { var g2 = ctx.createRadialGradient(x, y, 0, x, y, r); g2.addColorStop(0, 'rgba(255,255,255,' + a2 + ')'); g2.addColorStop(0.25, col); g2.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); }
       ctx.save(); ctx.translate(bx, by); ctx.rotate(-Math.atan(rollS) * 0.9 + turn * 0.05);
-      var ug = ctx.createRadialGradient(0, 0, 0, 0, 0, s*1.1); ug.addColorStop(0, 'rgba(95,240,200,0.75)'); ug.addColorStop(0.45, 'rgba(95,224,168,0.28)'); ug.addColorStop(1, 'rgba(95,224,168,0)');
-      ctx.save(); ctx.scale(1, 0.24); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = ug; ctx.beginPath(); ctx.arc(0, 0, s*1.1, 0, 6.283); ctx.fill(); ctx.restore();
-      ctx.fillStyle = '#0b1220'; ctx.strokeStyle = '#3b5476'; ctx.lineWidth = 2;
-      [-1, 1].forEach(function (sd) { ctx.beginPath(); ctx.ellipse(sd * s*0.42, -s*0.22, s*0.12, s*0.24, 0, 0, 6.283); ctx.fill(); ctx.stroke(); });
-      ctx.fillStyle = '#15233a'; ctx.fillRect(-s*0.34, -s*0.36, s*0.68, s*0.2);
-      ctx.fillStyle = '#1b2d4a'; ctx.fillRect(-s*0.3, -s*0.95, s*0.6, s*0.62);
-      ctx.strokeStyle = risky ? '#ffc670' : inp[1]; ctx.lineWidth = 2; ctx.strokeRect(-s*0.3, -s*0.95, s*0.6, s*0.62);
-      // lights: wheel rim LEDs, side light bars, tail lights, headlight glow
-      ctx.globalCompositeOperation = 'lighter';
-      function glowDot(x, y, r, col, a) { var g2 = ctx.createRadialGradient(x, y, 0, x, y, r); g2.addColorStop(0, 'rgba(255,255,255,' + a + ')'); g2.addColorStop(0.25, col); g2.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); }
-      var flick = 0.85 + 0.15 * Math.sin(now / 60);
+      var U = s * 1.35; // one world unit in pixels, drawn a little closer for detail
+      // underglow
+      var ug = ctx.createRadialGradient(0, 0, 0, 0, 0, U*1.1); ug.addColorStop(0, 'rgba(95,240,200,0.7)'); ug.addColorStop(0.45, 'rgba(95,224,168,0.25)'); ug.addColorStop(1, 'rgba(95,224,168,0)');
+      ctx.save(); ctx.scale(1, 0.24); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = ug; ctx.beginPath(); ctx.arc(0, 0, U*1.1, 0, 6.283); ctx.fill(); ctx.restore();
+      ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.beginPath(); ctx.ellipse(0, -U*0.01, U*0.58, U*0.07, 0, 0, 6.283); ctx.fill();
+      // front casters (seen under the chair, farther away)
+      [-1, 1].forEach(function (sd) { ctx.fillStyle = '#0a0f18'; rr(sd*U*0.27 - U*0.035, -U*0.13, U*0.07, U*0.11, U*0.03); ctx.fill(); ctx.fillStyle = '#4a5a6e'; ctx.fillRect(sd*U*0.27 - U*0.01, -U*0.2, U*0.02, U*0.08); });
+      // drive wheels: tyre with moving tread, rim and hub cap on the outer side
+      var tread = (dist * 3.2) % 1;
       [-1, 1].forEach(function (sd) {
-        ctx.strokeStyle = inp[1]; ctx.lineWidth = Math.max(2, s*0.035); ctx.shadowColor = inp[1]; ctx.shadowBlur = s*0.25;
-        ctx.beginPath(); ctx.ellipse(sd * s*0.42, -s*0.22, s*0.1, s*0.21, 0, 0, 6.283); ctx.stroke();
-        var spin = now / 120 * sd; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(sd * s*0.42 + Math.cos(spin) * s*0.1, -s*0.22 + Math.sin(spin) * s*0.21, s*0.025, 0, 6.283); ctx.fill();
-        ctx.shadowBlur = 0;
-        glowDot(sd * s*0.24, -s*0.42, s*0.22 * flick, 'rgba(255,40,60,0.85)', 0.95);
-        glowDot(sd * s*0.36, -s*0.62, s*0.5, 'rgba(225,248,255,0.25)', 0.35);
+        var wx = sd*U*0.45, wy = -U*0.25, ww = U*0.1, wh = U*0.25;
+        ctx.fillStyle = hg(wx - ww, wx + ww, [[0, '#05080d'], [0.5, '#1c2533'], [1, '#05080d']]); rr(wx - ww, wy - wh, ww*2, wh*2, ww*0.9); ctx.fill();
+        ctx.save(); rr(wx - ww, wy - wh, ww*2, wh*2, ww*0.9); ctx.clip();
+        ctx.strokeStyle = 'rgba(120,140,165,0.35)'; ctx.lineWidth = Math.max(1, U*0.012);
+        for (var tI = 0; tI < 9; tI++) { var ty = wy - wh + ((tI + tread) / 9) * wh * 2; ctx.beginPath(); ctx.moveTo(wx - ww*0.75, ty); ctx.lineTo(wx - ww*0.1, ty + U*0.012); ctx.moveTo(wx + ww*0.1, ty + U*0.012); ctx.lineTo(wx + ww*0.75, ty); ctx.stroke(); }
+        ctx.restore();
+        ctx.fillStyle = '#8fa3b8'; ctx.beginPath(); ctx.ellipse(wx + sd*ww*0.95, wy, U*0.025, wh*0.42, 0, 0, 6.283); ctx.fill();
+        ctx.fillStyle = '#c4d0dd'; ctx.beginPath(); ctx.ellipse(wx + sd*ww*1.05, wy, U*0.015, U*0.05, 0, 0, 6.283); ctx.fill();
       });
-      ctx.fillStyle = 'rgba(255,60,80,0.9)'; ctx.fillRect(-s*0.3, -s*0.44, s*0.6, Math.max(2, s*0.03));
+      // anti-tip wheels on short arms at the back
+      [-1, 1].forEach(function (sd) { ctx.strokeStyle = '#3b4a5e'; ctx.lineWidth = Math.max(2, U*0.03); ctx.beginPath(); ctx.moveTo(sd*U*0.2, -U*0.12); ctx.lineTo(sd*U*0.22, -U*0.03); ctx.stroke(); ctx.fillStyle = '#0a0f18'; ctx.beginPath(); ctx.ellipse(sd*U*0.22, -U*0.02, U*0.03, U*0.035, 0, 0, 6.283); ctx.fill(); });
+      // power base with battery box, vents and reflectors
+      ctx.fillStyle = lg(-U*0.36, -U*0.08, '#2b3a50', '#121b29'); rr(-U*0.34, -U*0.36, U*0.68, U*0.27, U*0.05); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.lineWidth = 1; rr(-U*0.34, -U*0.36, U*0.68, U*0.27, U*0.05); ctx.stroke();
+      ctx.fillStyle = 'rgba(0,0,0,0.35)'; for (var vI = 0; vI < 5; vI++) ctx.fillRect(-U*0.12, -U*0.27 + vI * U*0.03, U*0.24, U*0.012);
+      // seat post and seating actuator
+      ctx.fillStyle = lg(-U*0.5, -U*0.36, '#3e4f66', '#1a2434'); ctx.fillRect(-U*0.07, -U*0.5, U*0.14, U*0.15);
+      // seat cushion
+      ctx.fillStyle = lg(-U*0.56, -U*0.46, '#26324a', '#141d2c'); rr(-U*0.37, -U*0.57, U*0.74, U*0.11, U*0.04); ctx.fill();
+      // armrests: support posts and padded tops; joystick box on the right
+      [-1, 1].forEach(function (sd) {
+        ctx.fillStyle = '#4a5a6e'; ctx.fillRect(sd*U*0.37 - U*0.015, -U*0.78, U*0.03, U*0.24);
+        ctx.fillStyle = lg(-U*0.82, -U*0.74, '#2e3c52', '#151e2d'); rr(sd*U*0.37 - U*0.07, -U*0.82, U*0.14, U*0.07, U*0.03); ctx.fill();
+      });
+      var joyOn = inp[0] === 'MINI JOYSTICK';
+      ctx.fillStyle = '#0d141f'; rr(U*0.33, -U*0.9, U*0.1, U*0.08, U*0.015); ctx.fill();
+      ctx.fillStyle = joyOn ? inp[1] : '#6b7c90'; ctx.beginPath(); ctx.arc(U*0.38 + (cmdC === 'L' ? -1 : cmdC === 'R' ? 1 : 0) * U*0.015, -U*0.94, U*0.025, 0, 6.283); ctx.fill();
+      // backrest with lateral supports, stitching and a reflective strip
+      ctx.fillStyle = lg(-U*1.08, -U*0.55, '#2a3a55', '#162033');
+      ctx.beginPath(); ctx.moveTo(-U*0.3, -U*0.56); ctx.lineTo(-U*0.33, -U*0.85); ctx.quadraticCurveTo(-U*0.34, -U*1.06, -U*0.2, -U*1.08); ctx.lineTo(U*0.2, -U*1.08); ctx.quadraticCurveTo(U*0.34, -U*1.06, U*0.33, -U*0.85); ctx.lineTo(U*0.3, -U*0.56); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = risky ? '#ffc670' : 'rgba(196,208,221,0.35)'; ctx.lineWidth = risky ? 2 : 1; ctx.stroke();
+      ctx.strokeStyle = 'rgba(255,255,255,0.10)'; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(-U*0.24, -U*0.6); ctx.lineTo(-U*0.26, -U*1.0); ctx.moveTo(U*0.24, -U*0.6); ctx.lineTo(U*0.26, -U*1.0); ctx.stroke(); ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(196,208,221,0.18)'; ctx.fillRect(-U*0.2, -U*0.8, U*0.4, U*0.025);
+      // the user: shoulders, neck, head with hair
+      ctx.fillStyle = lg(-U*1.16, -U*1.02, '#3d6b8f', '#2a4d69'); ctx.beginPath(); ctx.ellipse(0, -U*1.07, U*0.25, U*0.08, 0, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = '#c99a7a'; ctx.fillRect(-U*0.045, -U*1.2, U*0.09, U*0.08);
+      ctx.fillStyle = '#d7aa8a'; ctx.beginPath(); ctx.ellipse(-U*0.125, -U*1.27, U*0.02, U*0.035, 0, 0, 6.283); ctx.ellipse(U*0.125, -U*1.27, U*0.02, U*0.035, 0, 0, 6.283); ctx.fill();
+      ctx.fillStyle = '#d7aa8a'; ctx.beginPath(); ctx.ellipse(0, -U*1.28, U*0.115, U*0.135, 0, 0, 6.283); ctx.fill();
+      ctx.fillStyle = '#3a2a20'; ctx.beginPath(); ctx.ellipse(0, -U*1.31, U*0.12, U*0.115, 0, Math.PI * 1.02, Math.PI * 1.98); ctx.fill(); ctx.beginPath(); ctx.ellipse(0, -U*1.3, U*0.118, U*0.1, 0, 0, Math.PI); ctx.fill();
+      // head array: centre pad behind the head and two side pads; they light with the command
+      var haOn = inp[0] === 'HEAD ARRAY';
+      [['F', 0, -U*1.2, U*0.2, U*0.08], ['L', -1, -U*1.3, U*0.05, U*0.13], ['R', 1, -U*1.3, U*0.05, U*0.13]].forEach(function (pd) {
+        var px = pd[1] ? pd[1] * U*0.17 - pd[3]/2 : -pd[3]/2, lit = haOn && cmdC === pd[0];
+        ctx.fillStyle = lit ? inp[1] : '#1d2a3f'; rr(px, pd[2] - pd[4]/2, pd[3], pd[4], U*0.025); ctx.fill();
+        ctx.strokeStyle = haOn ? inp[1] : '#3b5476'; ctx.lineWidth = 1.5; ctx.stroke();
+      });
+      ctx.fillStyle = '#4a5a6e'; ctx.fillRect(-U*0.015, -U*1.16, U*0.03, U*0.09);
+      // sip-and-puff tube on a gooseneck over the right shoulder
+      var spOn = inp[0] === 'SIP AND PUFF';
+      ctx.strokeStyle = spOn ? inp[1] : 'rgba(143,163,184,0.45)'; ctx.lineWidth = Math.max(1.5, U*0.018);
+      ctx.beginPath(); ctx.moveTo(U*0.3, -U*0.86); ctx.bezierCurveTo(U*0.34, -U*1.1, U*0.24, -U*1.24, U*0.1, -U*1.24); ctx.stroke();
+      // switch on a mount by the left cheek
+      var swOn = inp[0] === 'SWITCH SCANNING';
+      ctx.strokeStyle = '#4a5a6e'; ctx.lineWidth = Math.max(1.5, U*0.015); ctx.beginPath(); ctx.moveTo(-U*0.3, -U*0.86); ctx.quadraticCurveTo(-U*0.3, -U*1.15, -U*0.17, -U*1.2); ctx.stroke();
+      ctx.fillStyle = swOn ? inp[1] : '#2a3a55'; ctx.beginPath(); ctx.arc(-U*0.16, -U*1.2, U*0.03, 0, 6.283); ctx.fill();
+      // lights: wheel rim LEDs, tail lights, light bar, glow on the active control
+      ctx.globalCompositeOperation = 'lighter';
+      [-1, 1].forEach(function (sd) {
+        var wx = sd*U*0.45;
+        ctx.strokeStyle = inp[1]; ctx.lineWidth = Math.max(1.5, U*0.025); ctx.shadowColor = inp[1]; ctx.shadowBlur = U*0.2;
+        ctx.beginPath(); ctx.ellipse(wx + sd*U*0.095, -U*0.25, U*0.02, U*0.2, 0, 0, 6.283); ctx.stroke(); ctx.shadowBlur = 0;
+        var spin = now / 120 * sd; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(wx + sd*U*0.095 + Math.cos(spin) * U*0.02, -U*0.25 + Math.sin(spin) * U*0.2, U*0.02, 0, 6.283); ctx.fill();
+        glowDot(sd*U*0.26, -U*0.31, U*0.2 * flick, 'rgba(255,40,60,0.85)', 0.95);
+        glowDot(sd*U*0.36, -U*0.62, U*0.45, 'rgba(225,248,255,0.22)', 0.3);
+      });
+      ctx.fillStyle = 'rgba(255,60,80,0.9)'; ctx.fillRect(-U*0.3, -U*0.33, U*0.6, Math.max(2, U*0.022));
+      var act = haOn ? [cmdC === 'L' ? -U*0.17 : cmdC === 'R' ? U*0.17 : 0, cmdC === 'F' ? -U*1.2 : -U*1.3] : spOn ? [U*0.1, -U*1.24] : swOn ? [-U*0.16, -U*1.2] : [U*0.38, -U*0.94];
+      glowDot(act[0], act[1], U*(0.12 + 0.06 * pulse), inp[1], 0.6);
       ctx.globalCompositeOperation = 'source-over';
-      var pulse = 0.5 + 0.5 * Math.sin(now / 160);
-      ctx.fillStyle = '#c4d0dd'; ctx.beginPath(); ctx.arc(0, -s*1.12, s*0.14, 0, 6.283); ctx.fill();
-      ctx.strokeStyle = inp[1]; ctx.globalAlpha = 0.5 + 0.5 * pulse; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, -s*1.12, s*0.22, Math.PI * 0.15, Math.PI * 0.85, true); ctx.stroke(); ctx.globalAlpha = 1;
       ctx.restore();
     }
-    // HUD left: input, command, slope and tilt
+    // HUD left: input, the action the driver is making, LED indicators, slope and tilt
     var slopeDeg = Math.atan(slope) * 57.3, tiltD = Math.atan(rollS) * 57.3;
-    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(5,10,20,0.74)'; ctx.fillRect(14, 14, 196, 108); ctx.strokeStyle = inp[1]; ctx.lineWidth = 1; ctx.strokeRect(14.5, 14.5, 196, 108);
+    var cmd = Math.abs(turn) < 0.06 ? 'FORWARD' : turn > 0 ? 'RIGHT' : 'LEFT';
+    var MAP = {
+      'HEAD ARRAY': { leds: ['BACK PAD', 'EASE OFF', 'LEFT PAD', 'RIGHT PAD'], act: { FORWARD: 'Press back pad: forward', LEFT: 'Left pad: turn left', RIGHT: 'Right pad: turn right', BRAKE: 'Ease off the pad: slow down' } },
+      'SIP AND PUFF': { leds: ['HARD PUFF', 'HARD SIP', 'SOFT SIP', 'SOFT PUFF'], act: { FORWARD: 'Hard puff: forward (latched)', LEFT: 'Soft sip: turn left', RIGHT: 'Soft puff: turn right', BRAKE: 'Hard sip: slow and stop' } },
+      'SWITCH SCANNING': { leds: ['FORWARD', 'STOP', 'LEFT', 'RIGHT'], act: { FORWARD: 'Press when FORWARD lights', LEFT: 'Press when LEFT lights', RIGHT: 'Press when RIGHT lights', BRAKE: 'Press when STOP lights' } },
+      'MINI JOYSTICK': { leds: ['PUSH', 'CENTRE', 'LEFT', 'RIGHT'], act: { FORWARD: 'Push forward: speed follows the push', LEFT: 'Push left: turn left', RIGHT: 'Push right: turn right', BRAKE: 'Let it return to centre: slow down' } }
+    }, mp = MAP[inp[0]];
+    var on = [cmd !== 'LEFT' && cmd !== 'RIGHT' && !braking ? 1 : (inp[0] === 'SIP AND PUFF' ? 0.35 : 0), braking ? 1 : 0, cmd === 'LEFT' ? 1 : 0, cmd === 'RIGHT' ? 1 : 0];
+    var scanI = Math.floor(now / 650) % 4;
+    ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(5,10,20,0.78)'; ctx.fillRect(14, 14, 236, 158); ctx.strokeStyle = inp[1]; ctx.lineWidth = 1; ctx.strokeRect(14.5, 14.5, 236, 158);
     ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8fa3b8'; ctx.fillText('INPUT', 26, 33);
     ctx.fillStyle = inp[1]; ctx.font = '600 14px "IBM Plex Sans", sans-serif'; ctx.fillText(inp[0], 26, 51);
-    var cmd = Math.abs(turn) < 0.06 ? 'FORWARD' : turn > 0 ? 'RIGHT' : 'LEFT';
-    ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = '#c4d0dd'; ctx.fillText('COMMAND  ' + cmd, 26, 70);
-    function meter(lbl, val, max, y) { ctx.fillStyle = '#8fa3b8'; ctx.fillText(lbl, 26, y); var x0 = 76, w0 = 80, f = Math.max(-1, Math.min(1, val / max)), warn = Math.abs(f) > 0.6; ctx.fillStyle = '#1b2a40'; ctx.fillRect(x0, y - 8, w0, 8); ctx.fillStyle = warn ? '#ffc670' : '#5fe0a8'; var cxm = x0 + w0 / 2; ctx.fillRect(Math.min(cxm, cxm + f * w0 / 2), y - 8, Math.abs(f * w0 / 2), 8); ctx.fillStyle = '#f0f5fa'; ctx.fillRect(cxm - 0.5, y - 10, 1, 12); ctx.fillStyle = warn ? '#ffc670' : '#c4d0dd'; ctx.textAlign = 'left'; ctx.fillText((val >= 0 ? '+' : '') + Math.round(val) + '°', x0 + w0 + 8, y); }
-    meter('SLOPE', slopeDeg, 20, 92); meter('TILT', tiltD, 15, 110);
+    ctx.fillStyle = '#f0f5fa'; ctx.font = '500 11.5px "IBM Plex Sans", sans-serif'; ctx.fillText(mp.act[braking ? 'BRAKE' : cmd], 26, 69);
+    // LED indicators
+    mp.leds.forEach(function (lb, li) {
+      var lx = 48 + li * 54, ly = 86, lit = on[li], col = li === 1 ? '#ff5a6a' : inp[1];
+      if (lit > 0) { ctx.globalCompositeOperation = 'lighter'; var gg = ctx.createRadialGradient(lx, ly, 0, lx, ly, 14); gg.addColorStop(0, col); gg.addColorStop(1, 'rgba(0,0,0,0)'); ctx.globalAlpha = lit; ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(lx, ly, 14, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over'; }
+      ctx.fillStyle = lit > 0 ? col : '#1b2a40'; ctx.globalAlpha = lit > 0 ? Math.max(0.5, lit) : 1; ctx.beginPath(); ctx.arc(lx, ly, 6, 0, 6.283); ctx.fill(); ctx.globalAlpha = 1;
+      if (inp[0] === 'SWITCH SCANNING' && scanI === li) { ctx.strokeStyle = '#f0f5fa'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(lx, ly, 9.5, 0, 6.283); ctx.stroke(); }
+      ctx.fillStyle = lit > 0 ? '#f0f5fa' : '#8fa3b8'; ctx.font = '500 8px "IBM Plex Mono", monospace'; ctx.textAlign = 'center'; ctx.fillText(lb, lx, ly + 19);
+    });
+    ctx.textAlign = 'left'; ctx.font = '500 11px "IBM Plex Mono", monospace';
+    function meter(lbl, val, max, y) { ctx.fillStyle = '#8fa3b8'; ctx.fillText(lbl, 26, y); var x0 = 76, w0 = 90, f = Math.max(-1, Math.min(1, val / max)), warn = Math.abs(f) > 0.6; ctx.fillStyle = '#1b2a40'; ctx.fillRect(x0, y - 8, w0, 8); ctx.fillStyle = warn ? '#ffc670' : '#5fe0a8'; var cxm = x0 + w0 / 2; ctx.fillRect(Math.min(cxm, cxm + f * w0 / 2), y - 8, Math.abs(f * w0 / 2), 8); ctx.fillStyle = '#f0f5fa'; ctx.fillRect(cxm - 0.5, y - 10, 1, 12); ctx.fillStyle = warn ? '#ffc670' : '#c4d0dd'; ctx.textAlign = 'left'; ctx.fillText((val >= 0 ? '+' : '') + Math.round(val) + '°', x0 + w0 + 8, y); }
+    meter('SLOPE', slopeDeg, 20, 140); meter('TILT', tiltD, 15, 160);
     // HUD right
     var hx = W - 14 - 170; ctx.fillStyle = 'rgba(5,10,20,0.74)'; ctx.fillRect(hx, 14, 170, 70); ctx.strokeStyle = 'rgba(95,224,168,0.5)'; ctx.strokeRect(hx + 0.5, 14.5, 170, 70);
     ctx.fillStyle = '#8fa3b8'; ctx.fillText('GATES', hx + 12, 33); ctx.fillText('LAP TIME', hx + 90, 33);
     ctx.fillStyle = '#f0f5fa'; ctx.font = '600 18px "IBM Plex Sans", sans-serif'; ctx.fillText(gatesHit + '/14', hx + 12, 56); ctx.fillText(lapT.toFixed(1) + 's', hx + 90, 56);
     ctx.font = '500 10px "IBM Plex Mono", monospace'; ctx.fillStyle = '#5fe0a8'; ctx.fillText(best ? 'BEST ' + best.toFixed(1) + 's' : 'LAP ' + (lap + 1), hx + 12, 76);
+    ctx.fillStyle = 'rgba(5,10,20,0.78)'; ctx.fillRect(hx, 90, 170, 52); ctx.strokeStyle = 'rgba(95,224,168,0.5)'; ctx.strokeRect(hx + 0.5, 90.5, 170, 52);
+    ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8fa3b8'; ctx.fillText('SPEED', hx + 12, 108); ctx.fillText('BRAKE', hx + 104, 108);
+    ctx.fillStyle = '#f0f5fa'; ctx.font = '600 16px "IBM Plex Sans", sans-serif'; ctx.fillText((speed * 0.62).toFixed(1) + ' mph', hx + 12, 130);
+    ctx.fillStyle = braking ? '#ff5a6a' : '#1b2a40'; ctx.beginPath(); ctx.arc(hx + 122, 125, 7, 0, 6.283); ctx.fill();
+    if (braking) { ctx.globalCompositeOperation = 'lighter'; var bgl = ctx.createRadialGradient(hx + 122, 125, 0, hx + 122, 125, 16); bgl.addColorStop(0, 'rgba(255,90,106,0.9)'); bgl.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = bgl; ctx.beginPath(); ctx.arc(hx + 122, 125, 16, 0, 6.283); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; }
     // steering arrows
     var ax = W / 2, ay = 46;
     [['LEFT', -40], ['FORWARD', 0], ['RIGHT', 40]].forEach(function (A2) { var on = cmd === A2[0]; ctx.fillStyle = on ? inp[1] : 'rgba(196,208,221,0.25)'; ctx.beginPath(); var x0 = ax + A2[1]; if (A2[1] === 0) { ctx.moveTo(x0, ay - 10); ctx.lineTo(x0 - 9, ay + 6); ctx.lineTo(x0 + 9, ay + 6); } else { var dI = A2[1] > 0 ? 1 : -1; ctx.moveTo(x0 + 10*dI, ay); ctx.lineTo(x0 - 6*dI, ay - 9); ctx.lineTo(x0 - 6*dI, ay + 9); } ctx.fill(); });
