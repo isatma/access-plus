@@ -13,6 +13,16 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
   - Safety habits built in: confirm before safety-relevant actions, a stop and reverse control
   - Lives on the Simulators page; the home-page dial stays a simple guide
 
+## Research program
+
+- Ability tracking and technology transition plan (Nov 1, 2026), Claude Doc: https://claude.ai/artifact/8jweRCMyuJEgCW126q6dmj
+  - Background measures inside existing tech: dwell time, success rate, striking distance, time to target, path smoothness, spasticity and tremor signs, fatigue, switch timing, breath, voice
+  - Two-week settings protocol with short real tasks; setting recommendations, never automatic
+  - Technology chain (head, breath, eye gaze, EMG, BCI, combinations) and transferable skills
+  - Daily living targets (drink, eat, food transfers, brush teeth and hair, messages, call for help, home control, driving)
+  - Communication preparedness: speech early warning, voice banking, practiced fallback
+  - Consent, de-identified research sharing, IRB
+
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay
