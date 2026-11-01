@@ -601,6 +601,18 @@ footer .wrap { padding-block: 22px; }
   .fore-bend, .jaw-l, .jaw-r { transition: transform .35s ease; }
   .dial-item rect, .dial-item text { transition: stroke .2s, fill .2s; }
 }
+.ai-tease { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; align-items: center; padding: 28px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 92%, transparent); position: relative; }
+.ai-tease::before { content: ""; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border: solid var(--signal); border-width: 2px 0 0 2px; }
+.ai-tease canvas { width: 200px; height: 200px; display: block; border-radius: 50%; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
+.ai-tease-text { display: grid; gap: 14px; min-width: 0; }
+.ai-tease h2 { font: 600 1.45em var(--body); letter-spacing: 0; line-height: 1.3; max-width: 26em; }
+.ai-tease-q { margin: 0; padding: 12px 16px; border-left: 2px solid var(--signal); background: var(--signal-soft); display: grid; gap: 6px; max-width: 46em; }
+.ai-tease-q p { margin: 0; color: var(--desc); font-size: 0.95em; }
+.ai-tease-q b { color: var(--ink); font-weight: 500; }
+.ai-tease-q cite { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-style: normal; }
+.ai-tease-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.ai-tease-btns .btn { min-height: 64px; padding: 0 26px; font-size: 0.85em; }
+@media (max-width: 760px) { .ai-tease { grid-template-columns: 1fr; justify-items: center; padding: 18px; gap: 18px; } .ai-tease canvas { width: 130px; height: 130px; } .ai-tease-btns .btn { flex: 1 1 220px; justify-content: center; } }
 </style>
 
 <header class="bar" id="top">
@@ -778,6 +790,16 @@ footer .wrap { padding-block: 22px; }
 
 
     <section id="guide-ai" aria-labelledby="aiTitle">
+      <div class="ai-tease" id="aiTease">
+        <canvas id="aiTeaseFace" aria-hidden="true"></canvas>
+        <div class="ai-tease-text">
+          <span class="eyebrow">Your AI agent</span>
+          <h2>Ask by voice or typing, and watch your profile build as you answer</h2>
+          <blockquote class="ai-tease-q"><p><b>“I'm in bed this week and nose tracking keeps drifting.”</b></p><p>“Let's make an in-bed profile. I'll re-center your rest position, then you try two minutes of pointing practice and I'll compare it with your seated scores.”</p><cite>Example conversation</cite></blockquote>
+          <div class="ai-tease-btns"><a class="btn primary" href="#find">Find my technology &rarr;</a><a class="btn" href="#guide-ai" id="aiOpen">Talk to the AI agent</a></div>
+        </div>
+      </div>
+      <div id="aiFull" hidden>
       <div class="head"><h2 id="aiTitle">Your AI agent</h2><p>The AI agent assesses your needs, suggests the technology and sensors that fit you, and then helps you practice in the simulators.</p></div>
       <div class="ai">
         <ul class="ai-list">
@@ -827,6 +849,7 @@ footer .wrap { padding-block: 22px; }
         <div class="cases-head"><h3>Meet example users</h3><p>Six fictional stories from the Access+ research proposal, based on real clinical patterns. Pick one and the AI agent walks you through it.</p></div>
         <div class="case-grid" id="caseGrid"></div>
       </div>
+      </div>
     </section>
 
     <section id="sim-strip" class="simstrip" aria-label="Simulators">
@@ -857,7 +880,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:14 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:17 UTC</span></div>
   </div>
 </footer>
 
@@ -1405,6 +1428,14 @@ function AgentCloud(canvas, opts) {
   var tag = document.getElementById('chatTag'), starters = document.getElementById('starters');
   var turns = [], ctl = null, started = false, sampleFn = null;
   var aceFace = AgentCloud(document.getElementById('aceFace'));
+  var teaseFace = AgentCloud(document.getElementById('aiTeaseFace'));
+  (function () {
+    var full = document.getElementById('aiFull'), tease = document.getElementById('aiTease');
+    function sync() { var on = (location.hash || '').slice(1) === 'guide-ai'; full.hidden = !on; tease.hidden = on; if (on) { aceFace.pulse('#5fe0a8'); } }
+    window.addEventListener('hashchange', sync); sync();
+    document.getElementById('aiOpen').addEventListener('click', function () { teaseFace.pulse('#7cc4ff'); });
+    setInterval(function () { if (!tease.hidden) { teaseFace.talk(1400); } }, 7000);
+  })();
   var CASES = [
     { name: 'Marcus', color: '#5fe0a8', about: '32 · veteran · high cervical spinal cord injury', hl: 'Turning “too complex” into proven capability', ins: ['Voice', 'Facial EMG', 'Robotic arm'],
       story: 'Marcus’s rehabilitation team thinks a robotic arm would make him more independent, but funders want evidence he can use one safely. In Access+ he practices structured tasks in the robotic arm simulator using voice and facial EMG. I measure his accuracy and timing, find his most reliable control strategy, and produce a clear report the funding review can act on. When the arm arrives, the same profile sets it up, and later his computer, phone and home controls too.',
