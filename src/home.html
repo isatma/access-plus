@@ -316,7 +316,19 @@ footer { padding-bottom: 90px; }
 .has3d .stage3d .viz { transform: none !important; }
 .has3d .stage3d .viz::after { display: none; }
 .arm3d:focus-visible { box-shadow: inset 0 0 0 3px var(--signal); }
-.armctl2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.armctl2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+.armctl2 .testbtn { border-color: var(--signal); color: var(--signal); }
+.armres { margin-top: 14px; padding: 16px; border: 1px solid var(--signal); background: rgba(95,224,168,0.06); display: grid; gap: 12px; }
+.armres-top { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.armres-score { display: grid; justify-items: center; }
+.armres-score b { font: 700 2.6em var(--body); color: var(--signal); line-height: 1; }
+.armres-score span { color: var(--muted); font-size: 0.8em; }
+.armres dl { margin: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.armres dt { font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.armres dd { margin: 0; font-weight: 600; color: var(--ink); }
+.armres-trials { margin: 0; padding-left: 20px; color: var(--desc); font-size: 0.9em; display: grid; gap: 2px; }
+.armres-note { margin: 0; color: var(--muted); font-size: 0.85em; }
+.armres-acts { display: flex; flex-wrap: wrap; gap: 10px; }
 .armctl2 .btn { min-height: 52px; justify-content: center; font-size: 0.82em; }
 .armctl2 .stopbtn { border-color: #ff8a8a; color: #ff8a8a; }
 .armctl2 .stopbtn:hover { background: rgba(255,138,138,0.12); }
@@ -616,13 +628,19 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>The arm reaches across the table in 3D: left and right, in and out, up and down. In Navigate, it grasps a tile to open that page. In Pick things up, it brings a drink to the mouth, holds the phone at the ear, moves the pill bottle to the tray, or presses an elevator button, and asks you to confirm before moving near the face. Manual mode lets you drive one joint at a time, like a real assistive arm. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>The arm reaches across the table in 3D: left and right, in and out, up and down. In Navigate, it grasps a tile to open that page. In Pick things up, it brings a drink to the mouth, holds the phone at the ear, moves the pill bottle to the tray, or presses an elevator button, and asks you to confirm before moving near the face. Manual mode lets you drive one joint at a time, like a real assistive arm, and the Skill test scores how well you reach, grasp and place. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
             </div>
-            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual: off</button></div>
+            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual: off</button><button class="btn testbtn" id="armTest" type="button">Skill test</button></div>
+            <div class="armres" id="armRes" hidden role="status">
+              <div class="armres-top"><div class="armres-score"><b data-r="score">0</b><span>out of 100</span></div><dl><div><dt>Time</dt><dd data-r="time"></dd></div><div><dt>Inputs</dt><dd data-r="inputs"></dd></div><div><dt>Mode switches</dt><dd data-r="switch"></dd></div></dl></div>
+              <ol class="armres-trials" data-r="trials"></ol>
+              <p class="armres-note">Your results stay on this device. Save them as a file to compare over time or share with your therapist or a research study.</p>
+              <div class="armres-acts"><button class="btn primary" id="armSave" type="button">Save my results</button><button class="btn" id="armAgain" type="button">Try again</button></div>
+            </div>
             <p class="armread" id="armRead" hidden></p>
           </div>
         </div>
@@ -736,7 +754,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 10:56 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 11:03 UTC</span></div>
   </div>
 </footer>
 
@@ -1423,7 +1441,7 @@ function AgentCloud(canvas, opts) {
       if (!window.THREE || !window.initArm3D) return;
       function fresh(id) { var o = document.getElementById(id), n = o.cloneNode(true); o.parentNode.replaceChild(n, o); return n; }
       var ui = { left: fresh('armLeft'), right: fresh('armRight'), go: fresh('armGo'), navTab: fresh('modeNav'), playTab: fresh('modePlay'),
-                 stop: document.getElementById('armStop'), manual: document.getElementById('armManual'), status: document.getElementById('armSel'), readout: document.getElementById('armRead') };
+                 stop: document.getElementById('armStop'), manual: document.getElementById('armManual'), test: document.getElementById('armTest'), results: document.getElementById('armRes'), save: document.getElementById('armSave'), again: document.getElementById('armAgain'), status: document.getElementById('armSel'), readout: document.getElementById('armRead') };
       ui.go.textContent = 'Go'; ui.navTab.setAttribute('aria-pressed', 'true'); ui.playTab.setAttribute('aria-pressed', 'false');
       var dests = [
         { short: 'How it\nworks', name: 'How it works', go: '#how', cap: 'Four steps from your goals to trying real equipment.' },

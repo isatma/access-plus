@@ -148,6 +148,16 @@
       var arrow = makeLabel('▲', 0xa9e4c4, 0.2); arrow.position.set(0, 0.24, 0.08); g.add(arrow);
       g.userData.h = 0.62; return g;
     }
+    function makeBlock() {
+      var g = new THREE.Group();
+      var b = mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), new THREE.MeshStandardMaterial({ color: GREEN, emissive: GREEN, emissiveIntensity: 0.25, roughness: 0.5 }));
+      b.position.y = 0.1; g.add(b); g.userData.h = 0.2; return g;
+    }
+    var BLOCK = { key: 'block', name: 'Green block', g: makeBlock(), at: new THREE.Vector3() };
+    BLOCK.g.visible = false; scene.add(BLOCK.g);
+    BLOCK.halo = new THREE.Mesh(new THREE.RingGeometry(0.2, 0.24, 40), new THREE.MeshBasicMaterial({ color: GREEN, transparent: true, opacity: 0, side: THREE.DoubleSide }));
+    BLOCK.halo.rotation.x = -Math.PI / 2; scene.add(BLOCK.halo);
+    var test = null;
     var OBJ = [
       { key: 'cup', name: 'Cup of water', at: polar(-38, 1.85), make: makeCup, deliver: 'mouth', done: 'Cup at the mouth: drinking through the straw' },
       { key: 'phone', name: 'Phone', at: polar(4, 2.55), make: makePhone, deliver: 'ear', done: 'Phone held at the ear for a hands-free call' },
@@ -233,9 +243,12 @@
     function highlight() {
       TILES.forEach(function (t, i) { t.halo.material.opacity = (mode === 'nav' && i === sel) ? 0.9 : 0; t.mesh.visible = mode === 'nav' || t === held; });
       OBJ.forEach(function (o, i) { o.halo.material.opacity = (mode === 'play' && i === sel && held !== o) ? 0.9 : 0; o.g.visible = mode === 'play' || held === o; });
-      [tray, trayRim, trayLabel].forEach(function (m) { m.visible = mode === 'play'; });
+      [tray, trayRim, trayLabel].forEach(function (m) { m.visible = mode === 'play' || !!test; });
+      if (test) { OBJ.forEach(function (o) { o.g.visible = false; o.halo.material.opacity = 0; }); TILES.forEach(function (t) { t.mesh.visible = false; t.halo.material.opacity = 0; }); }
+      BLOCK.g.visible = !!test; BLOCK.halo.material.opacity = (test && held !== BLOCK) ? 0.8 : 0;
     }
     function describe() {
+      if (test) { setStatus('Skill test · Trial ' + (test.trial + 1) + ' of ' + test.trials + ': pick up the green block and put it in the tray · Mode: ' + AXES[axis]); return; }
       if (manual) { setStatus('Manual control · Mode: ' + AXES[axis] + ' · Use Left and Right, Next mode to switch'); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : ''));
@@ -346,6 +359,7 @@
     function nudge(sign) {
       var p = goal.p, d = sign * 0.08;
       if (!manual) return;
+      if (test) test.inputs++;
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z, yaw = Math.atan2(dx, dz), r = Math.hypot(dx, dz), np = cur.p.clone();
       if (axis === 0) { yaw += sign * 0.07; np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
       else if (axis === 1) { r = Math.max(0.7, Math.min(3.1, r + d)); np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
@@ -358,30 +372,103 @@
     function manualGrip() {
       if (cur.grip > 0.5 && !held) {
         var t = tipWorld(), best = null, bd = 0.32;
-        OBJ.concat(TILES).forEach(function (o) { var m = o.g || o.mesh; if (!m.visible || o.key === 'button') return; var c = m.position.clone(); c.y += (o.g ? o.g.userData.h * 0.5 : 0.03); var dd = c.distanceTo(t); if (dd < bd) { bd = dd; best = o; } });
+        OBJ.concat(TILES).concat([BLOCK]).forEach(function (o) { var m = o.g || o.mesh; if (!m.visible || o.key === 'button') return; var c = m.position.clone(); c.y += (o.g ? o.g.userData.h * 0.5 : 0.03); var dd = c.distanceTo(t); if (dd < bd) { bd = dd; best = o; } });
         if (best) { held = best; heldOffset = best.g ? -best.g.userData.h * 0.5 : -0.03; setStatus('Holding: ' + (best.name || best.d.name) + '. Open the grip to release.'); }
         else setStatus('Grip closed. Nothing within reach of the fingers.');
       } else if (cur.grip < 0.5 && held) {
         var m = held.g || held.mesh; m.position.y = held.g ? 0 : 0.03; m.rotation.x = m.rotation.z = 0;
         if (held.d) { held.mesh.position.copy(held.home); }
-        setStatus('Released.'); held = null;
+        var wasBlock = held === BLOCK; held = null;
+        if (wasBlock && test) {
+          var inTray = Math.abs(m.position.x - tray.position.x) < 0.42 && Math.abs(m.position.z - tray.position.z) < 0.32;
+          if (inTray) { m.position.y = 0.05; trialDone(); return; }
+          BLOCK.halo.position.set(m.position.x, 0.006, m.position.z); setStatus('Released outside the tray. Pick it up again.'); return;
+        }
+        setStatus('Released.');
       }
     }
+
+    // ---------- skill test ----------
+    var HOME_POSE = polar(0, 1.5, 1.0);
+    function placeBlock() {
+      var deg = -48 + Math.random() * 96, r = 1.25 + Math.random() * 1.3;
+      var at = polar(deg, r); if (at.distanceTo(tray.position) < 0.8) at = polar(deg > 0 ? deg - 30 : deg + 30, r);
+      BLOCK.at.copy(at); BLOCK.g.position.copy(at); BLOCK.g.rotation.set(0, Math.random() * Math.PI, 0);
+      BLOCK.halo.position.set(at.x, 0.006, at.z);
+      // estimate the fewest inputs needed (turn, reach, lift down and up, grip twice, mode switches)
+      var y0 = Math.atan2(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), y1 = Math.atan2(at.x - BASE.x, at.z - BASE.z), y2 = Math.atan2(tray.position.x - BASE.x, tray.position.z - BASE.z);
+      var r0 = Math.hypot(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), r2 = Math.hypot(tray.position.x - BASE.x, tray.position.z - BASE.z);
+      var steps = Math.abs(y1 - y0) / 0.07 + Math.abs(r - r0) / 0.08 + (HOME_POSE.y - 0.12) / 0.08 * 2 + Math.abs(y2 - y1) / 0.07 + Math.abs(r2 - r) / 0.08;
+      test.opt = Math.max(16, Math.round(steps / 3) + 14 + 2);
+      test.t0 = performance.now(); test.inputs = 0; test.switches = 0;
+    }
+    function resetPose() { queue = []; to(HOME_POSE, Math.PI / 2, { grip: 0, roll: 0, speed: 3 }); run(); }
+    function startTest() {
+      if (busy || held) return;
+      test = { trial: 0, trials: 3, results: [], inputs: 0, switches: 0 };
+      if (!manual) ui.manual.click();
+      mode = 'play'; ui.navTab.setAttribute('aria-pressed', 'false'); ui.playTab.setAttribute('aria-pressed', 'true');
+      axis = 0; ui.test.textContent = 'End test'; if (ui.results) ui.results.hidden = true;
+      placeBlock(); resetPose(); highlight(); describe();
+    }
+    function trialDone() {
+      var t = (performance.now() - test.t0) / 1000;
+      var eff = Math.min(1, test.opt / Math.max(1, test.inputs)), spd = Math.min(1, (test.opt * 0.9 + 8) / Math.max(1, t));
+      test.results.push({ trial: test.trial + 1, seconds: +t.toFixed(1), inputs: test.inputs, modeSwitches: test.switches, fewestInputsEstimate: test.opt, score: Math.round(100 * (0.6 * eff + 0.4 * spd)) });
+      test.trial++;
+      if (test.trial >= test.trials) return finishTest();
+      setStatus('Trial ' + test.trial + ' complete. Next block placed.');
+      setTimeout(function () { if (!test) return; placeBlock(); resetPose(); highlight(); describe(); }, 900);
+    }
+    function finishTest() {
+      var R = test.results, total = Math.round(R.reduce(function (a, r) { return a + r.score; }, 0) / R.length);
+      var secs = R.reduce(function (a, r) { return a + r.seconds; }, 0), inputs = R.reduce(function (a, r) { return a + r.inputs; }, 0), sw = R.reduce(function (a, r) { return a + r.modeSwitches; }, 0);
+      var summary = { test: 'Access+ robotic arm reach and grasp', version: 1, date: new Date().toISOString(), control: 'Manual, one axis at a time (Turn, Reach, Lift, Wrist, Grip)', score: total, totalSeconds: +secs.toFixed(1), totalInputs: inputs, modeSwitches: sw, trials: R };
+      lastResult = summary; test = null; highlight();
+      ui.test.textContent = 'Skill test';
+      setStatus('Skill test complete. Score ' + total + ' out of 100.');
+      if (ui.results) {
+        ui.results.hidden = false;
+        ui.results.querySelector('[data-r="score"]').textContent = total;
+        ui.results.querySelector('[data-r="time"]').textContent = secs.toFixed(0) + ' s';
+        ui.results.querySelector('[data-r="inputs"]').textContent = inputs;
+        ui.results.querySelector('[data-r="switch"]').textContent = sw;
+        var tb = ui.results.querySelector('[data-r="trials"]'); tb.innerHTML = '';
+        R.forEach(function (r) { var li = document.createElement('li'); li.textContent = 'Trial ' + r.trial + ': ' + r.score + ' points · ' + r.seconds + ' s · ' + r.inputs + ' inputs'; tb.appendChild(li); });
+      }
+      resetPose();
+    }
+    function endTest() { if (!test) return; test = null; held = null; highlight(); ui.test.textContent = 'Skill test'; setStatus('Skill test ended.'); resetPose(); }
+    var lastResult = null;
+    ui.test.addEventListener('click', function () { if (test) endTest(); else startTest(); });
+    if (ui.save) ui.save.addEventListener('click', function () {
+      if (!lastResult) return;
+      var name = 'access-plus-arm-test-' + lastResult.date.slice(0, 10) + '.json', data = JSON.stringify(lastResult, null, 2);
+      function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+      if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback);
+      else fallback();
+    });
+    if (ui.again) ui.again.addEventListener('click', function () { startTest(); });
 
     // ---------- readout ----------
     function readout() {
       if (!ui.readout) return;
       var deg = function (r) { return Math.round(r * 180 / Math.PI); };
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z;
-      ui.readout.textContent = (manual ? 'MANUAL · ' + AXES[axis].toUpperCase() : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
+      ui.readout.textContent = (test ? 'SKILL TEST ' + (test.trial + 1) + '/' + test.trials + ' · ' + AXES[axis].toUpperCase() + ' · INPUTS ' + test.inputs + ' · ' + ((performance.now() - test.t0) / 1000).toFixed(0) + ' S' : manual ? 'MANUAL · ' + AXES[axis].toUpperCase() : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
         '  ·  TURN ' + deg(joints.yaw) + '°  ·  REACH ' + Math.hypot(dx, dz).toFixed(2) + ' m  ·  LIFT ' + cur.p.y.toFixed(2) + ' m  ·  WRIST ' + deg(cur.roll) + '°  ·  GRIP ' + (cur.grip > 0.5 ? 'CLOSED' : 'OPEN');
     }
 
     // ---------- UI wiring ----------
-    ui.left.addEventListener('click', function () { if (manual) return nudge(-1); if (!busy && !awaitingConfirm) select(sel - 1); });
-    ui.right.addEventListener('click', function () { if (manual) return nudge(1); if (!busy && !awaitingConfirm) select(sel + 1); });
+    ui.left.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(-1); return; } if (!busy && !awaitingConfirm) select(sel - 1); });
+    ui.right.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(1); return; } if (!busy && !awaitingConfirm) select(sel + 1); });
+    var rep = null;
+    function holdStart(sign) { return function (e) { if (!manual) return; e.preventDefault(); nudge(sign); clearInterval(rep); var first = setTimeout(function () { rep = setInterval(function () { nudge(sign); if (test) test.inputs--; }, 140); }, 380); rep = first; }; }
+    function holdEnd() { clearInterval(rep); clearTimeout(rep); rep = null; }
+    ['pointerdown'].forEach(function (ev) { ui.left.addEventListener(ev, holdStart(-1)); ui.right.addEventListener(ev, holdStart(1)); });
+    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { ui.left.addEventListener(ev, holdEnd); ui.right.addEventListener(ev, holdEnd); });
     ui.go.addEventListener('click', function () {
-      if (manual) { axis = (axis + 1) % AXES.length; describe(); readout(); return; }
+      if (manual) { axis = (axis + 1) % AXES.length; if (test) { test.inputs++; test.switches++; } describe(); readout(); return; }
       if (busy) return;
       var it = list()[sel];
       if (mode === 'nav') return grabTile(it);
@@ -395,7 +482,7 @@
       if (held && !awaitingConfirm) { awaitingConfirm = 'return'; ui.go.textContent = 'Put it back'; }
     });
     ui.manual.addEventListener('click', function () {
-      if (busy) return;
+      if (busy || (test && manual)) return;
       manual = !manual; ui.manual.setAttribute('aria-pressed', manual ? 'true' : 'false');
       ui.manual.textContent = manual ? 'Manual: on' : 'Manual: off';
       ui.go.textContent = manual ? 'Next mode' : (mode === 'nav' ? 'Go' : (awaitingConfirm === 'deliver' ? 'Confirm' : awaitingConfirm === 'return' ? 'Put it back' : 'Pick up'));
@@ -403,6 +490,7 @@
       describe(); readout();
     });
     function setMode(m) {
+      if (test) endTest();
       if (busy || m === mode) return;
       if (held) return setStatus('Put the ' + (held.name || 'item').toLowerCase() + ' back first.');
       mode = m; sel = m === 'nav' ? 2 : 0; awaitingConfirm = null;
@@ -455,7 +543,7 @@
       renderer.render(scene, camera);
     }
     highlight(); describe(); point(); requestAnimationFrame(frame);
-    window.__arm3d = { dbg: function () { var a = new THREE.Vector3(), m = new THREE.Vector3(); mouth.getWorldPosition(m); var c = OBJ[0].g.userData.straw; c.updateMatrixWorld(); a.set(0, 0.23, 0).applyMatrix4(c.matrixWorld); return { strawTop: [a.x, a.y, a.z], mouth: [m.x, m.y, m.z] }; }, cur: cur, joints: function () { return joints; }, queue: function () { return queue.length; }, moving: function () { return moving; }, tip: function () { var v = tipWorld(); return [v.x, v.y, v.z]; } };
+    window.__arm3d = { st: function () { return { test: test ? { trial: test.trial, inputs: test.inputs } : null, axis: axis, held: held ? held.key || 'tile' : null, block: [BLOCK.g.position.x, BLOCK.g.position.z], tray: [tray.position.x, tray.position.z], base: [BASE.x, BASE.z], p: [cur.p.x, cur.p.y, cur.p.z], q: queue.length, last: lastResult }; }, dbg: function () { var a = new THREE.Vector3(), m = new THREE.Vector3(); mouth.getWorldPosition(m); var c = OBJ[0].g.userData.straw; c.updateMatrixWorld(); a.set(0, 0.23, 0).applyMatrix4(c.matrixWorld); return { strawTop: [a.x, a.y, a.z], mouth: [m.x, m.y, m.z] }; }, cur: cur, joints: function () { return joints; }, queue: function () { return queue.length; }, moving: function () { return moving; }, tip: function () { var v = tipWorld(); return [v.x, v.y, v.z]; } };
     return { setMode: setMode };
   };
 })();
