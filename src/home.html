@@ -708,7 +708,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:50 UTC</span></div>
+    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:55 UTC</span></div>
   </div>
 </footer>
 
@@ -1065,7 +1065,7 @@ function AgentCloud(canvas, opts) {
 
   // objects for pick-up mode
   var shapes = {
-    cup: '<rect class="shape" x="-8" y="-11" width="16" height="22" rx="2"/><rect class="water" x="-6.5" y="-5" width="13" height="14.5" fill="rgba(95,224,168,0.35)"/><path class="shape" d="M8 -5 h4 a3.5 3.5 0 0 1 0 9 h-4" fill="none"/><path d="M1 8 L4 -22 L10 -28" stroke="#f0f5fa" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M4.5 -16 l1 -1" stroke="#ff7a6e" stroke-width="2" stroke-linecap="round"/>',
+    cup: '<rect class="shape" x="-8" y="-11" width="16" height="22" rx="2"/><clipPath id="cupClip"><rect x="-6.5" y="-10" width="13" height="19.5"/></clipPath><g clip-path="url(#cupClip)"><g class="wlevel"><rect class="water" x="-14" y="-5" width="28" height="14.5" fill="rgba(95,224,168,0.35)"/></g></g><path class="shape" d="M8 -5 h4 a3.5 3.5 0 0 1 0 9 h-4" fill="none"/><path class="straw" d="M1 8 L3 -18 L6 -24 L10 -28" stroke="#f0f5fa" stroke-width="2" fill="none" stroke-linecap="round"/><path class="stripe" d="M4.5 -16 l1 -1" stroke="#ff7a6e" stroke-width="2" stroke-linecap="round"/>',
     phone: '<rect class="shape" x="-7" y="-13" width="14" height="26" rx="3"/><line x1="-2.5" y1="9" x2="2.5" y2="9" stroke="#a9e4c4" stroke-width="1.4"/>',
     cupcake: '<path class="shape" d="M-8 1 L-6 13 L6 13 L8 1 Z"/><path d="M-4 2 L-3.2 12 M0 2 L0 12 M4 2 L3.2 12" stroke="#a9e4c4" stroke-width="1"/><g class="frost"><path d="M-9.5 1 C-11 -5 -5 -7 -4 -9 C-3 -14 4 -14 5 -9 C7 -8 11 -5 9.5 1 Z" fill="rgba(247,178,196,0.3)" stroke="#f7b2c4" stroke-width="1.6"/><path d="M-6 -3 Q0 -6 6 -3" stroke="#f7b2c4" stroke-width="1" fill="none"/><circle cx="1" cy="-14" r="2.8" fill="#ff7a6e"/><path d="M1 -16.5 q2 -4 5 -4" stroke="#a9e4c4" stroke-width="1.2" fill="none"/></g>'
   };
@@ -1100,10 +1100,28 @@ function AgentCloud(canvas, opts) {
       setTimeout(function () { if (holding === o) aceSays('I’m all ears!', 2200); }, 2300);
     } else if (o.key === 'cup') {
       var water = o.g.querySelector('.water'), t0 = performance.now();
+      var straw = o.g.querySelector('.straw'), stripe = o.g.querySelector('.stripe'), wl = o.g.querySelector('.wlevel');
+      var BASE = -40, A = [[1, 8], [3, -18], [6, -24], [10, -28]], B = [[2, 6], [0, -14], [-9, -18], [-21, 1]];
+      if (stripe) stripe.style.opacity = '0';
+      function pose(r, k) {
+        o.g.setAttribute('transform', 'translate(200 86) rotate(' + r.toFixed(1) + ')');
+        if (wl) wl.setAttribute('transform', 'rotate(' + (-(BASE + r)).toFixed(1) + ' 0 5)');
+        if (straw) straw.setAttribute('d', A.map(function (pt, i) { var x = pt[0] + (B[i][0] - pt[0]) * k, y = pt[1] + (B[i][1] - pt[1]) * k; return (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); }).join(' '));
+      }
+      var ease = function (u) { return u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; };
+      (function tilt() {
+        var t = performance.now() - t0, r, k;
+        if (t < 450) { var u = ease(t / 450); r = 40 * u * 1.08 - (u > 0.85 ? (u - 0.85) * 22 : 0); k = 0; }
+        else if (t < 1050) { var v = ease((t - 450) / 600); r = 40 - 15 * v; k = v; }
+        else { r = 25; k = 1; }
+        if (holding === o || t < 1100) pose(r, k);
+        if (t < 1050) requestAnimationFrame(tilt);
+      })();
+      t0 = performance.now() + 900;
       aceSays('Slurp…', 2000);
       aceExpr(function (u) { return u < 0.65 ? { yaw: 24, pitch: -6, pucker: 1, smile: 0 } : { yaw: 20, smile: 1, blink: u > 0.7 && u < 0.76 ? 1 : 0 }; }, 3600);
       (function drain() {
-        var k = Math.min(1, (performance.now() - t0) / 2300);
+        var k = Math.max(0, Math.min(1, (performance.now() - t0) / 2300));
         if (water) { water.setAttribute('y', (-5 + 11 * k).toFixed(1)); water.setAttribute('height', (14.5 - 11 * k).toFixed(1)); }
         if (k < 1 && holding === o) requestAnimationFrame(drain);
       })();
@@ -1182,6 +1200,7 @@ function AgentCloud(canvas, opts) {
     } else {
       o = holding; aceSays('Thanks!', 1600); aceExpr({ smile: 0.8, yaw: 10 }, 1400);
       var w = o.g.querySelector('.water'); if (w) { w.setAttribute('y', '-5'); w.setAttribute('height', '14.5'); }
+      if (o.key === 'cup') { var st = o.g.querySelector('.straw'), sp = o.g.querySelector('.stripe'), wv = o.g.querySelector('.wlevel'); if (st) st.setAttribute('d', 'M1 8 L3 -18 L6 -24 L10 -28'); if (sp) sp.style.opacity = ''; if (wv) wv.removeAttribute('transform'); o.g.setAttribute('transform', 'translate(200 86)'); }
       var fr = o.g.querySelector('.frost'); if (fr) fr.removeAttribute('transform');
       if (o.key === 'cupcake') { var sm2 = document.getElementById('smear'); sm2.classList.add('fade'); setTimeout(function () { sm2.className = 'smear'; }, 1300); o.g.setAttribute('transform', 'translate(200 86)'); }
       sel.textContent = 'Putting back: ' + o.name;
