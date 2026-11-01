@@ -345,6 +345,12 @@ footer { padding-bottom: 90px; }
 .jstep .n { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 .jstep h3 { font-size: 1.1em; }
 .jstep p { margin: 0; color: var(--desc); font-size: 0.92em; }
+.goals-in { margin-top: 34px; scroll-margin-top: 210px; }
+.step1h { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-bottom: 14px; }
+.step1h h3 { display: flex; align-items: center; gap: 10px; font: 600 1.15em var(--body); letter-spacing: 0; }
+.step1h h3 .sn { display: inline-grid; place-items: center; width: 30px; height: 30px; background: var(--signal); color: var(--signal-ink); font-size: 0.85em; }
+.step1h p { margin: 0; color: var(--muted); }
+@media (max-width: 640px) { .goals-in { scroll-margin-top: 16px; } }
 .nextrow { display: flex; justify-content: flex-end; margin-top: 18px; }
 @media (max-width: 900px) { .jsteps { grid-template-columns: 1fr 1fr; } .jsteps li:nth-child(2)::after { display: none; } }
 @media (max-width: 520px) { .jsteps { grid-template-columns: 1fr; gap: 26px; } .jsteps li:not(:last-child)::after { content: "\2193"; right: auto; left: 50%; top: auto; bottom: -24px; transform: translateX(-50%); display: block; } }
@@ -558,10 +564,8 @@ footer .wrap { padding-block: 22px; }
         <li><a class="jstep" href="#software"><span class="n">Step 3</span><h3>Your solutions</h3><p>Software, hardware and advanced interfaces that fit your profile.</p></a></li>
         <li><a class="jstep" href="#try"><span class="n">Step 4</span><h3>Try and borrow</h3><p>Practice in simulators, then borrow a kit to try at home.</p></a></li>
       </ol>
-    </section>
-
-    <section id="goals" aria-labelledby="goalsTitle">
-      <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters to you. The AI agent will suggest where to begin.</p></div>
+      <div id="goals" class="goals-in" aria-labelledby="goalsTitle">
+      <div class="step1h"><h3 id="goalsTitle"><span class="sn">1</span>Start with a goal</h3><p>Pick what matters to you. The AI agent will suggest where to begin.</p></div>
       <form class="gsearch" id="goalSearch" autocomplete="off" role="search">
         <canvas class="gcloud" id="goalCloud" aria-hidden="true"></canvas>
         <div class="gsq"><span class="gsk">Ask the AI agent</span>
@@ -580,6 +584,7 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
       <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
+      </div>
     </section>
 
     <section id="sim-strip" class="simstrip" aria-label="Simulators">
@@ -591,11 +596,9 @@ footer .wrap { padding-block: 22px; }
       <div class="head"><h2 id="aiTitle">Your AI agent</h2><p>An AI agent that helps you build skills at every step: finding a starting point, coaching practice, tuning your setup and tracking progress.</p></div>
       <div class="ai">
         <ul class="ai-list">
-          <li><b>Finds your best way in</b><span>Compares inputs like head tracking, breath, switches, gaze and EMG during short tasks, and suggests the strongest combination for you.</span></li>
-          <li><b>Learns how you express intent</b><span>Builds one profile of how you control technology, not how one device works, so it can follow you from computer to phone, chair and home.</span></li>
-          <li><b>Notices change early</b><span>Tracks precision, speed and fatigue over time, and helps you start learning a new input before the old one becomes unreliable.</span></li>
-          <li><b>Explains every suggestion</b><span>Says what it noticed, what it proposes and why, and what will feel different. You decide, and you can always undo.</span></li>
-          <li><b>Builds your evidence</b><span>Turns practice results into clear reports for you, your therapist, and funding reviews.</span></li>
+          <li><b>Gets to know you</b><span>Asks what you want to do and finds your most reliable way to control technology.</span></li>
+          <li><b>Follows you across devices</b><span>One profile for your computer, phone, chair and home, and it notices early when your needs change.</span></li>
+          <li><b>You stay in control</b><span>Every suggestion is explained, you decide, and your practice becomes evidence for your therapist and funders.</span></li>
         </ul>
         <div class="chat" id="chat" aria-label="Chat with the AI guide">
           <div class="chat-head"><span>ACCESS+ AI AGENT</span><span class="tag-ex" id="chatTag">Example</span></div>
@@ -655,7 +658,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:26 UTC</span></div>
+    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:28 UTC</span></div>
   </div>
 </footer>
 
