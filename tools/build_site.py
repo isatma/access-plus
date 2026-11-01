@@ -151,11 +151,24 @@ def build():
     gesture_html = '''<main id="view-gesture" class="view" hidden>
   <div class="wrap">
     <div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div>
-    <section class="gx" aria-labelledby="gxT">
+    <section class="ck" aria-labelledby="ckT">
+      <div class="eyebrow">Your AI profile · Ability checks</div>
+      <h1 id="ckT">Ability checks</h1>
+      <p class="ck-lead">The AI agent chooses which checks to run from your answers in Find my technology. Most people need only one or two. People with ALS often focus on eye movement, breath, or the muscles that still fire reliably.</p>
+      <div class="ck-grid">
+        <button type="button" class="ck-card ready" data-scrollto="gx" style="text-align:left;font:inherit;cursor:pointer"><span class="ck-st">Available now · see below</span><b>Face and head gestures</b><small>Webcam check of smiles, blinks, eyebrows, head tilt and turn, and nose pointing</small></button>
+        <div class="ck-card"><span class="ck-st">Coming next</span><b>Eye movement</b><small>Gaze accuracy, dwell timing and fatigue, with an eye tracker or eye-tracking glasses</small></div>
+        <div class="ck-card"><span class="ck-st">Coming next</span><b>Breath</b><small>Sip and puff strength and control, soft and hard, for breath switches and drive controls</small></div>
+        <div class="ck-card"><span class="ck-st">Coming next</span><b>Muscle signals (EMG)</b><small>Finds small muscle firings, even without visible movement, using a sensor kit</small></div>
+        <div class="ck-card"><span class="ck-st">Coming next</span><b>Switch timing</b><small>How fast and reliably you can press a switch with any movement, for scanning</small></div>
+        <a class="ck-card" href="#advanced"><span class="ck-st">Specialist</span><b>Brain-computer interface</b><small>For people with no reliable movement: a referral to research programs, not a home check</small></a>
+      </div>
+    </section>
+    <section class="gx" id="gx" aria-labelledby="gxT">
       <div class="gx-text">
-        <div class="eyebrow">Assessment and software solution</div>
-        <h1 id="gxT">Gesture check</h1>
-        <p>Your webcam can turn small movements into switches. The gesture check does two jobs: as part of your AI custom profile, it calibrates and measures which movements are most reliable for you; as a software solution, those same gestures can work as switches and custom controls for your computer, phone and other devices.</p>
+        <div class="eyebrow">One of the ability checks</div>
+        <h2 id="gxT" class="gx-h">Face and head gesture check</h2>
+        <p>Your webcam can turn small movements into switches. For people who still have reliable face or head movement, this check does two jobs: it measures which movements are most reliable for you; as a software solution, those same gestures can work as switches and custom controls for your computer, phone and other devices.</p>
         <ul class="gx-list">
           <li><b>Face switches</b><span>Smile, open mouth, raised eyebrows, long blink, pucker</span></li>
           <li><b>Head switches</b><span>Tilt left and right, turn left and right, nod down, look up</span></li>
@@ -329,6 +342,21 @@ def build():
 #view-join .jn-note { margin: 0; color: var(--muted); font-size: 0.88em; }
 '''
     gesture_css = '''#view-gesture .wrap { gap: 48px !important; }
+#view-gesture .ck { display: grid; gap: 16px; }
+#view-gesture .ck h1 { font-size: 2em; }
+#view-gesture .ck-lead { margin: 0; color: var(--desc); max-width: 50em; font-size: 1.05em; }
+#view-gesture .ck-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#view-gesture .ck-card { display: grid; gap: 6px; align-content: start; padding: 16px; min-height: 120px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); text-decoration: none; }
+#view-gesture a.ck-card:hover { border-color: var(--signal); }
+#view-gesture .ck-card.ready { border-color: var(--signal); background: rgba(95,224,168,0.07); }
+#view-gesture .ck-card b { font-weight: 600; }
+#view-gesture .ck-card small { color: var(--desc); font-size: 0.88em; }
+#view-gesture .ck-st { font: 500 0.64em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-gesture .ck-card.ready .ck-st { color: var(--signal); }
+#view-gesture .gx-h { font-size: 1.5em; }
+@media (max-width: 900px) { #view-gesture .ck-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { #view-gesture .ck-grid { grid-template-columns: 1fr; } }
+
 #view-gesture .gx { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 #view-gesture .gx-text { display: grid; gap: 14px; justify-items: start; }
 #view-gesture h1 { font-size: 1.8em; line-height: 1.25; }
@@ -439,7 +467,7 @@ def build():
       if (sn) {
         var dots = document.getElementById('jDots'); dots.innerHTML = '';
         for (var k = 1; k <= 4; k++) { var d = document.createElement('a'); d.href = JH[k]; d.textContent = k; d.title = JT[k]; d.setAttribute('aria-label', 'Step ' + k + ': ' + JT[k]); d.className = k < sn ? 'done' : (k === sn ? 'cur' : ''); dots.appendChild(d); }
-        document.getElementById('jTitle').innerHTML = 'Step ' + sn + ' of 4: ' + JT[sn] + '<small>' + (sn === 3 ? 'Software, hardware and advanced interfaces' : sn === 2 ? 'The AI agent, your profile and the gesture check' : sn === 4 ? 'Simulators and sensor kits' : 'What you want to do') + '</small>';
+        document.getElementById('jTitle').innerHTML = 'Step ' + sn + ' of 4: ' + JT[sn] + '<small>' + (sn === 3 ? 'Software, hardware and advanced interfaces' : sn === 2 ? 'The AI agent, your profile and ability checks' : sn === 4 ? 'Simulators and sensor kits' : 'What you want to do') + '</small>';
         var nx = document.getElementById('jNext'); nx.textContent = JN[sn] + ' \u2192'; nx.href = JNH[sn];
       }
     }
@@ -456,6 +484,9 @@ def build():
   }
   window.addEventListener('hashchange', route);
   route();
+  document.querySelectorAll('[data-scrollto]').forEach(function (b) {
+    b.addEventListener('click', function () { var g = document.getElementById(b.getAttribute('data-scrollto')); if (!g) return; var bar = document.querySelector('.bar'), off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo({ top: g.getBoundingClientRect().top + window.scrollY - off, behavior: 'smooth' }); });
+  });
   document.querySelectorAll('[data-back]').forEach(function (b) {
     b.addEventListener('click', function () { if (history.length > 1) history.back(); else location.hash = 'home'; });
   });

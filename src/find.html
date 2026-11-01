@@ -134,6 +134,10 @@
 .fd-right .pc-log li b.neg { color: #b42318; }
 .fd-right .fd-pick { background: #f7f9fb; }
 .fd-right .fd-pick.primary { background: #eef8f3; }
+.pc-checks { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.pc-checks li { padding: 8px 12px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-size: 0.92em; }
+.pc-checks li small { display: block; color: var(--muted); font-size: 0.85em; }
+.pc-checks a { color: var(--signal); font-weight: 600; }
 </style>
 </head>
 <body>
@@ -179,6 +183,7 @@
           <div><b id="pcTitle">Your profile is starting</b><span id="pcSub">Answer on the left and watch it fill in here.</span></div>
         </div>
         <div class="pc-sec" id="pcRec" hidden><span class="pc-h">Recommended setup</span><div class="fd-top" id="fdTop"></div></div>
+        <div class="pc-sec" id="pcChecks" hidden><span class="pc-h">Ability checks the agent suggests next</span><ul class="pc-checks" id="pcCheckList"></ul></div>
         <div class="pc-sec"><span class="pc-h">Goals</span><div class="pc-chips" id="pcGoals"></div></div>
         <div class="pc-sec"><span class="pc-h">Reliable movements</span><div class="pc-chips" id="pcMoves"></div></div>
         <div class="pc-sec"><span class="pc-h">About you</span><div class="pc-tiles" id="pcAbout"></div></div>
@@ -385,6 +390,15 @@
     pick('Start with', primary, 'primary'); pick('Backup', backup);
     if (ahead) pick('Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
     el('pcRec').hidden = false;
+    var CK = [];
+    if (has('moves', 'eyes')) CK.push(['Eye movement', 'Gaze accuracy, dwell timing and fatigue · coming next']);
+    if (has('moves', 'breath')) CK.push(['Breath', 'Sip and puff strength and control · coming next']);
+    if (has('moves', 'face') || has('moves', 'head')) CK.push(['Face and head gestures', '<a href="#gesture">Available now</a>']);
+    if (has('moves', 'hand') || has('moves', 'foot')) CK.push(['Switch timing', 'Speed and reliability of your switch movement · coming next']);
+    if (A.change === 'fast' || !(A.moves || []).length || (A.moves || []).length <= 1) CK.push(['Muscle signals (EMG)', 'Finds small muscle firings, even without visible movement · coming next']);
+    var cl = el('pcCheckList'); cl.innerHTML = '';
+    CK.forEach(function (c) { var li = document.createElement('li'); li.innerHTML = '<b></b><small></small>'; li.querySelector('b').textContent = c[0]; li.querySelector('small').innerHTML = c[1]; cl.appendChild(li); });
+    el('pcChecks').hidden = !CK.length;
     // pre-select the first two tracks of the lead method
     METH[primary].spec.slice(0, 2).forEach(function (t) { picked[primary + ':' + t] = true; }); seen.spec = ''; update(false);
     var click = [];
@@ -423,7 +437,7 @@
     st.textContent = 'Profile ready';
   }
   el('fdRestart').addEventListener('click', function () {
-    A = {}; step = 0; rec = null; picked = {}; seen = {}; goalWords = ''; el('pcLog').innerHTML = ''; el('pcRec').hidden = true;
+    A = {}; step = 0; rec = null; picked = {}; seen = {}; goalWords = ''; el('pcLog').innerHTML = ''; el('pcRec').hidden = true; el('pcChecks').hidden = true;
     card.hidden = false; prog.hidden = false; done.hidden = true; res.hidden = true; aiText.hidden = true; ack.textContent = ''; st.textContent = 'Listening';
     update(false); render();
   });
