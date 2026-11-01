@@ -2,84 +2,188 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Access+ Find my technology</title>
+<title>Access+ Profile studio</title>
 <style>
-.fd-wrap { gap: 22px !important; max-width: 920px; }
-.fd-intro { display: grid; gap: 10px; }
-.fd-intro h1 { font-size: 1.9em; line-height: 1.2; }
-.fd-intro p { margin: 0; color: var(--desc); }
+.fd-wrap { gap: 28px !important; }
 .fd-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+/* giant header */
+.fd-hero { position: relative; display: grid; gap: 14px; padding: 46px 0 34px; text-align: center; justify-items: center; border-bottom: 1px solid var(--line-hi); overflow: hidden; }
+.fd-hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 110%, rgba(95,224,168,0.22), transparent 60%), radial-gradient(ellipse at 15% 0%, rgba(124,196,255,0.14), transparent 50%); pointer-events: none; }
+.fd-hero > * { position: relative; }
+.fd-hero h1 { font-size: clamp(2.2em, 6.2vw, 4.6em); line-height: 1.04; letter-spacing: 0.01em; max-width: 14em; }
+.fd-hero h1 span { color: var(--signal); text-shadow: 0 0 28px rgba(95,224,168,0.45); }
+.fd-hero p { margin: 0; max-width: 40em; color: var(--desc); font-size: 1.15em; }
+.fd-hero .fd-k { font-size: 0.8em; }
+/* split */
+.fd-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.fd-left, .fd-right { padding: 26px; display: grid; gap: 18px; align-content: start; min-width: 0; }
+.fd-right { border-left: 1px solid var(--line-hi); background: linear-gradient(180deg, rgba(124,196,255,0.05), transparent 40%); }
+.fd-colk { display: flex; align-items: center; justify-content: space-between; gap: 10px; font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.fd-colk b { color: var(--ink); font-weight: 500; }
+@media (min-width: 981px) and (min-height: 900px) { .fd-left { position: sticky; top: 196px; align-self: start; } }
+@media (max-width: 640px) { .fd-hero { padding: 30px 4px 26px; } }
+@media (max-width: 980px) { .fd-split { grid-template-columns: 1fr; } .fd-right { border-left: 0; border-top: 1px solid var(--line-hi); } }
+@media (max-width: 520px) { .fd-left, .fd-right { padding: 16px; } }
+/* agent */
+.fd-agentrow { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 18px; align-items: start; }
+.fd-agent { display: grid; justify-items: center; gap: 8px; }
+.fd-agent canvas { width: 170px; height: 170px; display: block; border-radius: 50%; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); box-shadow: 0 0 40px rgba(95,224,168,0.12); }
+.fd-st { font: 500 0.68em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #7cc4ff; text-align: center; min-height: 1.4em; }
+.fd-left.busy .fd-st::after { content: "…"; }
+.fd-say { position: relative; padding: 16px 18px; background: var(--signal-soft); border: 1px solid color-mix(in srgb, var(--signal) 45%, transparent); display: grid; gap: 8px; }
+.fd-say::before { content: ""; position: absolute; left: -9px; top: 26px; border: 8px solid transparent; border-left: 0; border-right-color: color-mix(in srgb, var(--signal) 45%, transparent); }
+.fd-say .fd-ack { margin: 0; color: var(--desc); font-size: 0.92em; }
+.fd-say .fd-ack:empty { display: none; }
+.fd-q { font: 600 1.3em var(--body); line-height: 1.3; margin: 0; }
+.fd-hint { margin: 0; color: var(--muted); font-size: 0.9em; }
+.fd-say p.fd-aitext { margin: 0; white-space: pre-wrap; color: var(--ink); }
+.fd-bar { height: 3px; background: var(--line); overflow: hidden; position: relative; }
+.fd-bar::after { content: ""; position: absolute; inset: 0; width: 35%; background: linear-gradient(90deg, transparent, #7cc4ff, var(--signal), transparent); transform: translateX(-100%); }
+.fd-left.busy .fd-bar::after { animation: fdscan 1.2s linear infinite; }
+.fd-left:not(.busy) .fd-bar { visibility: hidden; }
+@keyframes fdscan { to { transform: translateX(300%); } }
+@media (prefers-reduced-motion: reduce) { .fd-left.busy .fd-bar::after { animation: none; width: 100%; opacity: .5; transform: none; } }
+@media (max-width: 560px) { .fd-agentrow { grid-template-columns: 1fr; justify-items: center; } .fd-agent canvas { width: 120px; height: 120px; } .fd-say::before { display: none; } .fd-say { width: 100%; } }
 .fd-prog { display: flex; gap: 6px; }
 .fd-prog i { flex: 1; height: 6px; background: var(--line-hi); }
 .fd-prog i.on { background: var(--signal); }
-.fd-card { display: grid; gap: 16px; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
-.fd-q { font: 600 1.35em var(--body); line-height: 1.3; }
-.fd-hint { margin: -8px 0 0; color: var(--muted); font-size: 0.92em; }
 .fd-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .fd-opt { min-height: 64px; padding: 12px 16px; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 1em var(--body); cursor: pointer; display: grid; gap: 2px; }
 .fd-opt small { color: var(--muted); font-size: 0.82em; font-weight: 400; }
 .fd-opt:hover { border-color: var(--signal); }
 .fd-opt[aria-pressed="true"] { border-color: var(--signal); background: var(--signal-soft); color: var(--signal); box-shadow: inset 4px 0 0 var(--signal); }
 .fd-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.fd-nav .btn { min-height: 56px; min-width: 140px; justify-content: center; }
-.fd-res { display: grid; gap: 16px; }
-.fd-top { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.fd-pick { display: grid; gap: 6px; align-content: start; padding: 18px; border: 1px solid var(--line-hi); background: var(--panel); }
-.fd-pick.primary { border-color: var(--signal); background: rgba(95,224,168,0.07); }
-.fd-pick .r { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fd-nav .btn, .fd-acts .btn { min-height: 56px; justify-content: center; }
+.fd-nav .btn { min-width: 140px; }
+.fd-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.fd-acts .btn.primary { grid-column: span 2; min-height: 64px; font-size: 0.85em; }
+@media (max-width: 520px) { .fd-opts, .fd-acts { grid-template-columns: 1fr; } .fd-acts .btn.primary { grid-column: auto; } }
+/* profile center */
+.pc-ring { display: flex; align-items: center; gap: 16px; }
+.pc-ring svg { width: 84px; height: 84px; flex: none; }
+.pc-ring circle { fill: none; stroke-width: 8; }
+.pc-ring .bg { stroke: var(--line-hi); }
+.pc-ring .fg { stroke: var(--signal); stroke-linecap: round; transform: rotate(-90deg); transform-origin: 50% 50%; transition: stroke-dashoffset .6s ease; }
+.pc-ring text { fill: var(--ink); font: 600 20px var(--body); }
+.pc-ring div { display: grid; gap: 2px; }
+.pc-ring b { font: 600 1.15em var(--body); }
+.pc-ring span { color: var(--muted); font-size: 0.88em; }
+.pc-sec { display: grid; gap: 8px; }
+.pc-h { font: 500 0.68em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.pc-chips { display: flex; flex-wrap: wrap; gap: 6px; min-height: 34px; }
+.pc-chip { padding: 5px 10px; border: 1px solid var(--signal); color: var(--signal); font-size: 0.85em; background: var(--signal-soft); }
+.pc-chip.off { border-color: var(--line-hi); color: var(--muted); background: transparent; border-style: dashed; }
+.pc-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.pc-tile { padding: 10px; border: 1px solid var(--line-hi); display: grid; gap: 2px; min-height: 64px; align-content: start; }
+.pc-tile span { font: 500 0.6em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.pc-tile b { font-weight: 600; font-size: 0.92em; line-height: 1.25; }
+.pc-tile.set { border-color: color-mix(in srgb, var(--signal) 60%, transparent); }
+.pc-tile.empty b { color: var(--muted); font-weight: 400; }
+@media (max-width: 560px) { .pc-tiles { grid-template-columns: 1fr 1fr; } }
+.pc-bars { display: grid; gap: 8px; }
+.pc-bar { display: grid; grid-template-columns: 130px minmax(0, 1fr) 34px; gap: 10px; align-items: center; font-size: 0.9em; }
+.pc-bar i { display: block; height: 12px; background: var(--line); position: relative; overflow: hidden; }
+.pc-bar i em { position: absolute; inset: 0 auto 0 0; width: 0; background: linear-gradient(90deg, #7cc4ff, var(--signal)); transition: width .7s cubic-bezier(.2,.8,.2,1); }
+.pc-bar.lead { color: var(--signal); font-weight: 600; }
+.pc-bar.lead i { box-shadow: 0 0 12px rgba(95,224,168,0.35); }
+.pc-bar small { font: 500 0.8em var(--mono); color: var(--muted); text-align: right; }
+@media (max-width: 520px) { .pc-bar { grid-template-columns: 100px minmax(0, 1fr) 30px; } }
+.pc-spec { display: flex; flex-wrap: wrap; gap: 8px; }
+.pc-spec button { min-height: 44px; padding: 0 12px; background: transparent; border: 1px solid var(--line-hi); color: var(--ink); font: 500 0.85em var(--body); cursor: pointer; }
+.pc-spec button[aria-pressed="true"] { border-color: var(--signal); color: var(--signal); background: var(--signal-soft); }
+.pc-spec button[aria-pressed="true"]::before { content: "\2713  "; }
+.pc-spec .grp { width: 100%; font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #7cc4ff; margin-top: 4px; }
+.pc-empty { margin: 0; color: var(--muted); font-size: 0.88em; font-style: italic; }
+.pc-log { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; max-height: 190px; overflow-y: auto; font: 500 0.78em var(--mono); color: var(--desc); }
+.pc-log li { padding: 4px 8px; border-left: 2px solid var(--line-hi); }
+.pc-log li.new { border-left-color: var(--signal); color: var(--ink); background: var(--signal-soft); }
+.pc-log li b { color: var(--signal); font-weight: 500; }
+.pc-log li b.neg { color: #ffb0a0; }
+.pc-pop { animation: pcpop .5s ease; }
+@keyframes pcpop { from { box-shadow: 0 0 0 3px rgba(95,224,168,0.6); } to { box-shadow: 0 0 0 0 rgba(95,224,168,0); } }
+@media (prefers-reduced-motion: reduce) { .pc-pop { animation: none; } .pc-bar i em, .pc-ring .fg { transition: none; } }
+/* results */
+.fd-top { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.fd-pick { display: grid; gap: 4px; align-content: start; padding: 12px; border: 1px solid var(--line-hi); background: var(--panel); }
+.fd-pick.primary { border-color: var(--signal); background: rgba(95,224,168,0.08); }
+.fd-pick .r { font: 500 0.6em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .fd-pick.primary .r { color: var(--signal); }
-.fd-pick b { font: 600 1.15em var(--body); }
-.fd-pick p { margin: 0; color: var(--desc); font-size: 0.92em; }
-.fd-more { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fd-pick b { font: 600 1em var(--body); }
+.fd-pick p { margin: 0; color: var(--desc); font-size: 0.82em; }
+@media (max-width: 560px) { .fd-top { grid-template-columns: 1fr; } }
+.fd-more { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
 .fd-box { display: grid; gap: 8px; align-content: start; padding: 16px 18px; border: 1px solid var(--line-hi); background: var(--panel); }
 .fd-box b { font-weight: 600; }
-.fd-box ul { margin: 0; padding-left: 18px; color: var(--desc); display: grid; gap: 4px; font-size: 0.94em; }
-.fd-ai { padding: 16px 18px; border: 1px solid #7cc4ff; background: rgba(124,196,255,0.06); display: grid; gap: 8px; }
-.fd-ai p { margin: 0; color: var(--ink); white-space: pre-wrap; }
-.fd-acts { display: flex; flex-wrap: wrap; gap: 10px; }
-.fd-acts .btn { min-height: 56px; }
+.fd-box ul { margin: 0; padding-left: 18px; color: var(--desc); display: grid; gap: 4px; font-size: 0.92em; }
+@media (max-width: 980px) { .fd-more { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .fd-more { grid-template-columns: 1fr; } }
 .fd-note { margin: 0; color: var(--muted); font-size: 0.86em; }
-@media (max-width: 760px) { .fd-opts, .fd-top, .fd-more { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
 <main>
   <div class="wrap fd-wrap">
-    <section class="fd-intro">
-      <span class="fd-k">Your AI profile · Find my technology</span>
-      <h1>Find the right technology for you</h1>
-      <p>Answer a few quick questions. You'll get a starting recommendation, a backup, and something to plan ahead for, then you can practice it right away.</p>
-    </section>
-    <div class="fd-prog" id="fdProg" aria-hidden="true"></div>
-    <section class="fd-card" id="fdCard" aria-live="polite">
-      <h2 class="fd-q" id="fdQ"></h2>
-      <p class="fd-hint" id="fdHint"></p>
-      <div class="fd-opts" id="fdOpts" role="group"></div>
-      <div class="fd-nav"><button class="btn" type="button" id="fdBack">&larr; Back</button><button class="btn primary" type="button" id="fdNext">Next &rarr;</button></div>
-    </section>
-    <section class="fd-res" id="fdRes" hidden aria-live="polite">
-      <div class="fd-top" id="fdTop"></div>
-      <div class="fd-more">
-        <div class="fd-box"><b>How to click and select</b><ul id="fdClick"></ul></div>
-        <div class="fd-box"><b>For your goals</b><ul id="fdGoals"></ul></div>
-        <div class="fd-box"><b>Bed and chair</b><ul id="fdPos"></ul></div>
-        <div class="fd-box"><b>Avoiding fatigue</b><ul id="fdFat"></ul></div>
+    <header class="fd-hero">
+      <span class="fd-k">Your AI profile · Profile studio</span>
+      <h1>Watch your profile <span>build itself</span></h1>
+      <p>Work with the AI agent while your profile center fills in as you answer: what you want to do, how you move, which methods fit, the settings to start with, and the skills to practice.</p>
+    </header>
+    <section class="fd-split" aria-label="Profile studio">
+      <div class="fd-left" id="fdLeft">
+        <div class="fd-colk"><b>AI agent</b><span id="fdStepK">Question 1 of 6</span></div>
+        <div class="fd-agentrow">
+          <div class="fd-agent"><canvas id="fdAgent" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas><span class="fd-st" id="fdSt" aria-live="polite">Listening</span></div>
+          <div class="fd-say" aria-live="polite">
+            <p class="fd-ack" id="fdAck"></p>
+            <h2 class="fd-q" id="fdQ"></h2>
+            <p class="fd-hint" id="fdHint"></p>
+            <div class="fd-bar" aria-hidden="true"></div>
+            <p class="fd-aitext" id="fdAiText" hidden></p>
+          </div>
+        </div>
+        <div class="fd-prog" id="fdProg" aria-hidden="true"></div>
+        <div id="fdCard" style="display:grid;gap:16px">
+          <div class="fd-opts" id="fdOpts" role="group"></div>
+          <div class="fd-nav"><button class="btn" type="button" id="fdBack">&larr; Back</button><button class="btn primary" type="button" id="fdNext">Next &rarr;</button></div>
+        </div>
+        <div id="fdDone" hidden style="display:grid;gap:12px">
+          <div class="fd-acts">
+            <a class="btn primary" id="fdPractice" href="#simulators">Practice this now &rarr;</a>
+            <button class="btn" type="button" id="fdExplain" hidden>Ask the AI agent to explain</button>
+            <button class="btn" type="button" id="fdSave">Save my profile</button>
+            <button class="btn" type="button" id="fdRestart">Start over</button>
+          </div>
+          <p class="fd-note">A starting point for learning and practice, not a medical assessment. Try options with your therapist or a borrowed kit before deciding.</p>
+        </div>
       </div>
-      <div class="fd-ai" id="fdAi" hidden><span class="fd-k" style="color:#7cc4ff">The AI agent explains</span><p id="fdAiText"></p></div>
-      <div class="fd-acts">
-        <a class="btn primary" id="fdPractice" href="#simulators">Practice this now &rarr;</a>
-        <button class="btn" type="button" id="fdExplain" hidden>Ask the AI agent to explain</button>
-        <button class="btn" type="button" id="fdSave">Save my recommendation</button>
-        <button class="btn" type="button" id="fdRestart">Start over</button>
+      <div class="fd-right" aria-label="Your profile center">
+        <div class="fd-colk"><b>Profile center</b><span id="pcState">Building live</span></div>
+        <div class="pc-ring">
+          <svg viewBox="0 0 84 84" aria-hidden="true"><circle class="bg" cx="42" cy="42" r="34"/><circle class="fg" id="pcArc" cx="42" cy="42" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/><text id="pcPct" x="42" y="49" text-anchor="middle">0%</text></svg>
+          <div><b id="pcTitle">Your profile is starting</b><span id="pcSub">Answer on the left and watch it fill in here.</span></div>
+        </div>
+        <div class="pc-sec" id="pcRec" hidden><span class="pc-h">Recommended setup</span><div class="fd-top" id="fdTop"></div></div>
+        <div class="pc-sec"><span class="pc-h">Goals</span><div class="pc-chips" id="pcGoals"></div></div>
+        <div class="pc-sec"><span class="pc-h">Reliable movements</span><div class="pc-chips" id="pcMoves"></div></div>
+        <div class="pc-sec"><span class="pc-h">About you</span><div class="pc-tiles" id="pcAbout"></div></div>
+        <div class="pc-sec"><span class="pc-h">Method match · testing as you answer</span><div class="pc-bars" id="pcBars"></div></div>
+        <div class="pc-sec"><span class="pc-h">Starting settings</span><div class="pc-tiles" id="pcSet"></div></div>
+        <div class="pc-sec"><span class="pc-h">Specialize · pick what to practice</span><div class="pc-spec" id="pcSpec"></div></div>
+        <div class="pc-sec"><span class="pc-h">Agent activity</span><ul class="pc-log" id="pcLog" aria-live="off"></ul></div>
       </div>
-      <p class="fd-note">This is a starting point for learning and practice, not a medical assessment. Try options with your therapist or a borrowed kit before deciding.</p>
+    </section>
+    <section class="fd-more" id="fdRes" hidden aria-label="Details for your setup">
+      <div class="fd-box"><b>How to click and select</b><ul id="fdClick"></ul></div>
+      <div class="fd-box"><b>For your goals</b><ul id="fdGoals"></ul></div>
+      <div class="fd-box"><b>Bed and chair</b><ul id="fdPos"></ul></div>
+      <div class="fd-box"><b>Avoiding fatigue</b><ul id="fdFat"></ul></div>
     </section>
   </div>
 </main>
 <script>
 (function () {
   var Q = [
-    { id: 'goals', q: 'What do you most want to do?', hint: 'Choose all that apply.', multi: true, opts: [
+    { id: 'goals', q: 'What do you most want to do?', hint: 'Choose all that apply, then press Next.', multi: true, opts: [
       ['computer', 'Use a computer'], ['phone', 'Use a phone or tablet'], ['talk', 'Communicate', 'speech device or messages'], ['drive', 'Drive my wheelchair'],
       ['eat', 'Eat and drink on my own'], ['home', 'Control my home', 'lights, TV, bed, calling for help'], ['play', 'Play games or make music']] },
     { id: 'moves', q: 'Which movements are reliable for you?', hint: 'Choose all you can do comfortably and repeatedly.', multi: true, opts: [
@@ -94,74 +198,183 @@
     { id: 'change', q: 'Are your abilities changing?', opts: [
       ['stable', 'Fairly stable'], ['slow', 'Changing slowly'], ['fast', 'Changing quickly', 'for example with ALS']] }
   ];
-  var A = {}, step = 0;
-  var prog = document.getElementById('fdProg'), qEl = document.getElementById('fdQ'), hint = document.getElementById('fdHint'), opts = document.getElementById('fdOpts');
-  var back = document.getElementById('fdBack'), next = document.getElementById('fdNext'), card = document.getElementById('fdCard'), res = document.getElementById('fdRes');
+  function label(qid, v) { var q = Q.filter(function (x) { return x.id === qid; })[0]; var o = q && q.opts.filter(function (x) { return x[0] === v; })[0]; return o ? o[1] : v; }
+  var METH = {
+    head: { name: 'Head tracking', why: 'Small head or nose movements move the pointer. Fast and accurate.', sim: '#sim-pointing',
+      spec: ['Webcam nose tracking', 'Head mouse with a reflective dot', 'Dwell click', 'Facial-gesture click', 'Pointer smoothing', 'On-screen keyboard'] },
+    eyes: { name: 'Eye gaze', why: 'An eye tracker moves the pointer where you look. Needs very little movement.', sim: '#sim-pointing',
+      spec: ['Eye tracker calibration', 'Dwell click timing', 'Gaze keyboard with word prediction', 'Gaze speech app', 'Large-target layouts', 'Gaze in bed'] },
+    sw: { name: 'Switch scanning', why: 'Any small reliable movement works a switch that steps through choices.', sim: '#sim-scanning',
+      spec: ['Single-switch auto scan', 'Two-switch step scan', 'Row and column scanning', 'Switch placement', 'Scan speed tuning', 'Phone switch control'] },
+    voice: { name: 'Voice control', why: 'Speak commands and dictate text. Fast while your voice is clear.', sim: '#guide-ai',
+      spec: ['Dictation', 'Voice commands', 'Switch to start listening', 'Smart speaker routines', 'Voice banking'] },
+    sip: { name: 'Sip and puff', why: 'Breath works a switch or joystick, often for wheelchair driving.', sim: '#sim-scanning',
+      spec: ['Sip and puff switch', 'Sip and puff driving', 'Breath as a scan switch', 'Mouthpiece mounting'] }
+  };
+  var ORDER = ['head', 'eyes', 'sw', 'voice', 'sip'];
+  var A = {}, step = 0, rec = null, picked = {}, seen = {};
+  function el(id) { return document.getElementById(id); }
+  var prog = el('fdProg'), qEl = el('fdQ'), hint = el('fdHint'), opts = el('fdOpts'), ack = el('fdAck'), st = el('fdSt'), left = el('fdLeft');
+  var back = el('fdBack'), next = el('fdNext'), card = el('fdCard'), done = el('fdDone'), res = el('fdRes'), aiText = el('fdAiText');
+  var agent = null;
+  function cloud(id) { try { return typeof AgentCloud === 'function' ? AgentCloud(el(id)) : null; } catch (e) { return null; } }
+  setTimeout(function () { agent = cloud('fdAgent'); if (agent) agent.pulse('#5fe0a8'); }, 0);
   function has(k, v) { var a = A[k]; return Array.isArray(a) ? a.indexOf(v) >= 0 : a === v; }
+
+  function score() {
+    var s = { head: 0, eyes: 0, sw: 0, voice: 0, sip: 0 }, why = [];
+    function add(k, n, w) { s[k] += n; why.push([k, n, w]); }
+    if (has('moves', 'head')) add('head', 5, 'reliable head movement');
+    if (has('moves', 'eyes')) add('eyes', 4, 'reliable eye movement');
+    if (has('moves', 'face')) add('sw', 4, 'facial movement can work a switch');
+    else if (has('moves', 'hand')) add('sw', 4, 'a hand movement can work a switch');
+    else if (has('moves', 'foot')) add('sw', 4, 'a foot movement can work a switch');
+    if (has('moves', 'breath')) { add('sip', 4, 'breath control'); add('sw', 1, 'breath as a switch'); }
+    if (has('moves', 'voice')) add('voice', 3, 'voice available');
+    if (A.speech === 'clear') add('voice', 3, 'speech is clear');
+    if (A.speech === 'changing') add('voice', -1, 'speech is changing');
+    if (A.speech === 'none' && s.voice > 0) add('voice', -s.voice, 'speech not usable for control');
+    if (A.fatigue === 'high') { add('sw', 2, 'low effort for tiring sessions'); add('eyes', 1, 'little physical effort'); add('head', -1, 'repeated head movement tires'); }
+    if (A.fatigue === 'mid') add('sw', 1, 'low effort helps longer sessions');
+    if (A.where === 'bed') { add('eyes', 2, 'works lying down'); add('sw', 1, 'switch can mount on the bed'); add('head', -1, 'harder to move the head in bed'); }
+    if (A.where === 'both') add('eyes', 1, 'one tracker can move between bed and chair');
+    if (A.change === 'fast') { add('eyes', 2, 'keeps working as movement changes'); add('sw', 1, 'switch site can move as needed'); add('voice', -1, 'speech may change'); }
+    if (has('goals', 'drive')) add('sip', 1, 'common for wheelchair driving');
+    if (has('goals', 'talk')) { add('eyes', 1, 'gaze speech apps'); add('sw', 1, 'switch speech apps'); }
+    return { s: s, why: why };
+  }
+  function ranked(s) { return ORDER.filter(function (k) { return s[k] > 0; }).sort(function (a, b) { return s[b] - s[a]; }); }
+
+  /* ---------- profile center ---------- */
+  function chips(box, qid) {
+    var q = Q.filter(function (x) { return x.id === qid; })[0], a = A[qid] || [], prev = box.getAttribute('data-v') || '';
+    box.innerHTML = '';
+    if (!a.length) { var e = document.createElement('span'); e.className = 'pc-chip off'; e.textContent = 'Waiting for your answer'; box.appendChild(e); }
+    a.forEach(function (v) { var c = document.createElement('span'); c.className = 'pc-chip'; c.textContent = label(qid, v); if (prev.split(',').indexOf(v) < 0) c.classList.add('pc-pop'); box.appendChild(c); });
+    box.setAttribute('data-v', a.join(','));
+  }
+  function tiles(box, items) {
+    var prev = JSON.parse(box.getAttribute('data-v') || '{}'), now = {};
+    box.innerHTML = '';
+    items.forEach(function (t) {
+      var d = document.createElement('div'); d.className = 'pc-tile ' + (t[1] ? 'set' : 'empty');
+      d.innerHTML = '<span></span><b></b>'; d.querySelector('span').textContent = t[0]; d.querySelector('b').textContent = t[1] || 'Not yet';
+      if (t[1] && prev[t[0]] !== t[1]) d.classList.add('pc-pop'); now[t[0]] = t[1]; box.appendChild(d);
+    });
+    box.setAttribute('data-v', JSON.stringify(now));
+  }
+  function settings(lead) {
+    var pointer = lead === 'head' || lead === 'eyes', scan = lead === 'sw' || lead === 'sip';
+    var f = A.fatigue, w = A.where;
+    return [
+      ['Target size', f || w ? ((f === 'high' || w === 'bed') ? 'Large' : f === 'mid' ? 'Medium-large' : 'Medium') : ''],
+      [scan ? 'Scan speed' : 'Dwell time', lead && f ? (scan ? (f === 'high' ? '2.0 s per step' : f === 'mid' ? '1.5 s per step' : '1.0 s per step') : pointer ? (f === 'high' ? '1.2 s' : f === 'mid' ? '1.0 s' : '0.8 s') : 'Switch to listen') : ''],
+      ['Practice', f ? (f === 'high' ? '10 min, with breaks' : f === 'mid' ? '20 min' : '30 to 45 min') : ''],
+      ['Mounting', w ? (w === 'bed' ? 'Overbed arm' : w === 'chair' ? 'Chair at eye level' : 'Bed and chair setups') : '']
+    ];
+  }
+  function spec(r) {
+    var box = el('pcSpec'); box.innerHTML = '';
+    var top = r.slice(0, 2);
+    if (!top.length) { var e = document.createElement('p'); e.className = 'pc-empty'; e.textContent = 'Practice tracks appear here once the agent sees which methods fit you.'; box.appendChild(e); return; }
+    top.forEach(function (k) {
+      var g = document.createElement('span'); g.className = 'grp'; g.textContent = METH[k].name; box.appendChild(g);
+      METH[k].spec.forEach(function (t) {
+        var id = k + ':' + t, b = document.createElement('button'); b.type = 'button'; b.textContent = t;
+        b.setAttribute('aria-pressed', picked[id] ? 'true' : 'false');
+        b.addEventListener('click', function () { picked[id] = !picked[id]; b.setAttribute('aria-pressed', picked[id] ? 'true' : 'false'); if (agent) agent.pulse('#7cc4ff'); log([[k, 0, (picked[id] ? 'added practice track: ' : 'removed: ') + t]]); });
+        box.appendChild(b);
+      });
+    });
+  }
+  function log(items) {
+    var ul = el('pcLog'); Array.prototype.forEach.call(ul.children, function (li) { li.classList.remove('new'); });
+    items.forEach(function (w) {
+      var li = document.createElement('li'); li.className = 'new';
+      if (w[1]) { var b = document.createElement('b'); if (w[1] < 0) b.className = 'neg'; b.textContent = (w[1] > 0 ? '+' : '') + w[1] + ' '; li.appendChild(b); }
+      li.appendChild(document.createTextNode(METH[w[0]].name + ': ' + w[2]));
+      ul.insertBefore(li, ul.firstChild);
+    });
+  }
+  function update(fresh) {
+    var sc = score(), r = ranked(sc.s), max = Math.max(6, Math.max.apply(null, ORDER.map(function (k) { return sc.s[k]; })));
+    var n = Q.filter(function (q) { return q.multi ? (A[q.id] || []).length : A[q.id]; }).length, pct = Math.round(n / Q.length * 100);
+    el('pcArc').setAttribute('stroke-dashoffset', (213.6 * (1 - pct / 100)).toFixed(1)); el('pcPct').textContent = pct + '%';
+    el('pcTitle').textContent = rec ? 'Your profile is ready' : n ? 'Building your profile' : 'Your profile is starting';
+    el('pcSub').textContent = rec ? 'Pick practice tracks below, then save it.' : r.length ? 'Leading so far: ' + METH[r[0]].name : 'Answer on the left and watch it fill in here.';
+    el('pcState').textContent = rec ? 'Complete' : 'Building live';
+    chips(el('pcGoals'), 'goals'); chips(el('pcMoves'), 'moves');
+    tiles(el('pcAbout'), [['Speech', A.speech ? label('speech', A.speech) : ''], ['Session energy', A.fatigue ? label('fatigue', A.fatigue) : ''], ['Where', A.where ? label('where', A.where) : ''], ['Change', A.change ? label('change', A.change) : '']]);
+    var bars = el('pcBars'); if (!bars.children.length) ORDER.forEach(function (k) { var d = document.createElement('div'); d.className = 'pc-bar'; d.setAttribute('data-k', k); d.innerHTML = '<span></span><i><em></em></i><small>0</small>'; d.querySelector('span').textContent = METH[k].name; bars.appendChild(d); });
+    ORDER.forEach(function (k) { var d = bars.querySelector('[data-k="' + k + '"]'), v = Math.max(0, sc.s[k]); d.querySelector('em').style.width = Math.round(v / max * 100) + '%'; d.querySelector('small').textContent = v; d.classList.toggle('lead', r[0] === k); });
+    tiles(el('pcSet'), settings(r[0]));
+    var key = r.slice(0, 2).join(','); if (key !== seen.spec) { seen.spec = key; spec(r); }
+    if (fresh) {
+      var keys = {}; (seen.why || []).forEach(function (w) { keys[w.join('|')] = 1; });
+      var add = sc.why.filter(function (w) { return !keys[w.join('|')]; });
+      if (add.length) log(add.reverse());
+      seen.why = sc.why;
+      if (agent) { agent.pulse(add.some(function (w) { return w[1] < 0; }) ? '#ffb0a0' : '#5fe0a8'); agent.talk(600); }
+      return add;
+    }
+    seen.why = sc.why; return [];
+  }
+  function ackFor(add) {
+    if (!add.length) return 'Noted. That doesn’t change the picture much, which is useful to know.';
+    var top = add.slice().sort(function (a, b) { return Math.abs(b[1]) - Math.abs(a[1]); })[0];
+    return (top[1] > 0 ? 'Good, ' : 'Noted, ') + top[2] + '. I ' + (top[1] > 0 ? 'moved ' + METH[top[0]].name.toLowerCase() + ' up' : 'moved ' + METH[top[0]].name.toLowerCase() + ' down') + ' in your profile.';
+  }
+
+  /* ---------- questions ---------- */
+  function busy(on, label) { left.classList.toggle('busy', !!on); st.textContent = label; if (agent) agent.set({ energy: on ? 0.9 : 0 }); }
   function render() {
     prog.innerHTML = ''; Q.forEach(function (_, i) { var b = document.createElement('i'); if (i <= step) b.className = 'on'; prog.appendChild(b); });
-    var q = Q[step]; qEl.textContent = (step + 1) + '. ' + q.q; hint.textContent = q.hint || ''; hint.hidden = !q.hint;
+    var q = Q[step]; qEl.textContent = q.q; hint.textContent = q.hint || ''; hint.hidden = !q.hint;
+    el('fdStepK').textContent = 'Question ' + (step + 1) + ' of ' + Q.length;
     opts.innerHTML = ''; opts.setAttribute('aria-label', q.q);
     q.opts.forEach(function (o) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'fd-opt';
       b.textContent = o[1]; if (o[2]) { var s = document.createElement('small'); s.textContent = o[2]; b.appendChild(s); }
       b.setAttribute('aria-pressed', has(q.id, o[0]) ? 'true' : 'false');
       b.addEventListener('click', function () {
-        if (q.multi) { var a = A[q.id] || []; var i = a.indexOf(o[0]); if (i >= 0) a.splice(i, 1); else a.push(o[0]); A[q.id] = a; render(); }
-        else { A[q.id] = o[0]; render(); setTimeout(go, 220); }
+        if (q.multi) { var a = A[q.id] || []; var i = a.indexOf(o[0]); if (i >= 0) a.splice(i, 1); else a.push(o[0]); A[q.id] = a; ack.textContent = ackFor(update(true)); render(); }
+        else { A[q.id] = o[0]; var add = update(true); ack.textContent = ackFor(add); render(); think(go); }
       });
       opts.appendChild(b);
     });
-    back.disabled = step === 0; next.textContent = step === Q.length - 1 ? 'See my recommendation →' : 'Next →';
-    var answered = q.multi ? (A[q.id] || []).length > 0 : !!A[q.id]; next.disabled = !answered;
+    back.disabled = step === 0; next.textContent = step === Q.length - 1 ? 'Finish my profile →' : 'Next →';
+    next.disabled = !(q.multi ? (A[q.id] || []).length > 0 : !!A[q.id]);
   }
+  var tm = null;
+  function think(fn) { clearTimeout(tm); busy(true, 'Updating your profile'); tm = setTimeout(function () { busy(false, 'Listening'); fn(); }, 650); }
   function go() { if (step < Q.length - 1) { step++; render(); } else result(); }
-  next.addEventListener('click', go);
-  back.addEventListener('click', function () { if (step > 0) { step--; render(); } });
+  next.addEventListener('click', function () { think(go); });
+  back.addEventListener('click', function () { if (step > 0) { step--; ack.textContent = ''; render(); } });
 
-  var METH = {
-    head: { name: 'Head tracking', why: 'A webcam or head mouse moves the pointer with small head or nose movements. Fast and accurate for computers and tablets.', sim: '#sim-pointing' },
-    eyes: { name: 'Eye gaze', why: 'An eye tracker moves the pointer where you look. Works with very little movement and keeps working as other movement changes.', sim: '#sim-pointing' },
-    sw: { name: 'Switch scanning', why: 'One or two switches, worked by any small reliable movement, step through choices on screen. Very reliable and low effort.', sim: '#sim-scanning' },
-    voice: { name: 'Voice control', why: 'Speak commands and dictate text. Fast for writing when your voice is clear.', sim: '#guide-ai' },
-    sip: { name: 'Sip and puff', why: 'Breath controls a switch or joystick. Common for wheelchair driving and as a switch for scanning.', sim: '#sim-scanning' }
-  };
-  function score() {
-    var s = { head: 0, eyes: 0, sw: 0, voice: 0, sip: 0 };
-    if (has('moves', 'head')) s.head += 5; if (has('moves', 'eyes')) s.eyes += 4;
-    if (has('moves', 'face') || has('moves', 'hand') || has('moves', 'foot')) s.sw += 4;
-    if (has('moves', 'breath')) { s.sip += 4; s.sw += 1; }
-    if (has('moves', 'voice')) s.voice += 3;
-    if (A.speech === 'clear') s.voice += 3; if (A.speech === 'changing') s.voice -= 1; if (A.speech === 'none') s.voice = -9;
-    if (A.fatigue === 'high') { s.sw += 2; s.eyes += 1; s.head -= 1; } if (A.fatigue === 'mid') { s.sw += 1; }
-    if (A.where === 'bed') { s.eyes += 2; s.sw += 1; s.head -= 1; } if (A.where === 'both') { s.eyes += 1; }
-    if (A.change === 'fast') { s.eyes += 2; s.sw += 1; s.voice -= 1; }
-    if (has('goals', 'drive')) s.sip += 1;
-    if (has('goals', 'talk')) { s.eyes += 1; s.sw += 1; }
-    return Object.keys(s).filter(function (k) { return s[k] > 0; }).sort(function (a, b) { return s[b] - s[a]; });
-  }
-  var rec = null;
+  /* ---------- result ---------- */
   function li(ul, items) { ul.innerHTML = ''; items.forEach(function (t) { var l = document.createElement('li'); l.textContent = t; ul.appendChild(l); }); }
   function result() {
-    var r = score(); if (!r.length) r = ['sw'];
-    var primary = r[0], backup = r[1] || (primary === 'sw' ? 'eyes' : 'sw');
-    var ahead = null;
+    var r = ranked(score().s); if (!r.length) r = ['sw'];
+    var primary = r[0], backup = r[1] || (primary === 'sw' ? 'eyes' : 'sw'), ahead = null;
     if (A.change === 'fast' || A.change === 'slow') ahead = ['eyes', 'sw'].filter(function (k) { return k !== primary && k !== backup; })[0] || null;
     if (!ahead && A.speech === 'changing') ahead = 'voice-bank';
     rec = { primary: primary, backup: backup, ahead: ahead, answers: JSON.parse(JSON.stringify(A)) };
-    var top = document.getElementById('fdTop'); top.innerHTML = '';
+    var top = el('fdTop'); top.innerHTML = '';
     function pick(role, key, cls) {
-      var d = document.createElement('div'); d.className = 'fd-pick' + (cls ? ' ' + cls : '');
-      var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your own voice now so a speech device can sound like you later.' : METH[key].why;
+      var d = document.createElement('div'); d.className = 'fd-pick pc-pop' + (cls ? ' ' + cls : '');
+      var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your voice now so a speech device can sound like you later.' : METH[key].why;
       d.innerHTML = '<span class="r"></span><b></b><p></p>'; d.querySelector('.r').textContent = role; d.querySelector('b').textContent = name; d.querySelector('p').textContent = why; top.appendChild(d);
     }
     pick('Start with', primary, 'primary'); pick('Backup', backup);
     if (ahead) pick('Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
+    el('pcRec').hidden = false;
+    // pre-select the first two tracks of the lead method
+    METH[primary].spec.slice(0, 2).forEach(function (t) { picked[primary + ':' + t] = true; }); seen.spec = ''; update(false);
     var click = [];
     if (primary === 'head' || primary === 'eyes') { click.push('Dwell to click: hold the pointer still on a target'); if (has('moves', 'face')) click.push('Or a facial gesture, like a smile or eyebrow raise, as a click'); if (has('moves', 'hand') || has('moves', 'foot') || has('moves', 'breath')) click.push('Or a switch as a click, which is faster and causes fewer accidental selections'); }
     if (primary === 'sw' || primary === 'sip') click.push('Scanning: choices light up in turn and you press when the right one is lit', 'Start with a slower scan and speed up with practice');
     if (primary === 'voice') click.push('Voice commands like "click Send", with a switch to start and stop listening');
-    li(document.getElementById('fdClick'), click);
+    li(el('fdClick'), click);
     var g = [];
     if (has('goals', 'computer')) g.push('Computer: ' + METH[primary].name.toLowerCase() + ' with an on-screen keyboard such as OptiKey');
     if (has('goals', 'phone')) g.push('Phone: built-in switch control, head tracking or voice control on iPhone and Android');
@@ -170,41 +383,60 @@
     if (has('goals', 'eat')) g.push('Eating and drinking: a robotic arm or a tabletop eating aid. Try the robotic arm demo');
     if (has('goals', 'home')) g.push('Home: smart plugs, lights and TV through your phone or computer, plus more than one way to call for help');
     if (has('goals', 'play')) g.push('Games and music: head tracking or facial gestures as controls, breath-played instruments');
-    li(document.getElementById('fdGoals'), g.length ? g : ['Explore Your solutions for ideas']);
+    li(el('fdGoals'), g.length ? g : ['Explore Your solutions for ideas']);
     var pos = [];
     if (A.where !== 'chair') pos.push('In bed: mount the screen and switches where you can reach them lying down, and use larger targets');
     if (A.where !== 'bed') pos.push('In the chair: mount the screen at eye level and keep a switch within easy reach');
     if (A.where === 'both') pos.push('Keep a separate setup for bed and chair, and recalibrate when you change position');
-    li(document.getElementById('fdPos'), pos);
+    li(el('fdPos'), pos);
     var fat = ['Use the lowest-effort method for long tasks', 'Take short breaks and keep a backup method for later in the day'];
     if (A.fatigue !== 'low') fat.push('Slow the pointer, enlarge targets, and lengthen dwell or scan time when tired');
     if (A.fatigue === 'high') fat.push('Switch scanning or eye gaze usually tire people less than repeated head movement');
-    li(document.getElementById('fdFat'), fat);
-    var p = document.getElementById('fdPractice'), target = METH[primary].sim;
+    li(el('fdFat'), fat);
+    var p = el('fdPractice'), target = METH[primary].sim;
     if (has('goals', 'eat') && primary !== 'head' && primary !== 'eyes') target = '#home';
-    if (target.indexOf('#sim-') === 0 && !document.getElementById(target.slice(1))) target = '#simulators';
-    p.href = target; p.textContent = 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
-    if (target === '#home') p.textContent = 'Try the robotic arm →';
-    card.hidden = true; prog.hidden = true; res.hidden = false; document.getElementById('fdAi').hidden = true;
-    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (target.indexOf('#sim-') === 0 && !el(target.slice(1))) target = '#simulators';
+    p.href = target; p.textContent = target === '#home' ? 'Try the robotic arm →' : 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
+    card.hidden = true; prog.hidden = true; done.hidden = false; res.hidden = false; aiText.hidden = true;
+    el('fdStepK').textContent = 'Profile complete';
+    ack.textContent = 'Your profile is built.';
+    qEl.textContent = 'Start with ' + METH[primary].name.toLowerCase() + ', keep ' + METH[backup].name.toLowerCase() + ' as a backup.';
+    hint.hidden = false; hint.textContent = 'Pick practice tracks in your profile center, then practice or save it.';
+    if (agent) { agent.pulse('#5fe0a8'); agent.talk(1500); }
+    st.textContent = 'Profile ready';
   }
-  document.getElementById('fdRestart').addEventListener('click', function () { A = {}; step = 0; rec = null; card.hidden = false; prog.hidden = false; res.hidden = true; render(); });
-  document.getElementById('fdSave').addEventListener('click', function () {
+  el('fdRestart').addEventListener('click', function () {
+    A = {}; step = 0; rec = null; picked = {}; seen = {}; el('pcLog').innerHTML = ''; el('pcRec').hidden = true;
+    card.hidden = false; prog.hidden = false; done.hidden = true; res.hidden = true; aiText.hidden = true; ack.textContent = ''; st.textContent = 'Listening';
+    update(false); render();
+  });
+  el('fdSave').addEventListener('click', function () {
     if (!rec) return;
-    var name = 'access-plus-recommendation-' + new Date().toISOString().slice(0, 10) + '.json';
-    var data = JSON.stringify({ app: 'Access+ ALS', type: 'Find my technology', date: new Date().toISOString(), recommendation: { start: METH[rec.primary].name, backup: METH[rec.backup].name, planAhead: rec.ahead === 'voice-bank' ? 'Voice banking' : (rec.ahead ? METH[rec.ahead].name : null) }, answers: rec.answers }, null, 2);
+    var name = 'access-plus-profile-' + new Date().toISOString().slice(0, 10) + '.json', sc = score().s;
+    var data = JSON.stringify({ app: 'Access+ ALS', type: 'Profile studio', date: new Date().toISOString(),
+      recommendation: { start: METH[rec.primary].name, backup: METH[rec.backup].name, planAhead: rec.ahead === 'voice-bank' ? 'Voice banking' : (rec.ahead ? METH[rec.ahead].name : null) },
+      methodMatch: ORDER.reduce(function (o, k) { o[METH[k].name] = Math.max(0, sc[k]); return o; }, {}),
+      startingSettings: settings(rec.primary).reduce(function (o, t) { o[t[0]] = t[1]; return o; }, {}),
+      practiceTracks: Object.keys(picked).filter(function (k) { return picked[k]; }).map(function (k) { var x = k.split(':'); return { method: METH[x[0]].name, track: x[1] }; }),
+      answers: rec.answers }, null, 2);
     function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
     if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
   });
   var sampleFn = null;
-  if (window.claude && window.claude.use) window.claude.use('sample').then(function (f) { sampleFn = f; if (f) document.getElementById('fdExplain').hidden = false; }).catch(function () {});
-  document.getElementById('fdExplain').addEventListener('click', function () {
+  if (window.claude && window.claude.use) window.claude.use('sample').then(function (f) { sampleFn = f; if (f) el('fdExplain').hidden = false; }).catch(function () {});
+  el('fdExplain').addEventListener('click', function () {
     if (!sampleFn || !rec) return;
-    var box = document.getElementById('fdAi'), t = document.getElementById('fdAiText'); box.hidden = false; t.textContent = 'Thinking…';
-    var prompt = 'You are the Access+ AI agent, a calm, friendly guide for people with ALS and other complex disabilities. In under 140 words, plain language, explain why this starting setup suits the person and suggest one first practice step. Do not diagnose or give medical advice; suggest trying options with a therapist. Answers: ' + JSON.stringify(rec.answers) + '. Recommendation: start with ' + METH[rec.primary].name + ', backup ' + METH[rec.backup].name + (rec.ahead ? ', plan ahead for ' + (rec.ahead === 'voice-bank' ? 'voice banking' : METH[rec.ahead].name) : '') + '.';
-    sampleFn(prompt, { modelTier: 'quick', cache: false, onText: function (e) { t.textContent = e.text; } }).then(function (r) { t.textContent = r.text; }).catch(function () { t.textContent = 'The AI agent is not available right now. The recommendation above still applies.'; });
+    var btn = this; btn.disabled = true; aiText.hidden = false; aiText.textContent = ''; ack.textContent = 'Here’s why I put this together for you:';
+    busy(true, 'Thinking'); if (agent) agent.pulse('#7cc4ff');
+    left.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    function fin(msg) { busy(false, msg); btn.disabled = false; if (agent) agent.pulse('#5fe0a8'); }
+    var tracks = Object.keys(picked).filter(function (k) { return picked[k]; }).map(function (k) { return k.split(':')[1]; });
+    var prompt = 'You are the Access+ AI agent, a calm, friendly guide for people with ALS and other complex disabilities. In under 140 words, plain language, explain why this starting setup suits the person and suggest one first practice step. Do not diagnose or give medical advice; suggest trying options with a therapist. Do not recommend brands. Answers: ' + JSON.stringify(rec.answers) + '. Recommendation: start with ' + METH[rec.primary].name + ', backup ' + METH[rec.backup].name + (rec.ahead ? ', plan ahead for ' + (rec.ahead === 'voice-bank' ? 'voice banking' : METH[rec.ahead].name) : '') + '. Practice tracks chosen: ' + (tracks.join(', ') || 'none') + '.';
+    sampleFn(prompt, { modelTier: 'quick', cache: false, onText: function (e) { aiText.textContent = e.text; st.textContent = 'Explaining'; if (agent) { agent.set({ energy: 0.5 }); agent.talk(700); } } })
+      .then(function (r) { aiText.textContent = r.text; fin('Done'); })
+      .catch(function () { aiText.textContent = 'The AI agent is not available right now. Your profile still applies.'; fin('Not available'); });
   });
-  render();
+  update(false); render();
 })();
 </script>
 </body>

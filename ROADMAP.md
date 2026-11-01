@@ -16,6 +16,7 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay
+- Profile studio (Nov 1, 2026): Find my technology rebuilt as a split screen, AI agent on the left, live profile center on the right (goals, movements, method match bars, starting settings, practice tracks, agent activity log), saves a profile file
 - Robotic arm: 3D tabletop arm and reach-and-grasp skill test with score and Save my results built (Nov 1, 2026). Next: input selector (switch scanning, head tilt, face switches), AI assist slider, top-down camera view
 - Profile: skills, settings and trends prototype with activity profiles, focus skills, save/open file (Nov 1, 2026). Next: Save/Open on gesture check; feed real skill test results into trends
 - Fill in the "coming next" areas: switches and interfaces, smart home and safety, communication devices, lifts and transfers, environmental supports and mounting, computer access, phones and tablets, communication software, gaming and music, smart wheelchairs, exoskeletons and stimulation, smart glasses and AR
