@@ -15,7 +15,8 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 
 ## Website
 
-- Make the home-page robotic arm more sophisticated as a preview of the site's depth (ideas under discussion)
+- Robotic arm: 3D tabletop arm built (Nov 1, 2026). Next: skill tasks with scores and Save my results, input selector (switch scanning, head tilt, face switches), AI assist slider, top-down camera view
+- Save my results / Open saved results buttons on profile, gesture check and simulators
 - Fill in the "coming next" areas: switches and interfaces, smart home and safety, communication devices, lifts and transfers, environmental supports and mounting, computer access, phones and tablets, communication software, gaming and music, smart wheelchairs, exoskeletons and stimulation, smart glasses and AR
 - Profile carries through the journey: goals into the profile, "Matches for you" on Solutions, kit request pre-filled
 - Real sign-up, community reviews and kit requests: storage, privacy policy, consent

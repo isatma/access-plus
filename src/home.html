@@ -310,6 +310,18 @@ footer { padding-bottom: 90px; }
 .dial-item.on text { fill: #5fe0a8; }
 .dial-item:focus-visible rect { stroke: #5fe0a8; stroke-width: 3; }
 .dial-item:focus { outline: none; }
+.arm3d { display: none; width: 100%; outline: none; }
+.has3d .arm3d { display: block; }
+.has3d #armSvg, .has3d #aceWrap { display: none !important; }
+.has3d .stage3d .viz { transform: none !important; }
+.has3d .stage3d .viz::after { display: none; }
+.arm3d:focus-visible { box-shadow: inset 0 0 0 3px var(--signal); }
+.armctl2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.armctl2 .btn { min-height: 52px; justify-content: center; font-size: 0.82em; }
+.armctl2 .stopbtn { border-color: #ff8a8a; color: #ff8a8a; }
+.armctl2 .stopbtn:hover { background: rgba(255,138,138,0.12); }
+.armctl2 [aria-pressed="true"] { background: var(--signal-soft); color: var(--signal); border-color: var(--signal); }
+.armread { margin: 10px 0 0; font: 500 0.66em var(--mono); letter-spacing: 0.08em; color: var(--muted); line-height: 1.6; }
 .armctl { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 4px; }
 .armctl .btn { min-height: var(--target); justify-content: center; font-size: 0.85em; }
 .armsel { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--signal) !important; }
@@ -376,7 +388,12 @@ footer { padding-bottom: 90px; }
 @media (max-width: 900px) { .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .case-grid { grid-template-columns: 1fr; } }
 /* steps */
-#how { margin-top: 110px; position: relative; z-index: 1; }
+.pillars { margin-top: 70px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; position: relative; z-index: 1; }
+.pillar { display: grid; gap: 6px; padding: 18px 20px; border-top: 2px solid var(--signal); background: color-mix(in srgb, var(--panel) 85%, transparent); }
+.pillar .pk { font: 600 1.05em var(--body); color: var(--ink); }
+.pillar p { margin: 0; color: var(--desc); font-size: 0.93em; }
+@media (max-width: 760px) { .pillars { grid-template-columns: 1fr; margin-top: 32px; } }
+#how { margin-top: 70px; position: relative; z-index: 1; }
 .how-head { margin-bottom: 30px; justify-content: center; text-align: center; border-bottom: none; }
 .how-head::after { left: 50%; transform: translateX(-50%); width: 80px; }
 .how-head h2 { font-weight: 700; font-size: 1.45em; }
@@ -517,7 +534,7 @@ footer .wrap { padding-block: 22px; }
         <canvas id="heroAgent" aria-hidden="true"></canvas>
         <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
       </div>
-      <p>Practice in simulators, borrow equipment, and find free hardware and software for the devices you depend on.</p>
+      <p>Practice in simulators, borrow equipment, and find open-source and commercial hardware and software for the devices you depend on.</p>
       <div class="hero-agent">
         <div class="ha-text">
           <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
@@ -531,7 +548,7 @@ footer .wrap { padding-block: 22px; }
             <button class="mode" id="modeNav" type="button" aria-pressed="true">Navigate the site</button>
             <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
           </div>
-          <div class="stage3d"><div class="viz">
+          <div class="stage3d"><div class="viz"><div class="arm3d" id="arm3d" tabindex="0" aria-label="3D robotic arm. Use Left and Right to choose, Go to act, Escape to stop."></div>
             <div class="arm-ace" id="aceWrap"><svg class="arm-face user-target" id="userTarget" viewBox="0 0 100 100" aria-hidden="true">
               <path class="ut-head" d="M30 88 L30 71 C20 65 15 55 15 44 C15 26 29 13 46 13 C62 13 74 23 76 37 L81 47 C82 49 81 51 79 51 L77 51 L77 56 C77 59 75 61 72 61 L71 61 L71 66 C71 70 68 72 64 72 L58 72 L58 88"/>
               <path class="ut-ear" d="M43 38 C37 38 36 50 43 50"/>
@@ -599,15 +616,23 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>Turn the arm through the four steps of Access+ and press Go, or switch to Pick things up to bring a drink to the mouth, hold the phone at the ear, or press an elevator button. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>The arm reaches across the table in 3D: left and right, in and out, up and down. In Navigate, it grasps a tile to open that page. In Pick things up, it brings a drink to the mouth, holds the phone at the ear, moves the pill bottle to the tray, or presses an elevator button, and asks you to confirm before moving near the face. Manual mode lets you drive one joint at a time, like a real assistive arm. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
             </div>
+            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual: off</button></div>
+            <p class="armread" id="armRead" hidden></p>
           </div>
         </div>
     </div>
+
+    <section class="pillars" aria-label="What Access+ is">
+      <div class="pillar"><span class="pk">Open source</span><p>Designs, code, keyboard layouts and findings are shared openly so others can build on them.</p></div>
+      <div class="pillar"><span class="pk">Skill building</span><p>Practice in simulators and with mailed sensor kits, on your own or with your therapist.</p></div>
+      <div class="pillar"><span class="pk">Research platform</span><p>Assess your abilities, track your skills over time, and choose whether to share results with research studies.</p></div>
+    </section>
 
     <section id="how" aria-labelledby="howTitle">
       <div class="head how-head"><h2 id="howTitle">How Access+ works</h2></div>
@@ -711,7 +736,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 10:35 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 10:56 UTC</span></div>
   </div>
 </footer>
 
@@ -1389,4 +1414,36 @@ function AgentCloud(canvas, opts) {
   try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
   big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
 })();
+
+  // ---- 3D arm (loads Three.js; keeps the 2D arm if 3D is unavailable) ----
+  (function () {
+    var host = document.getElementById('arm3d'); if (!host) return;
+    var feat = document.getElementById('guide');
+    function start() {
+      if (!window.THREE || !window.initArm3D) return;
+      function fresh(id) { var o = document.getElementById(id), n = o.cloneNode(true); o.parentNode.replaceChild(n, o); return n; }
+      var ui = { left: fresh('armLeft'), right: fresh('armRight'), go: fresh('armGo'), navTab: fresh('modeNav'), playTab: fresh('modePlay'),
+                 stop: document.getElementById('armStop'), manual: document.getElementById('armManual'), status: document.getElementById('armSel'), readout: document.getElementById('armRead') };
+      ui.go.textContent = 'Go'; ui.navTab.setAttribute('aria-pressed', 'true'); ui.playTab.setAttribute('aria-pressed', 'false');
+      var dests = [
+        { short: 'How it\nworks', name: 'How it works', go: '#how', cap: 'Four steps from your goals to trying real equipment.' },
+        { short: 'Who it\u2019s\nfor', name: 'Who it\u2019s for', go: '#involved', cap: 'You, your family, your therapist: open to everyone.' },
+        { short: '1 Goals', name: 'Step 1, your goals', go: '#goals', cap: 'Pick what you want to do, like drink, eat, call for help or play.' },
+        { short: '2 AI\nprofile', name: 'Step 2, your AI profile', go: '#profile', cap: 'The AI agent asks what you want to accomplish and builds your profile.' },
+        { short: '3 Solutions', name: 'Step 3, your solutions', go: '#software', cap: 'Software, hardware and advanced interfaces that fit you.' },
+        { short: '4 Borrow\nkit', name: 'Step 4, try and borrow', go: '#try', cap: 'Practice in simulators, then borrow a sensor kit by mail.' }
+      ];
+      try {
+        var api = window.initArm3D({ host: host, ui: ui, dests: dests, go: function (h) { if (location.hash === h) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = h; } });
+        if (!api) return;
+        feat.classList.add('has3d');
+        document.getElementById('armCtl2').hidden = false; document.getElementById('armRead').hidden = false;
+      } catch (err) { console.warn('3D arm unavailable', err); feat.classList.remove('has3d'); }
+    }
+    var gl = false; try { var c = document.createElement('canvas'); gl = !!(c.getContext('webgl') || c.getContext('experimental-webgl')); } catch (e) {}
+    if (!gl) return;
+    if (window.THREE) return start();
+    var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; sc.async = true;
+    sc.onload = start; document.head.appendChild(sc);
+  })();
 </script>

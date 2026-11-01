@@ -170,7 +170,7 @@ def build():
       <h3 class="hx-group">Free webcam software</h3>
       <div class="hx-grid">
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>FaceNav</h4><p>Facial and nose navigation software for hands-free mouse control, developed alongside the Access+ work with MotionInput.</p><dl><dt>Clicking</dt><dd>Nose and head movement for the pointer; facial gestures for clicks</dd><dt>Works on</dt><dd>Details and download link to be added</dd></dl><span class="hx-pending">Link coming soon</span></article>
-        <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>UCL MotionInput / MotionInput Games</h4><p>Touchless computing from University College London: nose navigation, facial gestures, eye gaze, hand gestures and speech commands. Development continues at the MotionInput Games spin-off.</p><dl><dt>Clicking</dt><dd>Nose navigation moves the pointer; smiles, raised eyebrows, open mouth or speech click</dd><dt>Works on</dt><dd>Windows 10 and 11; free for non-commercial personal use</dd></dl><a class="hx-link" href="https://students.cs.ucl.ac.uk/software/MotionInput/v2/MotionInput.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
+        <article class="hx-card"><div class="hx-tags"><span class="hx-tag">Webcam</span></div><h4>UCL MotionInput / MotionInput Games</h4><p>Touchless computing from University College London: nose navigation, facial gestures, eye gaze, hand gestures and speech commands. Development continues at the MotionInput Games spin-off.</p><dl><dt>Clicking</dt><dd>Nose navigation moves the pointer; smiles, raised eyebrows, open mouth or speech click</dd><dt>Works on</dt><dd>Windows 10 and 11; free for non-commercial personal use</dd></dl><a class="hx-link" href="https://students.cs.ucl.ac.uk/software/MotionInput/v2/MotionInput.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Project Gameface (Google)</h4><p>Open-source hands-free mouse built for gaming. Head movement moves the cursor, with speed set separately for each direction and smoothing to cut jitter.</p><dl><dt>Clicking</dt><dd>Facial expressions such as raised eyebrows or an open mouth mapped to clicks, scrolling or keys, each with its own threshold</dd><dt>Works on</dt><dd>Open source on GitHub</dd></dl><a class="hx-link" href="https://developers.googleblog.com/2023/06/project-gameface.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Enable Viacam (eViacam)</h4><p>Long-standing free, open-source head mouse that follows head movement through a standard webcam.</p><dl><dt>Clicking</dt><dd>Dwell clicking: rest the pointer to click</dd><dt>Works on</dt><dd>Windows and Linux</dd></dl><a class="hx-link" href="https://fosshub.com/Enable-Viacam.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag free">Free</span><span class="hx-tag">Webcam</span></div><h4>Camera Mouse</h4><p>Free program that tracks a chosen point on the face, such as the nose, through a webcam. Developed at Boston College and widely used in schools.</p><dl><dt>Clicking</dt><dd>Dwell clicking</dd><dt>Works on</dt><dd>Windows</dd></dl><a class="hx-link" href="https://www.senteacher.org/app/popular/11/Free-Camera-Mouse-Disabilities.html" target="_blank" rel="noopener">Learn more &#8599;</a></article>
@@ -207,7 +207,7 @@ def build():
     </section>
     <section class="jn-sec" id="join-everyone">
       <div class="jn-k">Open to everyone</div>
-      <h2>Use it free, your way</h2>
+      <h2>Use it your way</h2>
       <p>Anyone can try the simulators, read the reviews, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
       <div class="jn-acts"><a class="btn primary" href="#goals">Start with a goal</a><a class="btn" href="#simulators">Try a simulator</a></div>
     </section>
@@ -526,6 +526,8 @@ def build():
         sel.textContent = 'Pointing at: ' + d.name;
       } else { location.href = d.go; }""", """      if (location.hash === d.go) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = d.go;
       sel.textContent = 'Pointing at: ' + d.name;""")
+    if '/*ARM3D*/' not in home:
+        home = home.rstrip() + '\n<script>/*ARM3D*/\n' + (ROOT / 'src' / 'arm3d.js').read_text(encoding='utf-8') + '\n</script>\n'
     home_p.write_text(home)
     print('built', len(home), 'bytes')
 
