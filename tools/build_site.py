@@ -430,6 +430,56 @@ def build():
     else window.scrollTo({ top: 0, behavior: smooth });
   });
   try { AgentCloud(document.getElementById('gxFace')); } catch (e) {}
+  // microphone buttons
+  (function () {
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    var ua = navigator.userAgent || '', plat = (navigator.userAgentData && navigator.userAgentData.platform) || navigator.platform || '';
+    function tipText() {
+      if (/iPhone|iPad|iPod|Android/i.test(ua)) return 'Tap the microphone on your keyboard, then speak.';
+      if (/Mac/i.test(plat)) return 'Press the Control key twice to dictate, then speak. (Turn on Dictation in System Settings, Keyboard.) Voice Control can run the whole site.';
+      if (/Win/i.test(plat)) return 'Press the Windows key + H to start voice typing, then speak. Voice Access in Windows 11 can also click buttons by voice.';
+      return 'Use your device’s dictation or voice typing to speak into the box.';
+    }
+    var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+    function addMic(input, before) {
+      if (!input) return;
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'mic'; b.innerHTML = ICON;
+      b.setAttribute('aria-label', 'Speak instead of typing'); b.title = 'Speak instead of typing. Your browser turns speech into text, often using a Google or Apple service.';
+      b.setAttribute('aria-pressed', 'false');
+      (before || input).insertAdjacentElement(before ? 'beforebegin' : 'afterend', b);
+      var row = b.parentElement;
+      if (getComputedStyle(row).display === 'grid') {
+        var n = [].filter.call(row.children, function (c) { return !c.classList.contains('sr') && c !== input; }).length;
+        row.style.gridTemplateColumns = 'minmax(0, 1fr)' + new Array(n + 1).join(' auto');
+      }
+      var tip = null, tipT = null, rec = null, base = '';
+      function showTip(msg) {
+        if (!tip) { tip = document.createElement('p'); tip.className = 'mictip'; tip.setAttribute('role', 'status'); var host = row.closest('form') || row; host.insertAdjacentElement('afterend', tip); }
+        tip.innerHTML = ''; tip.appendChild(document.createTextNode(msg));
+        var sm = document.createElement('small'); sm.textContent = 'The microphone button works when this site runs on its own web address. In this preview, your device’s voice typing works instead.'; tip.appendChild(sm);
+        tip.hidden = false; clearTimeout(tipT); tipT = setTimeout(function () { tip.hidden = true; }, 12000);
+        input.focus();
+      }
+      function stop() { b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); b.setAttribute('aria-label', 'Speak instead of typing'); }
+      b.addEventListener('click', function () {
+        if (rec) { try { rec.stop(); } catch (e) {} return; }
+        if (!SR) { showTip(tipText()); return; }
+        try {
+          rec = new SR(); rec.lang = navigator.language || 'en-US'; rec.interimResults = true; rec.continuous = false;
+          base = input.value ? input.value.replace(/\s*$/, ' ') : '';
+          rec.onresult = function (e) { var t = ''; for (var i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; input.value = base + t; input.dispatchEvent(new Event('input', { bubbles: true })); };
+          rec.onerror = function (e) { if (e.error === 'not-allowed' || e.error === 'service-not-allowed' || e.error === 'audio-capture') showTip(tipText()); };
+          rec.onend = function () { rec = null; stop(); input.focus(); };
+          rec.start();
+          b.classList.add('on'); b.setAttribute('aria-pressed', 'true'); b.setAttribute('aria-label', 'Listening. Press to stop.');
+        } catch (err) { rec = null; stop(); showTip(tipText()); }
+      });
+    }
+    var gq = document.getElementById('goalQ');
+    addMic(gq, gq && gq.parentElement.querySelector('button[type=submit]'));
+    addMic(document.getElementById('askInput'), document.getElementById('askBtn'));
+    addMic(document.getElementById('pf-askIn'), document.getElementById('pf-sendBtn'));
+  })();
 '''
     views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {\n' + keyboards[2] + '\n})();\n(function () {\n' + tech[2] + '\n})();\n(function () {\n' + about[2] + '\n})();\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
     home = home.replace('</script>\n</body>', '</script>\n' + views_js + '</body>', 1) if '</body>' in home else home + views_js
