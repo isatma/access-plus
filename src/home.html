@@ -185,6 +185,10 @@ footer { padding-bottom: 90px; }
 .arm-ace.play .arm-face { opacity: 1; transform: scale(1); }
 .arm-ace:not(.play) { visibility: hidden; transition: visibility 0s .7s; }
 .feature .viz { position: relative; }
+.feature .stage3d { perspective: 1100px; perspective-origin: 50% 0%; overflow: hidden; }
+.feature .stage3d .viz { transform: rotateX(20deg) scale(0.97); transform-origin: 50% 100%; transform-style: preserve-3d; }
+.feature .stage3d .viz::after { content: ""; position: absolute; left: 6%; right: 6%; bottom: 2%; height: 16%; background: radial-gradient(ellipse at 50% 60%, rgba(95,224,168,0.18), transparent 70%); pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) { .feature .stage3d .viz { transition: transform .8s ease; } .feature .stage3d:hover .viz { transform: rotateX(14deg) scale(0.98); } }
 .arm-ace { position: absolute; left: 3%; top: 33%; width: 26%; pointer-events: none; }
 .arm-ace canvas { display: block; width: 100%; aspect-ratio: 1; }
 .ace-name { position: absolute; left: 50%; bottom: -4px; transform: translateX(-50%); font: 500 10px var(--mono); letter-spacing: 0.14em; color: var(--signal); }
@@ -391,7 +395,7 @@ footer .wrap { padding-block: 22px; }
             <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
           </div>
           <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
-          <div class="viz">
+          <div class="stage3d"><div class="viz">
             <div class="arm-ace" id="aceWrap"><canvas id="armFace" class="arm-face" aria-hidden="true"></canvas><span class="ace-name" id="aceName">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
               <defs>
@@ -448,7 +452,7 @@ footer .wrap { padding-block: 22px; }
               <circle cx="200" cy="230" r="10" fill="url(#gJoint)" stroke="#0b1220" stroke-width="2" filter="url(#fGlow)"/>
               <circle cx="200" cy="230" r="3.5" fill="#0b1220"/>
             </svg>
-          </div>
+          </div></div>
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
