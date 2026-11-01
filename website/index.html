@@ -862,6 +862,13 @@ footer .wrap { padding-block: 22px; }
 #view-about .ab-intro p { margin: 0; color: var(--muted); max-width: 42em; }
 #view-about .ab-intro .lead { color: var(--desc); font-size: 1.05em; }
 #view-about .ab-cloud { width: 100%; height: 260px; display: block; background: radial-gradient(ellipse at 50% 50%, #0f1a2c, #060b14 72%); border: 1px solid var(--line-hi); }
+#view-about .ab-data-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+#view-about .ab-data-grid > div { display: grid; gap: 8px; align-content: start; padding: 20px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+#view-about .ab-data-grid h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+#view-about .ab-data-grid p { margin: 0; color: var(--desc); font-size: 0.95em; }
+@media (max-width: 900px) {
+#view-about .ab-data-grid { grid-template-columns: 1fr; }
+}
 #view-about .ab-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
 #view-about .ab-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
 #view-about .ab-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -1344,7 +1351,7 @@ footer .wrap { padding-block: 22px; }
         <ul class="plain" id="pf-next"></ul>
       </section>
 
-      <p class="note">Your profile is yours. In the finished site you choose what is saved and who can see it: just you, family, or your therapist.</p>
+      <p class="note">Your profile is yours. This pilot doesn't collect your data: in the finished site you save your profile and results as files on your own computer, load them again to track progress over time, and choose whether to share them with a research study.</p>
     </div>
 
     <aside class="card ace" aria-labelledby="pf-aceT">
@@ -1926,6 +1933,24 @@ footer .wrap { padding-block: 22px; }
       <canvas class="ab-cloud" id="ab-abCloud" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
     </section>
 
+    <section class="ab-data" id="ab-ab-data" aria-labelledby="ab-abDataT">
+      <div class="ab-head"><h2 id="ab-abDataT">Research and your data</h2></div>
+      <div class="ab-data-grid">
+        <div>
+          <h3>A skill-building and research platform</h3>
+          <p>Access+ helps people build skills with assistive technology, and it is also a platform for research on how people learn, adapt and keep access over time.</p>
+        </div>
+        <div>
+          <h3>Your data stays with you</h3>
+          <p>This pilot website does not collect or store your personal data. Assessment and practice results are saved as files on your own computer, and you can load them again later to see your progress over time.</p>
+        </div>
+        <div>
+          <h3>You choose what to share</h3>
+          <p>If you take part in a research study, you decide what to share and with which research institution, under that study's own consent process. Nothing is shared without your choice.</p>
+        </div>
+      </div>
+    </section>
+
     <section aria-labelledby="ab-abWhyT" style="display:grid;gap:20px">
       <div class="ab-head"><h2 id="ab-abWhyT">Why Access+ exists</h2></div>
       <div class="ab-story">
@@ -1950,7 +1975,7 @@ footer .wrap { padding-block: 22px; }
         <li><b>We don't sell anything</b><span>We lend equipment, review technology honestly, and help people practice.</span></li>
         <li><b>Never trapped</b><span>There is always a way to stop or get out, even if tracking or software fails.</span></li>
         <li><b>Needs first</b><span>Start with what you want to do, not with a product.</span></li>
-        <li><b>Your data is yours</b><span>You choose what is saved and who sees it. Camera tracking stays on your device.</span></li>
+        <li><b>Your data is yours</b><span>Results are saved on your own computer. You choose what to share, and with whom. Camera tracking stays on your device.</span></li>
         <li><b>Open to everyone</b><span>Use it alone, with family, or with your therapist. Share what works.</span></li>
         <li><b>No conflicts in reviews</b><span>Team members disclose any ties to companies and never review products they are connected to. No one pays for a listing or a review.</span></li>
         <li><b>Open where we can</b><span>Designs, keyboard layouts and findings are shared so others can build on them.</span></li>
@@ -2183,10 +2208,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#reviews">Independent reviews</a><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:55 UTC</span></div>
+    <div class="fbar"><span>Access+ · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 10:27 UTC</span></div>
   </div>
 </footer>
 
@@ -2734,6 +2759,7 @@ function AgentCloud(canvas, opts) {
     'Goals people often bring: giving yourself a drink, feeding yourself, redundant ways to call for help in an emergency, sitting without fatigue, using technology lying in bed and switching functions between bed and chair, moving a hospital bed yourself, communicating and raising voice volume, playing music, painting and adaptive art, adaptive photography, and adaptive sport such as electronic sailboats, adaptive skis like the Tetra ski, bowling and golf. For each, suggest practical options, the skills to practice, and where on this site to start.',
     'Engage people warmly and get to know them. Early in a conversation, and whenever it fits, ask open, friendly questions about the person: what they want to be able to do, what matters most to them, what a good day looks like, what frustrates them today, their routine in bed and in the chair, who helps them, what they enjoy, and what they hope for. Ask one question at a time, listen, reflect back briefly what you heard, and build on it. Respect their pace; they can skip any question. Never pressure, and do not ask for diagnoses or private medical details unless they offer them.',
     'When you have learned something useful, summarize it in a sentence or two and suggest a next step on the site, such as building their AI profile, trying a simulator, looking at solutions, or borrowing a kit.',
+    'Data and research: Access+ is a skill-building and research platform. This pilot website does not collect or store personal data. People save their assessment and practice results as files on their own computer, load them later to track progress over time, and choose whether to share them with a research institution under that study\'s consent process.',
     'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
     'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
   ].join('\n\n');
@@ -3303,7 +3329,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
-    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
+    var v = MODE[h] || (h === 'ab-data' ? 'about' : h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
@@ -3334,6 +3360,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       if (js && h !== 'join') { setTimeout(function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); }, 0); }
     }
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (h === 'ab-data') { setTimeout(function () { var t = document.getElementById('ab-ab-data') || document.getElementById('ab-data'); if (t) { var bar = document.querySelector('.bar'); window.scrollTo(0, t.getBoundingClientRect().top + scrollY - (bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16)); } }, 0); return; }
     if ((v === 'home' || h === 'simulators') && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
     window.scrollTo(0, 0);
   }

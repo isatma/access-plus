@@ -11,6 +11,11 @@
 .ab-intro p { margin: 0; color: var(--muted); max-width: 42em; }
 .ab-intro .lead { color: var(--desc); font-size: 1.05em; }
 .ab-cloud { width: 100%; height: 260px; display: block; background: radial-gradient(ellipse at 50% 50%, #0f1a2c, #060b14 72%); border: 1px solid var(--line-hi); }
+.ab-data-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.ab-data-grid > div { display: grid; gap: 8px; align-content: start; padding: 20px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.ab-data-grid h3 { font: 600 1.02em var(--body); letter-spacing: 0; }
+.ab-data-grid p { margin: 0; color: var(--desc); font-size: 0.95em; }
+@media (max-width: 900px) { .ab-data-grid { grid-template-columns: 1fr; } }
 .ab-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; padding-bottom: 12px; border-bottom: 1px solid var(--line-hi); position: relative; }
 .ab-head::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 64px; height: 2px; background: var(--signal); }
 .ab-head h2 { font-size: 1.15em; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -95,6 +100,24 @@
       <canvas class="ab-cloud" id="abCloud" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
     </section>
 
+    <section class="ab-data" id="ab-data" aria-labelledby="abDataT">
+      <div class="ab-head"><h2 id="abDataT">Research and your data</h2></div>
+      <div class="ab-data-grid">
+        <div>
+          <h3>A skill-building and research platform</h3>
+          <p>Access+ helps people build skills with assistive technology, and it is also a platform for research on how people learn, adapt and keep access over time.</p>
+        </div>
+        <div>
+          <h3>Your data stays with you</h3>
+          <p>This pilot website does not collect or store your personal data. Assessment and practice results are saved as files on your own computer, and you can load them again later to see your progress over time.</p>
+        </div>
+        <div>
+          <h3>You choose what to share</h3>
+          <p>If you take part in a research study, you decide what to share and with which research institution, under that study's own consent process. Nothing is shared without your choice.</p>
+        </div>
+      </div>
+    </section>
+
     <section aria-labelledby="abWhyT" style="display:grid;gap:20px">
       <div class="ab-head"><h2 id="abWhyT">Why Access+ exists</h2></div>
       <div class="ab-story">
@@ -119,7 +142,7 @@
         <li><b>We don't sell anything</b><span>We lend equipment, review technology honestly, and help people practice.</span></li>
         <li><b>Never trapped</b><span>There is always a way to stop or get out, even if tracking or software fails.</span></li>
         <li><b>Needs first</b><span>Start with what you want to do, not with a product.</span></li>
-        <li><b>Your data is yours</b><span>You choose what is saved and who sees it. Camera tracking stays on your device.</span></li>
+        <li><b>Your data is yours</b><span>Results are saved on your own computer. You choose what to share, and with whom. Camera tracking stays on your device.</span></li>
         <li><b>Open to everyone</b><span>Use it alone, with family, or with your therapist. Share what works.</span></li>
         <li><b>No conflicts in reviews</b><span>Team members disclose any ties to companies and never review products they are connected to. No one pays for a listing or a review.</span></li>
         <li><b>Open where we can</b><span>Designs, keyboard layouts and findings are shared so others can build on them.</span></li>
