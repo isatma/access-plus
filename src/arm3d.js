@@ -3,7 +3,7 @@
    half-circle in two dimensions (turn left/right, reach in/out) plus height.
    Joints: base turn, shoulder, elbow, wrist pitch, wrist roll, two-finger gripper.
    Modes: Navigate (grasp a tile to open a page) and Pick things up (cup, phone,
-   pill bottle, elevator button), with a Confirm step before moving near the user's
+   pill bottle, light switch), with a Confirm step before moving near the user's
    face, a Stop button, and Manual control one axis at a time (like JACO users). */
 (function () {
   'use strict';
@@ -33,7 +33,9 @@
     var CAM = { pos: new THREE.Vector3(0.1, 3.7, 5.3), look: new THREE.Vector3(-0.45, 0.55, -0.3) };
     camera.position.copy(CAM.pos); camera.lookAt(CAM.look);
 
-    scene.add(new THREE.HemisphereLight(0xbcd6f0, 0x05080f, 0.9));
+    var hemi = new THREE.HemisphereLight(0xbcd6f0, 0x05080f, 0.9); scene.add(hemi);
+    var roomLight = new THREE.PointLight(0xfff1d6, 0, 14, 1.4); roomLight.position.set(0, 4.5, 0.5); scene.add(roomLight);
+    var roomGlow = 0;
     var key = new THREE.DirectionalLight(0xffffff, 1.1);
     key.position.set(2.5, 6, 3.5); key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
@@ -150,9 +152,20 @@
     }
     function makePhone() {
       var g = new THREE.Group();
-      var body = mesh(new THREE.BoxGeometry(0.18, 0.36, 0.03), dark); body.position.y = 0.18; g.add(body);
-      var screen = mesh(new THREE.PlaneGeometry(0.15, 0.3), new THREE.MeshBasicMaterial({ color: 0x1e3a52 })); screen.position.set(0, 0.19, 0.016); g.add(screen);
-      g.userData.h = 0.36; return g;
+      var body = mesh(new THREE.BoxGeometry(0.2, 0.38, 0.035), new THREE.MeshStandardMaterial({ color: 0xe6edf5, metalness: 0.3, roughness: 0.35 })); body.position.y = 0.19; g.add(body);
+      var c = document.createElement('canvas'); c.width = 128; c.height = 256; var x = c.getContext('2d');
+      var grd = x.createLinearGradient(0, 0, 0, 256); grd.addColorStop(0, '#3fa9ff'); grd.addColorStop(1, '#5fe0a8'); x.fillStyle = grd; x.fillRect(0, 0, 128, 256);
+      x.fillStyle = '#ffffff'; x.font = '700 30px sans-serif'; x.textAlign = 'center'; x.fillText('9:41', 64, 46);
+      var cols = ['#ffd166', '#ff8fab', '#ffffff', '#b9a4ff', '#ffb347', '#a9e4c4', '#7cc4ff', '#ffffff', '#ff8a8a'];
+      for (var i = 0; i < 9; i++) { x.fillStyle = cols[i]; var cx = 22 + (i % 3) * 42, cy = 80 + Math.floor(i / 3) * 44; x.beginPath(); x.roundRect ? x.roundRect(cx - 14, cy - 14, 28, 28, 7) : x.rect(cx - 14, cy - 14, 28, 28); x.fill(); }
+      x.fillStyle = 'rgba(255,255,255,0.85)'; x.fillRect(44, 232, 40, 5);
+      var tex = new THREE.CanvasTexture(c);
+      var screen = new THREE.Mesh(new THREE.PlaneGeometry(0.17, 0.33), new THREE.MeshBasicMaterial({ map: tex }));
+      screen.position.set(0, 0.195, 0.019); g.add(screen);
+      var glow = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.52), new THREE.MeshBasicMaterial({ color: 0x5fd0ff, transparent: true, opacity: 0.18, depthWrite: false }));
+      glow.position.set(0, 0.195, 0.012); g.add(glow);
+      var light = new THREE.PointLight(0x5fd0ff, 0.6, 1.2); light.position.set(0, 0.2, 0.25); g.add(light);
+      g.userData.h = 0.38; return g;
     }
     function makePill() {
       var g = new THREE.Group();
@@ -162,11 +175,11 @@
     }
     function makeButton() {
       var g = new THREE.Group();
-      var post = mesh(new THREE.BoxGeometry(0.34, 0.62, 0.1), dark); post.position.y = 0.31; g.add(post);
-      var lamp = mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.04, 24), new THREE.MeshStandardMaterial({ color: 0x3b5476, emissive: 0x000000 }));
-      lamp.rotation.x = Math.PI / 2; lamp.position.set(0, 0.42, 0.07); g.add(lamp); g.userData.lamp = lamp;
-      var arrow = makeLabel('▲', 0xa9e4c4, 0.2); arrow.position.set(0, 0.24, 0.08); g.add(arrow);
-      g.userData.h = 0.62; return g;
+      var post = mesh(new THREE.BoxGeometry(0.06, 0.62, 0.06), dark); post.position.y = 0.31; g.add(post);
+      var plate = mesh(new THREE.BoxGeometry(0.3, 0.42, 0.04), new THREE.MeshStandardMaterial({ color: 0xe6edf5, roughness: 0.5 })); plate.position.set(0, 0.62, 0.03); g.add(plate);
+      var rocker = mesh(new THREE.BoxGeometry(0.12, 0.22, 0.05), new THREE.MeshStandardMaterial({ color: 0xc9d3de, emissive: 0x000000, roughness: 0.4 }));
+      rocker.position.set(0, 0.62, 0.07); rocker.rotation.x = 0.18; g.add(rocker); g.userData.lamp = rocker;
+      g.userData.h = 0.84; return g;
     }
     function makeBlock() {
       var g = new THREE.Group();
@@ -182,7 +195,7 @@
       { key: 'cup', name: 'Cup of water', at: polar(-38, 1.85), make: makeCup, deliver: 'mouth', done: 'Cup at the mouth: drinking through the straw' },
       { key: 'phone', name: 'Phone', at: polar(4, 2.55), make: makePhone, deliver: 'ear', done: 'Phone held at the ear for a hands-free call' },
       { key: 'pill', name: 'Pill bottle', at: polar(30, 1.35), make: makePill, deliver: 'tray', done: 'Pill bottle placed in the tray' },
-      { key: 'button', name: 'Elevator call button', at: polar(58, 2.25), make: makeButton, deliver: 'press', done: 'Button pressed' }
+      { key: 'button', name: 'Light switch', at: polar(58, 2.25), make: makeButton, deliver: 'press', done: 'Light switched on' }
     ];
     OBJ.forEach(function (o) {
       o.g = o.make(); o.g.position.copy(o.at); o.home = o.at.clone();
@@ -272,7 +285,7 @@
       if (manual) { setStatus('Manual control: use the control panel. Hold a button to keep moving.'); showLabel('Manual control', ''); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
-      else { var ACT = { cup: 'Pick up a drink', phone: 'Pick up the phone', pill: 'Move the pill bottle', button: 'Press the elevator button' }; setStatus((ACT[it.key] || it.name) + ': press Pick up.'); showLabel(ACT[it.key] || it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
+      else { var ACT = { cup: 'Pick up a drink', phone: 'Pick up the phone', pill: 'Move the pill bottle', button: 'Turn on the light' }; setStatus((ACT[it.key] || it.name) + ': press Pick up.'); showLabel(ACT[it.key] || it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Turn on the light' }[it.key]); }
     }
     function point() {
       if (manual || busy) return;
@@ -308,11 +321,11 @@
       var grasp = o.at.clone().add(dir.clone().multiplyScalar(side ? -0.02 : 0)); grasp.y = graspY + (side ? 0 : 0);
       var pre = grasp.clone().add(dir.clone().multiplyScalar(side ? -0.45 : 0)); pre.y = side ? graspY + 0.05 : h + 0.45;
       if (o.key === 'button') {
-        var face = o.at.clone().add(dir.clone().multiplyScalar(-0.1)); face.y = 0.42;
+        var face = o.at.clone().add(dir.clone().multiplyScalar(-0.12)); face.y = 0.62;
         var back = face.clone().add(dir.clone().multiplyScalar(-0.4));
-        queue = []; to(back, Math.PI / 2, { grip: 1, speed: 2 }); to(face, Math.PI / 2, { speed: 0.8, then: function () { o.g.userData.lamp.material.emissive.setHex(GREEN); o.g.userData.lamp.material.color.setHex(GREEN); setStatus(o.done); } });
+        queue = []; to(back, Math.PI / 2, { grip: 1, speed: 2 }); to(face, Math.PI / 2, { speed: 0.8, then: function () { var r = o.g.userData.lamp; r.rotation.x = -0.18; r.material.emissive.setHex(0xffd27a); roomGlow = 1; setStatus(o.done + '. The room brightens.'); } });
         to(face, Math.PI / 2, { wait: 400 }); to(back, Math.PI / 2, { speed: 1.2, grip: 0 });
-        run(function () { busy = false; lock(false); setTimeout(function () { o.g.userData.lamp.material.emissive.setHex(0); o.g.userData.lamp.material.color.setHex(0x3b5476); }, 2500); });
+        run(function () { busy = false; lock(false); setTimeout(function () { var r = o.g.userData.lamp; r.rotation.x = 0.18; r.material.emissive.setHex(0); }, 3200); });
         return;
       }
       queue = [];
@@ -574,6 +587,10 @@
       }
       var tw = tipWorld(); eyes.forEach(function (eg) { var lp = USER.worldToLocal(tw.clone()); lp.sub(eg.position); eg.rotation.y = Math.max(-0.6, Math.min(0.6, Math.atan2(lp.x, lp.z))); eg.rotation.x = Math.max(-0.4, Math.min(0.4, -Math.atan2(lp.y, Math.hypot(lp.x, lp.z)))); });
       var blink = ((now / 1000) % 4.2) < 0.12 ? 0.12 : 1; eyes.forEach(function (eg) { eg.scale.y = blink; });
+      if (roomGlow > 0) { roomGlow = Math.max(0, roomGlow - dt / 3.2); }
+      var gl = roomGlow > 0.85 ? (1 - roomGlow) / 0.15 : roomGlow / 0.85; gl = Math.min(1, gl) * (roomGlow > 0 ? 1 : 0);
+      roomLight.intensity = 2.2 * gl; hemi.intensity = 0.9 + 0.9 * gl;
+      if (host.parentNode) host.style.background = gl > 0.01 ? 'radial-gradient(ellipse at 50% 20%, rgba(255,236,190,' + (0.22 * gl).toFixed(3) + '), transparent 70%)' : '';
       var pulse = 0.55 + 0.35 * Math.sin((now - t0) / 380);
       mRing.material.opacity = (held && (awaitingConfirm === 'deliver' || slowNearFace)) ? 0.4 + 0.5 * Math.abs(Math.sin((now - t0) / 260)) : 0.5;
       if (!reduce && !moving && !held && !manual) { cur.p.y += Math.sin(now / 900) * 0.0006; }
