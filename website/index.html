@@ -167,8 +167,8 @@ footer { padding-bottom: 90px; }
 .feature::after, .sim::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 .sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
 .sim::after { border-width: 0 1px 1px 0; }
-.feature { grid-template-rows: auto auto 1fr; }
-.armsel-top { margin: 0 !important; padding: 10px 18px; min-height: 44px; display: flex; align-items: center; border-bottom: 1px solid var(--line-hi); background: rgba(95,224,168,0.06); }
+.feature { grid-template-rows: auto auto auto 1fr; }
+.armsel-top { margin: 0 !important; padding: 10px 18px; min-height: 48px; display: flex; align-items: center; justify-content: center; text-align: center; border-bottom: 1px solid var(--line-hi); background: rgba(95,224,168,0.06); }
 .armsel-top.flash { animation: selflash 1s ease; }
 @keyframes selflash { 0% { background: rgba(95,224,168,0.35); color: var(--ink); } 100% { background: rgba(95,224,168,0.06); } }
 @media (prefers-reduced-motion: reduce) { .armsel-top.flash { animation: none; } }
@@ -886,7 +886,6 @@ footer .wrap { padding-block: 22px; }
             <button class="mode" id="modeNav" type="button" aria-pressed="true">Navigate the site</button>
             <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
           </div>
-          <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
           <div class="stage3d"><div class="viz">
             <div class="arm-ace" id="aceWrap"><canvas id="armFace" class="arm-face" aria-hidden="true"></canvas><div class="smear" id="smear" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i><i class="b5"></i><i class="b6"></i><i class="sp s1"></i><i class="sp s2"></i><i class="sp s3"></i><i class="sp s4"></i><i class="sp s5"></i></div><span class="ace-name" id="aceName">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
@@ -945,6 +944,7 @@ footer .wrap { padding-block: 22px; }
               <circle cx="200" cy="230" r="3.5" fill="#0b1220"/>
             </svg>
           </div></div>
+          <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
