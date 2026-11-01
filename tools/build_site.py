@@ -248,6 +248,7 @@ def build():
       <h1>Practice first, then try the real thing</h1>
       <p>Build skills safely in the simulators, then borrow a sensor kit by mail to try at home, on your own, with family, or with your therapist.</p>
     </section>
+    __SIMS__
     <div class="try-grid">
       <a class="try-card" href="#simulators"><span class="jn-k">Practice</span><h2>Simulators</h2><p>Robotic arm, wheelchair driving, phone, computer exercises, soundboard and talking board. Works with nose tracking, eye gaze, switches or a mouse.</p><span class="try-go">Open the simulators &rarr;</span></a>
       <a class="try-card" href="#borrow"><span class="jn-k">Borrow</span><h2>Sensor kits by mail</h2><p>Head and nose tracking, switches, breath and more, sent to your door for a trial period. Therapists can order kits for their clients.</p><span class="try-go">Choose your kit &rarr;</span></a>
@@ -398,7 +399,7 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html + news_html + contact_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
@@ -411,7 +412,7 @@ def build():
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
-    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (VIEWS.indexOf(h) >= 0 ? h : 'home'));
+    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
@@ -442,7 +443,7 @@ def build():
       if (js && h !== 'join') { setTimeout(function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); }, 0); }
     }
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
+    if ((v === 'home' || h === 'simulators') && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', route);

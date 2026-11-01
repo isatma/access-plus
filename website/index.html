@@ -113,6 +113,8 @@ footer { padding-bottom: 90px; }
 @media (max-width: 520px) { .dock { left: 16px; right: 16px; } .dock button { flex: 1; min-width: 0; } }
 .band { position: relative; z-index: 1; height: 34px; overflow: hidden; border-bottom: 1px solid var(--line); background: linear-gradient(90deg, rgba(95,224,168,0.05), rgba(124,196,255,0.06), rgba(247,178,196,0.05), rgba(255,198,112,0.05)); }
 .band-bottom { border-bottom: none; border-top: 1px solid var(--line); }
+.band-top { margin-top: 18px; margin-bottom: 8px; border-top: 1px solid var(--line); }
+.band-bottom { margin-top: 24px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
 .bd { position: absolute; top: 50%; translate: 0 -50%; display: block; width: 18px; height: 18px; }
 .bd svg { display: block; width: 100%; height: 100%; }
 .bd.wave { width: 46px; height: 12px; }
@@ -311,6 +313,11 @@ footer { padding-bottom: 90px; }
 
 @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
 
+.simstrip { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.simstrip > div { display: grid; gap: 6px; max-width: 46em; }
+.simstrip h2 { font: 600 1.2em var(--body); letter-spacing: 0; text-transform: none; }
+.simstrip p { margin: 0; color: var(--desc); }
+.cases-toggle { justify-self: start; margin-top: 20px; }
 .cases { display: grid; gap: 16px; margin-top: 28px; }
 .cases-head { display: grid; gap: 4px; }
 .cases-head h3 { font-size: 1em; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -952,7 +959,7 @@ footer .wrap { padding-block: 22px; }
         </div>
       </div>
                   <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
-      <p>Create your own personal platform for building skills. Practice in simulators, borrow equipment on loan, and get free access to hardware and software solutions for the devices you depend on: wheelchairs, phones, computers, communication devices and emerging electronics.</p>
+      <p>Practice in simulators, borrow equipment, and find free hardware and software for the devices you depend on.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
@@ -1064,47 +1071,9 @@ footer .wrap { padding-block: 22px; }
       <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
     </section>
 
-    <section id="simulators" aria-labelledby="simTitle">
-      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
-      <div class="sims">
-        <div class="side">
-          <a class="sim" href="#" data-msg="Robotic arm simulator: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M8 34h14M15 34V22l9-9 6 3"/><circle cx="15" cy="22" r="2"/><circle cx="24" cy="13" r="2"/><path d="M30 16l3-4M30 16l4 1"/></svg>
-            <h3>Robotic arm</h3>
-            <p>Reach, grasp and drink, switching arm and gripper modes.</p>
-          </a>
-          <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
-            <h3>Wheelchair driving</h3>
-            <p>Obstacle courses with levels, using any input.</p>
-          </a>
-          <a class="sim" href="#" data-msg="Phone simulator: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><line x1="18" y1="31" x2="22" y2="31"/></svg>
-            <h3>Cell phone</h3>
-            <p>Calls, texts and apps without touching the screen.</p>
-          </a>
-          <a class="sim" href="#" data-msg="Computer exercises: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="7" width="30" height="20"/><path d="M14 33h12M20 27v6M17 14l4 9 1.5-3.5L26 18z"/></svg>
-            <h3>Computer exercises</h3>
-            <p>Point, click, drag, type and draw.</p>
-          </a>
-          <a class="sim" href="#" data-msg="Soundboard simulator: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="5" width="13" height="13" rx="2"/><rect x="22" y="5" width="13" height="13" rx="2"/><rect x="5" y="22" width="13" height="13" rx="2"/><path d="M26 25v9M26 25l7-2v8"/><circle cx="24" cy="34" r="2"/><circle cx="31" cy="32" r="2"/></svg>
-            <h3>Soundboard</h3>
-            <p>Play sounds and music with a switch, a breath or a smile.</p>
-          </a>
-          <a class="sim" href="#" data-msg="Talking board simulator: coming soon.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M5 7h24v16H14l-6 6v-6H5z"/><path d="M10 13h14M10 17h9"/><path d="M33 12q3 4 0 8M36 9q5 7 0 14"/></svg>
-            <h3>Talking board</h3>
-            <p>Speak phrases out loud with one switch or your eyes.</p>
-          </a>
-          <a class="sim more" href="#" data-msg="More simulators: exercise, voice, smart home and breath-played music are planned.">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/><rect x="6" y="22" width="12" height="12"/><path d="M28 23v10M23 28h10"/></svg>
-            <h3>More simulators</h3>
-            <p>Exercise, voice, smart home, breath-played music and more.</p>
-          </a>
-        </div>
-      </div>
+    <section id="sim-strip" class="simstrip" aria-label="Simulators">
+      <div><span class="eyebrow">Simulators</span><h2>Practice before you try the real thing</h2><p>Robotic arm, wheelchair driving, phone, computer, soundboard and talking board. Works with nose tracking, eye gaze, switches or a mouse.</p></div>
+      <a class="btn primary" href="#simulators">See all simulators</a>
     </section>
 
     <section id="guide-ai" aria-labelledby="aiTitle">
@@ -1139,7 +1108,8 @@ footer .wrap { padding-block: 22px; }
           <p class="chat-note" id="chatNote">The guide uses Claude on your own Claude account. It's for learning and practice, not medical advice.</p>
         </div>
       </div>
-      <div class="cases">
+      <button class="btn cases-toggle" type="button" id="casesToggle" aria-expanded="false" aria-controls="casesBox">Meet six example users</button>
+      <div class="cases" id="casesBox" hidden>
         <div class="cases-head"><h3>Meet example users</h3><p>Six fictional stories from the Access+ research proposal, based on real clinical patterns. Pick one and the AI agent walks you through it.</p></div>
         <div class="case-grid" id="caseGrid"></div>
       </div>
@@ -1160,16 +1130,6 @@ footer .wrap { padding-block: 22px; }
       </div>
     </section>
 
-    <div>
-      <section id="who" aria-labelledby="whoTitle">
-        <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
-        <ul class="who">
-          <li><b>On your own</b><span>Run self-trials at your own pace.</span></li>
-          <li><b>With family or friends</b><span>Someone can help set up sensors and track progress.</span></li>
-          <li><b>With your therapist</b><span>OTs, PTs and other professionals can guide trials and review results.</span></li>
-        </ul>
-      </section>
-    </div>
 
   </div>
 </main>
@@ -2089,6 +2049,49 @@ footer .wrap { padding-block: 22px; }
       <h1>Practice first, then try the real thing</h1>
       <p>Build skills safely in the simulators, then borrow a sensor kit by mail to try at home, on your own, with family, or with your therapist.</p>
     </section>
+        <section id="simulators" aria-labelledby="simTitle">
+      <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
+      <div class="sims">
+        <div class="side">
+          <a class="sim" href="#" data-msg="Robotic arm simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M8 34h14M15 34V22l9-9 6 3"/><circle cx="15" cy="22" r="2"/><circle cx="24" cy="13" r="2"/><path d="M30 16l3-4M30 16l4 1"/></svg>
+            <h3>Robotic arm</h3>
+            <p>Reach, grasp and drink, switching arm and gripper modes.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
+            <h3>Wheelchair driving</h3>
+            <p>Obstacle courses with levels, using any input.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Phone simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><line x1="18" y1="31" x2="22" y2="31"/></svg>
+            <h3>Cell phone</h3>
+            <p>Calls, texts and apps without touching the screen.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Computer exercises: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="7" width="30" height="20"/><path d="M14 33h12M20 27v6M17 14l4 9 1.5-3.5L26 18z"/></svg>
+            <h3>Computer exercises</h3>
+            <p>Point, click, drag, type and draw.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Soundboard simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="5" y="5" width="13" height="13" rx="2"/><rect x="22" y="5" width="13" height="13" rx="2"/><rect x="5" y="22" width="13" height="13" rx="2"/><path d="M26 25v9M26 25l7-2v8"/><circle cx="24" cy="34" r="2"/><circle cx="31" cy="32" r="2"/></svg>
+            <h3>Soundboard</h3>
+            <p>Play sounds and music with a switch, a breath or a smile.</p>
+          </a>
+          <a class="sim" href="#" data-msg="Talking board simulator: coming soon.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M5 7h24v16H14l-6 6v-6H5z"/><path d="M10 13h14M10 17h9"/><path d="M33 12q3 4 0 8M36 9q5 7 0 14"/></svg>
+            <h3>Talking board</h3>
+            <p>Speak phrases out loud with one switch or your eyes.</p>
+          </a>
+          <a class="sim more" href="#" data-msg="More simulators: exercise, voice, smart home and breath-played music are planned.">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/><rect x="6" y="22" width="12" height="12"/><path d="M28 23v10M23 28h10"/></svg>
+            <h3>More simulators</h3>
+            <p>Exercise, voice, smart home, breath-played music and more.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <div class="try-grid">
       <a class="try-card" href="#simulators"><span class="jn-k">Practice</span><h2>Simulators</h2><p>Robotic arm, wheelchair driving, phone, computer exercises, soundboard and talking board. Works with nose tracking, eye gaze, switches or a mouse.</p><span class="try-go">Open the simulators &rarr;</span></a>
       <a class="try-card" href="#borrow"><span class="jn-k">Borrow</span><h2>Sensor kits by mail</h2><p>Head and nose tracking, switches, breath and more, sent to your door for a trial period. Therapists can order kits for their clients.</p><span class="try-go">Choose your kit &rarr;</span></a>
@@ -2130,7 +2133,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:18 UTC</span></div>
+    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:26 UTC</span></div>
   </div>
 </footer>
 
@@ -2468,7 +2471,7 @@ function AgentCloud(canvas, opts) {
   // navigation dial
   var dests = [
     { label: 'HOW IT WORKS', name: 'How it works', go: '#how', a: -68, r: 158, cap: 'Four steps from your goals to trying real equipment.' },
-    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who', a: -40, r: 176, cap: 'You, your family, your therapist: open to everyone.' },
+    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#involved', a: -40, r: 176, cap: 'You, your family, your therapist: open to everyone.' },
     { label: '1 GOALS', name: 'Step 1, your goals', go: '#goals', a: -15, r: 200, cap: 'Pick what you want to do, like drink, eat, call for help or play.' },
     { label: '2 AI PROFILE', name: 'Step 2, your AI profile', go: '#profile', a: 15, r: 200, cap: 'The AI agent asks what you want to accomplish and builds your profile.' },
     { label: '3 SOLUTIONS', name: 'Step 3, your solutions', go: '#software', a: 40, r: 176, cap: 'Software, hardware and advanced interfaces that fit you.' },
@@ -2687,6 +2690,8 @@ function AgentCloud(canvas, opts) {
       story: 'D. talks on the phone while updating records, so voice control can’t help: his voice is already busy. Access+ runs his computer on parallel channels: eye gaze moves the cursor, an EMG switch clicks, nose tracking takes over while his eyes are reading, and a facial gesture mutes the call. Speed matters as much as ability, so he rehearses the combination in a workplace simulator before his shift. D. was always qualified for the job; the interface was the barrier.',
       ask: ['How would D. practice in a workplace simulator?', 'Why not just use voice control?'] }
   ];
+  var casesToggle = document.getElementById('casesToggle'), casesBox = document.getElementById('casesBox');
+  if (casesToggle) casesToggle.addEventListener('click', function () { var o = casesBox.hidden; casesBox.hidden = !o; casesToggle.setAttribute('aria-expanded', o ? 'true' : 'false'); casesToggle.textContent = o ? 'Hide example users' : 'Meet six example users'; });
   var caseGrid = document.getElementById('caseGrid');
   CASES.forEach(function (c, i) {
     var b = document.createElement('button'); b.type = 'button'; b.className = 'case'; b.setAttribute('aria-pressed', 'false');
@@ -3200,7 +3205,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
-    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (VIEWS.indexOf(h) >= 0 ? h : 'home'));
+    var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
@@ -3231,7 +3236,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       if (js && h !== 'join') { setTimeout(function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); }, 0); }
     }
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
-    if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
+    if ((v === 'home' || h === 'simulators') && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', route);
