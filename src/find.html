@@ -182,7 +182,7 @@
           <svg viewBox="0 0 84 84" aria-hidden="true"><circle class="bg" cx="42" cy="42" r="34"/><circle class="fg" id="pcArc" cx="42" cy="42" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/><text id="pcPct" x="42" y="49" text-anchor="middle">0%</text></svg>
           <div><b id="pcTitle">Your profile is starting</b><span id="pcSub">Answer on the left and watch it fill in here.</span></div>
         </div>
-        <div class="pc-sec" id="pcRec" hidden><span class="pc-h">Recommended setup</span><div class="fd-top" id="fdTop"></div></div>
+        <div class="pc-sec" id="pcRec" hidden><span class="pc-h">Your technology chain</span><div class="fd-top" id="fdTop"></div></div>
         <div class="pc-sec" id="pcChecks" hidden><span class="pc-h">Ability checks the agent suggests next</span><ul class="pc-checks" id="pcCheckList"></ul></div>
         <div class="pc-sec"><span class="pc-h">Goals</span><div class="pc-chips" id="pcGoals"></div></div>
         <div class="pc-sec"><span class="pc-h">Reliable movements</span><div class="pc-chips" id="pcMoves"></div></div>
@@ -387,8 +387,8 @@
       var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your voice now so a speech device can sound like you later.' : METH[key].why;
       d.innerHTML = '<span class="r"></span><b></b><p></p>'; d.querySelector('.r').textContent = role; d.querySelector('b').textContent = name; d.querySelector('p').textContent = why; top.appendChild(d);
     }
-    pick('Start with', primary, 'primary'); pick('Backup', backup);
-    if (ahead) pick('Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
+    pick('1 · Start with', primary, 'primary'); pick('2 · Practiced backup', backup);
+    if (ahead) pick('3 · Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">3 · Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
     el('pcRec').hidden = false;
     var CK = [];
     if (has('moves', 'eyes')) CK.push(['Eye movement', 'Gaze accuracy, dwell timing and fatigue · coming next']);
@@ -430,7 +430,7 @@
     p.href = target; p.textContent = target === '#home' ? 'Try the robotic arm →' : 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
     card.hidden = true; prog.hidden = true; done.hidden = false; res.hidden = false; aiText.hidden = true;
     el('fdStepK').textContent = 'Profile complete';
-    ack.textContent = 'Your profile is built.';
+    ack.textContent = goalWords && /chain/i.test(goalWords) ? 'Your profile is built, and here is your technology chain.' : 'Your profile is built.';
     qEl.textContent = 'Start with ' + METH[primary].name.toLowerCase() + ', keep ' + METH[backup].name.toLowerCase() + ' as a backup.';
     hint.hidden = false; hint.textContent = 'Pick practice tracks in your profile center, then practice or save it.';
     if (agent) { agent.pulse('#5fe0a8'); agent.talk(1500); }
