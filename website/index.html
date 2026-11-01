@@ -450,7 +450,8 @@ footer { padding-bottom: 90px; }
 @media (max-width: 900px) { .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .case-grid { grid-template-columns: 1fr; } }
 /* steps */
-.pillars { margin-top: 70px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; position: relative; z-index: 1; }
+.promise-wide { position: relative; z-index: 1; margin: 46px auto 0; max-width: 46em; text-align: center; font-size: 1.15em; line-height: 1.5; color: var(--ink); padding: 18px 24px; border-top: 1px solid rgba(95,224,168,0.35); border-bottom: 1px solid rgba(95,224,168,0.35); }
+.pillars { margin-top: 40px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; position: relative; z-index: 1; }
 .pillar { display: grid; gap: 6px; padding: 18px 20px; border-top: 2px solid var(--signal); background: color-mix(in srgb, var(--panel) 85%, transparent); }
 .pillar .pk { font: 600 1.05em var(--body); color: var(--ink); }
 .pillar p { margin: 0; color: var(--desc); font-size: 0.93em; }
@@ -1099,7 +1100,6 @@ footer .wrap { padding-block: 22px; }
           <span class="ha-acts"><a class="primary" href="#profile">Build my profile</a><a href="#guide-ai">Ask a question</a></span>
         </div>
       </div>
-      <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
           <div class="modes modes-top" role="group" aria-label="Arm mode">
@@ -1208,6 +1208,8 @@ footer .wrap { padding-block: 22px; }
           </div>
         </div>
     </div>
+
+    <p class="promise-wide">We lend equipment, review technology independently, and help you practice. Save your results to track your progress, or share them with a research study.</p>
 
     <section class="pillars" aria-label="What Access+ is">
       <div class="pillar"><span class="pk">Open source</span><p>Designs, code, keyboard layouts and findings are shared openly so others can build on them.</p></div>
@@ -2325,7 +2327,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:19 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:21 UTC</span></div>
   </div>
 </footer>
 
