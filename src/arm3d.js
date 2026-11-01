@@ -97,13 +97,26 @@
     // ---------- the user (abstract head) ----------
     var USER = new THREE.Group(); USER.position.set(-2.15, 0, 0.45); scene.add(USER);
     var userMat = new THREE.MeshStandardMaterial({ color: 0x8fa3b8, transparent: true, opacity: 0.22, roughness: 0.8 });
-    var wire = new THREE.MeshBasicMaterial({ color: 0x8fa3b8, wireframe: true, transparent: true, opacity: 0.35 });
+    var wire = new THREE.MeshBasicMaterial({ color: 0x8fa3b8, wireframe: true, transparent: true, opacity: 0.18 });
     var torso = mesh(new THREE.CylinderGeometry(0.42, 0.55, 0.9, 24, 1, true), userMat); torso.position.y = 0.45; USER.add(torso);
     var neck = mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.2, 16), userMat); neck.position.y = 1.0; USER.add(neck);
     var head = new THREE.Mesh(new THREE.SphereGeometry(0.34, 24, 18), userMat); head.scale.set(0.92, 1.12, 1); head.position.y = 1.38; USER.add(head);
     var headW = new THREE.Mesh(new THREE.SphereGeometry(0.345, 14, 10), wire); headW.scale.copy(head.scale); headW.position.copy(head.position); USER.add(headW);
-    USER.rotation.y = Math.PI / 2 - 0.35; // faces the arm
+    USER.rotation.y = Math.PI / 2 - 0.85; // faces the arm
     var mouth = new THREE.Object3D(); mouth.position.set(0, 1.27, 0.33); USER.add(mouth);
+    // simple human features so the head reads as a person: eyes, nose, ears
+    var white = new THREE.MeshStandardMaterial({ color: 0xf0f5fa, roughness: 0.4 }), iris = new THREE.MeshStandardMaterial({ color: 0x1a2a3e, roughness: 0.3 });
+    var faceMat = new THREE.MeshStandardMaterial({ color: 0xa9bccf, transparent: true, opacity: 0.55, roughness: 0.7 });
+    var eyes = [];
+    [-0.11, 0.11].forEach(function (x) {
+      var eg = new THREE.Group(); eg.position.set(x, 1.47, 0.27);
+      var ball = new THREE.Mesh(new THREE.SphereGeometry(0.068, 16, 12), white); eg.add(ball);
+      var pup = new THREE.Mesh(new THREE.SphereGeometry(0.036, 12, 10), iris); pup.position.z = 0.048; eg.add(pup);
+      USER.add(eg); eyes.push(eg);
+    });
+    var nose = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.1, 12), faceMat); nose.rotation.x = Math.PI / 2; nose.position.set(0, 1.38, 0.36); USER.add(nose);
+    var lips = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.012, 8, 20, Math.PI), faceMat); lips.rotation.z = Math.PI; lips.position.set(0, 1.28, 0.33); USER.add(lips);
+    [-0.33, 0.33].forEach(function (x) { var e = new THREE.Mesh(new THREE.SphereGeometry(0.07, 12, 10), faceMat); e.scale.set(0.45, 1, 0.8); e.position.set(x, 1.4, 0); USER.add(e); });
     var ear = new THREE.Object3D(); ear.position.set(0.33, 1.4, 0.02); USER.add(ear);
     var mRing = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.07, 32), new THREE.MeshBasicMaterial({ color: GREEN, side: THREE.DoubleSide, transparent: true, opacity: 0.8 }));
     mRing.position.copy(mouth.position); mRing.position.z += 0.02; USER.add(mRing);
@@ -259,7 +272,7 @@
       if (manual) { setStatus('Manual control: use the control panel. Hold a button to keep moving.'); showLabel('Manual control', ''); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
-      else { setStatus('Selected: ' + it.name + '. Press Pick up.'); showLabel(it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
+      else { var ACT = { cup: 'Pick up a drink', phone: 'Pick up the phone', pill: 'Move the pill bottle', button: 'Press the elevator button' }; setStatus((ACT[it.key] || it.name) + ': press Pick up.'); showLabel(ACT[it.key] || it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
     }
     function point() {
       if (manual || busy) return;
@@ -330,7 +343,7 @@
     function deliver(o) {
       busy = true; lock(true); awaitingConfirm = null; slowNearFace = true;
       var t = o._target.clone(), dir = t.clone().sub(BASE).setY(0).normalize();
-      var near = t.clone().add(dir.multiplyScalar(o.deliver === 'ear' ? -0.16 : 0.09));
+      var near = t.clone().add(dir.multiplyScalar(o.deliver === 'ear' ? -0.16 : -0.1));
       if (o.deliver === 'mouth') near.y -= 0.36;
       queue = []; to(near, Math.PI / 2, { speed: 0.9, then: function () { if (o.key === 'cup') tiltCup = 1; setStatus(o.done); } });
       to(near, Math.PI / 2, { wait: o.key === 'cup' ? 2400 : 1600 });
@@ -559,6 +572,8 @@
         var yaw = joints.yaw; m.rotation.set(0, yaw + Math.PI, 0);
         if (held.key === 'cup') { m.rotation.z = 0; m.rotateOnWorldAxis(new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw)), -0.35 * tiltCup); var w = held.g.userData.water; if (tiltCup) { w.scale.y = Math.max(0.35, w.scale.y - dt * 0.25); w.position.y = 0.11 * w.scale.y; } }
       }
+      var tw = tipWorld(); eyes.forEach(function (eg) { var lp = USER.worldToLocal(tw.clone()); lp.sub(eg.position); eg.rotation.y = Math.max(-0.6, Math.min(0.6, Math.atan2(lp.x, lp.z))); eg.rotation.x = Math.max(-0.4, Math.min(0.4, -Math.atan2(lp.y, Math.hypot(lp.x, lp.z)))); });
+      var blink = ((now / 1000) % 4.2) < 0.12 ? 0.12 : 1; eyes.forEach(function (eg) { eg.scale.y = blink; });
       var pulse = 0.55 + 0.35 * Math.sin((now - t0) / 380);
       mRing.material.opacity = (held && (awaitingConfirm === 'deliver' || slowNearFace)) ? 0.4 + 0.5 * Math.abs(Math.sin((now - t0) / 260)) : 0.5;
       if (!reduce && !moving && !held && !manual) { cur.p.y += Math.sin(now / 900) * 0.0006; }
