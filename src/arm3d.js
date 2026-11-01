@@ -20,7 +20,7 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
     var bigLabel = document.createElement('div'); bigLabel.className = 'arm3d-label'; bigLabel.setAttribute('aria-hidden', 'true');
-    bigLabel.innerHTML = '<b></b><span></span>'; host.appendChild(bigLabel);
+    bigLabel.innerHTML = '<b></b><span></span>'; host.insertBefore(bigLabel, renderer.domElement);
     function showLabel(title, sub) {
       bigLabel.querySelector('b').textContent = title || ''; bigLabel.querySelector('span').textContent = sub || '';
       bigLabel.classList.remove('pop'); void bigLabel.offsetWidth; bigLabel.classList.add('pop');
@@ -255,8 +255,8 @@
       BLOCK.g.visible = !!test; BLOCK.halo.material.opacity = (test && held !== BLOCK) ? 0.8 : 0;
     }
     function describe() {
-      if (test) { setStatus('Skill test · Trial ' + (test.trial + 1) + ' of ' + test.trials + ': pick up the green block and put it in the tray · Mode: ' + AXES[axis]); showLabel('Mode: ' + AXES[axis], 'Skill test · trial ' + (test.trial + 1) + ' of ' + test.trials); return; }
-      if (manual) { setStatus('Manual control · Mode: ' + AXES[axis] + ' · Use Left and Right, Next mode to switch'); showLabel('Mode: ' + AXES[axis], 'Manual control'); return; }
+      if (test) { setStatus('Pick up the green block and put it in the tray. Use the control panel.'); showLabel('Skill test · trial ' + (test.trial + 1) + ' of ' + test.trials, ''); return; }
+      if (manual) { setStatus('Manual control: use the control panel. Hold a button to keep moving.'); showLabel('Manual control', ''); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
       else { setStatus('Selected: ' + it.name + '. Press Pick up.'); showLabel(it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
@@ -363,10 +363,10 @@
     function mouthWorld() { var v = new THREE.Vector3(); mouth.getWorldPosition(v); return v; }
 
     // ---------- manual control (one axis at a time) ----------
-    function nudge(sign) {
+    function nudge(sign, repeat) {
       var p = goal.p, d = sign * 0.08;
       if (!manual) return;
-      if (test) test.inputs++;
+      if (test && !repeat) { test.inputs++; if (axis === 4) test.switches++; }
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z, yaw = Math.atan2(dx, dz), r = Math.hypot(dx, dz), np = cur.p.clone();
       if (axis === 0) { yaw += sign * 0.07; np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
       else if (axis === 1) { r = Math.max(0.7, Math.min(3.1, r + d)); np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
@@ -406,14 +406,14 @@
       var y0 = Math.atan2(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), y1 = Math.atan2(at.x - BASE.x, at.z - BASE.z), y2 = Math.atan2(tray.position.x - BASE.x, tray.position.z - BASE.z);
       var r0 = Math.hypot(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), r2 = Math.hypot(tray.position.x - BASE.x, tray.position.z - BASE.z);
       var steps = Math.abs(y1 - y0) / 0.07 + Math.abs(r - r0) / 0.08 + (HOME_POSE.y - 0.12) / 0.08 * 2 + Math.abs(y2 - y1) / 0.07 + Math.abs(r2 - r) / 0.08;
-      test.opt = Math.max(16, Math.round(steps / 3) + 14 + 2);
+      test.opt = Math.max(8, Math.round(steps / 4) + 6);
       test.t0 = performance.now(); test.inputs = 0; test.switches = 0;
     }
     function resetPose() { queue = []; to(HOME_POSE, Math.PI / 2, { grip: 0, roll: 0, speed: 3 }); run(); }
     function startTest() {
       if (busy || held) return;
       test = { trial: 0, trials: 3, results: [], inputs: 0, switches: 0 };
-      if (!manual) ui.manual.click();
+      if (!manual) setManual(true);
       mode = 'play'; ui.navTab.setAttribute('aria-pressed', 'false'); ui.playTab.setAttribute('aria-pressed', 'true');
       axis = 0; ui.test.textContent = 'End test'; if (ui.results) ui.results.hidden = true;
       placeBlock(); resetPose(); highlight(); describe();
@@ -421,7 +421,7 @@
     function trialDone() {
       var t = (performance.now() - test.t0) / 1000;
       var eff = Math.min(1, test.opt / Math.max(1, test.inputs)), spd = Math.min(1, (test.opt * 0.9 + 8) / Math.max(1, t));
-      test.results.push({ trial: test.trial + 1, seconds: +t.toFixed(1), inputs: test.inputs, modeSwitches: test.switches, fewestInputsEstimate: test.opt, score: Math.round(100 * (0.6 * eff + 0.4 * spd)) });
+      test.results.push({ trial: test.trial + 1, seconds: +t.toFixed(1), inputs: test.inputs, gripActions: test.switches, fewestInputsEstimate: test.opt, score: Math.round(100 * (0.6 * eff + 0.4 * spd)) });
       test.trial++;
       if (test.trial >= test.trials) return finishTest();
       setStatus('Trial ' + test.trial + ' complete. Next block placed.');
@@ -429,8 +429,8 @@
     }
     function finishTest() {
       var R = test.results, total = Math.round(R.reduce(function (a, r) { return a + r.score; }, 0) / R.length);
-      var secs = R.reduce(function (a, r) { return a + r.seconds; }, 0), inputs = R.reduce(function (a, r) { return a + r.inputs; }, 0), sw = R.reduce(function (a, r) { return a + r.modeSwitches; }, 0);
-      var summary = { test: 'Access+ robotic arm reach and grasp', version: 1, date: new Date().toISOString(), control: 'Manual, one axis at a time (Turn, Reach, Lift, Wrist, Grip)', score: total, totalSeconds: +secs.toFixed(1), totalInputs: inputs, modeSwitches: sw, trials: R };
+      var secs = R.reduce(function (a, r) { return a + r.seconds; }, 0), inputs = R.reduce(function (a, r) { return a + r.inputs; }, 0), sw = R.reduce(function (a, r) { return a + r.gripActions; }, 0);
+      var summary = { test: 'Access+ robotic arm reach and grasp', version: 2, date: new Date().toISOString(), control: 'Manual control panel (left, right, reach out, reach in, up, down, pick up, let go, wrist)', score: total, totalSeconds: +secs.toFixed(1), totalInputs: inputs, gripActions: sw, trials: R };
       lastResult = summary; test = null; highlight();
       ui.test.textContent = 'Skill test';
       setStatus('Skill test complete. Score ' + total + ' out of 100.');
@@ -462,7 +462,7 @@
       if (!ui.readout) return;
       var deg = function (r) { return Math.round(r * 180 / Math.PI); };
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z;
-      ui.readout.textContent = (test ? 'SKILL TEST ' + (test.trial + 1) + '/' + test.trials + ' · ' + AXES[axis].toUpperCase() + ' · INPUTS ' + test.inputs + ' · ' + ((performance.now() - test.t0) / 1000).toFixed(0) + ' S' : manual ? 'MANUAL · ' + AXES[axis].toUpperCase() : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
+      ui.readout.textContent = (test ? 'SKILL TEST ' + (test.trial + 1) + '/' + test.trials + ' · INPUTS ' + test.inputs + ' · ' + ((performance.now() - test.t0) / 1000).toFixed(0) + ' S' : manual ? 'MANUAL' : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
         '  ·  TURN ' + deg(joints.yaw) + '°  ·  REACH ' + Math.hypot(dx, dz).toFixed(2) + ' m  ·  LIFT ' + cur.p.y.toFixed(2) + ' m  ·  WRIST ' + deg(cur.roll) + '°  ·  GRIP ' + (cur.grip > 0.5 ? 'CLOSED' : 'OPEN');
     }
 
@@ -470,12 +470,12 @@
     ui.left.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(-1); return; } if (!busy && !awaitingConfirm) select(sel - 1); });
     ui.right.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(1); return; } if (!busy && !awaitingConfirm) select(sel + 1); });
     var rep = null;
-    function holdStart(sign) { return function (e) { if (!manual) return; e.preventDefault(); nudge(sign); clearInterval(rep); var first = setTimeout(function () { rep = setInterval(function () { nudge(sign); if (test) test.inputs--; }, 140); }, 380); rep = first; }; }
+    function holdStart(sign) { return function (e) { if (!manual) return; e.preventDefault(); nudge(sign); clearInterval(rep); var first = setTimeout(function () { rep = setInterval(function () { nudge(sign, true); }, 140); }, 380); rep = first; }; }
     function holdEnd() { clearInterval(rep); clearTimeout(rep); rep = null; }
     ['pointerdown'].forEach(function (ev) { ui.left.addEventListener(ev, holdStart(-1)); ui.right.addEventListener(ev, holdStart(1)); });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { ui.left.addEventListener(ev, holdEnd); ui.right.addEventListener(ev, holdEnd); });
     ui.go.addEventListener('click', function () {
-      if (manual) { axis = (axis + 1) % AXES.length; if (test) { test.inputs++; test.switches++; } describe(); readout(); return; }
+      if (manual) { axis = (axis + 1) % AXES.length; if (test) { test.inputs++; } describe(); readout(); return; }
       if (busy) return;
       var it = list()[sel];
       if (mode === 'nav') return grabTile(it);
@@ -488,13 +488,27 @@
       setStatus('Stopped. The arm is holding still.' + (held ? ' Press ' + (awaitingConfirm ? ui.go.textContent : 'Put it back') + ' when ready.' : ''));
       if (held && !awaitingConfirm) { awaitingConfirm = 'return'; ui.go.textContent = 'Put it back'; }
     });
-    ui.manual.addEventListener('click', function () {
-      if (busy || (test && manual)) return;
-      manual = !manual; ui.manual.setAttribute('aria-pressed', manual ? 'true' : 'false');
-      ui.manual.textContent = manual ? 'Manual: on' : 'Manual: off';
-      ui.go.textContent = manual ? 'Next mode' : (mode === 'nav' ? 'Go' : (awaitingConfirm === 'deliver' ? 'Confirm' : awaitingConfirm === 'return' ? 'Put it back' : 'Pick up'));
-      ui.left.textContent = manual ? '← Less' : '← Left'; ui.right.textContent = manual ? 'More →' : 'Right →';
+    function setManual(on) {
+      if (busy && on) return;
+      manual = on; ui.manual.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (ui.panel) ui.panel.hidden = !on;
+      if (ui.mainCtl) ui.mainCtl.hidden = on;
+      if (!on) { ui.go.textContent = mode === 'nav' ? 'Go' : (awaitingConfirm === 'deliver' ? 'Confirm' : awaitingConfirm === 'return' ? 'Put it back' : 'Pick up'); if (test) endTest(); }
       describe(); readout();
+    }
+    ui.manual.addEventListener('click', function () { setManual(!manual); });
+    if (ui.panelClose) ui.panelClose.addEventListener('click', function () { setManual(false); });
+    if (ui.panel) ui.panel.querySelectorAll('.mp').forEach(function (b) {
+      var ax = +b.dataset.ax, sg = +b.dataset.s, timer = null;
+      function once() { if (b.dataset.stop) { ui.stop.click(); return; } axis = ax; nudge(sg); describe(); }
+      function stopRep() { clearTimeout(timer); clearInterval(timer); timer = null; b.classList.remove('on'); }
+      b.addEventListener('pointerdown', function (e) {
+        e.preventDefault(); b.classList.add('on'); once();
+        if (b.dataset.stop || ax === 4) return;
+        timer = setTimeout(function () { timer = setInterval(function () { axis = ax; nudge(sg, true); }, 130); }, 380);
+      });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { b.addEventListener(ev, stopRep); });
+      b.addEventListener('click', function (e) { if (e.detail === 0) once(); });
     });
     function setMode(m) {
       if (test) endTest();

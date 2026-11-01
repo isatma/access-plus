@@ -311,11 +311,11 @@ footer { padding-bottom: 90px; }
 .dial-item:focus-visible rect { stroke: #5fe0a8; stroke-width: 3; }
 .dial-item:focus { outline: none; }
 .arm3d { display: none; width: 100%; outline: none; position: relative; }
-.arm3d-label { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); display: grid; justify-items: center; gap: 0; padding: 6px 16px; max-width: 80%; white-space: nowrap; text-align: center; background: rgba(11,18,32,0.82); border: 1px solid rgba(95,224,168,0.55); pointer-events: none; transition: opacity .25s ease; }
+.arm3d-label { position: static; display: grid; justify-items: center; padding: 8px 16px; min-height: 44px; align-content: center; border: 0; border-bottom: 1px solid var(--line-hi); text-align: center; background: rgba(11,18,32,0.82); border: 1px solid rgba(95,224,168,0.55); pointer-events: none; transition: opacity .25s ease; }
 .arm3d-label b { font: 700 1.25em var(--body); color: var(--ink); line-height: 1.2; }
 .arm3d-label span { display: none; }
 .arm3d-label span:empty { display: none; }
-@media (prefers-reduced-motion: no-preference) { .arm3d-label.pop { animation: lblpop .35s ease; } @keyframes lblpop { from { transform: translateX(-50%) translateY(-6px) scale(.96); opacity: .4; } to { transform: translateX(-50%); opacity: 1; } } }
+@media (prefers-reduced-motion: no-preference) { .arm3d-label.pop b { animation: lblpop .35s ease; } @keyframes lblpop { from { transform: translateY(-4px); opacity: .3; } to { transform: none; opacity: 1; } } }
 @media (max-width: 520px) { .arm3d-label b { font-size: 1.15em; } .arm3d-label span { display: none; } }
 .has3d .arm3d { display: block; }
 .has3d #armSvg, .has3d #aceWrap { display: none !important; }
@@ -323,6 +323,19 @@ footer { padding-bottom: 90px; }
 .has3d .stage3d .viz::after { display: none; }
 .arm3d:focus-visible { box-shadow: inset 0 0 0 3px var(--signal); }
 .armctl2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+.mpanel { margin: 0; padding: 14px 18px; border: 0; border-bottom: 1px solid var(--signal); background: rgba(95,224,168,0.05); display: grid; gap: 12px; }
+.mp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.mp-head b { font-weight: 600; }
+.mp-head .btn { min-height: 44px; font-size: 0.75em; }
+.mp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.mp { min-height: 64px; justify-content: center; font-size: 0.9em; touch-action: none; user-select: none; }
+.mp:active, .mp.on { background: var(--signal-soft); border-color: var(--signal); color: var(--signal); }
+.mp-grip { border-color: var(--signal); color: var(--signal); }
+.mp-stop { border-color: #ff8a8a; color: #ff8a8a; }
+.mp-wrist { display: grid; grid-template-columns: auto 1fr 1fr; gap: 8px; align-items: center; }
+.mp-wrist span { font: 500 0.7em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.mp-wrist .mp { min-height: 48px; }
+.mp-note { margin: 0; color: var(--muted); font-size: 0.82em; }
 .armctl2 .testbtn { border-color: var(--signal); color: var(--signal); }
 .armres { margin-top: 14px; padding: 16px; border: 1px solid var(--signal); background: rgba(95,224,168,0.06); display: grid; gap: 12px; }
 .armres-top { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
@@ -1127,21 +1140,38 @@ footer .wrap { padding-block: 22px; }
             </svg>
           </div></div>
           <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
+          <div class="mpanel" id="armPanel" hidden role="group" aria-label="Manual control panel">
+              <div class="mp-head"><b>Manual control panel</b><button class="btn" id="mpClose" type="button">Close panel</button></div>
+              <div class="mp-grid">
+                <button class="btn mp" type="button" data-ax="2" data-s="1">&uarr; Up</button>
+                <button class="btn mp" type="button" data-ax="1" data-s="1">Reach out</button>
+                <button class="btn mp mp-grip" type="button" data-ax="4" data-s="1">Pick up</button>
+                <button class="btn mp" type="button" data-ax="0" data-s="-1">&larr; Left</button>
+                <button class="btn mp mp-stop" type="button" data-stop="1">Stop</button>
+                <button class="btn mp" type="button" data-ax="0" data-s="1">Right &rarr;</button>
+                <button class="btn mp" type="button" data-ax="2" data-s="-1">&darr; Down</button>
+                <button class="btn mp" type="button" data-ax="1" data-s="-1">Reach in</button>
+                <button class="btn mp mp-grip" type="button" data-ax="4" data-s="-1">Let go</button>
+              </div>
+              <div class="mp-wrist"><span>Wrist</span><button class="btn mp" type="button" data-ax="3" data-s="-1">&#8634; Turn</button><button class="btn mp" type="button" data-ax="3" data-s="1">Turn &#8635;</button></div>
+              <p class="mp-note">Hold a button to keep moving. Works with a mouse, nose or eye tracking, or switch scanning.</p>
+            </div>
+            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual control</button><button class="btn testbtn" id="armTest" type="button">Skill test</button></div>
+            <div class="armres" id="armRes" hidden role="status">
+              <div class="armres-top"><div class="armres-score"><b data-r="score">0</b><span>out of 100</span></div><dl><div><dt>Time</dt><dd data-r="time"></dd></div><div><dt>Inputs</dt><dd data-r="inputs"></dd></div><div><dt>Grip actions</dt><dd data-r="switch"></dd></div></dl></div>
+              <ol class="armres-trials" data-r="trials"></ol>
+              <p class="armres-note">Your results stay on this device. Save them as a file to compare over time or share with your therapist or a research study.</p>
+              <div class="armres-acts"><button class="btn primary" id="armSave" type="button">Save my results</button><button class="btn" id="armAgain" type="button">Try again</button></div>
+            </div>
+
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>The arm reaches across the table in 3D: left and right, in and out, up and down. In Navigate, it grasps a tile to open that page. In Pick things up, it brings a drink to the mouth, holds the phone at the ear, moves the pill bottle to the tray, or presses an elevator button, and asks you to confirm before moving near the face. Manual mode lets you drive one joint at a time, like a real assistive arm, and the Skill test scores how well you reach, grasp and place. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>The arm reaches across the table in 3D. Navigate: it grasps a tile to open that page. Pick things up: it brings a drink to the mouth, the phone to the ear, the pill bottle to the tray, or presses a button, confirming before it moves near the face. Manual control opens a control panel, and the Skill test scores your reach and grasp. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
-            </div>
-            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual: off</button><button class="btn testbtn" id="armTest" type="button">Skill test</button></div>
-            <div class="armres" id="armRes" hidden role="status">
-              <div class="armres-top"><div class="armres-score"><b data-r="score">0</b><span>out of 100</span></div><dl><div><dt>Time</dt><dd data-r="time"></dd></div><div><dt>Inputs</dt><dd data-r="inputs"></dd></div><div><dt>Mode switches</dt><dd data-r="switch"></dd></div></dl></div>
-              <ol class="armres-trials" data-r="trials"></ol>
-              <p class="armres-note">Your results stay on this device. Save them as a file to compare over time or share with your therapist or a research study.</p>
-              <div class="armres-acts"><button class="btn primary" id="armSave" type="button">Save my results</button><button class="btn" id="armAgain" type="button">Try again</button></div>
             </div>
             <p class="armread" id="armRead" hidden></p>
           </div>
@@ -2263,7 +2293,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 11:04 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 11:10 UTC</span></div>
   </div>
 </footer>
 
@@ -2950,7 +2980,7 @@ function AgentCloud(canvas, opts) {
       if (!window.THREE || !window.initArm3D) return;
       function fresh(id) { var o = document.getElementById(id), n = o.cloneNode(true); o.parentNode.replaceChild(n, o); return n; }
       var ui = { left: fresh('armLeft'), right: fresh('armRight'), go: fresh('armGo'), navTab: fresh('modeNav'), playTab: fresh('modePlay'),
-                 stop: document.getElementById('armStop'), manual: document.getElementById('armManual'), test: document.getElementById('armTest'), results: document.getElementById('armRes'), save: document.getElementById('armSave'), again: document.getElementById('armAgain'), status: document.getElementById('armSel'), readout: document.getElementById('armRead') };
+                 stop: document.getElementById('armStop'), manual: document.getElementById('armManual'), panel: document.getElementById('armPanel'), panelClose: document.getElementById('mpClose'), mainCtl: document.querySelector('#guide .armctl'), test: document.getElementById('armTest'), results: document.getElementById('armRes'), save: document.getElementById('armSave'), again: document.getElementById('armAgain'), status: document.getElementById('armSel'), readout: document.getElementById('armRead') };
       ui.go.textContent = 'Go'; ui.navTab.setAttribute('aria-pressed', 'true'); ui.playTab.setAttribute('aria-pressed', 'false');
       var dests = [
         { short: 'How it\nworks', name: 'How it works', go: '#how', cap: 'Four steps from your goals to trying real equipment.' },
@@ -3546,7 +3576,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
     var bigLabel = document.createElement('div'); bigLabel.className = 'arm3d-label'; bigLabel.setAttribute('aria-hidden', 'true');
-    bigLabel.innerHTML = '<b></b><span></span>'; host.appendChild(bigLabel);
+    bigLabel.innerHTML = '<b></b><span></span>'; host.insertBefore(bigLabel, renderer.domElement);
     function showLabel(title, sub) {
       bigLabel.querySelector('b').textContent = title || ''; bigLabel.querySelector('span').textContent = sub || '';
       bigLabel.classList.remove('pop'); void bigLabel.offsetWidth; bigLabel.classList.add('pop');
@@ -3781,8 +3811,8 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       BLOCK.g.visible = !!test; BLOCK.halo.material.opacity = (test && held !== BLOCK) ? 0.8 : 0;
     }
     function describe() {
-      if (test) { setStatus('Skill test · Trial ' + (test.trial + 1) + ' of ' + test.trials + ': pick up the green block and put it in the tray · Mode: ' + AXES[axis]); showLabel('Mode: ' + AXES[axis], 'Skill test · trial ' + (test.trial + 1) + ' of ' + test.trials); return; }
-      if (manual) { setStatus('Manual control · Mode: ' + AXES[axis] + ' · Use Left and Right, Next mode to switch'); showLabel('Mode: ' + AXES[axis], 'Manual control'); return; }
+      if (test) { setStatus('Pick up the green block and put it in the tray. Use the control panel.'); showLabel('Skill test · trial ' + (test.trial + 1) + ' of ' + test.trials, ''); return; }
+      if (manual) { setStatus('Manual control: use the control panel. Hold a button to keep moving.'); showLabel('Manual control', ''); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
       else { setStatus('Selected: ' + it.name + '. Press Pick up.'); showLabel(it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
@@ -3889,10 +3919,10 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     function mouthWorld() { var v = new THREE.Vector3(); mouth.getWorldPosition(v); return v; }
 
     // ---------- manual control (one axis at a time) ----------
-    function nudge(sign) {
+    function nudge(sign, repeat) {
       var p = goal.p, d = sign * 0.08;
       if (!manual) return;
-      if (test) test.inputs++;
+      if (test && !repeat) { test.inputs++; if (axis === 4) test.switches++; }
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z, yaw = Math.atan2(dx, dz), r = Math.hypot(dx, dz), np = cur.p.clone();
       if (axis === 0) { yaw += sign * 0.07; np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
       else if (axis === 1) { r = Math.max(0.7, Math.min(3.1, r + d)); np.x = BASE.x + Math.sin(yaw) * r; np.z = BASE.z + Math.cos(yaw) * r; }
@@ -3932,14 +3962,14 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       var y0 = Math.atan2(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), y1 = Math.atan2(at.x - BASE.x, at.z - BASE.z), y2 = Math.atan2(tray.position.x - BASE.x, tray.position.z - BASE.z);
       var r0 = Math.hypot(HOME_POSE.x - BASE.x, HOME_POSE.z - BASE.z), r2 = Math.hypot(tray.position.x - BASE.x, tray.position.z - BASE.z);
       var steps = Math.abs(y1 - y0) / 0.07 + Math.abs(r - r0) / 0.08 + (HOME_POSE.y - 0.12) / 0.08 * 2 + Math.abs(y2 - y1) / 0.07 + Math.abs(r2 - r) / 0.08;
-      test.opt = Math.max(16, Math.round(steps / 3) + 14 + 2);
+      test.opt = Math.max(8, Math.round(steps / 4) + 6);
       test.t0 = performance.now(); test.inputs = 0; test.switches = 0;
     }
     function resetPose() { queue = []; to(HOME_POSE, Math.PI / 2, { grip: 0, roll: 0, speed: 3 }); run(); }
     function startTest() {
       if (busy || held) return;
       test = { trial: 0, trials: 3, results: [], inputs: 0, switches: 0 };
-      if (!manual) ui.manual.click();
+      if (!manual) setManual(true);
       mode = 'play'; ui.navTab.setAttribute('aria-pressed', 'false'); ui.playTab.setAttribute('aria-pressed', 'true');
       axis = 0; ui.test.textContent = 'End test'; if (ui.results) ui.results.hidden = true;
       placeBlock(); resetPose(); highlight(); describe();
@@ -3947,7 +3977,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     function trialDone() {
       var t = (performance.now() - test.t0) / 1000;
       var eff = Math.min(1, test.opt / Math.max(1, test.inputs)), spd = Math.min(1, (test.opt * 0.9 + 8) / Math.max(1, t));
-      test.results.push({ trial: test.trial + 1, seconds: +t.toFixed(1), inputs: test.inputs, modeSwitches: test.switches, fewestInputsEstimate: test.opt, score: Math.round(100 * (0.6 * eff + 0.4 * spd)) });
+      test.results.push({ trial: test.trial + 1, seconds: +t.toFixed(1), inputs: test.inputs, gripActions: test.switches, fewestInputsEstimate: test.opt, score: Math.round(100 * (0.6 * eff + 0.4 * spd)) });
       test.trial++;
       if (test.trial >= test.trials) return finishTest();
       setStatus('Trial ' + test.trial + ' complete. Next block placed.');
@@ -3955,8 +3985,8 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     }
     function finishTest() {
       var R = test.results, total = Math.round(R.reduce(function (a, r) { return a + r.score; }, 0) / R.length);
-      var secs = R.reduce(function (a, r) { return a + r.seconds; }, 0), inputs = R.reduce(function (a, r) { return a + r.inputs; }, 0), sw = R.reduce(function (a, r) { return a + r.modeSwitches; }, 0);
-      var summary = { test: 'Access+ robotic arm reach and grasp', version: 1, date: new Date().toISOString(), control: 'Manual, one axis at a time (Turn, Reach, Lift, Wrist, Grip)', score: total, totalSeconds: +secs.toFixed(1), totalInputs: inputs, modeSwitches: sw, trials: R };
+      var secs = R.reduce(function (a, r) { return a + r.seconds; }, 0), inputs = R.reduce(function (a, r) { return a + r.inputs; }, 0), sw = R.reduce(function (a, r) { return a + r.gripActions; }, 0);
+      var summary = { test: 'Access+ robotic arm reach and grasp', version: 2, date: new Date().toISOString(), control: 'Manual control panel (left, right, reach out, reach in, up, down, pick up, let go, wrist)', score: total, totalSeconds: +secs.toFixed(1), totalInputs: inputs, gripActions: sw, trials: R };
       lastResult = summary; test = null; highlight();
       ui.test.textContent = 'Skill test';
       setStatus('Skill test complete. Score ' + total + ' out of 100.');
@@ -3988,7 +4018,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       if (!ui.readout) return;
       var deg = function (r) { return Math.round(r * 180 / Math.PI); };
       var dx = cur.p.x - BASE.x, dz = cur.p.z - BASE.z;
-      ui.readout.textContent = (test ? 'SKILL TEST ' + (test.trial + 1) + '/' + test.trials + ' · ' + AXES[axis].toUpperCase() + ' · INPUTS ' + test.inputs + ' · ' + ((performance.now() - test.t0) / 1000).toFixed(0) + ' S' : manual ? 'MANUAL · ' + AXES[axis].toUpperCase() : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
+      ui.readout.textContent = (test ? 'SKILL TEST ' + (test.trial + 1) + '/' + test.trials + ' · INPUTS ' + test.inputs + ' · ' + ((performance.now() - test.t0) / 1000).toFixed(0) + ' S' : manual ? 'MANUAL' : (mode === 'nav' ? 'NAVIGATE' : 'PICK UP')) +
         '  ·  TURN ' + deg(joints.yaw) + '°  ·  REACH ' + Math.hypot(dx, dz).toFixed(2) + ' m  ·  LIFT ' + cur.p.y.toFixed(2) + ' m  ·  WRIST ' + deg(cur.roll) + '°  ·  GRIP ' + (cur.grip > 0.5 ? 'CLOSED' : 'OPEN');
     }
 
@@ -3996,12 +4026,12 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     ui.left.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(-1); return; } if (!busy && !awaitingConfirm) select(sel - 1); });
     ui.right.addEventListener('click', function (e) { if (manual) { if (e.detail === 0) nudge(1); return; } if (!busy && !awaitingConfirm) select(sel + 1); });
     var rep = null;
-    function holdStart(sign) { return function (e) { if (!manual) return; e.preventDefault(); nudge(sign); clearInterval(rep); var first = setTimeout(function () { rep = setInterval(function () { nudge(sign); if (test) test.inputs--; }, 140); }, 380); rep = first; }; }
+    function holdStart(sign) { return function (e) { if (!manual) return; e.preventDefault(); nudge(sign); clearInterval(rep); var first = setTimeout(function () { rep = setInterval(function () { nudge(sign, true); }, 140); }, 380); rep = first; }; }
     function holdEnd() { clearInterval(rep); clearTimeout(rep); rep = null; }
     ['pointerdown'].forEach(function (ev) { ui.left.addEventListener(ev, holdStart(-1)); ui.right.addEventListener(ev, holdStart(1)); });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { ui.left.addEventListener(ev, holdEnd); ui.right.addEventListener(ev, holdEnd); });
     ui.go.addEventListener('click', function () {
-      if (manual) { axis = (axis + 1) % AXES.length; if (test) { test.inputs++; test.switches++; } describe(); readout(); return; }
+      if (manual) { axis = (axis + 1) % AXES.length; if (test) { test.inputs++; } describe(); readout(); return; }
       if (busy) return;
       var it = list()[sel];
       if (mode === 'nav') return grabTile(it);
@@ -4014,13 +4044,27 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       setStatus('Stopped. The arm is holding still.' + (held ? ' Press ' + (awaitingConfirm ? ui.go.textContent : 'Put it back') + ' when ready.' : ''));
       if (held && !awaitingConfirm) { awaitingConfirm = 'return'; ui.go.textContent = 'Put it back'; }
     });
-    ui.manual.addEventListener('click', function () {
-      if (busy || (test && manual)) return;
-      manual = !manual; ui.manual.setAttribute('aria-pressed', manual ? 'true' : 'false');
-      ui.manual.textContent = manual ? 'Manual: on' : 'Manual: off';
-      ui.go.textContent = manual ? 'Next mode' : (mode === 'nav' ? 'Go' : (awaitingConfirm === 'deliver' ? 'Confirm' : awaitingConfirm === 'return' ? 'Put it back' : 'Pick up'));
-      ui.left.textContent = manual ? '← Less' : '← Left'; ui.right.textContent = manual ? 'More →' : 'Right →';
+    function setManual(on) {
+      if (busy && on) return;
+      manual = on; ui.manual.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (ui.panel) ui.panel.hidden = !on;
+      if (ui.mainCtl) ui.mainCtl.hidden = on;
+      if (!on) { ui.go.textContent = mode === 'nav' ? 'Go' : (awaitingConfirm === 'deliver' ? 'Confirm' : awaitingConfirm === 'return' ? 'Put it back' : 'Pick up'); if (test) endTest(); }
       describe(); readout();
+    }
+    ui.manual.addEventListener('click', function () { setManual(!manual); });
+    if (ui.panelClose) ui.panelClose.addEventListener('click', function () { setManual(false); });
+    if (ui.panel) ui.panel.querySelectorAll('.mp').forEach(function (b) {
+      var ax = +b.dataset.ax, sg = +b.dataset.s, timer = null;
+      function once() { if (b.dataset.stop) { ui.stop.click(); return; } axis = ax; nudge(sg); describe(); }
+      function stopRep() { clearTimeout(timer); clearInterval(timer); timer = null; b.classList.remove('on'); }
+      b.addEventListener('pointerdown', function (e) {
+        e.preventDefault(); b.classList.add('on'); once();
+        if (b.dataset.stop || ax === 4) return;
+        timer = setTimeout(function () { timer = setInterval(function () { axis = ax; nudge(sg, true); }, 130); }, 380);
+      });
+      ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { b.addEventListener(ev, stopRep); });
+      b.addEventListener('click', function (e) { if (e.detail === 0) once(); });
     });
     function setMode(m) {
       if (test) endTest();
