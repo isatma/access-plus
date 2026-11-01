@@ -440,7 +440,7 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>Turn the arm to point at part of the site and press Go, or switch to Pick things up and bring a drink, the phone or a cupcake over to Ace. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Turn the arm through the four steps of Access+ and press Go, or switch to Pick things up and bring a drink, the phone or a cupcake over to Ace. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
@@ -851,13 +851,12 @@ function AgentCloud(canvas, opts) {
 
   // navigation dial
   var dests = [
-    { label: 'GOALS', name: 'Goals', go: '#goals', a: -72, r: 172 },
-    { label: 'SIMULATORS', name: 'Simulators', go: '#simulators', a: -48, r: 158 },
-    { label: 'MY PROFILE', name: 'Create a custom profile', go: '#profile', a: -24, r: 206 },
-    { label: 'SOFTWARE', name: 'Software solutions', go: '#software', a: 0, r: 158 },
-    { label: 'HARDWARE', name: 'Hardware solutions', go: '#hardware', a: 24, r: 206 },
-    { label: 'TECH REVIEWS', name: 'Independent tech reviews', go: '#reviews', a: 48, r: 158 },
-    { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: '#borrow', a: 72, r: 172 }
+    { label: 'HOW IT WORKS', name: 'How it works', go: '#how', a: -68, r: 158, cap: 'Four steps from your goals to trying real equipment.' },
+    { label: 'WHO IT’S FOR', name: 'Who it’s for', go: '#who', a: -40, r: 176, cap: 'You, your family, your therapist: open to everyone.' },
+    { label: '1 GOALS', name: 'Step 1, your goals', go: '#goals', a: -15, r: 200, cap: 'Pick what you want to do, like drink, eat, call for help or play.' },
+    { label: '2 AI PROFILE', name: 'Step 2, your AI profile', go: '#profile', a: 15, r: 200, cap: 'The AI agent asks what you want to accomplish and builds your profile.' },
+    { label: '3 SOLUTIONS', name: 'Step 3, your solutions', go: '#software', a: 40, r: 176, cap: 'Software, hardware and advanced interfaces that fit you.' },
+    { label: '4 BORROW KIT', name: 'Step 4, try and borrow', go: '#try', a: 68, r: 158, cap: 'Practice in simulators, then borrow a sensor kit by mail.' }
   ];
   dests.forEach(function (d, i) {
     var p = polar(d.a, d.r || 178), w = d.label.length * 7.4 + 20;
@@ -947,8 +946,8 @@ function AgentCloud(canvas, opts) {
     var L = list(); cur = Math.max(0, Math.min(L.length - 1, i));
     aim(L[cur].a);
     L.forEach(function (d, j) { (d.el || d.g).classList.toggle('on', j === cur); if (d.label && d.label.setAttribute) d.label.classList && d.label.classList.toggle('on', j === cur); });
-    sel.textContent = (mode === 'nav' ? 'Pointing at: ' : 'Reaching for: ') + L[cur].name;
-    if (typeof armAce !== 'undefined') aceExpr({ yaw: 8 + (L[cur].a + 72) / 144 * 26, pitch: -4, smile: 0.45 }, 1600);
+    sel.textContent = mode === 'nav' ? (L[cur].name + (L[cur].cap ? ': ' + L[cur].cap : '')) : 'Reaching for: ' + L[cur].name;
+    if (typeof armAce !== 'undefined') aceExpr({ yaw: 8 + (L[cur].a + 68) / 136 * 26, pitch: -4, smile: 0.45 }, 1600);
     wake();
   }
   function lock(on) { busy = on; leftBtn.disabled = on || !!holding; rightBtn.disabled = on || !!holding; goBtn.disabled = on; }
@@ -1005,7 +1004,7 @@ function AgentCloud(canvas, opts) {
     aceWrap.classList.toggle('play', m === 'play');
     if (m === 'play') { armAce.set({ energy: 1 }); setTimeout(function () { armAce.set({ energy: 0 }); }, 700); aceSays('Hi, I\u2019m Ace! Bring me something.', 2600); aceExpr({ smile: 1, brow: 0.6, yaw: 15 }, 2000); }
     else { aceSay.hidden = true; }
-    setCur(m === 'nav' ? 1 : 1);
+    setCur(m === 'nav' ? 2 : 1);
   }
   modeNav.addEventListener('click', function () { setMode('nav'); });
   modePlay.addEventListener('click', function () { setMode('play'); });
@@ -1018,7 +1017,7 @@ function AgentCloud(canvas, opts) {
     if (e.key === 'ArrowLeft') { e.preventDefault(); setCur(cur - 1); }
     if (e.key === 'ArrowRight') { e.preventDefault(); setCur(cur + 1); }
   });
-  setCur(1); idle.classList.add('idle');
+  setCur(2); idle.classList.add('idle');
 
 
   // AI guide chat
