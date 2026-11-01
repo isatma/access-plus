@@ -168,6 +168,10 @@ footer { padding-bottom: 90px; }
 .sim::before, .sim::after { border-color: var(--line-hi); width: 10px; height: 10px; border-width: 1px 0 0 1px; }
 .sim::after { border-width: 0 1px 1px 0; }
 .feature { grid-template-rows: auto auto 1fr; }
+.armsel-top { margin: 0 !important; padding: 10px 18px; min-height: 44px; display: flex; align-items: center; border-bottom: 1px solid var(--line-hi); background: rgba(95,224,168,0.06); }
+.armsel-top.flash { animation: selflash 1s ease; }
+@keyframes selflash { 0% { background: rgba(95,224,168,0.35); color: var(--ink); } 100% { background: rgba(95,224,168,0.06); } }
+@media (prefers-reduced-motion: reduce) { .armsel-top.flash { animation: none; } }
 .modes-top { border: 0; border-bottom: 1px solid var(--line-hi); }
 .modes-top .mode { min-height: 56px; font-size: 0.78em; }
 .modes-top .mode[aria-pressed="true"] { box-shadow: inset 0 -3px 0 var(--signal); }
@@ -860,6 +864,7 @@ footer .wrap { padding-block: 22px; }
             <button class="mode" id="modeNav" type="button" aria-pressed="true">Navigate the site</button>
             <button class="mode" id="modePlay" type="button" aria-pressed="false">Pick things up</button>
           </div>
+          <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
           <div class="viz">
             <div class="arm-ace" id="aceWrap"><canvas id="armFace" class="arm-face" aria-hidden="true"></canvas><span class="ace-name" id="aceName">ACE</span><div class="ace-say" id="aceSay" role="status" aria-live="polite" hidden></div></div>
             <svg id="armSvg" viewBox="-10 0 420 262" fill="none" stroke-linecap="round" role="img" aria-label="Robotic arm pointing at a part of the website">
@@ -927,7 +932,6 @@ footer .wrap { padding-block: 22px; }
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
             </div>
-            <p class="armsel" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
           </div>
         </div>
     </div>
@@ -2244,6 +2248,7 @@ function AgentCloud(canvas, opts) {
   var dial = document.getElementById('dial'), scene = document.getElementById('scene');
   var rot = document.getElementById('armRot'), idle = document.getElementById('armIdle'), grip = document.getElementById('grip');
   var svg = document.getElementById('armSvg'), sel = document.getElementById('armSel'), bubble = document.getElementById('bubble');
+  try { new MutationObserver(function () { sel.classList.remove('flash'); void sel.offsetWidth; sel.classList.add('flash'); }).observe(sel, { childList: true, characterData: true, subtree: true }); } catch (e) {}
   var goBtn = document.getElementById('armGo'), leftBtn = document.getElementById('armLeft'), rightBtn = document.getElementById('armRight');
   var modeNav = document.getElementById('modeNav'), modePlay = document.getElementById('modePlay');
   function el(tag, attrs) { var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); return e; }
