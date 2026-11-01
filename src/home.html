@@ -81,7 +81,13 @@ section[id] { scroll-margin-top: 170px; }
 @media (max-width: 760px) { .mission { text-align: left; max-width: none; font-size: 0.88em; flex-basis: 100%; } }
 .bigbadge { background: none; cursor: pointer; color: var(--signal); border: 1px solid var(--signal); min-height: 28px; }
 .bigbadge[aria-pressed="true"] { background: var(--signal); color: var(--signal-ink); }
-.nav .navsign { margin-left: auto; color: var(--signal); }
+.nav .navsign { color: var(--signal); }
+.nav .navside { margin-left: auto; }
+.nav .jl { gap: 8px; }
+.nav .jl .sn { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--signal); color: var(--signal); font: 600 0.82em var(--body); }
+.nav .jl[aria-current="page"] .sn { background: var(--signal); color: var(--signal-ink); }
+.nav .jl + .jl::before { content: "\203A"; color: var(--muted); margin: 0 6px 0 -4px; font-size: 1.2em; }
+@media (max-width: 640px) { .nav .navside { margin-left: 0; } }
 .nav .navsign:hover { color: var(--ink); }
 @media (max-width: 640px) { .nav .navsign { margin-left: 0; } }
 .nav .navdemo { margin-left: 8px; font: 500 0.68em var(--mono); background: #ffc670; color: #231c05; padding: 2px 6px; letter-spacing: 0.08em; text-transform: uppercase; }
@@ -279,6 +285,31 @@ footer { padding-bottom: 90px; }
 @media (max-width: 900px) { .case-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .case-grid { grid-template-columns: 1fr; } }
 /* steps */
+.jsteps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; counter-reset: none; }
+.jsteps li { position: relative; display: grid; }
+.jsteps li:not(:last-child)::after { content: "\2192"; position: absolute; right: -22px; top: 50%; transform: translateY(-50%); color: var(--signal); font-size: 1.4em; }
+.jstep { display: grid; gap: 6px; align-content: start; padding: 20px; min-height: 150px; background: var(--panel); border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; }
+.jstep:hover { border-color: var(--signal); }
+.jsteps li:first-child .jstep { border-color: var(--signal); background: rgba(95,224,168,0.08); }
+.jstep .n { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+.jstep h3 { font-size: 1.1em; }
+.jstep p { margin: 0; color: var(--desc); font-size: 0.92em; }
+.nextrow { display: flex; justify-content: flex-end; margin-top: 18px; }
+@media (max-width: 900px) { .jsteps { grid-template-columns: 1fr 1fr; } .jsteps li:nth-child(2)::after { display: none; } }
+@media (max-width: 520px) { .jsteps { grid-template-columns: 1fr; gap: 26px; } .jsteps li:not(:last-child)::after { content: "\2193"; right: auto; left: 50%; top: auto; bottom: -24px; transform: translateX(-50%); display: block; } }
+section[id] { scroll-margin-top: 210px; }
+@media (max-width: 640px) { section[id] { scroll-margin-top: 16px; } }
+/* journey bar */
+.journey { border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.journey .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-block: 10px; }
+.journey .jdots { display: flex; gap: 6px; }
+.journey .jdots a { display: inline-grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line-hi); color: var(--muted); text-decoration: none; font: 600 0.85em var(--body); }
+.journey .jdots a.done { border-color: var(--signal); color: var(--signal); }
+.journey .jdots a.cur { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.journey .jt { font-weight: 600; }
+.journey .jt small { display: block; color: var(--muted); font-weight: 400; font-size: 0.82em; }
+.journey .jnext { margin-left: auto; }
+@media (max-width: 640px) { .journey .jnext { margin-left: 0; } }
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line-hi); border: 1px solid var(--line-hi); }
 .step { display: grid; gap: 8px; align-content: start; padding: 22px; background: var(--panel); text-decoration: none; color: var(--ink); min-height: var(--target); }
 .step .n { font: 500 0.72em var(--mono); color: var(--signal); letter-spacing: 0.14em; }
@@ -422,6 +453,16 @@ footer .wrap { padding-block: 22px; }
         </div>
     </div>
 
+    <section id="how" aria-labelledby="howTitle">
+      <div class="head"><h2 id="howTitle">How Access+ works</h2><p>Four steps. Start anywhere, or follow them in order.</p></div>
+      <ol class="jsteps">
+        <li><a class="jstep" href="#goals"><span class="n">Step 1 · Start here</span><h3>Your goals</h3><p>Pick what you want to do: drink, eat, call for help, create, play.</p></a></li>
+        <li><a class="jstep" href="#profile"><span class="n">Step 2</span><h3>Your AI profile</h3><p>The AI agent asks what you want to accomplish and checks your movements.</p></a></li>
+        <li><a class="jstep" href="#software"><span class="n">Step 3</span><h3>Your solutions</h3><p>Software, hardware and advanced interfaces that fit your profile.</p></a></li>
+        <li><a class="jstep" href="#try"><span class="n">Step 4</span><h3>Try and borrow</h3><p>Practice in simulators, then borrow a kit to try at home.</p></a></li>
+      </ol>
+    </section>
+
     <section id="goals" aria-labelledby="goalsTitle">
       <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters to you. The AI agent will suggest where to begin.</p></div>
       <div class="goal-groups">
@@ -433,6 +474,7 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
+      <div class="nextrow"><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
     </section>
 
     <section id="simulators" aria-labelledby="simTitle">
@@ -515,15 +557,6 @@ footer .wrap { padding-block: 22px; }
       </div>
     </section>
 
-    <section id="how" aria-labelledby="howTitle">
-      <div class="head"><h2 id="howTitle">How it works</h2></div>
-      <div class="steps">
-        <a class="step" href="#profile"><span class="n">STEP 1</span><h3>Build your profile</h3><p>Your goals, movement, posture and positions, in one place.</p></a>
-        <a class="step" href="#borrow"><span class="n">STEP 2</span><h3>Try and borrow</h3><p>Read independent reviews and borrow a sensor kit by mail.</p></a>
-        <a class="step" href="#simulators"><span class="n">STEP 3</span><h3>Practice</h3><p>Build skills in simulators and carry them to real devices.</p></a>
-      </div>
-    </section>
-
     <div>
       <section id="who" aria-labelledby="whoTitle">
         <div class="head"><h2 id="whoTitle">Open to everyone</h2></div>
@@ -539,7 +572,7 @@ footer .wrap { padding-block: 22px; }
 </main>
 
 <div class="band band-bottom" aria-hidden="true"><span class="bd dots" style="left:2.0%;--d:6s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#5fe0a8"/><circle cx="12" cy="5" r="2" fill="#f7b2c4"/><circle cx="20" cy="5" r="2" fill="#ffc670"/><circle cx="28" cy="5" r="2" fill="#7cc4ff"/></svg></span><span class="bd tri" style="left:9.4%;--d:13s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#7cc4ff" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd ring" style="left:16.8%;--d:11s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#ffc670" stroke-width="1.5" stroke-dasharray="3 3"/></svg></span><span class="bd wave" style="left:24.2%;--d:9s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#f7b2c4" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd orb b" style="left:31.5%;--d:7s"></span><span class="bd cube" style="left:38.9%;--d:14s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z M3 7 L12 12 L21 7 M12 12 V22" stroke="#5fe0a8" stroke-width="1.3"/></svg></span><span class="bd plus" style="left:46.3%;--d:12s"><svg viewBox="0 0 16 16" fill="none"><path d="M8 2 V14 M2 8 H14" stroke="#5fe0a8" stroke-width="2" stroke-linecap="round"/></svg></span><span class="bd hex" style="left:53.7%;--d:10s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2 L21 7 V17 L12 22 L3 17 V7 Z" stroke="#f7b2c4" stroke-width="1.6"/></svg></span><span class="bd orb p" style="left:61.1%;--d:8s"></span><span class="bd dots" style="left:68.5%;--d:6s"><svg viewBox="0 0 30 10"><circle cx="4" cy="5" r="2" fill="#ffc670"/><circle cx="12" cy="5" r="2" fill="#5fe0a8"/><circle cx="20" cy="5" r="2" fill="#7cc4ff"/><circle cx="28" cy="5" r="2" fill="#f7b2c4"/></svg></span><span class="bd tri" style="left:75.8%;--d:13s"><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 L21 20 H3 Z" stroke="#ffc670" stroke-width="1.6" stroke-linejoin="round"/></svg></span><span class="bd wave" style="left:83.2%;--d:11s"><svg viewBox="0 0 60 16" fill="none"><path d="M1 8 Q8 1 15 8 T29 8 T43 8 T59 8" stroke="#7cc4ff" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="bd ring" style="left:90.6%;--d:9s"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#5fe0a8" stroke-width="1.5" stroke-dasharray="3 3"/><circle cx="12" cy="12" r="4" stroke="#7cc4ff" stroke-width="1.2"/></svg></span><span class="bd orb g" style="left:98.0%;--d:7s"></span></div>
-<footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between"><span>Access+ · for review by users, therapists and partners</span><span>Version 0.7765 · Pilot draft · Updated 2026-10-31 23:39 UTC</span></div></footer>
+<footer><div class="wrap" style="display:flex;flex-wrap:wrap;gap:6px 24px;justify-content:space-between"><span>Access+ · for review by users, therapists and partners</span><span>Version 0.8 · Pilot draft · Updated 2026-11-01 01:36 UTC</span></div></footer>
 
 <div class="dock" role="navigation" aria-label="Quick navigation"><button type="button" id="dockBack"><span class="ico" aria-hidden="true">&larr;</span>Back</button><button type="button" id="dockMenu"><span class="ico" aria-hidden="true">&#9776;</span>Menu</button></div>
 
@@ -821,7 +854,7 @@ function AgentCloud(canvas, opts) {
     { label: 'MY PROFILE', name: 'Create a custom profile', go: '#profile', a: -24, r: 206 },
     { label: 'SOFTWARE', name: 'Software solutions', go: '#software', a: 0, r: 158 },
     { label: 'HARDWARE', name: 'Hardware solutions', go: '#hardware', a: 24, r: 206 },
-    { label: 'TECH REVIEWS', name: 'Advanced tech reviews', go: '#advanced', a: 48, r: 158 },
+    { label: 'TECH REVIEWS', name: 'Independent tech reviews', go: '#reviews', a: 48, r: 158 },
     { label: 'BORROW KIT', name: 'Borrow a sensor kit', go: '#borrow', a: 72, r: 172 }
   ];
   dests.forEach(function (d, i) {

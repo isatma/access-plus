@@ -1,5 +1,13 @@
 # Access+ changelog
 
+## Version 0.8 · Pilot draft · 2026-11-01 01:36 UTC
+
+- Site reorganized as a four-step journey: 1 Your goals, 2 Your AI profile, 3 Your solutions, 4 Try and borrow
+- Step bar with Next button on each step page; home page shows the four steps
+- Your solutions: Software, Hardware and Advanced interfaces tabs
+- Reviews library: every reviewed product in one place
+- Try and borrow page: simulators and sensor kits
+
 ## Version 0.7765 · Pilot draft · 2026-10-31 23:19 UTC
 
 - Menu reorganized: Home, Goals, Simulators, AI custom profile, Software, Hardware, Advanced tech reviews, Borrow a kit, About, Sign in

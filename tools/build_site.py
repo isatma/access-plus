@@ -241,7 +241,35 @@ def build():
   </div>
 </main>
 '''
-    join_css = '''#view-join .jn-wrap { gap: 28px !important; }
+    try_html = '''<main id="view-try" class="view" hidden>
+  <div class="wrap jn-wrap">
+    <section class="jn-intro">
+      <div class="eyebrow">Step 4 · Try and borrow</div>
+      <h1>Practice first, then try the real thing</h1>
+      <p>Build skills safely in the simulators, then borrow a sensor kit by mail to try at home, on your own, with family, or with your therapist.</p>
+    </section>
+    <div class="try-grid">
+      <a class="try-card" href="#simulators"><span class="jn-k">Practice</span><h2>Simulators</h2><p>Robotic arm, wheelchair driving, phone, computer exercises, soundboard and talking board. Works with nose tracking, eye gaze, switches or a mouse.</p><span class="try-go">Open the simulators &rarr;</span></a>
+      <a class="try-card" href="#borrow"><span class="jn-k">Borrow</span><h2>Sensor kits by mail</h2><p>Head and nose tracking, switches, breath and more, sent to your door for a trial period. Therapists can order kits for their clients.</p><span class="try-go">Choose your kit &rarr;</span></a>
+    </div>
+    <p class="jn-note">Not sure what to try? Your AI profile suggests where to start. <a href="#profile">Go to your AI profile</a>.</p>
+  </div>
+</main>
+'''
+    join_css = '''#view-try .try-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+#view-try .try-card { display: grid; gap: 10px; align-content: start; padding: 26px; min-height: 220px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); text-decoration: none; }
+#view-try .try-card:hover { border-color: var(--signal); }
+#view-try .try-card h2 { font: 600 1.3em var(--body); letter-spacing: 0; text-transform: none; }
+#view-try .try-card p { margin: 0; color: var(--desc); }
+#view-try .try-go { color: var(--signal); font-weight: 600; margin-top: 4px; }
+#view-try .jn-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+#view-try .jn-wrap { gap: 26px !important; }
+#view-try .jn-intro { display: grid; gap: 12px; max-width: 52em; }
+#view-try .jn-intro h1 { font-size: 1.8em; line-height: 1.25; }
+#view-try .jn-intro p, #view-try .jn-note { margin: 0; color: var(--desc); }
+#view-try .jn-note a { color: var(--signal); }
+@media (max-width: 760px) { #view-try .try-grid { grid-template-columns: 1fr; } }
+#view-join .jn-wrap { gap: 28px !important; }
 #view-join .jn-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-join .jn-intro h1 { font-size: 1.8em; line-height: 1.25; }
 #view-join .jn-intro p { margin: 0; color: var(--desc); }
@@ -311,15 +339,13 @@ def build():
     home = re.sub(r'<a class="btn primary" href="#profile">My profile</a>', '<a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>', home, count=1)
     nav = ('<nav class="nav" aria-label="Site">'
            '<a href="#home" data-route="home">Home</a>'
-           '<a href="#goals" data-route="goals">Goals</a>'
-           '<a href="#simulators" data-route="simulators">Simulators</a>'
-           '<a href="#profile" data-route="profile">AI custom profile</a>'
-           '<a href="#software" data-route="software">Software solutions</a>'
-           '<a href="#hardware" data-route="hardware">Hardware solutions</a>'
-           '<a href="#advanced" data-route="advanced">Advanced tech reviews</a>'
-           '<a href="#borrow" data-route="borrow">Borrow a kit</a>'
+           '<a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a>'
+           '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
+           '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
+           '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
+           '<a class="navside" href="#reviews" data-route="reviews">Reviews</a>'
            '<a href="#about" data-route="about">About</a>'
-           '<a class="navsign" href="#profile" data-route="signin">Sign in · My profile<span class="navdemo">Demo</span></a></nav>')
+           '<a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
     nav += ('</div>\n  <div class="wrap navrow aud"><nav class="nav2" aria-label="Who it is for"><span class="nav2-k">Get involved:</span>'
             '<a href="#join-everyone" data-route="join-everyone">Open to everyone</a>'
             '<a href="#join-participants" data-route="join-participants">Become a participant</a>'
@@ -327,6 +353,8 @@ def build():
             '<a href="#join-families" data-route="join-families">Families and caregivers</a>'
             '<a href="#join-supporters" data-route="join-supporters">Partners and supporters</a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
+    if 'id="journey"' not in home:
+        home = home.replace('</header>', '</header>\n<div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>', 1)
     if '.testbadge' not in home:
         home = home.replace('/* hero */', '''.brand { text-decoration: none; }
 .testbadge { font: 500 0.62em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; border: 1px dashed #ffc670; padding: 3px 7px; }
@@ -338,7 +366,7 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer>', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer>', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
@@ -347,23 +375,39 @@ def build():
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
-    var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech' };
+    var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
     var v = MODE[h] || (h.indexOf('join') === 0 ? 'join' : (VIEWS.indexOf(h) >= 0 ? h : 'home'));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
-    var navKey = v !== 'home' ? v : (h === 'simulators' || h === 'guide-ai' || h === 'goals' ? h : 'home');
-    if (v === 'tech') navKey = h === 'tech' ? 'hardware' : h;
-    if (v === 'keyboards') navKey = 'software';
-    if (v === 'gesture') navKey = (window.__lastRoute === 'software' || window.__lastRoute === 'keyboards') ? 'software' : 'profile';
-    window.__lastRoute = v === 'tech' ? h : (v === 'gesture' ? window.__lastRoute : v);
+    var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
+    if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
+    if (v === 'keyboards') navKey = 'solutions';
+    if (v === 'borrow') navKey = 'try';
+    if (v === 'gesture') navKey = (window.__lastNav === 'solutions') ? 'solutions' : 'profile';
+    window.__lastNav = navKey;
+    var STEP = { goals: 1, profile: 2, solutions: 3, try: 4 };
+    var JT = ['', 'Your goals', 'Your AI profile', 'Your solutions', 'Try and borrow'];
+    var JH = ['', '#goals', '#profile', '#software', '#try'];
+    var JN = ['', 'Next: your AI profile', 'Next: your solutions', 'Next: try and borrow', 'Next: read the reviews'];
+    var JNH = ['', '#profile', '#software', '#try', '#reviews'];
+    var jb = document.getElementById('journey'), sn = v === 'home' ? 0 : (STEP[navKey] || 0);
+    if (jb) {
+      jb.hidden = !sn;
+      if (sn) {
+        var dots = document.getElementById('jDots'); dots.innerHTML = '';
+        for (var k = 1; k <= 4; k++) { var d = document.createElement('a'); d.href = JH[k]; d.textContent = k; d.title = JT[k]; d.setAttribute('aria-label', 'Step ' + k + ': ' + JT[k]); d.className = k < sn ? 'done' : (k === sn ? 'cur' : ''); dots.appendChild(d); }
+        document.getElementById('jTitle').innerHTML = 'Step ' + sn + ' of 4: ' + JT[sn] + '<small>' + (sn === 3 ? 'Software, hardware and advanced interfaces' : sn === 2 ? 'The AI agent, your profile and the gesture check' : sn === 4 ? 'Simulators and sensor kits' : 'What you want to do') + '</small>';
+        var nx = document.getElementById('jNext'); nx.textContent = JN[sn] + ' \u2192'; nx.href = JNH[sn];
+      }
+    }
     document.querySelectorAll('.nav2 a').forEach(function (a) { if (a.dataset.route === h) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'join') {
       document.querySelectorAll('#view-join .jn-sec').forEach(function (x) { x.classList.toggle('hl', x.id === h); });
       var js = document.getElementById(h);
-      if (js && h !== 'join') { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); return; }
+      if (js && h !== 'join') { setTimeout(function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo(0, js.getBoundingClientRect().top + window.scrollY - off); }, 0); }
     }
     document.querySelectorAll('.nav a').forEach(function (a) { if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     if (v === 'home' && h !== 'home') { var t = document.getElementById(h); if (t) { t.scrollIntoView({ block: 'start' }); return; } }

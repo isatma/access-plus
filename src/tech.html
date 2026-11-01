@@ -72,6 +72,19 @@ a.tg-cat { text-decoration: none; }
 .mi-g b { color: var(--ink); font-weight: 600; }
 @media (max-width: 900px) { .mi-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .mi-grid { grid-template-columns: 1fr; } }
+.tg-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tg-tabs a { min-height: 52px; display: inline-flex; align-items: center; padding: 0 20px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; font-weight: 600; }
+.tg-tabs a:hover { border-color: var(--signal); }
+.tg-tabs a[aria-current="page"] { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.ri-group { display: grid; gap: 10px; }
+.ri-group h3 { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+.ri-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.ri { display: grid; gap: 6px; align-content: start; text-align: left; padding: 16px; min-height: 120px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); color: var(--ink); font: inherit; cursor: pointer; }
+.ri:hover { border-color: var(--signal); }
+.ri .tg-tag { justify-self: start; }
+.ri b { font-weight: 600; } .ri small { color: var(--desc); } .ri .ri-c { color: var(--muted); font-size: 0.82em; }
+@media (max-width: 900px) { .ri-list { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .ri-list { grid-template-columns: 1fr; } }
 .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 .tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
@@ -112,6 +125,8 @@ a.tg-cat { text-decoration: none; }
       <p class="lead">Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.</p>
     </section>
 
+    <nav class="tg-tabs" aria-label="Solution types"><a href="#software" data-tab="software">Software</a><a href="#hardware" data-tab="hardware">Hardware</a><a href="#advanced" data-tab="advanced">Advanced interfaces</a></nav>
+
     <div class="tg-neutral">
       <b>Independent reviews</b>
       <p>Access+ reviews critical technology the way an independent consumer guide does: wheelchairs, robotic arms, communication devices, lifts and transfer equipment, adjustable tables, trapezes and mounting, as well as software. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word. <button type="button" class="tg-joinrev" id="joinRev">Become a community reviewer</button></p>
@@ -125,7 +140,14 @@ a.tg-cat { text-decoration: none; }
       <div class="st"><b>3 · Device</b><span>What it controls</span><small>Power wheelchair, computer, phone, robotic arm, smart home, communication device</small></div>
     </div>
 
-    <section aria-labelledby="tgCatsT" style="display:grid;gap:18px">
+
+    <section class="tg-revindex" hidden aria-labelledby="riT" style="display:grid;gap:18px">
+      <div class="tg-head"><h2 id="riT">Reviewed so far</h2><p>Every listing uses the same neutral template. Community reviews are opening soon.</p></div>
+      <div class="ri-group"><h3>Hardware</h3><div class="ri-list"><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Kinova JACO assistive robotic arm</b><small>Robotic arm</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Obi robotic eating device</b><small>Eating aid</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>Permobil Omni2</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net control system</b><small>Wheelchair electronics</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net Input/Output Module</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
+      <div class="ri-group"><h3>Software</h3><div class="ri-list"><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Apple Voice Control</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Dragon Professional</b><small>Voice control and dictation</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Windows Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Talon Voice</b><small>Voice, noise and eye control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Google Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="mi"><span class="tg-tag com">Commercial</span><b>MotionInput</b><small>Camera, gesture and speech control</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
+      <div class="ri-group"><h3>Advanced interfaces</h3><div class="ri-list"><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Neuralink (Telepathy)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Synchron (Stentrode)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Blackrock Neurotech</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Precision Neuroscience</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Paradromics (Connexus)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
+    </section>
+    <section class="tg-cats-sec" aria-labelledby="tgCatsT" style="display:grid;gap:18px">
       <div class="tg-head"><h2 id="tgCatsT">Choose an area</h2><p>Every listing is tagged so you can tell them apart at a glance.</p></div>
       <div class="tg-tags" aria-label="Tag key"><span class="tg-tag com">Commercial</span> sold by a company <span class="tg-tag open">Open source</span> free designs or code anyone can build or change <span class="tg-tag built">Built in</span> already on your phone, computer or chair <span class="tg-tag res">Research</span> in development</div>
       <div class="tg-groups">
@@ -156,7 +178,7 @@ a.tg-cat { text-decoration: none; }
           </div>
         </div>
         <div class="tg-group adv">
-          <header><b>Advanced technology</b><span>Emerging and research-stage technology: what it does today, who is building it, and how close it is.</span></header>
+          <header><b>Advanced interfaces</b><span>Emerging and research-stage interfaces: what they do today, who is building them, and how close they are.</span></header>
           <div class="tg-cats" role="group" aria-label="Advanced technology areas">
             <button class="tg-cat ready" type="button" data-cat="bci" aria-pressed="false"><span class="st8">Guide ready · Research</span><b>Brain-computer interfaces</b><small>Implants and headsets that turn brain signals into control</small></button>
             <button class="tg-cat" type="button" data-cat="smartchair" aria-pressed="false"><span class="st8">Coming next · Research</span><b>Smart wheelchairs</b><small>AI-assisted driving and chair-plus-arm systems</small></button>
@@ -590,9 +612,10 @@ a.tg-cat { text-decoration: none; }
     });
   });
   var MODES = {
-    software: { g: 'sw', first: 'voice', eb: 'Software solutions', h: 'Software that turns your movement into control', p: 'Tracking, virtual keyboards, voice and phone accessibility. Most of it is free or already built into your devices.' },
-    hardware: { g: 'hw', first: 'wheel', eb: 'Hardware solutions', h: 'The devices, inputs and interfaces you use', p: 'Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.' },
-    advanced: { g: 'adv', first: 'bci', eb: 'Advanced technology reviews', h: 'Independent reviews of what is coming next', p: 'Research-stage technology, reviewed plainly: what it can do today, who is building it, what it costs, and how close it is to everyday use.' }
+    software: { g: 'sw', first: 'voice', eb: 'Step 3 · Your solutions · Software', h: 'Software that turns your movement into control', p: 'Tracking, virtual keyboards, voice and phone accessibility. Most of it is free or already built into your devices.' },
+    hardware: { g: 'hw', first: 'wheel', eb: 'Step 3 · Your solutions · Hardware', h: 'The devices, inputs and interfaces you use', p: 'Every setup has three parts: the input you use, an interface that translates it, and the device it controls. Change the interface and the same input can run a wheelchair, a computer, a phone or a robotic arm.' },
+    advanced: { g: 'adv', first: 'bci', eb: 'Step 3 · Your solutions · Advanced interfaces', h: 'Advanced interfaces: what is coming next', p: 'Research-stage technology, reviewed plainly: what it can do today, who is building it, what it costs, and how close it is to everyday use.' },
+    reviews: { g: 'none', first: '', eb: 'Independent reviews', h: 'Reviews you can trust', p: 'Neutral reviews of assistive technology, like an independent consumer guide, plus reviews from the people who use it every day. Access+ is not a vendor and does not sell anything.' }
   };
   window.tgMode = function (m) {
     var M = MODES[m] || MODES.hardware;
@@ -601,8 +624,20 @@ a.tg-cat { text-decoration: none; }
     var eb = document.querySelector('#view-tech .tg-intro .eyebrow'), h1 = document.querySelector('#view-tech .tg-intro h1'), lead = document.querySelector('#view-tech .tg-intro .lead');
     if (eb) eb.textContent = M.eb; if (h1) h1.textContent = M.h; if (lead) lead.textContent = M.p;
     var flow = document.querySelector('#view-tech .tg-flow'); if (flow) flow.hidden = m !== 'hardware';
-    var b = document.querySelector('#view-tech .tg-cat[data-cat="' + M.first + '"]'); if (b) b.click();
+    var isRev = m === 'reviews';
+    var q = function (sel) { return document.querySelector('#view-tech ' + sel); };
+    if (q('.tg-tabs')) q('.tg-tabs').hidden = isRev;
+    if (q('.tg-cats-sec')) q('.tg-cats-sec').hidden = isRev;
+    if (q('.tg-revindex')) q('.tg-revindex').hidden = !isRev;
+    document.querySelectorAll('#view-tech .tg-tabs a').forEach(function (a) { if (a.dataset.tab === m) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    if (isRev) { document.querySelectorAll('#view-tech .tg-panel, #view-tech .tg-soon').forEach(function (x) { x.hidden = true; }); return; }
+    var want = window.__tgOpen || M.first; window.__tgOpen = null;
+    var b = document.querySelector('#view-tech .tg-cat[data-cat="' + want + '"]'); if (b) b.click();
+    if (want !== M.first) { var pnl = document.getElementById('tg-panel-' + want) || document.getElementById('panel-' + want); if (pnl) setTimeout(function () { var bar = document.querySelector('.bar'); window.scrollTo(0, pnl.getBoundingClientRect().top + window.scrollY - (bar ? bar.offsetHeight + 16 : 16)); }, 30); }
   };
+  document.querySelectorAll('#view-tech .ri').forEach(function (b) {
+    b.addEventListener('click', function () { window.__tgOpen = b.dataset.open; location.hash = b.dataset.mode; });
+  });
   var jr = document.getElementById('joinRev'), rh = document.getElementById('revT');
   if (jr && rh) jr.addEventListener('click', function () { var bar = document.querySelector('.bar'); var off = bar && getComputedStyle(bar).position === 'sticky' ? bar.offsetHeight + 16 : 16; window.scrollTo({ top: rh.getBoundingClientRect().top + window.scrollY - off, behavior: 'smooth' }); });
   var rev = document.getElementById('tgRev');
