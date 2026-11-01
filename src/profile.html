@@ -188,6 +188,22 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 .mx-note { margin: 0; color: var(--muted); font-size: 0.84em; }
 @media (max-width: 960px) { .mx-grid { grid-template-columns: 1fr 1fr; } .mx-fcols { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .mx-grid { grid-template-columns: 1fr; } }
+/* light, high-contrast profile */
+.col, .mx {
+  --panel: #ffffff; --panel-hi: #f2f5f8; --ink: #0b1220; --desc: #1e2b3a; --muted: #4b5a6b; --line: #d7dee6; --line-hi: #b7c3cf;
+  --signal: #08734b; --signal-soft: rgba(8,115,75,0.09); --signal-ink: #ffffff; --warn: #8a5300; --bad: #b42318; color: var(--ink); color-scheme: light;
+}
+.col { background: #ffffff; padding: 18px; border: 1px solid #b7c3cf; }
+.col .card { background: #ffffff; }
+.col .sample { background: #fff6e6; }
+.col .facts { background: transparent; gap: 0; border: 0; }
+.col .facts div { border: 1px solid var(--line); margin: 0 -1px -1px 0; }
+.mx { background: #ffffff; padding: 24px; border: 1px solid #b7c3cf; margin-top: 8px; }
+.mx-eyebrow { color: #8a5300; }
+.mx-down { color: #b42318; }
+.mx-focus { background: #f4fbf7; }
+.col .btn, .mx .btn { color: var(--ink); border-color: var(--line-hi); }
+.col .btn.primary, .mx .btn.primary { background: var(--signal); color: #fff; border-color: var(--signal); }
 </style>
 </head>
 <body>
@@ -309,7 +325,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:39 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:43 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
@@ -658,7 +674,7 @@ function AgentCloud(canvas, opts) {
     function spark(data, cls) {
       var w = 200, h = 38, min = Math.min.apply(null, data), max = Math.max.apply(null, data), r = max - min || 1;
       var pts = data.map(function (v, i) { return [i * (w - 8) / (data.length - 1) + 4, h - 5 - (v - min) / r * (h - 10)]; });
-      var col = cls === 'up' ? '#5fe0a8' : cls === 'down' ? '#ff8a8a' : '#8fa3b8';
+      var col = cls === 'up' ? '#08734b' : cls === 'down' ? '#b42318' : '#4b5a6b';
       return '<svg class="mx-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="' + col + '" stroke-width="2" points="' + pts.map(function (p) { return p.join(','); }).join(' ') + '"/><circle cx="' + pts[pts.length - 1][0] + '" cy="' + pts[pts.length - 1][1] + '" r="3" fill="' + col + '"/></svg>';
     }
     function renderActs() {
@@ -685,14 +701,14 @@ function AgentCloud(canvas, opts) {
       var W = 640, H = 240, pl = 48, pr = 16, pt = 16, pb = 34, d = m.data;
       var lo = Math.min.apply(null, d), hi = Math.max.apply(null, d), span = (hi - lo) || Math.abs(hi) * 0.2 || 1, raw = span / 3, mag = Math.pow(10, Math.floor(Math.log10(raw))), st = [1, 2, 2.5, 5, 10].map(function (q) { return q * mag; }).filter(function (q) { return q >= raw; })[0]; var min = Math.floor(lo / st) * st, max = Math.ceil(hi / st) * st; if (max === min) max += st;
       var x = function (i) { return pl + i * (W - pl - pr) / (d.length - 1); }, y = function (v) { return pt + (max - v) / (max - min) * (H - pt - pb); };
-      var t = trend(m), col = t[0] === 'up' ? '#5fe0a8' : t[0] === 'down' ? '#ff8a8a' : '#8fa3b8';
+      var t = trend(m), col = t[0] === 'up' ? '#08734b' : t[0] === 'down' ? '#b42318' : '#4b5a6b';
       var g = '';
-      for (var v = min; v <= max + 1e-9; v += st) { var yy = y(v); g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + yy + '" y2="' + yy + '" stroke="#22324a" stroke-width="1"/><text x="' + (pl - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="11" fill="#8fa3b8">' + (st < 1 ? v.toFixed(1) : Math.round(v)) + '</text>'; }
-      d.forEach(function (v, i) { g += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11" fill="#8fa3b8">' + MONTHS[i] + '</text>'; });
+      for (var v = min; v <= max + 1e-9; v += st) { var yy = y(v); g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + yy + '" y2="' + yy + '" stroke="#d7dee6" stroke-width="1"/><text x="' + (pl - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="11" fill="#4b5a6b">' + (st < 1 ? v.toFixed(1) : Math.round(v)) + '</text>'; }
+      d.forEach(function (v, i) { g += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11" fill="#4b5a6b">' + MONTHS[i] + '</text>'; });
       var path = d.map(function (v, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); }).join(' ');
       g += '<path d="' + path + '" fill="none" stroke="' + col + '" stroke-width="2.5"/>';
       d.forEach(function (v, i) { g += '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="' + (i === d.length - 1 ? 5 : 3.5) + '" fill="' + col + '"><title>' + MONTHS[i] + ': ' + v + ' ' + m.unit + '</title></circle>'; });
-      g += '<text x="' + (x(d.length - 1) - 8) + '" y="' + (y(d[d.length - 1]) - 10) + '" text-anchor="end" font-size="12" font-weight="600" fill="#e6edf5">' + d[d.length - 1] + ' ' + m.unit + '</text>';
+      g += '<text x="' + (x(d.length - 1) - 8) + '" y="' + (y(d[d.length - 1]) - 10) + '" text-anchor="end" font-size="12" font-weight="600" fill="#0b1220">' + d[d.length - 1] + ' ' + m.unit + '</text>';
       return '<svg viewBox="0 0 ' + W + ' ' + H + '">' + g + '</svg>';
     }
     function openFocus(k, metric) {
