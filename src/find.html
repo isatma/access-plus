@@ -213,7 +213,7 @@
       spec: ['Sip and puff switch', 'Sip and puff driving', 'Breath as a scan switch', 'Mouthpiece mounting'] }
   };
   var ORDER = ['head', 'eyes', 'sw', 'voice', 'sip'];
-  var A = {}, step = 0, rec = null, picked = {}, seen = {};
+  var A = {}, step = 0, rec = null, picked = {}, seen = {}, goalWords = '';
   function el(id) { return document.getElementById(id); }
   var prog = el('fdProg'), qEl = el('fdQ'), hint = el('fdHint'), opts = el('fdOpts'), ack = el('fdAck'), st = el('fdSt'), left = el('fdLeft');
   var back = el('fdBack'), next = el('fdNext'), card = el('fdCard'), done = el('fdDone'), res = el('fdRes'), aiText = el('fdAiText');
@@ -250,7 +250,8 @@
   function chips(box, qid) {
     var q = Q.filter(function (x) { return x.id === qid; })[0], a = A[qid] || [], prev = box.getAttribute('data-v') || '';
     box.innerHTML = '';
-    if (!a.length) { var e = document.createElement('span'); e.className = 'pc-chip off'; e.textContent = 'Waiting for your answer'; box.appendChild(e); }
+    if (qid === 'goals' && goalWords) { var w = document.createElement('span'); w.className = 'pc-chip'; w.textContent = '“' + goalWords + '”'; box.appendChild(w); }
+    if (!a.length && !(qid === 'goals' && goalWords)) { var e = document.createElement('span'); e.className = 'pc-chip off'; e.textContent = 'Waiting for your answer'; box.appendChild(e); }
     a.forEach(function (v) { var c = document.createElement('span'); c.className = 'pc-chip'; c.textContent = label(qid, v); if (prev.split(',').indexOf(v) < 0) c.classList.add('pc-pop'); box.appendChild(c); });
     box.setAttribute('data-v', a.join(','));
   }
@@ -293,7 +294,7 @@
     items.forEach(function (w) {
       var li = document.createElement('li'); li.className = 'new';
       if (w[1]) { var b = document.createElement('b'); if (w[1] < 0) b.className = 'neg'; b.textContent = (w[1] > 0 ? '+' : '') + w[1] + ' '; li.appendChild(b); }
-      li.appendChild(document.createTextNode(METH[w[0]].name + ': ' + w[2]));
+      li.appendChild(document.createTextNode((METH[w[0]] ? METH[w[0]].name + ': ' : '') + w[2]));
       ul.insertBefore(li, ul.firstChild);
     });
   }
@@ -407,7 +408,7 @@
     st.textContent = 'Profile ready';
   }
   el('fdRestart').addEventListener('click', function () {
-    A = {}; step = 0; rec = null; picked = {}; seen = {}; el('pcLog').innerHTML = ''; el('pcRec').hidden = true;
+    A = {}; step = 0; rec = null; picked = {}; seen = {}; goalWords = ''; el('pcLog').innerHTML = ''; el('pcRec').hidden = true;
     card.hidden = false; prog.hidden = false; done.hidden = true; res.hidden = true; aiText.hidden = true; ack.textContent = ''; st.textContent = 'Listening';
     update(false); render();
   });
@@ -419,7 +420,7 @@
       methodMatch: ORDER.reduce(function (o, k) { o[METH[k].name] = Math.max(0, sc[k]); return o; }, {}),
       startingSettings: settings(rec.primary).reduce(function (o, t) { o[t[0]] = t[1]; return o; }, {}),
       practiceTracks: Object.keys(picked).filter(function (k) { return picked[k]; }).map(function (k) { var x = k.split(':'); return { method: METH[x[0]].name, track: x[1] }; }),
-      answers: rec.answers }, null, 2);
+      goalInOwnWords: goalWords || null, answers: rec.answers }, null, 2);
     function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
     if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
   });
@@ -432,12 +433,30 @@
     left.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     function fin(msg) { busy(false, msg); btn.disabled = false; if (agent) agent.pulse('#5fe0a8'); }
     var tracks = Object.keys(picked).filter(function (k) { return picked[k]; }).map(function (k) { return k.split(':')[1]; });
-    var prompt = 'You are the Access+ AI agent, a calm, friendly guide for people with ALS and other complex disabilities. In under 140 words, plain language, explain why this starting setup suits the person and suggest one first practice step. Do not diagnose or give medical advice; suggest trying options with a therapist. Do not recommend brands. Answers: ' + JSON.stringify(rec.answers) + '. Recommendation: start with ' + METH[rec.primary].name + ', backup ' + METH[rec.backup].name + (rec.ahead ? ', plan ahead for ' + (rec.ahead === 'voice-bank' ? 'voice banking' : METH[rec.ahead].name) : '') + '. Practice tracks chosen: ' + (tracks.join(', ') || 'none') + '.';
+    var prompt = 'You are the Access+ AI agent, a calm, friendly guide for people with ALS and other complex disabilities. In under 140 words, plain language, explain why this starting setup suits the person and suggest one first practice step. Do not diagnose or give medical advice; suggest trying options with a therapist. Do not recommend brands. Answers: ' + JSON.stringify(rec.answers) + '. Recommendation: start with ' + METH[rec.primary].name + ', backup ' + METH[rec.backup].name + (rec.ahead ? ', plan ahead for ' + (rec.ahead === 'voice-bank' ? 'voice banking' : METH[rec.ahead].name) : '') + '. The person described their goal as: ' + (goalWords || 'not given') + '. Practice tracks chosen: ' + (tracks.join(', ') || 'none') + '.';
     sampleFn(prompt, { modelTier: 'quick', cache: false, onText: function (e) { aiText.textContent = e.text; st.textContent = 'Explaining'; if (agent) { agent.set({ energy: 0.5 }); agent.talk(700); } } })
       .then(function (r) { aiText.textContent = r.text; fin('Done'); })
       .catch(function () { aiText.textContent = 'The AI agent is not available right now. Your profile still applies.'; fin('Not available'); });
   });
-  update(false); render();
+  var KEYS = [['computer', /computer|laptop|\bpc\b|mac|email|type|typing|keyboard|mouse|internet|web/i], ['phone', /phone|tablet|ipad|iphone|android|text|call (my|a)|facetime|app|read|book|page/i],
+    ['talk', /talk|speak|speech|communicat|heard|voice volume|conversation|say/i], ['drive', /wheelchair|drive|driving|mobility|getting around|transfer|lift/i],
+    ['eat', /eat|drink|feed|meal|cup|food/i], ['home', /home|light|tv|door|thermostat|bed|help|emergency|night|safety/i],
+    ['play', /music|game|gaming|play|paint|art|photo|sail|ski|bowl|golf|sport|exercise/i]];
+  window.fdStartWithGoal = function () {
+    var t = window.__fdGoal; if (!t) return; window.__fdGoal = null;
+    el('fdRestart').click();
+    goalWords = String(t).slice(0, 120);
+    A.goals = KEYS.filter(function (k) { return k[1].test(goalWords); }).map(function (k) { return k[0]; });
+    update(true);
+    log([['', 0, 'Starting goal: “' + goalWords + '”']]);
+    var names = A.goals.map(function (g) { return label('goals', g).toLowerCase(); });
+    ack.textContent = 'You want to: “' + goalWords + '”. ' + (names.length ? 'I added ' + names.join(' and ') + ' to your goals.' : 'I added it to your profile.') + ' Add anything else, then press Next.';
+    if (agent) { agent.pulse('#7cc4ff'); agent.talk(1600); }
+    render();
+  };
+  function fromHash() { if ((location.hash || '').slice(1) === 'find' && window.__fdGoal) setTimeout(window.fdStartWithGoal, 30); }
+  window.addEventListener('hashchange', fromHash);
+  update(false); render(); fromHash();
 })();
 </script>
 </body>

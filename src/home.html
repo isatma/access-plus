@@ -601,18 +601,14 @@ footer .wrap { padding-block: 22px; }
   .fore-bend, .jaw-l, .jaw-r { transition: transform .35s ease; }
   .dial-item rect, .dial-item text { transition: stroke .2s, fill .2s; }
 }
-.ai-tease { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 32px; align-items: center; padding: 28px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 92%, transparent); position: relative; }
-.ai-tease::before { content: ""; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border: solid var(--signal); border-width: 2px 0 0 2px; }
-.ai-tease canvas { width: 200px; height: 200px; display: block; border-radius: 50%; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
-.ai-tease-text { display: grid; gap: 14px; min-width: 0; }
-.ai-tease h2 { font: 600 1.45em var(--body); letter-spacing: 0; line-height: 1.3; max-width: 26em; }
-.ai-tease-q { margin: 0; padding: 12px 16px; border-left: 2px solid var(--signal); background: var(--signal-soft); display: grid; gap: 6px; max-width: 46em; }
-.ai-tease-q p { margin: 0; color: var(--desc); font-size: 0.95em; }
-.ai-tease-q b { color: var(--ink); font-weight: 500; }
-.ai-tease-q cite { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-style: normal; }
-.ai-tease-btns { display: flex; flex-wrap: wrap; gap: 10px; }
-.ai-tease-btns .btn { min-height: 64px; padding: 0 26px; font-size: 0.85em; }
 @media (max-width: 760px) { .ai-tease { grid-template-columns: 1fr; justify-items: center; padding: 18px; gap: 18px; } .ai-tease canvas { width: 130px; height: 130px; } .ai-tease-btns .btn { flex: 1 1 220px; justify-content: center; } }
+.gsearch { padding: 26px 28px; gap: 26px; border-color: var(--signal); background: linear-gradient(90deg, rgba(95,224,168,0.08), color-mix(in srgb, var(--panel) 85%, transparent) 45%); }
+.gcloud { width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(ellipse at 50% 45%, #0f1a2c, #060b14 70%); border: 1px solid var(--line-hi); }
+.gsh { font: 600 1.3em var(--body); letter-spacing: 0; line-height: 1.3; }
+.gsn { color: var(--muted); font-size: 0.85em; }
+.gsearch input { min-height: 60px; font-size: 1.05em; }
+.gsearch .btn { min-height: 60px; min-width: 110px; justify-content: center; }
+@media (max-width: 560px) { .gsearch { flex-direction: column; align-items: stretch; } .gcloud { width: 96px; height: 96px; align-self: center; } }
 </style>
 
 <header class="bar" id="top">
@@ -766,15 +762,17 @@ footer .wrap { padding-block: 22px; }
         <li><a class="jstep" href="#try"><span class="n">Step 4</span><h3>Try and borrow</h3><p>Practice in simulators, then borrow a kit to try at home.</p></a></li>
       </ol>
       <div id="goals" class="goals-in" aria-labelledby="goalsTitle">
-      <div class="step1h"><h3 id="goalsTitle"><span class="sn">1</span>Start with a goal</h3></div>
+      <div class="step1h"><h3 id="goalsTitle"><span class="sn">1</span>Start with a goal</h3><p>Then the AI agent builds your profile around it.</p></div>
       <form class="gsearch" id="goalSearch" autocomplete="off" role="search">
         <canvas class="gcloud" id="goalCloud" aria-hidden="true"></canvas>
-        <div class="gsq"><span class="gsk">Ask the AI agent</span>
-        <label class="sr" for="goalQ">Search goals or describe your own</label>
-        <div class="gsrow"><input id="goalQ" type="search" placeholder="Search goals, or describe your own, like &ldquo;turn pages of a book&rdquo;"><button class="btn primary" type="submit">Ask</button></div></div>
+        <div class="gsq"><span class="gsk">Your AI agent</span>
+        <h3 class="gsh">What do you want to be able to do? Say it or type it.</h3>
+        <label class="sr" for="goalQ">Say or type a goal</label>
+        <div class="gsrow"><input id="goalQ" type="search" placeholder="Like &ldquo;turn pages of a book&rdquo; or &ldquo;text my family&rdquo;"><button class="btn primary" type="submit">Start</button></div>
+        <small class="gsn">Or pick one below. Typing also filters the list.</small></div>
       </form>
       <div class="gtiles" id="goalTiles" role="group" aria-label="Goal categories"></div>
-      <p class="gnone" id="goalNone" hidden>No matching goal yet. Press <b>Ask the AI agent</b> and it will help with your own goal.</p>
+      <p class="gnone" id="goalNone" hidden>No matching goal in the list. Press <b>Start</b> and the AI agent will build your profile around your own goal.</p>
       <div class="goal-groups" id="goalGroups">
         <div class="goal-group"><h3>Daily living</h3><div class="chips"><button class="chip" type="button">Give myself a drink</button><button class="chip" type="button">Feed myself</button><button class="chip" type="button">Use my phone</button><button class="chip" type="button">Use a computer</button><button class="chip" type="button">Control my home</button></div></div>
         <div class="goal-group"><h3>Safety</h3><div class="chips"><button class="chip" type="button">Call for help in more than one way</button><button class="chip" type="button">Emergency response at night</button></div></div>
@@ -784,21 +782,12 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
-      <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
+      <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#find">Next: build my profile &rarr;</a></div>
       </div>
     </section>
 
 
     <section id="guide-ai" aria-labelledby="aiTitle">
-      <div class="ai-tease" id="aiTease">
-        <canvas id="aiTeaseFace" aria-hidden="true"></canvas>
-        <div class="ai-tease-text">
-          <span class="eyebrow">Your AI agent</span>
-          <h2>Ask by voice or typing, and watch your profile build as you answer</h2>
-          <blockquote class="ai-tease-q"><p><b>“I'm in bed this week and nose tracking keeps drifting.”</b></p><p>“Let's make an in-bed profile. I'll re-center your rest position, then you try two minutes of pointing practice and I'll compare it with your seated scores.”</p><cite>Example conversation</cite></blockquote>
-          <div class="ai-tease-btns"><a class="btn primary" href="#find">Find my technology &rarr;</a><a class="btn" href="#guide-ai" id="aiOpen">Talk to the AI agent</a></div>
-        </div>
-      </div>
       <div id="aiFull" hidden>
       <div class="head"><h2 id="aiTitle">Your AI agent</h2><p>The AI agent assesses your needs, suggests the technology and sensors that fit you, and then helps you practice in the simulators.</p></div>
       <div class="ai">
@@ -880,7 +869,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:23 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:29 UTC</span></div>
   </div>
 </footer>
 
@@ -1139,10 +1128,7 @@ function AgentCloud(canvas, opts) {
   });
   document.querySelectorAll('#goals .chip').forEach(function (b) {
     b.addEventListener('click', function () {
-      var f = document.getElementById('askForm'), inp = document.getElementById('askInput');
-      location.hash = 'guide-ai';
-      if (f && inp && !f.hidden && !inp.disabled) { inp.value = 'My goal: ' + b.textContent + '. Where should I start?'; f.requestSubmit(); }
-      else if (inp) { inp.value = 'My goal: ' + b.textContent + '. Where should I start?'; toastSay('Goal added to the AI agent box.'); }
+      window.__fdGoal = b.textContent; location.hash = 'find'; if (window.fdStartWithGoal) window.fdStartWithGoal();
     });
   });
 
@@ -1195,11 +1181,7 @@ function AgentCloud(canvas, opts) {
       e.preventDefault();
       var v = q.value.trim(); if (!v) { q.focus(); return; }
       if (gc) { gc.pulse('#7cc4ff'); gc.talk(1500); }
-      var f = document.getElementById('askForm'), inp = document.getElementById('askInput');
-      location.hash = 'guide-ai';
-      var msg = 'My goal: ' + v + '. Where should I start?';
-      if (f && inp && !f.hidden && !inp.disabled) { inp.value = msg; f.requestSubmit(); }
-      else if (inp) { inp.value = msg; toastSay('Your goal is in the AI agent box.'); }
+      setTimeout(function () { window.__fdGoal = v; location.hash = 'find'; if (window.fdStartWithGoal) window.fdStartWithGoal(); }, 450);
     });
   })();
 
@@ -1428,13 +1410,10 @@ function AgentCloud(canvas, opts) {
   var tag = document.getElementById('chatTag'), starters = document.getElementById('starters');
   var turns = [], ctl = null, started = false, sampleFn = null;
   var aceFace = AgentCloud(document.getElementById('aceFace'));
-  var teaseFace = AgentCloud(document.getElementById('aiTeaseFace'));
   (function () {
-    var full = document.getElementById('aiFull'), tease = document.getElementById('aiTease');
-    function sync() { var on = (location.hash || '').slice(1) === 'guide-ai'; full.hidden = !on; tease.hidden = on; if (on) { aceFace.pulse('#5fe0a8'); } }
+    var full = document.getElementById('aiFull');
+    function sync() { var on = (location.hash || '').slice(1) === 'guide-ai'; full.hidden = !on; if (on) { aceFace.pulse('#5fe0a8'); } }
     window.addEventListener('hashchange', sync); sync();
-    document.getElementById('aiOpen').addEventListener('click', function () { teaseFace.pulse('#7cc4ff'); });
-    setInterval(function () { if (!tease.hidden) { teaseFace.talk(1400); } }, 7000);
   })();
   var CASES = [
     { name: 'Marcus', color: '#5fe0a8', about: '32 · veteran · high cervical spinal cord injury', hl: 'Turning “too complex” into proven capability', ins: ['Voice', 'Facial EMG', 'Robotic arm'],
