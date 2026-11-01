@@ -527,7 +527,7 @@ def build():
       } else { location.href = d.go; }""", """      if (location.hash === d.go) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = d.go;
       sel.textContent = 'Pointing at: ' + d.name;""")
     if '/*ARM3D*/' not in home:
-        home = home.rstrip() + '\n<script>/*ARM3D*/\n' + (ROOT / 'src' / 'arm3d.js').read_text(encoding='utf-8') + '\n</script>\n'
+        home = home.rstrip() + '\n<script>/* three.js r128, MIT License, https://threejs.org */\n' + (ROOT / 'src' / 'vendor' / 'three.min.js').read_text(encoding='utf-8') + '\n</script>\n<script>/*ARM3D*/\n' + (ROOT / 'src' / 'arm3d.js').read_text(encoding='utf-8') + '\n</script>\n'
     home_p.write_text(home)
     print('built', len(home), 'bytes')
 

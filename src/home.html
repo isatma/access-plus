@@ -1443,7 +1443,11 @@ function AgentCloud(canvas, opts) {
     var gl = false; try { var c = document.createElement('canvas'); gl = !!(c.getContext('webgl') || c.getContext('experimental-webgl')); } catch (e) {}
     if (!gl) return;
     if (window.THREE) return start();
+    if (document.readyState !== 'complete') { window.addEventListener('load', function () { if (window.THREE && window.initArm3D) start(); else loadCdn(); }); return; }
+    loadCdn();
+    function loadCdn() {
     var sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js'; sc.async = true;
     sc.onload = start; document.head.appendChild(sc);
+    }
   })();
 </script>
