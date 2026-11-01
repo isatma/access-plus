@@ -19,6 +19,13 @@
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     host.appendChild(renderer.domElement);
+    var bigLabel = document.createElement('div'); bigLabel.className = 'arm3d-label'; bigLabel.setAttribute('aria-hidden', 'true');
+    bigLabel.innerHTML = '<b></b><span></span>'; host.appendChild(bigLabel);
+    function showLabel(title, sub) {
+      bigLabel.querySelector('b').textContent = title || ''; bigLabel.querySelector('span').textContent = sub || '';
+      bigLabel.classList.remove('pop'); void bigLabel.offsetWidth; bigLabel.classList.add('pop');
+      bigLabel.style.opacity = title ? '1' : '0';
+    }
     renderer.domElement.setAttribute('aria-hidden', 'true');
 
     var scene = new THREE.Scene();
@@ -248,11 +255,11 @@
       BLOCK.g.visible = !!test; BLOCK.halo.material.opacity = (test && held !== BLOCK) ? 0.8 : 0;
     }
     function describe() {
-      if (test) { setStatus('Skill test · Trial ' + (test.trial + 1) + ' of ' + test.trials + ': pick up the green block and put it in the tray · Mode: ' + AXES[axis]); return; }
-      if (manual) { setStatus('Manual control · Mode: ' + AXES[axis] + ' · Use Left and Right, Next mode to switch'); return; }
+      if (test) { setStatus('Skill test · Trial ' + (test.trial + 1) + ' of ' + test.trials + ': pick up the green block and put it in the tray · Mode: ' + AXES[axis]); showLabel('Mode: ' + AXES[axis], 'Skill test · trial ' + (test.trial + 1) + ' of ' + test.trials); return; }
+      if (manual) { setStatus('Manual control · Mode: ' + AXES[axis] + ' · Use Left and Right, Next mode to switch'); showLabel('Mode: ' + AXES[axis], 'Manual control'); return; }
       var it = list()[sel]; if (!it) return;
-      if (mode === 'nav') setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : ''));
-      else setStatus('Selected: ' + it.name + '. Press Pick up.');
+      if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
+      else { setStatus('Selected: ' + it.name + '. Press Pick up.'); showLabel(it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Press the elevator button' }[it.key]); }
     }
     function point() {
       if (manual || busy) return;

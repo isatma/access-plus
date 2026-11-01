@@ -310,7 +310,13 @@ footer { padding-bottom: 90px; }
 .dial-item.on text { fill: #5fe0a8; }
 .dial-item:focus-visible rect { stroke: #5fe0a8; stroke-width: 3; }
 .dial-item:focus { outline: none; }
-.arm3d { display: none; width: 100%; outline: none; }
+.arm3d { display: none; width: 100%; outline: none; position: relative; }
+.arm3d-label { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); display: grid; justify-items: center; gap: 0; padding: 6px 16px; max-width: 80%; white-space: nowrap; text-align: center; background: rgba(11,18,32,0.82); border: 1px solid rgba(95,224,168,0.55); pointer-events: none; transition: opacity .25s ease; }
+.arm3d-label b { font: 700 1.25em var(--body); color: var(--ink); line-height: 1.2; }
+.arm3d-label span { display: none; }
+.arm3d-label span:empty { display: none; }
+@media (prefers-reduced-motion: no-preference) { .arm3d-label.pop { animation: lblpop .35s ease; } @keyframes lblpop { from { transform: translateX(-50%) translateY(-6px) scale(.96); opacity: .4; } to { transform: translateX(-50%); opacity: 1; } } }
+@media (max-width: 520px) { .arm3d-label b { font-size: 1.15em; } .arm3d-label span { display: none; } }
 .has3d .arm3d { display: block; }
 .has3d #armSvg, .has3d #aceWrap { display: none !important; }
 .has3d .stage3d .viz { transform: none !important; }
@@ -754,7 +760,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 11:03 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 11:04 UTC</span></div>
   </div>
 </footer>
 
