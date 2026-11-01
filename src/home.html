@@ -652,6 +652,19 @@ footer .wrap { padding-block: 22px; }
 .sb-pane p { margin: 0; color: var(--desc); font-size: 0.88em; }
 .sb-pop-note { margin: 0; color: var(--muted); font-size: 0.8em; }
 @media (max-width: 560px) { .sb-pop { left: 12px; right: 12px; width: auto; bottom: 74px; } .sb-how { right: 12px; bottom: 12px; } .sb-cap { bottom: 74px; } }
+.adl { margin-top: 30px; display: grid; gap: 14px; }
+.adl-head h3 { font: 600 1.15em var(--body); letter-spacing: 0; }
+.adl-head p { margin: 4px 0 0; color: var(--muted); }
+.adl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.adl-card { display: grid; gap: 10px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); border-top: 2px solid var(--signal); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.adl-card > b { font: 600 1.02em var(--body); }
+.adl-card dl { margin: 0; display: grid; grid-template-columns: 6.8em 1fr; gap: 4px 10px; font-size: 0.86em; }
+.adl-card dt { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.adl-card dd { margin: 0; color: var(--desc); }
+.adl-card dd a { color: var(--signal); }
+.adl-card .btn { justify-self: start; min-height: 48px; font-size: 0.74em; margin-top: auto; }
+@media (max-width: 900px) { .adl-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .adl-grid { grid-template-columns: 1fr; } }
 </style>
 
 <header class="bar" id="top">
@@ -825,6 +838,20 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
+      <section class="adl" aria-labelledby="adlT">
+        <div class="adl-head"><h3 id="adlT">Daily living: how Access+ helps</h3><p>Everyday activities, the technology that can help, where to practice, and how progress is measured.</p></div>
+        <div class="adl-grid">
+          <article class="adl-card"><b>Get a drink</b><dl><dt>Technology</dt><dd>Robotic arm with a cup holder; drinking aids</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator</a></dd><dt>Measured by</dt><dd>Time to drink, spills, help needed</dd></dl><button class="btn adl-go" type="button" data-goal="Get a drink">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Eat, including food transfers</b><dl><dt>Technology</dt><dd>Robotic arm; eating devices such as Obi</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator</a></dd><dt>Measured by</dt><dd>Bites per minute, dropped food, fatigue</dd></dl><button class="btn adl-go" type="button" data-goal="Eat, including food transfers">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Brush teeth</b><dl><dt>Technology</dt><dd>Robotic arm; adapted brushes; caregiver cues</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator (planned)</a></dd><dt>Measured by</dt><dd>Time, help needed, reach</dd></dl><button class="btn adl-go" type="button" data-goal="Brush teeth">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Brush hair</b><dl><dt>Technology</dt><dd>Robotic arm; adapted tools</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator (planned)</a></dd><dt>Measured by</dt><dd>Time, help needed, reach</dd></dl><button class="btn adl-go" type="button" data-goal="Brush hair">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Send a message</b><dl><dt>Technology</dt><dd>Eye gaze, switches, voice, lip touchpad, on-screen keyboards</dd><dt>Practice</dt><dd><a href="#simulators">Pointing and typing practice</a></dd><dt>Measured by</dt><dd>Words per minute, errors, dwell time</dd></dl><button class="btn adl-go" type="button" data-goal="Send a message">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Call for help</b><dl><dt>Technology</dt><dd>More than one method: switch, voice, smart speaker, wheelchair controls</dd><dt>Practice</dt><dd><a href="#simulators">Switch practice</a></dd><dt>Measured by</dt><dd>Time to alert, works in bed and chair, at night</dd></dl><button class="btn adl-go" type="button" data-goal="Call for help">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Control lights, TV and bed</b><dl><dt>Technology</dt><dd>Smart home through phone, computer, voice or the wheelchair</dd><dt>Practice</dt><dd><a href="#simulators">Smart home practice (planned)</a></dd><dt>Measured by</dt><dd>Tasks done without help</dd></dl><button class="btn adl-go" type="button" data-goal="Control lights, TV and bed">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Drive the wheelchair</b><dl><dt>Technology</dt><dd>Head array, sip and puff, mini joystick, switches, Omni2</dd><dt>Practice</dt><dd><a href="#simulators">Wheelchair simulator</a></dd><dt>Measured by</dt><dd>Gates, stops, collisions, lap time</dd></dl><button class="btn adl-go" type="button" data-goal="Drive the wheelchair">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Use a phone or computer</b><dl><dt>Technology</dt><dd>Head tracking, eye gaze, switch control, voice, lip touchpad</dd><dt>Practice</dt><dd><a href="#simulators">Pointing practice</a></dd><dt>Measured by</dt><dd>Success rate, time to target, fatigue</dd></dl><button class="btn adl-go" type="button" data-goal="Use a phone or computer">Make this my goal &rarr;</button></article>
+        </div>
+      </section>
       <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#find">Next: build my profile &rarr;</a></div>
       </div>
     </section>
@@ -926,10 +953,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:42 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 22:08 UTC</span></div>
   </div>
 </footer>
 
@@ -2008,5 +2035,12 @@ function AgentCloud(canvas, opts) {
   x.addEventListener('click', function () { close(); btn.focus(); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { close(); btn.focus(); } }, true);
   render();
+})();
+
+/* Daily-living cards: make the activity a goal and open the profile studio */
+(function () {
+  document.querySelectorAll('.adl-go').forEach(function (b) {
+    b.addEventListener('click', function () { window.__fdGoal = b.getAttribute('data-goal'); location.hash = 'find'; if (window.fdStartWithGoal) window.fdStartWithGoal(); });
+  });
 })();
 </script>

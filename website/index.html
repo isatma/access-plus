@@ -652,6 +652,19 @@ footer .wrap { padding-block: 22px; }
 .sb-pane p { margin: 0; color: var(--desc); font-size: 0.88em; }
 .sb-pop-note { margin: 0; color: var(--muted); font-size: 0.8em; }
 @media (max-width: 560px) { .sb-pop { left: 12px; right: 12px; width: auto; bottom: 74px; } .sb-how { right: 12px; bottom: 12px; } .sb-cap { bottom: 74px; } }
+.adl { margin-top: 30px; display: grid; gap: 14px; }
+.adl-head h3 { font: 600 1.15em var(--body); letter-spacing: 0; }
+.adl-head p { margin: 4px 0 0; color: var(--muted); }
+.adl-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.adl-card { display: grid; gap: 10px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); border-top: 2px solid var(--signal); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.adl-card > b { font: 600 1.02em var(--body); }
+.adl-card dl { margin: 0; display: grid; grid-template-columns: 6.8em 1fr; gap: 4px 10px; font-size: 0.86em; }
+.adl-card dt { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.adl-card dd { margin: 0; color: var(--desc); }
+.adl-card dd a { color: var(--signal); }
+.adl-card .btn { justify-self: start; min-height: 48px; font-size: 0.74em; margin-top: auto; }
+@media (max-width: 900px) { .adl-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .adl-grid { grid-template-columns: 1fr; } }
 /* views-css:start */
 #view-borrow .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 #view-borrow > .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
@@ -1052,6 +1065,88 @@ footer .wrap { padding-block: 22px; }
 #view-find .pc-checks li { padding: 8px 12px; border-left: 3px solid var(--signal); background: var(--signal-soft); font-size: 0.92em; }
 #view-find .pc-checks li small { display: block; color: var(--muted); font-size: 0.85em; }
 #view-find .pc-checks a { color: var(--signal); font-weight: 600; }
+#view-research .rs-wrap { gap: 26px !important; }
+#view-research .rs-hero { display: grid; gap: 12px; padding: 36px 0 8px; }
+#view-research .rs-hero h1 { font-size: clamp(2em, 5vw, 3.4em); line-height: 1.06; }
+#view-research .rs-hero h1 span { color: var(--signal); }
+#view-research .rs-hero p { margin: 0; color: var(--desc); max-width: 52em; font-size: 1.08em; }
+#view-research .rs-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+#view-research .rs-sim { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 12px 16px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.07); color: var(--ink); font-size: 0.95em; }
+#view-research .rs-sim b { color: #ffc670; font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
+#view-research .rs-sim a { color: #ffc670; }
+#view-research .rs-board { --panel: #ffffff; --panel-hi: #f2f5f8; --ink: #0b1220; --desc: #24344a; --muted: #4b5a6b; --line: #d7dee6; --line-hi: #b7c3cf; --signal: #08734b; --signal-soft: rgba(8,115,75,0.09); --signal-ink: #fff; color: var(--ink); color-scheme: light; background: #f4f7fa; border: 1px solid #b7c3cf; padding: 20px; display: grid; gap: 18px; }
+#view-research .rs-filters { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; align-items: end; padding: 14px; background: #fff; border: 1px solid var(--line-hi); position: sticky; top: calc(env(safe-area-inset-top, 0px) + 176px); z-index: 2; }
+#view-research .rs-filters label { min-width: 0; display: grid; gap: 4px; font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-research .rs-filters select { width: 100%; min-width: 0; -webkit-appearance: menulist; appearance: menulist; min-height: 46px; padding: 0 10px; font: 500 1.35em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: #fff; border: 1px solid var(--line-hi); }
+#view-research .rs-filters select:focus { outline: 3px solid var(--signal); outline-offset: 1px; }
+@media (max-width: 1000px) {
+#view-research .rs-filters { grid-template-columns: repeat(3, minmax(0, 1fr)); position: static; }
+}
+@media (max-width: 560px) {
+#view-research .rs-filters { grid-template-columns: 1fr 1fr; }
+#view-research .rs-board { padding: 12px; }
+}
+#view-research .rs-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+#view-research .rs-kpi { background: #fff; border: 1px solid var(--line-hi); padding: 14px; display: grid; gap: 2px; }
+#view-research .rs-kpi span { font: 500 0.64em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-research .rs-kpi b { font: 700 1.6em var(--body); color: var(--ink); line-height: 1.15; }
+#view-research .rs-kpi small { color: var(--muted); font-size: 0.8em; }
+@media (max-width: 900px) {
+#view-research .rs-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+#view-research .rs-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+#view-research .rs-card { background: #fff; border: 1px solid var(--line-hi); padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+#view-research .rs-card.wide { grid-column: 1 / -1; }
+#view-research .rs-card h2 { font: 600 1.08em var(--body); letter-spacing: 0; text-transform: none; }
+#view-research .rs-card .sub { margin: -4px 0 0; color: var(--muted); font-size: 0.86em; }
+#view-research .rs-card .find { margin: 0; padding: 8px 12px; border-left: 3px solid var(--signal); background: var(--signal-soft); color: var(--ink); font-size: 0.92em; }
+#view-research .rs-card svg { width: 100%; height: auto; display: block; }
+#view-research .rs-card svg text { font-family: var(--body); }
+@media (max-width: 900px) {
+#view-research .rs-grid { grid-template-columns: 1fr; }
+}
+#view-research .rs-ctl { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; font-size: 0.88em; color: var(--muted); }
+#view-research .rs-ctl label { display: flex; gap: 8px; align-items: center; }
+#view-research .rs-ctl input[type=range] { width: 160px; accent-color: #08734b; }
+#view-research .rs-ctl select { min-height: 40px; padding: 0 8px; font: inherit; color: var(--ink); border: 1px solid var(--line-hi); background: #fff; }
+#view-research .rs-ctl b { color: var(--ink); }
+#view-research .rs-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.82em; color: var(--desc); }
+#view-research .rs-legend svg { width: 14px !important; height: 14px !important; display: inline-block !important; }
+#view-research .rs-legend i { display: inline-block; width: 12px; height: 12px; margin-right: 5px; vertical-align: -1px; border-radius: 2px; }
+#view-research .rs-tbl { width: 100%; border-collapse: collapse; font-size: 0.86em; }
+#view-research .rs-tbl td { color: #0b1220; }
+#view-research .rs-wrapt th, #view-research .rs-wrapt td { white-space: normal; }
+#view-research .rs-tbl th, #view-research .rs-tbl td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+#view-research .rs-tbl th { font: 500 0.78em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: #f7f9fb; position: sticky; top: 0; }
+#view-research .rs-scroll { overflow: auto; max-height: 340px; border: 1px solid var(--line); }
+#view-research .rs-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; }
+#view-research .rs-facts div { border: 1px solid var(--line); padding: 8px 10px; display: grid; gap: 2px; }
+#view-research .rs-facts span { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-research .rs-facts b { font-weight: 600; font-size: 0.95em; }
+#view-research .rs-files { display: grid; grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2fr); gap: 14px; }
+#view-research .rs-flist { display: grid; gap: 8px; align-content: start; }
+#view-research .rs-file { display: grid; grid-template-columns: 40px 1fr; gap: 10px; align-items: center; text-align: left; min-height: 60px; padding: 10px 12px; border: 1px solid var(--line-hi); background: #fff; color: var(--ink); font: inherit; cursor: pointer; }
+#view-research .rs-file:hover { border-color: var(--signal); }
+#view-research .rs-file[aria-pressed="true"] { border-color: var(--signal); background: var(--signal-soft); box-shadow: inset 4px 0 0 var(--signal); }
+#view-research .rs-file .ic { width: 40px; height: 40px; display: grid; place-items: center; background: #e8eef4; color: #24344a; font: 600 0.7em var(--mono); }
+#view-research .rs-file b { display: block; font: 600 0.92em var(--mono); }
+#view-research .rs-file small { color: var(--muted); font-size: 0.8em; }
+#view-research .rs-fview { display: grid; gap: 10px; align-content: start; min-width: 0; }
+#view-research .rs-fhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; }
+#view-research .rs-fhead b { font: 600 1em var(--mono); }
+#view-research .rs-fhead p { margin: 2px 0 0; color: var(--muted); font-size: 0.86em; }
+#view-research .rs-btn { min-height: 48px; padding: 0 16px; border: 1px solid var(--signal); background: var(--signal); color: #fff; font: 600 0.82em var(--body); cursor: pointer; }
+#view-research .rs-btn.ghost { background: #fff; color: var(--signal); }
+#view-research .rs-pre { margin: 0; padding: 14px; background: #f7f9fb; border: 1px solid var(--line); white-space: pre-wrap; font: 500 0.82em var(--mono); color: var(--ink); max-height: 340px; overflow: auto; }
+@media (max-width: 800px) {
+#view-research .rs-files { grid-template-columns: 1fr; }
+}
+#view-research .rs-method { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+#view-research .rs-method ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; color: var(--desc); font-size: 0.9em; }
+#view-research .rs-method a { color: var(--signal); }
+@media (max-width: 800px) {
+#view-research .rs-method { grid-template-columns: 1fr; }
+}
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1495,7 +1590,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navsign navside" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside" href="#research" data-route="research">Research</a><a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -1663,6 +1758,20 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
+      <section class="adl" aria-labelledby="adlT">
+        <div class="adl-head"><h3 id="adlT">Daily living: how Access+ helps</h3><p>Everyday activities, the technology that can help, where to practice, and how progress is measured.</p></div>
+        <div class="adl-grid">
+          <article class="adl-card"><b>Get a drink</b><dl><dt>Technology</dt><dd>Robotic arm with a cup holder; drinking aids</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator</a></dd><dt>Measured by</dt><dd>Time to drink, spills, help needed</dd></dl><button class="btn adl-go" type="button" data-goal="Get a drink">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Eat, including food transfers</b><dl><dt>Technology</dt><dd>Robotic arm; eating devices such as Obi</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator</a></dd><dt>Measured by</dt><dd>Bites per minute, dropped food, fatigue</dd></dl><button class="btn adl-go" type="button" data-goal="Eat, including food transfers">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Brush teeth</b><dl><dt>Technology</dt><dd>Robotic arm; adapted brushes; caregiver cues</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator (planned)</a></dd><dt>Measured by</dt><dd>Time, help needed, reach</dd></dl><button class="btn adl-go" type="button" data-goal="Brush teeth">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Brush hair</b><dl><dt>Technology</dt><dd>Robotic arm; adapted tools</dd><dt>Practice</dt><dd><a href="#home">Robotic arm simulator (planned)</a></dd><dt>Measured by</dt><dd>Time, help needed, reach</dd></dl><button class="btn adl-go" type="button" data-goal="Brush hair">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Send a message</b><dl><dt>Technology</dt><dd>Eye gaze, switches, voice, lip touchpad, on-screen keyboards</dd><dt>Practice</dt><dd><a href="#simulators">Pointing and typing practice</a></dd><dt>Measured by</dt><dd>Words per minute, errors, dwell time</dd></dl><button class="btn adl-go" type="button" data-goal="Send a message">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Call for help</b><dl><dt>Technology</dt><dd>More than one method: switch, voice, smart speaker, wheelchair controls</dd><dt>Practice</dt><dd><a href="#simulators">Switch practice</a></dd><dt>Measured by</dt><dd>Time to alert, works in bed and chair, at night</dd></dl><button class="btn adl-go" type="button" data-goal="Call for help">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Control lights, TV and bed</b><dl><dt>Technology</dt><dd>Smart home through phone, computer, voice or the wheelchair</dd><dt>Practice</dt><dd><a href="#simulators">Smart home practice (planned)</a></dd><dt>Measured by</dt><dd>Tasks done without help</dd></dl><button class="btn adl-go" type="button" data-goal="Control lights, TV and bed">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Drive the wheelchair</b><dl><dt>Technology</dt><dd>Head array, sip and puff, mini joystick, switches, Omni2</dd><dt>Practice</dt><dd><a href="#simulators">Wheelchair simulator</a></dd><dt>Measured by</dt><dd>Gates, stops, collisions, lap time</dd></dl><button class="btn adl-go" type="button" data-goal="Drive the wheelchair">Make this my goal &rarr;</button></article>
+          <article class="adl-card"><b>Use a phone or computer</b><dl><dt>Technology</dt><dd>Head tracking, eye gaze, switch control, voice, lip touchpad</dd><dt>Practice</dt><dd><a href="#simulators">Pointing practice</a></dd><dt>Measured by</dt><dd>Success rate, time to target, fatigue</dd></dl><button class="btn adl-go" type="button" data-goal="Use a phone or computer">Make this my goal &rarr;</button></article>
+        </div>
+      </section>
       <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#find">Next: build my profile &rarr;</a></div>
       </div>
     </section>
@@ -1827,6 +1936,12 @@ footer .wrap { padding-block: 22px; }
             <div class="top"><h3>Head tilt sensor</h3><span class="check">Add</span></div>
             <p>A motion sensor (IMU) on a cap or headset turns head tilts into pointing or steering.</p>
             <div class="bw-chips"><span class="bw-chip">Proportional</span><span class="bw-chip">Switched</span></div>
+          </button>
+
+          <button class="item" type="button" aria-pressed="false" data-name="Lip or chin touchpad" data-kind="Touch">
+            <div class="top"><h3>Lip or chin touchpad</h3><span class="check">Add</span></div>
+            <p>A small USB touchpad on a gooseneck mount. Slide your lip or chin to move the pointer and tap to click. The pad is yours to keep.</p>
+            <div class="bw-chips"><span class="bw-chip">Pointing</span><span class="bw-chip">Low cost</span><span class="bw-chip inc">Yours to keep</span></div>
           </button>
 
           <button class="item" type="button" aria-pressed="false" data-name="Eye tracker" data-kind="Eye gaze">
@@ -2041,6 +2156,102 @@ footer .wrap { padding-block: 22px; }
     </section>
   </div>
 </main>
+<main id="view-research" class="view" hidden>
+
+  <div class="wrap rs-wrap">
+    <header class="rs-hero">
+      <span class="rs-k">Research and science · Data dashboard</span>
+      <h1>Abilities, technologies and <span>change over time</span></h1>
+      <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
+    </header>
+    <div class="rs-sim" role="note"><b>Simulated data</b><span>60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rs-rsMethodLink">how the data was made</a>.</span></div>
+
+    <section class="rs-board" aria-label="Research dashboard">
+      <div class="rs-filters" role="group" aria-label="Filters">
+        <label>Onset<select id="rs-fOnset"><option value="all">All</option><option value="limb">Limb onset</option><option value="bulbar">Bulbar onset</option></select></label>
+        <label>Progression<select id="rs-fProg"><option value="all">All</option><option value="slow">Slow</option><option value="average">Average</option><option value="fast">Fast</option></select></label>
+        <label>Position<select id="rs-fPos"><option value="all">All</option><option value="chair">Mostly chair</option><option value="bed">Mostly bed</option><option value="both">Bed and chair</option></select></label>
+        <label>Technology<select id="rs-fTech"></select></label>
+        <label>Measure<select id="rs-fMeas"></select></label>
+        <label>Participant<select id="rs-fPid"><option value="">None highlighted</option></select></label>
+      </div>
+
+      <div class="rs-kpis" id="rs-rsKpis"></div>
+
+      <div class="rs-grid">
+        <article class="rs-card wide">
+          <h2 id="rs-trendT">Group trend</h2>
+          <p class="sub">Median of everyone using this technology at each check-in, with the middle half of participants shaded. Highlight a participant to see their own line.</p>
+          <div id="rs-trendC"></div>
+          <p class="find" id="rs-trendF"></p>
+        </article>
+
+        <article class="rs-card">
+          <h2>Snapshot compare</h2>
+          <p class="sub">Each line is one participant, from the first snapshot to the second.</p>
+          <div class="rs-ctl"><label>From week <input type="range" id="rs-snapA" min="0" max="52" step="2" value="0"><b id="rs-snapAv">0</b></label><label>to week <input type="range" id="rs-snapB" min="0" max="52" step="2" value="26"><b id="rs-snapBv">26</b></label></div>
+          <div id="rs-snapC"></div>
+          <p class="find" id="rs-snapF"></p>
+        </article>
+
+        <article class="rs-card">
+          <h2>Early warning before a switch</h2>
+          <p class="sub">The selected measure for people who later moved off this technology, lined up on the week they switched.</p>
+          <div id="rs-warnC"></div>
+          <p class="find" id="rs-warnF"></p>
+        </article>
+
+        <article class="rs-card wide">
+          <h2>The technology chain</h2>
+          <p class="sub">One row per participant: which method they relied on, week by week. Diamonds mark a switch; a ring means the next method had been practiced before the switch.</p>
+          <div class="rs-legend" id="rs-chainL"></div>
+          <div id="rs-chainC"></div>
+          <div class="rs-scroll" style="max-height:220px"><table class="rs-tbl" id="rs-pathT"></table></div>
+        </article>
+
+        <article class="rs-card wide" id="rs-drill">
+          <h2 id="rs-drillT">Participant drill-down</h2>
+          <p class="sub">Choose a participant above, or click a row in the technology chain.</p>
+          <div id="rs-drillB"></div>
+        </article>
+      </div>
+
+      <article class="rs-card wide">
+        <h2>Data files</h2>
+        <p class="sub">The simulated dataset behind every chart. Click a file to preview it, then download it as a CSV for your own analysis.</p>
+        <div class="rs-files"><div class="rs-flist" id="rs-fileList" role="group" aria-label="Data files"></div><div class="rs-fview" id="rs-fileView"></div></div>
+      </article>
+
+      <article class="rs-card wide" id="rs-method">
+        <h2>How the simulated data was made</h2>
+        <div class="rs-method">
+          <div>
+            <p class="sub" style="margin:0 0 8px">Each virtual participant has an onset type, a rate of decline, a starting ALS functional score and a usual position. Every two weeks the model works out how much function has been lost, and how well each technology still works at that level of loss.</p>
+            <ul>
+              <li><b>Onset:</b> about 1 in 4 bulbar onset, in line with large trial databases (PRO-ACT)</li>
+              <li><b>Decline:</b> functional score loss averages a little under 1 point a month, spread from slow to fast; bulbar onset declines faster</li>
+              <li><b>Pointing:</b> head pointing about 2.5 bits per second and gaze pointing about 2.1 at the start, slowing as function is lost</li>
+              <li><b>Eye-gaze typing:</b> about 8 words per minute, with wide variation between people</li>
+              <li><b>Technology tolerance:</b> each method keeps working until a set amount of function is lost; voice goes first with bulbar onset, eye gaze and EMG last</li>
+              <li><b>Switching:</b> a participant moves to the next method after two check-ins below 80% success</li>
+              <li><b>Spasticity and tremor:</b> an index from 0 to 1 that grows with loss, scaled by each person's tendency</li>
+            </ul>
+          </div>
+          <div>
+            <p class="sub" style="margin:0 0 8px">Sources for the figures used:</p>
+            <ul>
+              <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8217360" target="_blank" rel="noopener">Perry et al., Muscle &amp; Nerve 2021: PRO-ACT, 6,149 participants</a></li>
+              <li><a href="https://informahealthcare.com/doi/abs/10.1080/21678421.2017.1418001" target="_blank" rel="noopener">PRO-ACT analysis of 3,203 patients: faster decline with bulbar onset and older age</a></li>
+              <li><a href="https://www.yorku.ca/mack/etra2018.html" target="_blank" rel="noopener">Hansen et al. 2018: gaze, head and mouse pointing throughput</a></li>
+              <li><a href="https://research.google/pubs/speakfaster-observer-long-term-instrumentation-of-eye-gaze-typing-for-measuring-aac-communication/" target="_blank" rel="noopener">SpeakFaster Observer: 8.1 words per minute eye-gaze typing in ALS</a></li>
+            </ul>
+            <p class="sub" style="margin:10px 0 0">The model is a teaching and planning tool. Its curves are plausible, not measured. Real participants' data will replace it once consent, secure storage and ethics approval are in place.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+</main>
 <main id="view-keyboards" class="view" hidden>
 
   <div class="wrap kb-wrap">
@@ -2155,6 +2366,7 @@ footer .wrap { padding-block: 22px; }
           <div class="tg-cats" role="group" aria-label="Hardware areas">
             <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
             <button class="tg-cat ready" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Guide ready</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+            <button class="tg-cat ready" type="button" data-cat="mouse" aria-pressed="false"><span class="st8">Guide ready · Catalog</span><b>Mouse alternatives</b><small>Low-cost touchpads used with the lip or chin, and other pointing devices</small></button>
             <button class="tg-cat ready" type="button" data-cat="ctrl" aria-pressed="false"><span class="st8">Guide ready · Catalog</span><b>Game controllers</b><small>Mouth, breath and switch-operated controllers for consoles and PCs</small></button>
             <button class="tg-cat ready" type="button" data-cat="eyes" aria-pressed="false"><span class="st8">Guide ready · Hardware and software</span><b>Eye tracking</b><small>Screen-mounted trackers and low-cost DIY eye-tracking glasses</small></button>
             <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches</b><small>Button, breath, EMG and proximity switches, commercial and open source</small></button>
@@ -2671,6 +2883,43 @@ footer .wrap { padding-block: 22px; }
       <p class="tg-safe">Listings are neutral information, not endorsements, and are not paid for.</p>
     </section>
 
+    <section class="tg-panel" id="tg-panel-mouse" hidden aria-labelledby="tg-mouseT">
+      <div class="tg-head"><h2 id="tg-mouseT">Mouse alternatives</h2><p>Ways to move a pointer and click without using your hands.</p></div>
+      <div class="cat-std"><b>Catalog listing</b> Every entry uses the same layout: what it is, at a glance, watch and read, evidence, insights, and community comments.</div>
+      <div class="cat-list">
+        <article class="cat-card" id="tg-cat-touchpad">
+          <div class="cat-main">
+            <div class="cat-top">
+              <span class="kind">Hardware · mouse alternative · lip or chin</span>
+              <h3>USB touchpad, used with the lip or chin</h3>
+              <span class="by">Any small external USB or Bluetooth touchpad, sold by many makers. A low-cost, do-it-yourself setup.</span>
+              <div class="cat-tags"><span class="tg-tag com">Commercial</span><span class="tg-tag built">Low cost</span><span class="tg-tag built">No extra software</span></div>
+            </div>
+            <p>An ordinary touchpad, mounted on an arm near the face, becomes a precise mouse. Sliding the lower lip or chin across it moves the pointer, and a tap clicks. It works with any computer that accepts a regular touchpad, with no special software.</p>
+            <dl class="cat-glance">
+              <dt>Works with</dt><dd>Windows, Mac, Chromebook and most tablets that accept a mouse; pairs well with an on-screen keyboard such as OptiKey</dd>
+              <dt>Clicking</dt><dd>A tap on the pad, a dwell click in the computer's accessibility settings, or a separate switch</dd>
+              <dt>Mounting</dt><dd>A flexible gooseneck or articulating arm on the wheelchair, bed rail or desk, angled to the lip or chin</dd>
+              <dt>Settings</dt><dd>Pointer speed, tap-to-click on or off, palm rejection, and scrolling gestures, set in the computer's touchpad settings</dd>
+              <dt>Cost</dt><dd>Inexpensive compared with most assistive pointing devices; prices vary by model</dd>
+              <dt>Good for</dt><dd>People with reliable lip or chin movement who want fine pointing control; a useful backup to head or eye tracking</dd>
+            </dl>
+            <p class="cat-dated">General guidance, November 2026. Try settings with your therapist and adjust for comfort.</p>
+          </div>
+          <div class="cat-side">
+            <span class="cat-h">Tips</span>
+            <ul><li>Put a thin cover or film on the pad and wipe it regularly; it is personal equipment and is not shared</li><li>Start with slow pointer speed and turn up as control improves</li><li>Turn off tap-to-click if you get accidental clicks, and use dwell or a switch instead</li><li>Check lips and skin for irritation, and change position during long sessions</li><li>Practice pointing in the simulators to tune speed and target size</li></ul>
+            <span class="cat-h">Watch</span>
+            <div class="cat-media">
+              <a href="https://www.youtube.com/results?search_query=lip+operated+touchpad+mouse+quadriplegic" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>Lip and chin touchpad setups<small>YouTube search</small></span></a>
+            </div>
+            <div class="cat-comments"><b>Community comments</b><span>Coming later, once sign-in, moderation and consent are in place.</span></div>
+          </div>
+        </article>
+      </div>
+      <p class="tg-safe">Listings are neutral information, not endorsements, and are not paid for.</p>
+    </section>
+
     <section class="tg-panel" id="tg-panel-ctrl" hidden aria-labelledby="tg-ctrlT">
       <div class="tg-head"><h2 id="tg-ctrlT">Game controllers</h2><p>Hardware that replaces a hand-held game controller. For adapters and hubs, see Bridges and interfaces.</p></div>
       <div class="cat-std"><b>Catalog listing</b> Every entry uses the same layout: what it is, at a glance, watch and read, evidence, insights, and community comments.</div>
@@ -3128,10 +3377,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:42 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 22:08 UTC</span></div>
   </div>
 </footer>
 
@@ -4211,6 +4460,13 @@ function AgentCloud(canvas, opts) {
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { close(); btn.focus(); } }, true);
   render();
 })();
+
+/* Daily-living cards: make the activity a goal and open the profile studio */
+(function () {
+  document.querySelectorAll('.adl-go').forEach(function (b) {
+    b.addEventListener('click', function () { window.__fdGoal = b.getAttribute('data-goal'); location.hash = 'find'; if (window.fdStartWithGoal) window.fdStartWithGoal(); });
+  });
+})();
 </script>
 <script>
 // views-js:start
@@ -4887,6 +5143,280 @@ var __ID = function (x) { return document.getElementById('fd-' + x) || document.
 
 })();
 (function () {
+var __ID = function (x) { return document.getElementById('rs-' + x) || document.getElementById(x); };
+
+(function () {
+  /* ---------- seeded random numbers, so the dataset is the same every time ---------- */
+  var seed = 20261101;
+  function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+  function norm(m, s) { var u = 1 - rnd(), v = rnd(); return m + s * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  function r1(x) { return Math.round(x * 10) / 10; }
+
+  var TECH = {
+    head: { name: 'Head tracking', c: '#1f9d6b' }, voice: { name: 'Voice control', c: '#e2703a' }, breath: { name: 'Breath (sip and puff)', c: '#2f80c9' },
+    sw: { name: 'Switch scanning', c: '#c28a0e' }, eyes: { name: 'Eye gaze', c: '#7b5cc9' }, emg: { name: 'Muscle signals (EMG)', c: '#c24a78' }
+  };
+  var MEAS = {
+    success: { name: 'Success rate', unit: '%', dec: 0, good: 'up' }, dwell: { name: 'Dwell time', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
+    target: { name: 'Smallest reliable target', unit: 'px', dec: 0, good: 'down', ptr: 1 }, ttt: { name: 'Time to target', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
+    tput: { name: 'Throughput', unit: 'bits/s', dec: 2, good: 'up', ptr: 1 }, tremor: { name: 'Spasticity and tremor index', unit: '', dec: 2, good: 'down' },
+    fatigue: { name: 'Accuracy drop over a session', unit: '%', dec: 0, good: 'down' }, wpm: { name: 'Typing speed', unit: 'wpm', dec: 1, good: 'up' },
+    react: { name: 'Switch reaction time', unit: 'ms', dec: 0, good: 'down', sw: 1 }, voice: { name: 'Voice recognition accuracy', unit: '%', dec: 0, good: 'up' },
+    breath: { name: 'Breath strength', unit: '% of start', dec: 0, good: 'up' }, alsfrs: { name: 'ALS functional score (ALSFRS-R)', unit: 'points', dec: 0, good: 'up' }
+  };
+  var TECH_MEAS = {
+    head: ['success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm'], eyes: ['success', 'dwell', 'target', 'ttt', 'tput', 'fatigue', 'wpm'],
+    sw: ['success', 'react', 'tremor', 'fatigue', 'wpm'], breath: ['success', 'breath', 'fatigue'], voice: ['success', 'voice', 'wpm'], emg: ['success', 'react', 'fatigue'],
+    all: ['alsfrs', 'voice', 'breath']
+  };
+  /* points of function lost at which each method falls to 80% success */
+  function tol(m, onset) { return { voice: onset === 'bulbar' ? 5 : 18, head: onset === 'bulbar' ? 18 : 13, sw: 19, breath: onset === 'bulbar' ? 11 : 20, eyes: 32, emg: 42 }[m]; }
+  var WEEKS = []; for (var w = 0; w <= 52; w += 2) WEEKS.push(w);
+  var ADL = [['Send a message', 'eyes'], ['Call for help', 'sw'], ['Control lights and TV', 'voice'], ['Drive the wheelchair', 'breath'], ['Get a drink', 'head'], ['Eat, including food transfers', 'head'], ['Brush teeth', 'head'], ['Brush hair', 'head'], ['Use a phone or computer', 'eyes']];
+
+  /* ---------- generate the cohort ---------- */
+  var P = [], S = [], TR = [], AD = [];
+  for (var i = 0; i < 60; i++) {
+    var onset = rnd() < 0.25 ? 'bulbar' : 'limb';
+    var rate = clamp(Math.exp(norm(Math.log(0.82), 0.45)) * (onset === 'bulbar' ? 1.25 : 1), 0.25, 2.6);
+    var prog = rate < 0.6 ? 'slow' : rate > 1.2 ? 'fast' : 'average';
+    var pr = rnd(), pos = pr < 0.55 ? 'chair' : pr < 0.7 ? 'bed' : 'both';
+    var base = Math.round(clamp(norm(39, 3.5), 30, 46)), age = Math.round(clamp(norm(60, 9), 38, 80)), spast = onset === 'limb' ? 0.4 + rnd() * 0.6 : 0.2 + rnd() * 0.5;
+    var ch0 = onset === 'bulbar' ? ['voice', 'head', 'eyes', 'emg'] : (rnd() < 0.5 ? ['head', 'sw', 'eyes', 'emg'] : ['head', 'breath', 'eyes', 'emg']);
+    var lost0 = clamp(norm(4, 2.5), 0, 12); /* function already lost at enrollment */
+    var id = 'P' + String(i + 1).padStart(3, '0');
+    var p = { id: id, onset: onset, age: age, rate: r1(rate), prog: prog, pos: pos, base: base, spast: Math.round(spast * 100) / 100, chain: ch0, lost0: r1(lost0), timeline: {} };
+    P.push(p);
+    var ci = 0, below = 0, practiced = false;
+    WEEKS.forEach(function (wk) {
+      var L = lost0 + rate * wk / 4.345, m = ch0[ci];
+      function succ(mm) { return clamp(99 - 19 * Math.pow(L / tol(mm, onset), 2) + norm(0, 1.6), 35, 99.5); }
+      var sc = succ(m);
+      if (sc < 80) below++; else below = 0;
+      if (below >= 2 && ci < ch0.length - 1) {
+        var next = ch0[ci + 1];
+        TR.push({ id: id, week: wk, from: m, to: next, backup: practiced ? 'yes' : 'no' });
+        ci++; m = next; sc = succ(m); below = 0; practiced = false;
+      }
+      var nx = ch0[ci + 1]; if (nx && L > 0.65 * tol(m, onset)) practiced = practiced || rnd() < 0.1;
+      var x = L / tol(m, onset);
+      var row = { id: id, week: wk, method: m, success: r1(sc), alsfrs: Math.round(clamp(48 - lost0 - (48 - base) * 0 - rate * wk / 4.345 + norm(0, 0.8), 0, 48)),
+        dwell: '', target: '', ttt: '', tput: '', tremor: Math.round(clamp(0.08 + 0.45 * Math.min(1.4, x) * spast + norm(0, 0.03), 0, 1) * 100) / 100,
+        fatigue: Math.round(clamp(5 + 20 * x + norm(0, 2), 2, 45)), wpm: '', react: '',
+        voice: Math.round(clamp(95 - 26 * Math.pow(L / tol('voice', onset), 1.5) + norm(0, 2), 5, 98)), breath: Math.round(clamp(100 - (onset === 'bulbar' ? 2.8 : 2.1) * L + norm(0, 3), 10, 105)),
+        backup_ready: practiced ? 'yes' : 'no' };
+      row.alsfrs = Math.round(clamp(base - rate * wk / 4.345 + norm(0, 0.8), 0, 48));
+      if (m === 'head' || m === 'eyes') {
+        var hb = m === 'head';
+        row.dwell = Math.round((hb ? 650 : 750) * (1 + 0.55 * Math.pow(x, 1.5)) + norm(0, 25));
+        row.target = Math.round((hb ? 36 : 58) * (1 + (hb ? 0.8 : 0.45) * x) + norm(0, 2));
+        row.ttt = Math.round((hb ? 900 : 820) * (1 + (hb ? 0.7 : 0.35) * x) + norm(0, 40));
+        row.tput = Math.round(clamp((hb ? 2.47 : 2.13) / (1 + (hb ? 0.8 : 0.45) * x) + norm(0, 0.08), 0.3, 3) * 100) / 100;
+        row.wpm = r1(clamp((hb ? 9 : 8.1) * (1 - 0.35 * Math.min(1, x)) * (0.75 + 0.5 * (i % 7) / 6) + norm(0, 0.6), 1, 20));
+      }
+      if (m === 'sw' || m === 'emg') { row.react = Math.round((m === 'sw' ? 450 : 520) * (1 + 0.8 * x) + norm(0, 30)); row.wpm = r1(clamp(3 * (1 - 0.3 * Math.min(1, x)) + norm(0, 0.3), 0.5, 6)); }
+      if (m === 'voice') row.wpm = r1(clamp(28 * (1 - 0.5 * Math.min(1, x)) + norm(0, 2), 4, 40));
+      if (m === 'breath') row.wpm = '';
+      if (m !== 'head') row.tremor = m === 'sw' ? row.tremor : '';
+      p.timeline[wk] = m;
+      S.push(row);
+    });
+    var gs = ADL.slice().sort(function () { return rnd() - 0.5; }).slice(0, 2 + Math.floor(rnd() * 3));
+    gs.forEach(function (g) {
+      var t0 = Math.round(clamp(norm(140, 40), 40, 300)), help0 = rnd() < 0.6 ? 'some' : 'full';
+      var kept = rate < 1.3 || rnd() < 0.5;
+      AD.push({ id: id, goal: g[0], technology: TECH[g[1]].name, week0_seconds: t0, week52_seconds: Math.round(t0 * (kept ? 0.7 + rnd() * 0.3 : 1.1 + rnd() * 0.5)), help_week0: help0, help_week52: kept ? (help0 === 'full' ? 'some' : 'none') : help0 });
+    });
+  }
+  var byId = {}; P.forEach(function (p) { byId[p.id] = p; });
+
+  /* ---------- helpers ---------- */
+  function el(id) { return __ID(id); }
+  function q(arr, f) { if (!arr.length) return NaN; var a = arr.slice().sort(function (x, y) { return x - y; }), pos = (a.length - 1) * f, lo = Math.floor(pos), hi = Math.ceil(pos); return a[lo] + (a[hi] - a[lo]) * (pos - lo); }
+  function fmt(v, m) { if (v === '' || v === null || isNaN(v)) return '–'; var d = MEAS[m].dec; return Number(v).toFixed(d) + (MEAS[m].unit && MEAS[m].unit !== 'points' ? (MEAS[m].unit === '%' ? '%' : ' ' + MEAS[m].unit) : ''); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var F = { onset: 'all', prog: 'all', pos: 'all', tech: 'head', meas: 'dwell', pid: '' };
+  function inFilter(p) { return (F.onset === 'all' || p.onset === F.onset) && (F.prog === 'all' || p.prog === F.prog) && (F.pos === 'all' || p.pos === F.pos); }
+  function rowsFor() { var ok = {}; P.forEach(function (p) { if (inFilter(p)) ok[p.id] = 1; }); return S.filter(function (r) { return ok[r.id] && (F.tech === 'all' || r.method === F.tech) && r[F.meas] !== ''; }); }
+
+  /* ---------- filters ---------- */
+  var fTech = el('fTech'), fMeas = el('fMeas'), fPid = el('fPid');
+  fTech.innerHTML = '<option value="all">All participants (whole-body measures)</option>' + ['head', 'eyes', 'sw', 'breath', 'voice', 'emg'].map(function (k) { return '<option value="' + k + '">' + TECH[k].name + '</option>'; }).join('');
+  fTech.value = 'head';
+  function fillMeas() { var list = TECH_MEAS[F.tech]; fMeas.innerHTML = list.map(function (k) { return '<option value="' + k + '">' + MEAS[k].name + '</option>'; }).join(''); if (list.indexOf(F.meas) < 0) F.meas = list[0]; fMeas.value = F.meas; }
+  function fillPid() { var cur = F.pid; fPid.innerHTML = '<option value="">None highlighted</option>' + P.filter(inFilter).map(function (p) { return '<option value="' + p.id + '">' + p.id + ' · ' + p.onset + ', ' + p.prog + '</option>'; }).join(''); fPid.value = byId[cur] && inFilter(byId[cur]) ? cur : ''; F.pid = fPid.value; }
+  [['fOnset', 'onset'], ['fProg', 'prog'], ['fPos', 'pos'], ['fTech', 'tech'], ['fMeas', 'meas'], ['fPid', 'pid']].forEach(function (a) {
+    el(a[0]).addEventListener('change', function (e) { F[a[1]] = e.target.value; if (a[1] === 'tech') fillMeas(); if (a[1] !== 'pid' && a[1] !== 'meas' && a[1] !== 'tech') fillPid(); draw(); });
+  });
+  fillMeas(); fillPid();
+
+  /* ---------- charts ---------- */
+  var GRID = '#d7dee6', AX = '#4b5a6b', INK = '#0b1220';
+  function axes(x0, y0, w, h, lo, hi, m, xlab) {
+    var g = '', steps = 4; for (var k = 0; k <= steps; k++) { var v = lo + (hi - lo) * k / steps, y = y0 + h - h * k / steps; g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + y + '" y2="' + y + '" stroke="' + GRID + '"/><text x="' + (x0 - 8) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="' + AX + '">' + Number(v).toFixed(MEAS[m].dec > 1 ? 1 : MEAS[m].dec) + '</text>'; }
+    return g;
+  }
+  function trend() {
+    var rows = rowsFor(), m = F.meas, W = 760, H = 300, x0 = 56, y0 = 20, w = W - x0 - 24, h = H - y0 - 44;
+    var stats = WEEKS.map(function (wk) { var v = rows.filter(function (r) { return r.week === wk; }).map(function (r) { return +r[m]; }); return { wk: wk, n: v.length, md: q(v, 0.5), lo: q(v, 0.25), hi: q(v, 0.75) }; }).filter(function (s) { return s.n >= 3; });
+    var hl = F.pid ? S.filter(function (r) { return r.id === F.pid && r[m] !== '' && (F.tech === 'all' || r.method === F.tech); }) : [];
+    var all = stats.map(function (s) { return s.lo; }).concat(stats.map(function (s) { return s.hi; })).concat(hl.map(function (r) { return +r[m]; }));
+    el('trendT').textContent = MEAS[m].name + (F.tech === 'all' ? ' · all participants' : ' · ' + TECH[F.tech].name);
+    if (!stats.length) { el('trendC').innerHTML = '<p class="sub">Not enough participants use this technology with these filters.</p>'; el('trendF').textContent = ''; return; }
+    var lo = Math.min.apply(null, all), hi = Math.max.apply(null, all), pad = (hi - lo) * 0.12 || 1; lo = Math.max(0, lo - pad); hi = hi + pad;
+    var X = function (wk) { return x0 + w * wk / 52; }, Y = function (v) { return y0 + h - h * (v - lo) / (hi - lo); };
+    var col = F.tech === 'all' ? '#08734b' : TECH[F.tech].c;
+    var band = 'M' + stats.map(function (s) { return X(s.wk) + ' ' + Y(s.hi); }).join(' L') + ' L' + stats.slice().reverse().map(function (s) { return X(s.wk) + ' ' + Y(s.lo); }).join(' L') + 'Z';
+    var line = 'M' + stats.map(function (s) { return X(s.wk) + ' ' + Y(s.md); }).join(' L');
+    var g = axes(x0, y0, w, h, lo, hi, m);
+    [0, 13, 26, 39, 52].forEach(function (wk) { g += '<text x="' + X(wk) + '" y="' + (y0 + h + 18) + '" text-anchor="middle" font-size="11" fill="' + AX + '">week ' + wk + '</text>'; });
+    g += '<path d="' + band + '" fill="' + col + '" fill-opacity="0.16"/><path d="' + line + '" fill="none" stroke="' + col + '" stroke-width="2.5"/>';
+    stats.forEach(function (s) { g += '<circle cx="' + X(s.wk) + '" cy="' + Y(s.md) + '" r="3" fill="' + col + '"><title>Week ' + s.wk + ': median ' + fmt(s.md, m) + ', middle half ' + fmt(s.lo, m) + ' to ' + fmt(s.hi, m) + ', ' + s.n + ' participants</title></circle>'; });
+    if (hl.length) { g += '<path d="M' + hl.map(function (r) { return X(r.week) + ' ' + Y(+r[m]); }).join(' L') + '" fill="none" stroke="' + INK + '" stroke-width="2" stroke-dasharray="5 4"/>'; var lr = hl[hl.length - 1]; g += '<text x="' + Math.min(X(lr.week) + 6, W - 40) + '" y="' + (Y(+lr[m]) - 6) + '" font-size="12" font-weight="600" fill="' + INK + '">' + F.pid + '</text>'; }
+    g += '<text x="' + x0 + '" y="' + (H - 4) + '" font-size="11" fill="' + AX + '">' + MEAS[m].name + (MEAS[m].unit ? ' (' + MEAS[m].unit + ')' : '') + ' · shaded band = middle 50% of participants</text>';
+    el('trendC').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(MEAS[m].name) + ' over 52 weeks">' + g + '</svg>';
+    var a = stats[0], b = stats[stats.length - 1], ch = (b.md - a.md) / (a.md || 1) * 100;
+    var better = MEAS[m].good === 'up' ? ch > 0 : ch < 0;
+    el('trendF').textContent = 'Median ' + MEAS[m].name.toLowerCase() + ' went from ' + fmt(a.md, m) + ' at week ' + a.wk + ' to ' + fmt(b.md, m) + ' at week ' + b.wk + ' (' + (ch >= 0 ? '+' : '') + Math.round(ch) + '%, ' + (Math.abs(ch) < 3 ? 'about the same' : better ? 'better' : 'worse') + ').';
+  }
+  function snap() {
+    var A = +el('snapA').value, B = +el('snapB').value; el('snapAv').textContent = A; el('snapBv').textContent = B;
+    var m = F.meas, rows = rowsFor(), pairs = [];
+    P.filter(inFilter).forEach(function (p) { var ra = rows.filter(function (r) { return r.id === p.id && r.week === A; })[0], rb = rows.filter(function (r) { return r.id === p.id && r.week === B; })[0]; if (ra && rb) pairs.push([p.id, +ra[m], +rb[m]]); });
+    var W = 380, H = 280, x1 = 90, x2 = 290, y0 = 24, h = H - 70;
+    if (pairs.length < 2) { el('snapC').innerHTML = '<p class="sub">Fewer than two participants use this technology at both weeks. Try other weeks or filters.</p>'; el('snapF').textContent = ''; return; }
+    var vals = pairs.reduce(function (a, p) { return a.concat([p[1], p[2]]); }, []), lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), pad = (hi - lo) * 0.1 || 1; lo -= pad; hi += pad; if (lo < 0) lo = 0;
+    var Y = function (v) { return y0 + h - h * (v - lo) / (hi - lo); };
+    var g = '<line x1="' + x1 + '" x2="' + x1 + '" y1="' + y0 + '" y2="' + (y0 + h) + '" stroke="' + GRID + '" stroke-width="2"/><line x1="' + x2 + '" x2="' + x2 + '" y1="' + y0 + '" y2="' + (y0 + h) + '" stroke="' + GRID + '" stroke-width="2"/>';
+    var worse = 0;
+    pairs.forEach(function (p) { var d = (p[2] - p[1]) / (p[1] || 1), bad = MEAS[m].good === 'up' ? d < -0.1 : d > 0.1; if (bad) worse++; var c = bad ? '#b42318' : '#4b5a6b', hl = p[0] === F.pid; g += '<line x1="' + x1 + '" x2="' + x2 + '" y1="' + Y(p[1]) + '" y2="' + Y(p[2]) + '" stroke="' + (hl ? INK : c) + '" stroke-opacity="' + (hl ? 1 : 0.45) + '" stroke-width="' + (hl ? 3 : 1.5) + '"><title>' + p[0] + ': ' + fmt(p[1], m) + ' → ' + fmt(p[2], m) + '</title></line>'; });
+    var ma = q(pairs.map(function (p) { return p[1]; }), 0.5), mb = q(pairs.map(function (p) { return p[2]; }), 0.5);
+    g += '<line x1="' + x1 + '" x2="' + x2 + '" y1="' + Y(ma) + '" y2="' + Y(mb) + '" stroke="#08734b" stroke-width="4"/><circle cx="' + x1 + '" cy="' + Y(ma) + '" r="5" fill="#08734b"/><circle cx="' + x2 + '" cy="' + Y(mb) + '" r="5" fill="#08734b"/>';
+    g += '<text x="' + (x1 - 10) + '" y="' + (Y(ma) + 4) + '" text-anchor="end" font-size="12" font-weight="600" fill="' + INK + '">' + fmt(ma, m) + '</text><text x="' + (x2 + 10) + '" y="' + (Y(mb) + 4) + '" font-size="12" font-weight="600" fill="' + INK + '">' + fmt(mb, m) + '</text>';
+    g += '<text x="' + x1 + '" y="' + (y0 + h + 22) + '" text-anchor="middle" font-size="12" fill="' + AX + '">Week ' + A + '</text><text x="' + x2 + '" y="' + (y0 + h + 22) + '" text-anchor="middle" font-size="12" fill="' + AX + '">Week ' + B + '</text>';
+    g += '<text x="' + (W / 2) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="11" fill="' + AX + '">green = median · red = worse by more than 10%</text>';
+    el('snapC').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Snapshot comparison">' + g + '</svg>';
+    el('snapF').textContent = pairs.length + ' participants used this technology at both weeks. Median ' + fmt(ma, m) + ' → ' + fmt(mb, m) + '; ' + worse + ' of ' + pairs.length + ' got worse by more than 10%.';
+  }
+  function warn() {
+    var m = F.meas, tech = F.tech, W = 380, H = 280, x0 = 50, y0 = 24, w = W - x0 - 20, h = H - 72;
+    if (tech === 'all') { el('warnC').innerHTML = '<p class="sub">Choose a technology to see the signals before people switched away from it.</p>'; el('warnF').textContent = ''; return; }
+    var trs = TR.filter(function (t) { return t.from === tech && inFilter(byId[t.id]); }), offs = []; for (var o = -12; o <= 0; o += 2) offs.push(o);
+    var series = offs.map(function (o) { var v = []; trs.forEach(function (t) { var r = S.filter(function (s) { return s.id === t.id && s.week === t.week + o && s.method === tech; })[0], r0 = S.filter(function (s) { return s.id === t.id && s.week === t.week - 12 && s.method === tech; })[0]; if (r && r0 && r[m] !== '' && +r0[m]) v.push(+r[m] / +r0[m] * 100); }); return { o: o, n: v.length, md: q(v, 0.5) }; }).filter(function (s) { return s.n >= 2; });
+    if (series.length < 3) { el('warnC').innerHTML = '<p class="sub">Not enough switches away from ' + TECH[tech].name.toLowerCase() + ' with these filters to show a pattern (' + trs.length + ' so far).</p>'; el('warnF').textContent = ''; return; }
+    var vals = series.map(function (s) { return s.md; }).concat([100]), lo = Math.min.apply(null, vals) - 5, hi = Math.max.apply(null, vals) + 5;
+    var X = function (o) { return x0 + w * (o + 12) / 12; }, Y = function (v) { return y0 + h - h * (v - lo) / (hi - lo); };
+    var g = '';
+    for (var k = 0; k <= 4; k++) { var v = lo + (hi - lo) * k / 4, y = Y(v); g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + y + '" y2="' + y + '" stroke="' + GRID + '"/><text x="' + (x0 - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="' + AX + '">' + Math.round(v) + '%</text>'; }
+    g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + Y(100) + '" y2="' + Y(100) + '" stroke="' + AX + '" stroke-dasharray="3 3"/>';
+    g += '<line x1="' + X(0) + '" x2="' + X(0) + '" y1="' + y0 + '" y2="' + (y0 + h) + '" stroke="#b42318" stroke-width="1.5" stroke-dasharray="4 3"/><text x="' + (X(0) - 4) + '" y="' + (y0 + 12) + '" text-anchor="end" font-size="11" font-weight="600" fill="#b42318">switch</text>';
+    g += '<path d="M' + series.map(function (s) { return X(s.o) + ' ' + Y(s.md); }).join(' L') + '" fill="none" stroke="' + TECH[tech].c + '" stroke-width="2.5"/>';
+    series.forEach(function (s) { g += '<circle cx="' + X(s.o) + '" cy="' + Y(s.md) + '" r="3.5" fill="' + TECH[tech].c + '"><title>' + s.o + ' weeks: ' + Math.round(s.md) + '% of the value 12 weeks before (' + s.n + ' people)</title></circle>'; });
+    [-12, -8, -4, 0].forEach(function (o) { g += '<text x="' + X(o) + '" y="' + (y0 + h + 18) + '" text-anchor="middle" font-size="11" fill="' + AX + '">' + (o === 0 ? '0' : o) + ' wk</text>'; });
+    g += '<text x="' + x0 + '" y="' + (H - 6) + '" font-size="11" fill="' + AX + '">' + MEAS[m].name + ', % of its value 12 weeks before the switch</text>';
+    el('warnC').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Signals before a switch">' + g + '</svg>';
+    var s8 = series.filter(function (s) { return s.o === -4; })[0] || series[series.length - 2], last = series[series.length - 1];
+    var ready = trs.filter(function (t) { return t.backup === 'yes'; }).length;
+    el('warnF').textContent = trs.length + ' people switched away from ' + TECH[tech].name.toLowerCase() + '. Four weeks before the switch, ' + MEAS[m].name.toLowerCase() + ' was already at ' + Math.round(s8.md) + '% of its earlier level, a warning a check-in could catch. ' + ready + ' of ' + trs.length + ' had practiced the next method in time.';
+  }
+  function chain() {
+    var ps = P.filter(inFilter).slice().sort(function (a, b) { return (a.onset > b.onset ? 1 : a.onset < b.onset ? -1 : 0) || b.rate - a.rate; });
+    var used = {}; ps.forEach(function (p) { WEEKS.forEach(function (wk) { used[p.timeline[wk]] = 1; }); });
+    el('chainL').innerHTML = Object.keys(TECH).filter(function (k) { return used[k]; }).map(function (k) { return '<span><i style="background:' + TECH[k].c + '"></i>' + TECH[k].name + '</span>'; }).join('') + '<span><svg width="12" height="12" viewBox="0 0 12 12" style="vertical-align:-1px;margin-right:5px"><path d="M6 1L11 6L6 11L1 6Z" fill="#0b1220"/></svg>switch</span><span><svg width="14" height="14" viewBox="0 0 14 14" style="vertical-align:-2px;margin-right:5px"><circle cx="7" cy="7" r="5.5" fill="none" stroke="#08734b" stroke-width="2"/></svg>next method practiced first</span>';
+    var rowH = 11, x0 = 64, W = 760, w = W - x0 - 16, H = ps.length * rowH + 40, X = function (wk) { return x0 + w * wk / 54; };
+    var g = '';
+    [0, 13, 26, 39, 52].forEach(function (wk) { g += '<line x1="' + X(wk) + '" x2="' + X(wk) + '" y1="8" y2="' + (H - 22) + '" stroke="' + GRID + '"/><text x="' + X(wk) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="11" fill="' + AX + '">week ' + wk + '</text>'; });
+    ps.forEach(function (p, ri) {
+      var y = 10 + ri * rowH, hl = p.id === F.pid;
+      g += '<g class="rs-row" data-pid="' + p.id + '" style="cursor:pointer"><rect x="0" y="' + (y - 1) + '" width="' + W + '" height="' + rowH + '" fill="' + (hl ? '#e6f4ee' : 'transparent') + '"/>';
+      g += '<text x="' + (x0 - 6) + '" y="' + (y + 8) + '" text-anchor="end" font-size="9" fill="' + (hl ? INK : AX) + '" font-weight="' + (hl ? 700 : 400) + '">' + p.id + (p.onset === 'bulbar' ? ' B' : '') + '</text>';
+      WEEKS.forEach(function (wk) { g += '<rect x="' + X(wk) + '" y="' + y + '" width="' + (w * 2 / 54 + 0.5) + '" height="' + (rowH - 2) + '" fill="' + TECH[p.timeline[wk]].c + '"/>'; });
+      TR.filter(function (t) { return t.id === p.id; }).forEach(function (t) { var cx = X(t.week); g += '<path d="M' + cx + ' ' + (y - 1) + 'l5 5l-5 5l-5 -5z" fill="#0b1220"/>'; if (t.backup === 'yes') g += '<circle cx="' + cx + '" cy="' + (y + 4) + '" r="7" fill="none" stroke="#08734b" stroke-width="1.6"/>'; });
+      g += '<title>' + p.id + ': ' + p.onset + ' onset, ' + p.prog + ' progression (' + p.rate + ' points a month)</title></g>';
+    });
+    el('chainC').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Technology used by each participant over 52 weeks">' + g + '</svg>';
+    Array.prototype.forEach.call(el('chainC').querySelectorAll('.rs-row'), function (r) { r.addEventListener('click', function () { F.pid = r.getAttribute('data-pid'); fPid.value = F.pid; draw(); el('drill').scrollIntoView({ behavior: 'smooth', block: 'start' }); }); });
+    var paths = {}; ps.forEach(function (p) { var seq = []; WEEKS.forEach(function (wk) { var m = p.timeline[wk]; if (seq[seq.length - 1] !== m) seq.push(m); }); var k = seq.map(function (m) { return TECH[m].name; }).join(' → '); paths[k] = (paths[k] || 0) + 1; });
+    var tr = TR.filter(function (t) { return inFilter(byId[t.id]); }), ready = tr.filter(function (t) { return t.backup === 'yes'; }).length;
+    el('pathT').innerHTML = '<thead><tr><th>Path over 52 weeks</th><th>Participants</th></tr></thead><tbody>' + Object.keys(paths).sort(function (a, b) { return paths[b] - paths[a]; }).map(function (k) { return '<tr><td>' + esc(k) + '</td><td>' + paths[k] + '</td></tr>'; }).join('') + '</tbody>';
+    return { tr: tr.length, ready: ready };
+  }
+  function kpis(cs) {
+    var ps = P.filter(inFilter), rows = rowsFor(), m = F.meas, ids = {}; rows.forEach(function (r) { ids[r.id] = 1; });
+    var v0 = rows.filter(function (r) { return r.week <= 4; }).map(function (r) { return +r[m]; }), v1 = rows.filter(function (r) { return r.week >= 48; }).map(function (r) { return +r[m]; });
+    var adl = AD.filter(function (a) { return inFilter(byId[a.id]); }), kept = adl.filter(function (a) { return a.help_week52 !== 'full' && a.week52_seconds <= a.week0_seconds * 1.05; }).length;
+    var K = [['Participants', ps.length, Object.keys(ids).length + ' used this technology'], ['Check-ins', rows.length, 'every 2 weeks, 52 weeks'], ['Median now', isNaN(q(v1, 0.5)) ? '–' : fmt(q(v1, 0.5), m), 'start ' + (isNaN(q(v0, 0.5)) ? '–' : fmt(q(v0, 0.5), m))], ['Technology switches', cs.tr, cs.ready + ' with the next method practiced'], ['Daily-living goals kept', adl.length ? Math.round(kept / adl.length * 100) + '%' : '–', kept + ' of ' + adl.length + ' goals at week 52']];
+    el('rsKpis').innerHTML = K.map(function (k) { return '<div class="rs-kpi"><span>' + k[0] + '</span><b>' + k[1] + '</b><small>' + esc(k[2]) + '</small></div>'; }).join('');
+  }
+  function drill() {
+    var box = el('drillB');
+    if (!F.pid) { box.innerHTML = ''; el('drillT').textContent = 'Participant drill-down'; return; }
+    var p = byId[F.pid], rows = S.filter(function (r) { return r.id === p.id; });
+    el('drillT').textContent = 'Participant drill-down · ' + p.id;
+    var seq = []; WEEKS.forEach(function (wk) { var m = p.timeline[wk]; if (seq[seq.length - 1] !== m) seq.push(m); });
+    var facts = [['Onset', p.onset], ['Age', p.age], ['Decline', p.rate + ' points a month (' + p.prog + ')'], ['Position', p.pos === 'both' ? 'bed and chair' : 'mostly ' + p.pos], ['Spasticity tendency', p.spast], ['Path', seq.map(function (m) { return TECH[m].name; }).join(' → ')]];
+    var W = 760, H = 220, x0 = 46, y0 = 16, w = W - x0 - 20, h = H - 56, X = function (wk) { return x0 + w * wk / 52; }, Y = function (v) { return y0 + h - h * (v - 30) / 70; };
+    var g = ''; [30, 50, 80, 100].forEach(function (v) { g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="' + (v === 80 ? '#b42318' : GRID) + '" stroke-dasharray="' + (v === 80 ? '4 3' : '') + '"/><text x="' + (x0 - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="11" fill="' + AX + '">' + v + '%</text>'; });
+    g += '<text x="' + (x0 + 6) + '" y="' + (Y(80) + 14) + '" font-size="10.5" fill="#b42318">80%: switch threshold</text>';
+    var segs = {}; rows.forEach(function (r) { (segs[r.method] = segs[r.method] || []).push(r); });
+    Object.keys(segs).forEach(function (m) { g += '<path d="M' + segs[m].map(function (r) { return X(r.week) + ' ' + Y(r.success); }).join(' L') + '" fill="none" stroke="' + TECH[m].c + '" stroke-width="2.5"/>'; segs[m].forEach(function (r) { g += '<circle cx="' + X(r.week) + '" cy="' + Y(r.success) + '" r="2.6" fill="' + TECH[m].c + '"><title>Week ' + r.week + ', ' + TECH[m].name + ': ' + r.success + '% success</title></circle>'; }); });
+    g += '<path d="M' + rows.map(function (r) { return X(r.week) + ' ' + Y(r.voice); }).join(' L') + '" fill="none" stroke="#e2703a" stroke-width="1.5" stroke-dasharray="2 3"/>';
+    [0, 13, 26, 39, 52].forEach(function (wk) { g += '<text x="' + X(wk) + '" y="' + (y0 + h + 18) + '" text-anchor="middle" font-size="11" fill="' + AX + '">week ' + wk + '</text>'; });
+    g += '<text x="' + x0 + '" y="' + (H - 4) + '" font-size="11" fill="' + AX + '">Success rate with the method in use (solid) · voice recognition accuracy check-ins (dotted)</text>';
+    /* attempt traces at the latest check-in */
+    var last = rows[rows.length - 1], tw = 300, th = 220, cx = 150, cy = 110, tg = '', tremor = +(last.tremor || 0.2), lr = seed;
+    seed = parseInt(p.id.slice(1), 10) * 7919;
+    for (var k = 0; k < 8; k++) { var an = k / 8 * Math.PI * 2, tx = cx + Math.cos(an) * 88, ty = cy + Math.sin(an) * 80, d = 'M' + cx + ' ' + cy, px = cx, py = cy; for (var s = 1; s <= 14; s++) { var f = s / 14, j = (1 - f) * tremor * 26; px = cx + (tx - cx) * f + norm(0, j); py = cy + (ty - cy) * f + norm(0, j); d += ' L' + r1(px) + ' ' + r1(py); } var hit = Math.hypot(px - tx, py - ty) < 12; tg += '<circle cx="' + tx + '" cy="' + ty + '" r="12" fill="none" stroke="' + (hit ? '#08734b' : '#b42318') + '" stroke-width="1.5"/><path d="' + d + '" fill="none" stroke="#24344a" stroke-opacity="0.75" stroke-width="1.4"/>'; }
+    seed = lr;
+    tg += '<circle cx="' + cx + '" cy="' + cy + '" r="4" fill="#0b1220"/><text x="' + cx + '" y="' + (th - 6) + '" text-anchor="middle" font-size="11" fill="' + AX + '">Pointing paths, week ' + last.week + ' (tremor index ' + (last.tremor === '' ? 'n/a' : last.tremor) + ')</text>';
+    var adl = AD.filter(function (a) { return a.id === p.id; });
+    box.innerHTML = '<div class="rs-facts">' + facts.map(function (f) { return '<div><span>' + f[0] + '</span><b>' + esc(f[1]) + '</b></div>'; }).join('') + '</div>' +
+      '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Success rate over time" style="margin-top:12px">' + g + '</svg><div class="rs-grid" style="margin-top:12px"><div style="display:grid;gap:10px;align-content:start;justify-items:center">' + (TECH_MEAS.head.indexOf('tremor') >= 0 && (last.method === 'head' || last.method === 'eyes') ? '<svg viewBox="0 0 ' + tw + ' ' + th + '" role="img" aria-label="Pointing paths" style="max-width:360px">' + tg + '</svg>' : '<p class="sub">Pointing paths appear for participants currently using head tracking or eye gaze.</p>') + '</div><div style="overflow-x:auto;min-width:0">' +
+      '<table class="rs-tbl rs-wrapt"><thead><tr><th>Daily-living goal</th><th>Week 0</th><th>Week 52</th></tr></thead><tbody>' + adl.map(function (a) { return '<tr><td>' + esc(a.goal) + '<br><small style="color:#4b5a6b">' + esc(a.technology) + '</small></td><td>' + a.week0_seconds + ' s, ' + a.help_week0 + ' help</td><td>' + a.week52_seconds + ' s, ' + a.help_week52 + ' help</td></tr>'; }).join('') + '</tbody></table></div></div>';
+  }
+  function draw() { trend(); snap(); warn(); var cs = chain(); kpis(cs); drill(); }
+  el('snapA').addEventListener('input', snap); el('snapB').addEventListener('input', snap);
+  el('rsMethodLink').addEventListener('click', function (e) { e.preventDefault(); el('method').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+
+  /* ---------- data files ---------- */
+  function csv(rows, cols) { return [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); })).join('\n'); }
+  var DICT = [['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
+    ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
+    ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
+    ['adl_goals.csv', 'goal', 'Daily-living activity'], ['adl_goals.csv', 'week0_seconds / week52_seconds', 'Time to complete the activity'], ['adl_goals.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+  var FILES = [
+    { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
+    { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
+    { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
+    { name: 'adl_goals.csv', kind: 'CSV', desc: 'Daily-living goals and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
+    { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },
+    { name: 'README.txt', kind: 'TXT', desc: 'How the data was made', text: README }
+  ];
+  var curFile = FILES[0];
+  function fileText(f) { return f.text || csv(f.rows(), f.cols); }
+  function showFile(f) {
+    curFile = f;
+    Array.prototype.forEach.call(el('fileList').children, function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-f') === f.name ? 'true' : 'false'); });
+    var v = el('fileView'), txt = fileText(f), n = f.rows ? f.rows().length : txt.split('\n').length;
+    var head = '<div class="rs-fhead"><div><b>' + f.name + '</b><p>' + esc(f.desc) + ' · ' + n + (f.rows ? ' rows' : ' lines') + ' · ' + Math.round(txt.length / 1024 * 10) / 10 + ' KB</p></div><button class="rs-btn" type="button" id="fileDl">Download ' + f.name + '</button></div>';
+    if (f.text) v.innerHTML = head + '<pre class="rs-pre">' + esc(f.text) + '</pre>';
+    else { var rows = f.rows().slice(0, 40); v.innerHTML = head + '<div class="rs-scroll"><table class="rs-tbl"><thead><tr>' + f.cols.map(function (c) { return '<th>' + c + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.map(function (r) { return '<tr>' + f.cols.map(function (c) { return '<td>' + esc(r[c] === undefined ? '' : r[c]) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>' + (n > 40 ? '<p class="sub">Showing the first 40 of ' + n + ' rows. Download for the full file.</p>' : ''); }
+    el('fileDl').addEventListener('click', function () { save(f.name, fileText(f), f.text ? 'text/plain' : 'text/csv'); });
+  }
+  function save(name, data, type) {
+    function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+    if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+  }
+  el('fileList').innerHTML = FILES.map(function (f) { var n = f.rows ? f.rows().length + ' rows' : 'text'; return '<button class="rs-file" type="button" data-f="' + f.name + '" aria-pressed="false"><span class="ic">' + f.kind + '</span><span><b>' + f.name + '</b><small>' + esc(f.desc) + ' · ' + n + '</small></span></button>'; }).join('');
+  Array.prototype.forEach.call(el('fileList').children, function (b) { b.addEventListener('click', function () { showFile(FILES.filter(function (f) { return f.name === b.getAttribute('data-f'); })[0]); }); });
+  showFile(FILES[0]);
+  draw();
+})();
+
+})();
+(function () {
 var __ID = function (x) { return document.getElementById('kb-' + x) || document.getElementById(x); };
 
 var KB_FILES = {"Dave_Keyboard2": {"layout": {"rows": 8, "cols": 21, "keys": [{"r": 0, "c": 0, "w": 1, "h": 3, "t": "◤", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 0, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 0, "w": 1, "h": 3, "t": "◣", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 20, "w": 1, "h": 3, "t": "◥", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 20, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 20, "w": 1, "h": 3, "t": "◢", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 1, "w": 17, "h": 1, "t": "Typed text appears here", "k": "pad"}, {"r": 0, "c": 18, "w": 1, "h": 1, "t": "▬", "bg": "#A86868", "fg": "White"}, {"r": 1, "c": 1, "w": 19, "h": 1, "t": "Word suggestions", "k": "sug"}, {"r": 0, "c": 19, "w": 1, "h": 1, "t": "X", "bg": "#A86868", "fg": "White"}, {"r": 2, "c": 1, "w": 2, "h": 1, "t": "Menu"}, {"r": 2, "c": 4, "w": 3, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 7, "w": 3, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 10, "w": 3, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 13, "w": 3, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 2, "c": 16, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 2, "c": 3, "w": 1, "h": 1, "t": "🖱", "bg": "#5A65A2", "fg": "White"}, {"r": 2, "c": 18, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}, {"r": 3, "c": 1, "w": 1, "h": 1, "t": "Esc"}, {"r": 3, "c": 2, "w": 1, "h": 1, "t": "`\n~", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 3, "w": 1, "h": 1, "t": "1\n!", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 4, "w": 1, "h": 1, "t": "2\n@", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 5, "w": 1, "h": 1, "t": "3\n#", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 6, "w": 1, "h": 1, "t": "4\n$", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 7, "w": 1, "h": 1, "t": "5\n%", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 8, "w": 1, "h": 1, "t": "6\n^", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 9, "w": 1, "h": 1, "t": "7\n&", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 10, "w": 1, "h": 1, "t": "8\n*", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 11, "w": 1, "h": 1, "t": "9\n(", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 12, "w": 1, "h": 1, "t": "Ø\n)", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 13, "w": 1, "h": 1, "t": "-\n_", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 14, "w": 2, "h": 1, "t": "=\n+", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 16, "w": 2, "h": 1, "t": "Home", "bg": "#525D9A", "fg": "White"}, {"r": 3, "c": 18, "w": 2, "h": 1, "t": "PgUp", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 1, "w": 1, "h": 1, "t": "Tab"}, {"r": 4, "c": 2, "w": 1, "h": 1, "t": "q"}, {"r": 4, "c": 3, "w": 1, "h": 1, "t": "w"}, {"r": 4, "c": 4, "w": 1, "h": 1, "t": "e"}, {"r": 4, "c": 5, "w": 1, "h": 1, "t": "r"}, {"r": 4, "c": 6, "w": 1, "h": 1, "t": "t"}, {"r": 4, "c": 7, "w": 1, "h": 1, "t": "y"}, {"r": 4, "c": 8, "w": 1, "h": 1, "t": "u"}, {"r": 4, "c": 9, "w": 1, "h": 1, "t": "i"}, {"r": 4, "c": 10, "w": 1, "h": 1, "t": "o"}, {"r": 4, "c": 11, "w": 1, "h": 1, "t": "p"}, {"r": 4, "c": 12, "w": 1, "h": 1, "t": "[\n{", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 13, "w": 1, "h": 1, "t": "]\n}", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 14, "w": 2, "h": 1, "t": "\\\n|", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 16, "w": 2, "h": 1, "t": "End", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 18, "w": 2, "h": 1, "t": "PgDn", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 1, "w": 1, "h": 1, "t": "Caps", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 5, "c": 2, "w": 1, "h": 1, "t": "a"}, {"r": 5, "c": 3, "w": 1, "h": 1, "t": "s"}, {"r": 5, "c": 4, "w": 1, "h": 1, "t": "d"}, {"r": 5, "c": 5, "w": 1, "h": 1, "t": "f"}, {"r": 5, "c": 6, "w": 1, "h": 1, "t": "g"}, {"r": 5, "c": 7, "w": 1, "h": 1, "t": "h"}, {"r": 5, "c": 8, "w": 1, "h": 1, "t": "j"}, {"r": 5, "c": 9, "w": 1, "h": 1, "t": "k"}, {"r": 5, "c": 10, "w": 1, "h": 1, "t": "l"}, {"r": 5, "c": 11, "w": 1, "h": 1, "t": "●\n❟", "bg": "#4B5690", "fg": "White"}, {"r": 5, "c": 12, "w": 1, "h": 1, "t": "'\n\"", "bg": "#4B5690", "fg": "White"}, {"r": 7, "c": 13, "w": 3, "h": 1, "t": "Enter"}, {"r": 5, "c": 16, "w": 2, "h": 1, "t": "Esc", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 18, "w": 2, "h": 1, "t": "🎤", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 1, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 3, "w": 1, "h": 1, "t": "z"}, {"r": 6, "c": 4, "w": 1, "h": 1, "t": "x"}, {"r": 6, "c": 5, "w": 1, "h": 1, "t": "c"}, {"r": 6, "c": 6, "w": 1, "h": 1, "t": "v"}, {"r": 6, "c": 7, "w": 1, "h": 1, "t": "b"}, {"r": 6, "c": 8, "w": 1, "h": 1, "t": "n"}, {"r": 6, "c": 9, "w": 1, "h": 1, "t": "m"}, {"r": 6, "c": 10, "w": 1, "h": 1, "t": "❟\n<", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 11, "w": 1, "h": 1, "t": "●\n>", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 12, "w": 1, "h": 1, "t": "/\n?", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 13, "w": 1, "h": 1, "t": "↑", "bg": "#5A65A2", "fg": "White"}, {"r": 6, "c": 14, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 16, "w": 2, "h": 1, "t": "Copy", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 18, "w": 2, "h": 1, "t": "Paste", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 1, "w": 2, "h": 1, "t": "Ctrl", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 3, "w": 2, "h": 1, "t": "⊞", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 5, "w": 2, "h": 1, "t": "Alt", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 7, "w": 6, "h": 1, "t": "SPACE"}, {"r": 5, "c": 13, "w": 1, "h": 1, "t": "←", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 14, "w": 1, "h": 1, "t": "↓", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 15, "w": 1, "h": 1, "t": "→", "bg": "#5A65A2", "fg": "White"}, {"r": 7, "c": 16, "w": 2, "h": 1, "t": "Bksp", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 18, "w": 2, "h": 1, "t": "Del", "bg": "#525D9A", "fg": "White"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Keyboard.xml  -  custom OptiKey dynamic keyboard\n\n  Layout (8 rows x 21 columns: edge column each side):\n    Row 0  Scratchpad (typed text)\n    Row 1  Word suggestions\n    Row 2  UTILITY ROW: Quit | Menu | Left click | Right click |\n                        Double click | Drag | dash key at far right (-> Dave_Mouse.xml) | Scroll up | Scroll down\n    Rows 3-7  Full Windows On-Screen-Keyboard layout, including the nav block\n              (Home/PgUp, End/PgDn, Insert/Pause, PrtScn/ScrLk, Speak/Clear)\n\n  Install: Management Console (Alt+M) -> Visuals -> Startup keyboard -> \"Custom Keyboard File\"\n           and point it at this file, then OK.  Adjust Width / Height below if it does not fit.\n-->\n<Keyboard>\n    <Name>Dave_Keyboard</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>50%</Width>\n    <Height>35%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>8</Rows>\n        <Cols>21</Cols>\n    </Grid>\n\n    <!-- Colour groups so the special rows stand out -->\n    <KeyGroup Name=\"Utility\"  SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n        <KeyGroup Name=\"Quit\"     BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" />\n    <KeyGroup Name=\"NavKey\"   BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Nav\" />\n    <KeyGroup Name=\"Dual\"     BackgroundColor=\"#4B5690\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Dim\"      BackgroundColor=\"#3C4675\" ForegroundColor=\"#D0D4E8\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Edge\"     BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" Opacity=\"0.45\" />\n    <KeyGroup Name=\"UtilityDash\" BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"MouseDash\"   BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"NavIcon\"  BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"ArrowKey\" BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"SpaceBar\" SharedSizeGroup=\"SpaceBar\" />\n    <KeyGroup Name=\"ShiftKey\" SharedSizeGroup=\"ShiftKey\" />\n\n    <Content>\n        <!-- Left edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◤</Label><Action>MoveToTopAndLeftBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"0\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◣</Label><Action>MoveToBottomAndLeftBoundaries</Action></DynamicKey>\n        <!-- Right edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◥</Label><Action>MoveToTopAndRightBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"20\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◢</Label><Action>MoveToBottomAndRightBoundaries</Action></DynamicKey>\n\n        <!-- ===================== Row 0 : scratchpad ===================== -->\n        <Scratchpad Row=\"0\" Col=\"1\" Width=\"17\" Height=\"1\" BackgroundColor=\"#202020\" Opacity=\"1\" />\n        <!-- Yellow keys: jump the keyboard to a screen corner (keeps its size; corner moves never dock) -->\n        <!-- Home key: reloads this keyboard so it returns to its default spot (top, centred) -->\n        <!-- Hide key (upper right): swaps to the tiny Dave_Mini.xml restore button -->\n        <DynamicKey Row=\"0\" Col=\"18\">\n            <KeyGroup>UtilityDash</KeyGroup>\n            <Label>▬</Label>\n            <ChangeKeyboard>Dave_Mini.xml</ChangeKeyboard>\n        </DynamicKey>\n\n        <!-- ===================== Row 1 : suggestions ==================== -->\n        <SuggestionRow Row=\"1\" Col=\"1\" Width=\"19\" Height=\"1\" />\n\n        <!-- ===================== Row 2 : UTILITY ROW ==================== -->\n        <!-- Quit OptiKey (OptiKey asks for confirmation first) -->\n        <DynamicKey Row=\"0\" Col=\"19\" Width=\"1\">\n            <KeyGroup>Quit</KeyGroup>\n            <Label>X</Label>\n            <Action>Quit</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"1\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Label>Menu</Label>\n            <Action>MenuKeyboard</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"4\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"7\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"10\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"13\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n                <DynamicKey Row=\"2\" Col=\"16\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"3\" Width=\"1\">\n            <KeyGroup>MouseDash</KeyGroup>\n            <Symbol>MouseIcon</Symbol>\n            <ChangeKeyboard>Dave_Mouse.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"18\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n\n        <!-- ===================== Row 3 : Esc ` 1-0 - = Backspace | Home PgUp ===================== -->\n        <DynamicKey Row=\"3\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>`\\n~</Label><ShiftDownLabel>~</ShiftDownLabel><Text>`</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"3\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>1\\n!</Label><ShiftDownLabel>!</ShiftDownLabel><Text>1</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"4\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>2\\n@</Label><ShiftDownLabel>@</ShiftDownLabel><Text>2</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"5\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>3\\n#</Label><ShiftDownLabel>#</ShiftDownLabel><Text>3</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"6\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>4\\n$</Label><ShiftDownLabel>$</ShiftDownLabel><Text>4</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"7\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>5\\n%</Label><ShiftDownLabel>%</ShiftDownLabel><Text>5</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"8\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>6\\n^</Label><ShiftDownLabel>^</ShiftDownLabel><Text>6</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"9\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>7\\n&amp;</Label><ShiftDownLabel>&amp;</ShiftDownLabel><Text>7</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"10\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>8\\n*</Label><ShiftDownLabel>*</ShiftDownLabel><Text>8</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>9\\n(</Label><ShiftDownLabel>(</ShiftDownLabel><Text>9</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>Ø\\n)</Label><ShiftDownLabel>)</ShiftDownLabel><Text>0</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>-\\n_</Label><ShiftDownLabel>_</ShiftDownLabel><Text>-</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>=\\n+</Label><ShiftDownLabel>+</ShiftDownLabel><Text>=</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Home</Label><Action>Home</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgUp</Label><Action>PgUp</Action></DynamicKey>\n\n        <!-- ===================== Row 4 : Tab q-p [ ] \\ Del | End PgDn ===================== -->\n        <DynamicKey Row=\"4\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Tab</Label><KeyDown>TAB</KeyDown><KeyUp>TAB</KeyUp></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"2\"><Label>q</Label><ShiftDownLabel>Q</ShiftDownLabel><Text>q</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"3\"><Label>w</Label><ShiftDownLabel>W</ShiftDownLabel><Text>w</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"4\"><Label>e</Label><ShiftDownLabel>E</ShiftDownLabel><Text>e</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"5\"><Label>r</Label><ShiftDownLabel>R</ShiftDownLabel><Text>r</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"6\"><Label>t</Label><ShiftDownLabel>T</ShiftDownLabel><Text>t</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"7\"><Label>y</Label><ShiftDownLabel>Y</ShiftDownLabel><Text>y</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"8\"><Label>u</Label><ShiftDownLabel>U</ShiftDownLabel><Text>u</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"9\"><Label>i</Label><ShiftDownLabel>I</ShiftDownLabel><Text>i</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"10\"><Label>o</Label><ShiftDownLabel>O</ShiftDownLabel><Text>o</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"11\"><Label>p</Label><ShiftDownLabel>P</ShiftDownLabel><Text>p</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>[\\n{</Label><ShiftDownLabel>{</ShiftDownLabel><Text>[</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>]\\n}</Label><ShiftDownLabel>}</ShiftDownLabel><Text>]</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>\\\\n|</Label><ShiftDownLabel>|</ShiftDownLabel><Text>\\</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>End</Label><Action>End</Action></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgDn</Label><Action>PgDn</Action></DynamicKey>\n\n        <!-- ===================== Row 5 : Caps a-l ; ' Enter | Insert Pause ===================== -->\n        <DynamicKey Row=\"5\" Col=\"1\" SharedSizeGroup=\"L4\"><KeyGroup>Dim</KeyGroup><Label>Caps</Label><KeyToggle>CAPITAL</KeyToggle></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"2\"><Label>a</Label><ShiftDownLabel>A</ShiftDownLabel><Text>a</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"3\"><Label>s</Label><ShiftDownLabel>S</ShiftDownLabel><Text>s</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"4\"><Label>d</Label><ShiftDownLabel>D</ShiftDownLabel><Text>d</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"5\"><Label>f</Label><ShiftDownLabel>F</ShiftDownLabel><Text>f</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"6\"><Label>g</Label><ShiftDownLabel>G</ShiftDownLabel><Text>g</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"7\"><Label>h</Label><ShiftDownLabel>H</ShiftDownLabel><Text>h</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"8\"><Label>j</Label><ShiftDownLabel>J</ShiftDownLabel><Text>j</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"9\"><Label>k</Label><ShiftDownLabel>K</ShiftDownLabel><Text>k</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"10\"><Label>l</Label><ShiftDownLabel>L</ShiftDownLabel><Text>l</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"11\" SharedSizeGroup=\"Semi\"><KeyGroup>Dual</KeyGroup><Label>●\\n❟</Label><ShiftDownLabel>:</ShiftDownLabel><Text>;</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>'\\n\"</Label><ShiftDownLabel>\"</ShiftDownLabel><Text>'</Text></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"13\" Width=\"3\" SharedSizeGroup=\"EnterKey\"><Label>Enter</Label><KeyDown>RETURN</KeyDown><KeyUp>RETURN</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"18\" Width=\"2\"><KeyGroup>NavIcon</KeyGroup><Label>🎤</Label><KeyDown>LWIN</KeyDown><KeyDown>VK_H</KeyDown><KeyUp>VK_H</KeyUp><KeyUp>LWIN</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 6 : Shift z-m , . / Up Shift | PrtScn ScrLk ===================== -->\n        <DynamicKey Row=\"6\" Col=\"1\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"3\"><Label>z</Label><ShiftDownLabel>Z</ShiftDownLabel><Text>z</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"4\"><Label>x</Label><ShiftDownLabel>X</ShiftDownLabel><Text>x</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"5\"><Label>c</Label><ShiftDownLabel>C</ShiftDownLabel><Text>c</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"6\"><Label>v</Label><ShiftDownLabel>V</ShiftDownLabel><Text>v</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"7\"><Label>b</Label><ShiftDownLabel>B</ShiftDownLabel><Text>b</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"8\"><Label>n</Label><ShiftDownLabel>N</ShiftDownLabel><Text>n</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"9\"><Label>m</Label><ShiftDownLabel>M</ShiftDownLabel><Text>m</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"10\" SharedSizeGroup=\"Comma\"><KeyGroup>Dual</KeyGroup><Label>❟\\n&lt;</Label><ShiftDownLabel>&lt;</ShiftDownLabel><Text>,</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>●\\n&gt;</Label><ShiftDownLabel>&gt;</ShiftDownLabel><Text>.</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>/\\n?</Label><ShiftDownLabel>?</ShiftDownLabel><Text>/</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>UpArrowKeyIcon</Symbol><Action>ArrowUp</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"14\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Copy</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_C</KeyDown><KeyUp>VK_C</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Paste</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_V</KeyDown><KeyUp>VK_V</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 7 : Ctrl Win Alt Space Alt Ctrl Left Down Right | Speak Clear ===================== -->\n        <DynamicKey Row=\"7\" Col=\"1\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Ctrl</Label><Action>LeftCtrl</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"3\" Width=\"2\"><KeyGroup>Dim</KeyGroup><Symbol>WinIcon</Symbol><Action>LeftWin</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"5\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Alt</Label><Action>LeftAlt</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"7\" Width=\"6\"><KeyGroup>SpaceBar</KeyGroup><Label>SPACE</Label><KeyDown>SPACE</KeyDown><KeyUp>SPACE</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>LeftArrowKeyIcon</Symbol><Action>ArrowLeft</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"14\"><KeyGroup>ArrowKey</KeyGroup><Symbol>DownArrowKeyIcon</Symbol><Action>ArrowDown</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"15\"><KeyGroup>ArrowKey</KeyGroup><Symbol>RightArrowKeyIcon</Symbol><Action>ArrowRight</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Bksp</Label><Action>BackOne</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Del</Label><Action>Delete</Action></DynamicKey>\n\n    </Content>\n</Keyboard>\n"}, "Dave_Mouse": {"layout": {"rows": 1, "cols": 14, "keys": [{"r": 0, "c": 12, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 0, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 2, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 4, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 6, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 8, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 10, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>14</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"12\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"2\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"4\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"6\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"8\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"10\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}, "Dave_Mini": {"layout": {"rows": 1, "cols": 16, "keys": [{"r": 0, "c": 0, "w": 1, "h": 1, "t": "◤", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 13, "w": 1, "h": 1, "t": "◥", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 14, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 1, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 3, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 5, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 7, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 9, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 11, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>16</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"Nudge\"    BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◤</Label>\n            <Action>MoveToTopAndLeftBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"13\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◥</Label>\n            <Action>MoveToTopAndRightBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"14\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"1\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"3\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"5\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"7\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"9\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"11\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}};
@@ -5066,7 +5596,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
