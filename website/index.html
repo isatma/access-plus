@@ -138,13 +138,16 @@ footer { padding-bottom: 90px; }
 @media (max-width: 640px) { .bd:nth-child(even) { display: none; } }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
-.hero .intro { align-content: space-between; gap: 30px; }
-@media (min-width: 901px) { .hero { align-items: stretch; } .hero .intro { padding-block: 6px 10px; } }
-.hero .intro h1 { font-size: 3em; line-height: 1.12; }
+.hero .intro { align-content: start; gap: 26px; }
+@media (min-width: 901px) { .hero .intro { padding-top: 10px; } }
+.hero .intro h1 { font-size: 2.6em; line-height: 1.12; }
 @media (max-width: 640px) { .hero .intro h1 { font-size: 2.1em; } .hero .intro { gap: 22px; } }
 .hero .intro > p { font-size: 1.15em; }
 .hero .intro .promise { font-size: 1.12em; }
-.hero-agent canvas { width: 160px; height: 160px; }
+.hero-head { display: flex; align-items: center; gap: 22px; }
+.hero-head canvas { width: 150px; height: 150px; flex: none; display: block; }
+.hero-head h1 { margin: 0; }
+@media (max-width: 640px) { .hero-head { gap: 12px; } .hero-head canvas { width: 84px; height: 84px; } }
 .hero-agent .ha-line { font-size: 1.1em; }
 .hero .intro .hero-agent { margin-bottom: 10px; }
 .hero .intro h1 { margin-bottom: -4px; }
@@ -974,15 +977,17 @@ footer .wrap { padding-block: 22px; }
     <div class="hero">
       <div class="plane3d" aria-hidden="true"><div class="plane-grid"></div></div>
       <section class="intro" aria-labelledby="introTitle">
-      <div class="hero-agent">
+      <div class="hero-head">
         <canvas id="heroAgent" aria-hidden="true"></canvas>
+        <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
+      </div>
+      <p>Practice in simulators, borrow equipment, and find free hardware and software for the devices you depend on.</p>
+      <div class="hero-agent">
         <div class="ha-text">
-                    <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
+          <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
           <span class="ha-acts"><a class="primary" href="#profile">Build my profile</a><a href="#guide-ai">Ask a question</a></span>
         </div>
       </div>
-                  <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
-      <p>Practice in simulators, borrow equipment, and find free hardware and software for the devices you depend on.</p>
       <p class="promise">We don't sell anything. We lend equipment, review technology, and help you practice.</p>
     </section>
       <div class="feature" id="guide">
@@ -2153,7 +2158,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:34 UTC</span></div>
+    <div class="fbar"><span>Access+ · Skill building for assistive technology · Supported by a nonprofit coalition</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 02:38 UTC</span></div>
   </div>
 </footer>
 
