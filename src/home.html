@@ -634,7 +634,7 @@ footer .wrap { padding-block: 22px; }
 .sb-stage .sb-cap { opacity: 0; transform: translateY(10px); transition: opacity .6s ease 1.1s, transform .6s ease 1.1s; }
 .sb-stage.revealed .sb-cap { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .sb-wipe { display: none; } .sb-stage .sb-cap { opacity: 1; transform: none; transition: none; } }
-@media (max-width: 900px) { .simbanner { grid-template-columns: 1fr; } .sb-stage { border-left: 0; border-top: 1px solid var(--line-hi); min-height: 300px; } .sb-text { padding: 28px 20px; } }
+@media (max-width: 900px) { .simbanner { grid-template-columns: 1fr; } .sb-stage { border-left: 0; border-top: 1px solid var(--line-hi); min-height: 440px; } .sb-text { padding: 28px 20px; } }
 </style>
 
 <header class="bar" id="top">
@@ -905,7 +905,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:31 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:38 UTC</span></div>
   </div>
 </footer>
 
@@ -1663,9 +1663,10 @@ function AgentCloud(canvas, opts) {
   var GATES = [], CONES = [];
   for (var g = 0; g < 14; g++) { var dd = TOTAL * (g + 0.5) / 14, P = at(dd); GATES.push({ d: dd, x: P[0], z: P[1], h: P[2], lit: 0 }); }
   for (var c2 = 0; c2 < 44; c2++) { var d2 = TOTAL * c2 / 44, Q = at(d2), side = c2 % 2 ? 1 : -1, off = 2.3 + (c2 % 3) * 0.3, cx0 = Q[0] + Math.cos(Q[2]) * off * side, cz0 = Q[1] - Math.sin(Q[2]) * off * side; var l0 = local(cx0, cz0); if (Math.abs(l0[0]) < BR_LEN + 2.5 && Math.abs(l0[1]) < BR_W + 1) continue; CONES.push({ x: cx0, z: cz0 }); }
+  var STOPS = [HILL_D - 5, BR_D - BR_LEN - 2];
   var ZONES = [[HILL_D - 6, 'STEEP HILL', 'Slow and steady'], [BR_D - BR_LEN, 'NARROW BRIDGE', 'Fine control over the water'], [SIDE_D - 4, 'SIDE SLOPE', 'Watch your tilt']];
   var INPUTS = [['HEAD ARRAY', '#5fe0a8'], ['SIP AND PUFF', '#7cc4ff'], ['SWITCH SCANNING', '#ffc670'], ['MINI JOYSTICK', '#f7b2c4']];
-  var dist = 0, last = performance.now(), W = 0, H = 0, sparks = [], lap = 0, lapT = 0, gatesHit = 0, best = null, camYs = null, horS = null, rollS = 0, spPrev = 0, brakeT = 0;
+  var dist = 0, last = performance.now(), W = 0, H = 0, sparks = [], lap = 0, lapT = 0, gatesHit = 0, best = null, camYs = null, horS = null, rollS = 0, spPrev = 0, brakeT = 0, phase = null, phT = 0, stopsDone = {}, goT = 0;
   function size() { var dpr = Math.min(2, window.devicePixelRatio || 1), r = cv.getBoundingClientRect(); var w = Math.max(200, r.width), h = Math.max(160, r.height); if (cv.width !== Math.round(w*dpr) || cv.height !== Math.round(h*dpr)) { cv.width = Math.round(w*dpr); cv.height = Math.round(h*dpr); } ctx.setTransform(dpr,0,0,dpr,0,0); W = w; H = h; }
   function frame(now) {
     requestAnimationFrame(frame);
@@ -1677,8 +1678,15 @@ function AgentCloud(canvas, opts) {
     var nx = Math.cos(here[2]), nz = -Math.sin(here[2]), cross = (ground(here[0] + nx, here[1] + nz) - ground(here[0] - nx, here[1] - nz)) / 2;
     var onBridge = inWater(here[0], here[1]);
     var speed = 5.4 * (1 - Math.min(0.35, Math.abs(turn) * 0.6)) * (1 - Math.min(0.55, Math.abs(slope) * 1.6)) * (onBridge ? 0.7 : 1);
+    // stop-and-go before hazards: decelerate, hold, then start again
+    var dW = wrapD(dist), lapKey = lap + ':';
+    if (!phase) STOPS.forEach(function (sd, si) { var rel = wrapD(sd - dW); if (rel < 1.2 && !stopsDone[lapKey + si]) { stopsDone[lapKey + si] = 1; phase = 'stop'; phT = 0; } });
+    var sf = 1;
+    if (phase) { phT += dt; if (phase === 'stop') { sf = Math.max(0, 1 - phT / 0.7); if (phT > 0.7) { phase = 'hold'; phT = 0; } } else if (phase === 'hold') { sf = 0; if (phT > 1.3) { phase = 'go'; phT = 0; } } else if (phase === 'go') { sf = Math.min(1, phT / 0.9); if (phT > 0.9) { phase = null; goT = 0.6; } } }
+    goT = Math.max(0, goT - dt);
+    speed *= sf;
     dist += dt * speed; lapT += dt;
-    if (dt > 0) { var dv = (speed - spPrev) / dt; spPrev = speed; brakeT = dv < -2 ? 0.45 : Math.max(0, brakeT - dt); } var braking = brakeT > 0;
+    var braking = phase === 'stop' || phase === 'hold', resuming = phase === 'go' || goT > 0;
     if (dist >= TOTAL * (lap + 1)) { lap++; best = best === null ? lapT : Math.min(best, lapT); lapT = 0; gatesHit = 0; GATES.forEach(function (g) { g.lit = 0; }); }
     var inp = INPUTS[lap % INPUTS.length];
     var camBack = 5.5, camH = 2.6, F = Math.min(W, H) * 0.95;
@@ -1871,17 +1879,23 @@ function AgentCloud(canvas, opts) {
     var slopeDeg = Math.atan(slope) * 57.3, tiltD = Math.atan(rollS) * 57.3;
     var cmd = Math.abs(turn) < 0.06 ? 'FORWARD' : turn > 0 ? 'RIGHT' : 'LEFT';
     var MAP = {
-      'HEAD ARRAY': { leds: ['BACK PAD', 'EASE OFF', 'LEFT PAD', 'RIGHT PAD'], act: { FORWARD: 'Press back pad: forward', LEFT: 'Left pad: turn left', RIGHT: 'Right pad: turn right', BRAKE: 'Ease off the pad: slow down' } },
-      'SIP AND PUFF': { leds: ['HARD PUFF', 'HARD SIP', 'SOFT SIP', 'SOFT PUFF'], act: { FORWARD: 'Hard puff: forward (latched)', LEFT: 'Soft sip: turn left', RIGHT: 'Soft puff: turn right', BRAKE: 'Hard sip: slow and stop' } },
-      'SWITCH SCANNING': { leds: ['FORWARD', 'STOP', 'LEFT', 'RIGHT'], act: { FORWARD: 'Press when FORWARD lights', LEFT: 'Press when LEFT lights', RIGHT: 'Press when RIGHT lights', BRAKE: 'Press when STOP lights' } },
-      'MINI JOYSTICK': { leds: ['PUSH', 'CENTRE', 'LEFT', 'RIGHT'], act: { FORWARD: 'Push forward: speed follows the push', LEFT: 'Push left: turn left', RIGHT: 'Push right: turn right', BRAKE: 'Let it return to centre: slow down' } }
+      'HEAD ARRAY': { leds: ['BACK PAD', 'RELEASE', 'LEFT PAD', 'RIGHT PAD'], act: { FORWARD: 'Press back pad: forward', LEFT: 'Left pad: turn left', RIGHT: 'Right pad: turn right', BRAKE: 'Release the pads: chair stops', GO: 'Press back pad: forward again' },
+        tip: ['HEAD ARRAY TECHNIQUE', 'Lean back into the centre pad to go forward', 'Press a side pad to turn; release to go straight', 'Release all pads and the chair brakes to a stop', 'Reverse is usually a mode change'] },
+      'SIP AND PUFF': { leds: ['HARD PUFF', 'HARD SIP', 'SOFT SIP', 'SOFT PUFF'], act: { FORWARD: 'Hard puff: forward (latched)', LEFT: 'Soft sip: turn left, forward stays on', RIGHT: 'Soft puff: turn right, forward stays on', BRAKE: 'Hard sip: stop', GO: 'Hard puff: start again' },
+        tip: ['BREATH CONTROL TECHNIQUE', 'Hard puff: go forward. It stays on (latched)', 'Hard sip: stop. Hard puff again to resume', 'Soft sip turns left, soft puff turns right', 'Stop sipping or puffing to go straight again'] },
+      'SWITCH SCANNING': { leds: ['FORWARD', 'STOP', 'LEFT', 'RIGHT'], act: { FORWARD: 'Press when FORWARD lights', LEFT: 'Press when LEFT lights', RIGHT: 'Press when RIGHT lights', BRAKE: 'Press when STOP lights', GO: 'Press when FORWARD lights' },
+        tip: ['SWITCH SCANNING TECHNIQUE', 'Choices light up in turn: forward, stop, left, right', 'Press your switch when the one you want is lit', 'Turns last while the switch is held', 'Scan speed is set to suit you'] },
+      'MINI JOYSTICK': { leds: ['PUSH', 'CENTRE', 'LEFT', 'RIGHT'], act: { FORWARD: 'Push forward: speed follows the push', LEFT: 'Push left: turn left', RIGHT: 'Push right: turn right', BRAKE: 'Let it return to centre: chair stops', GO: 'Push forward again' },
+        tip: ['MINI JOYSTICK TECHNIQUE', 'Very light touch, by chin, lip or finger', 'Push further to go faster', 'Steer by pushing at an angle', 'Let go and it springs to centre: the chair stops'] }
     }, mp = MAP[inp[0]];
-    var on = [cmd !== 'LEFT' && cmd !== 'RIGHT' && !braking ? 1 : (inp[0] === 'SIP AND PUFF' ? 0.35 : 0), braking ? 1 : 0, cmd === 'LEFT' ? 1 : 0, cmd === 'RIGHT' ? 1 : 0];
+    var sp = inp[0] === 'SIP AND PUFF', latched = sp && !braking;
+    var on = braking ? [0, 1, 0, 0] : [(cmd === 'FORWARD' || resuming) && !(sp && !resuming) ? 1 : (latched ? (resuming ? 1 : 0.35) : 0), 0, cmd === 'LEFT' ? 1 : 0, cmd === 'RIGHT' ? 1 : 0];
+    if (sp && cmd === 'FORWARD' && !resuming && !braking) on[0] = 0.35;
     var scanI = Math.floor(now / 650) % 4;
     ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(5,10,20,0.78)'; ctx.fillRect(14, 14, 236, 158); ctx.strokeStyle = inp[1]; ctx.lineWidth = 1; ctx.strokeRect(14.5, 14.5, 236, 158);
     ctx.font = '500 11px "IBM Plex Mono", monospace'; ctx.fillStyle = '#8fa3b8'; ctx.fillText('INPUT', 26, 33);
     ctx.fillStyle = inp[1]; ctx.font = '600 14px "IBM Plex Sans", sans-serif'; ctx.fillText(inp[0], 26, 51);
-    ctx.fillStyle = '#f0f5fa'; ctx.font = '500 11.5px "IBM Plex Sans", sans-serif'; ctx.fillText(mp.act[braking ? 'BRAKE' : cmd], 26, 69);
+    ctx.fillStyle = '#f0f5fa'; ctx.font = '500 11.5px "IBM Plex Sans", sans-serif'; ctx.fillText(mp.act[braking ? 'BRAKE' : resuming ? 'GO' : cmd], 26, 69);
     // LED indicators
     mp.leds.forEach(function (lb, li) {
       var lx = 48 + li * 54, ly = 86, lit = on[li], col = li === 1 ? '#ff5a6a' : inp[1];
@@ -1893,7 +1907,9 @@ function AgentCloud(canvas, opts) {
     ctx.textAlign = 'left'; ctx.font = '500 11px "IBM Plex Mono", monospace';
     function meter(lbl, val, max, y) { ctx.fillStyle = '#8fa3b8'; ctx.fillText(lbl, 26, y); var x0 = 76, w0 = 90, f = Math.max(-1, Math.min(1, val / max)), warn = Math.abs(f) > 0.6; ctx.fillStyle = '#1b2a40'; ctx.fillRect(x0, y - 8, w0, 8); ctx.fillStyle = warn ? '#ffc670' : '#5fe0a8'; var cxm = x0 + w0 / 2; ctx.fillRect(Math.min(cxm, cxm + f * w0 / 2), y - 8, Math.abs(f * w0 / 2), 8); ctx.fillStyle = '#f0f5fa'; ctx.fillRect(cxm - 0.5, y - 10, 1, 12); ctx.fillStyle = warn ? '#ffc670' : '#c4d0dd'; ctx.textAlign = 'left'; ctx.fillText((val >= 0 ? '+' : '') + Math.round(val) + '°', x0 + w0 + 8, y); }
     meter('SLOPE', slopeDeg, 20, 140); meter('TILT', tiltD, 15, 160);
+    var compact = W < 560;
     // HUD right
+    if (!compact) {
     var hx = W - 14 - 170; ctx.fillStyle = 'rgba(5,10,20,0.74)'; ctx.fillRect(hx, 14, 170, 70); ctx.strokeStyle = 'rgba(95,224,168,0.5)'; ctx.strokeRect(hx + 0.5, 14.5, 170, 70);
     ctx.fillStyle = '#8fa3b8'; ctx.fillText('GATES', hx + 12, 33); ctx.fillText('LAP TIME', hx + 90, 33);
     ctx.fillStyle = '#f0f5fa'; ctx.font = '600 18px "IBM Plex Sans", sans-serif'; ctx.fillText(gatesHit + '/14', hx + 12, 56); ctx.fillText(lapT.toFixed(1) + 's', hx + 90, 56);
@@ -1903,9 +1919,12 @@ function AgentCloud(canvas, opts) {
     ctx.fillStyle = '#f0f5fa'; ctx.font = '600 16px "IBM Plex Sans", sans-serif'; ctx.fillText((speed * 0.62).toFixed(1) + ' mph', hx + 12, 130);
     ctx.fillStyle = braking ? '#ff5a6a' : '#1b2a40'; ctx.beginPath(); ctx.arc(hx + 122, 125, 7, 0, 6.283); ctx.fill();
     if (braking) { ctx.globalCompositeOperation = 'lighter'; var bgl = ctx.createRadialGradient(hx + 122, 125, 0, hx + 122, 125, 16); bgl.addColorStop(0, 'rgba(255,90,106,0.9)'); bgl.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = bgl; ctx.beginPath(); ctx.arc(hx + 122, 125, 16, 0, 6.283); ctx.fill(); ctx.globalCompositeOperation = 'source-over'; }
+    }
     // steering arrows
+    if (!compact) {
     var ax = W / 2, ay = 46;
     [['LEFT', -40], ['FORWARD', 0], ['RIGHT', 40]].forEach(function (A2) { var on = cmd === A2[0]; ctx.fillStyle = on ? inp[1] : 'rgba(196,208,221,0.25)'; ctx.beginPath(); var x0 = ax + A2[1]; if (A2[1] === 0) { ctx.moveTo(x0, ay - 10); ctx.lineTo(x0 - 9, ay + 6); ctx.lineTo(x0 + 9, ay + 6); } else { var dI = A2[1] > 0 ? 1 : -1; ctx.moveTo(x0 + 10*dI, ay); ctx.lineTo(x0 - 6*dI, ay - 9); ctx.lineTo(x0 - 6*dI, ay + 9); } ctx.fill(); });
+    }
     // hazard banner
     var dl = wrapD(dist);
     ZONES.forEach(function (z) {
@@ -1913,13 +1932,24 @@ function AgentCloud(canvas, opts) {
       if (rel < 12 && rel > -10) {
         var a2 = rel > 8 ? (12 - rel) / 4 : rel < -7 ? (rel + 10) / 3 : 1, blink = rel > 0 && rel < 8 ? 0.75 + 0.25 * Math.sin(now / 120) : 1;
         ctx.globalAlpha = Math.max(0, Math.min(1, a2)) * blink;
-        var bw = 250, bx0 = W / 2 - bw / 2, by0 = 70;
+        var bw = 250, bx0 = W / 2 - bw / 2, by0 = compact ? 184 : 70;
         ctx.fillStyle = 'rgba(35,28,5,0.85)'; ctx.fillRect(bx0, by0, bw, 46); ctx.strokeStyle = '#ffc670'; ctx.lineWidth = 2; ctx.strokeRect(bx0 + 1, by0 + 1, bw - 2, 44);
         ctx.textAlign = 'center'; ctx.fillStyle = '#ffc670'; ctx.font = '700 14px "IBM Plex Sans", sans-serif'; ctx.fillText('⚠ ' + z[1] + (rel > 0 ? ' AHEAD' : ''), W / 2, by0 + 20);
         ctx.fillStyle = '#f0f5fa'; ctx.font = '500 12px "IBM Plex Sans", sans-serif'; ctx.fillText(z[2], W / 2, by0 + 37);
         ctx.globalAlpha = 1; ctx.textAlign = 'left';
       }
     });
+    // technique tip for the current input
+    (function () {
+      var tp = mp.tip, tw = 270, th = 104, tx = W - tw - 14, ty = 152, fade = Math.min(1, lapT / 1.2);
+      if (compact) return;
+      ctx.globalAlpha = fade; ctx.fillStyle = 'rgba(5,10,20,0.86)'; ctx.fillRect(tx, ty, tw, th); ctx.strokeStyle = inp[1]; ctx.lineWidth = 1.5; ctx.strokeRect(tx + 0.5, ty + 0.5, tw - 1, th - 1);
+      ctx.fillStyle = inp[1]; ctx.fillRect(tx, ty, 4, th);
+      ctx.textAlign = 'left'; ctx.font = '600 10.5px "IBM Plex Mono", monospace'; ctx.fillStyle = inp[1]; ctx.fillText(tp[0], tx + 14, ty + 18);
+      ctx.font = '500 11.5px "IBM Plex Sans", sans-serif'; ctx.fillStyle = '#f0f5fa';
+      for (var ti = 1; ti < tp.length; ti++) ctx.fillText('\u2022 ' + tp[ti], tx + 14, ty + 18 + ti * 19);
+      ctx.globalAlpha = 1;
+    })();
   }
   requestAnimationFrame(frame);
 })();
