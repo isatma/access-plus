@@ -165,7 +165,7 @@ def build():
     </section>
 
     <section class="hx" aria-labelledby="hxT">
-      <div class="hx-head"><h2 id="hxT">Head, nose and face tracking: what's available</h2><p>Independent summaries, not endorsements. Hands-on reviews and simulator scores are coming.</p></div>
+      <div class="hx-head"><h2 id="hxT">Head, nose and face tracking: what's available</h2><p>Independent summaries, not endorsements. Simulator scores are coming.</p></div>
       <div class="hx-legend"><span class="hx-tag free">Free</span><span class="hx-tag paid">Commercial</span><span class="hx-tag built">Built in</span><span class="hx-tag">Webcam</span><span class="hx-tag">Worn sensor</span></div>
       <h3 class="hx-group">Free webcam software</h3>
       <div class="hx-grid">
@@ -192,7 +192,7 @@ def build():
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>SmartNav (NaturalPoint)</h4><p>An infrared camera that follows a small reflective dot worn on the head. A long-established option; check current availability.</p><dl><dt>Clicking</dt><dd>Dwell software or switches</dd><dt>Works on</dt><dd>Windows</dd></dl><a class="hx-link" href="https://askjan.org/products/smartNAV.cfm" target="_blank" rel="noopener">Learn more &#8599;</a></article>
       </div>
 
-      <p class="hx-note">Details change often. Check the maker's site for current versions, prices and platforms. Have a product we've missed, or a review to share? Tell us on the About page.</p>
+      <p class="hx-note">Details change often. Check the maker's site for current versions, prices and platforms. Have a product we've missed? Tell us on the About page.</p>
     </section>
   </div>
 </main>
@@ -208,13 +208,13 @@ def build():
     <section class="jn-sec" id="join-everyone">
       <div class="jn-k">Open to everyone</div>
       <h2>Use it your way</h2>
-      <p>Anyone can try the simulators, read the reviews, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
+      <p>Anyone can try the simulators, explore solutions, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
       <div class="jn-acts"><a class="btn primary" href="#goals">Start with a goal</a><a class="btn" href="#simulators">Try a simulator</a></div>
     </section>
     <section class="jn-sec" id="join-participants">
       <div class="jn-k">Become a participant</div>
       <h2>We're looking for pilot participants</h2>
-      <p>If you live with quadriplegia, ALS, or another condition that limits hand use, help us shape Access+. Participants try the simulators and sensor kits, tell us what works and what doesn't, and can review the technology they use.</p>
+      <p>If you live with quadriplegia, ALS, or another condition that limits hand use, help us shape Access+. Participants try the simulators and sensor kits, and tell us what works and what doesn't.</p>
       <ul class="jn-list"><li>Take part from home, on your own schedule</li><li>Borrow sensor kits by mail</li><li>Your feedback shapes what we build next</li></ul>
       <div class="jn-acts"><a class="btn primary" href="#profile">Start a profile (sample)</a><a class="btn" href="#borrow">See the sensor kit</a></div>
     </section>
@@ -222,13 +222,13 @@ def build():
       <div class="jn-k">Therapists and clinicians</div>
       <h2>A tool for your practice</h2>
       <p>Occupational, physical and speech therapists, seating specialists and rehabilitation engineers can use Access+ with the people they serve.</p>
-      <ul class="jn-list"><li>Order sensor kits for clients and run hands-on trials</li><li>Describe a client's needs, positions and goals in a shared profile</li><li>Use simulator results as evidence for equipment and funding decisions</li><li>Follow progress over time, in person or by telehealth</li><li>Help shape the simulators and reviews</li></ul>
+      <ul class="jn-list"><li>Order sensor kits for clients and run hands-on trials</li><li>Describe a client's needs, positions and goals in a shared profile</li><li>Use simulator results as evidence for equipment and funding decisions</li><li>Follow progress over time, in person or by telehealth</li><li>Help shape the simulators and guides</li></ul>
       <div class="jn-acts"><a class="btn primary" href="#borrow">Request a kit (preview)</a><a class="btn" href="#guide-ai">Ask the AI agent</a></div>
     </section>
     <section class="jn-sec" id="join-families">
       <div class="jn-k">Families and caregivers</div>
       <h2>Help someone get started</h2>
-      <p>Set up sensors, practice together, and keep track of what's working. You can also share your experience in a community review.</p>
+      <p>Set up sensors, practice together, and keep track of what's working.</p>
       <div class="jn-acts"><a class="btn primary" href="#goals">Pick a goal together</a><a class="btn" href="#hardware">Browse solutions</a></div>
     </section>
     <section class="jn-sec" id="join-supporters">
@@ -261,7 +261,7 @@ def build():
   <div class="wrap jn-wrap">
     <section class="jn-intro"><div class="eyebrow">News and updates</div><h1>What's new on Access+</h1><p>This is an early pilot draft. Here is what has been added so far.</p></section>
     <article class="nw"><time>October 31, 2026</time><h2>A clearer path: four steps</h2><p>The site now follows four steps: your goals, your AI profile, your solutions, and try and borrow. A step bar on each page shows where you are, with a Next button.</p></article>
-    <article class="nw"><time>October 31, 2026</time><h2>Independent reviews and new guides</h2><p>New neutral guides to robotic arms, brain-computer interfaces, voice control and microphones, MotionInput, and more. Community members can sign up to review what they use, and companies can request a free, neutral listing.</p></article>
+    <article class="nw"><time>October 31, 2026</time><h2>New technology guides</h2><p>New neutral guides to robotic arms, brain-computer interfaces, voice control and microphones, MotionInput, and more.</p></article>
     <article class="nw"><time>October 31, 2026</time><h2>An AI agent that gets to know you</h2><p>Start with a goal, or describe your own, and the AI agent helps you find where to begin. It asks about your needs and hopes and builds your profile, including a gesture check. Microphone buttons let you speak instead of typing.</p></article>
     <article class="nw"><time>October 31, 2026</time><h2>Pilot draft shared for feedback</h2><p>The first version of the site is ready for comments from users, therapists and partners. Everything is a draft and open to change.</p></article>
   </div>
@@ -411,6 +411,7 @@ def build():
   var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
+    if (h === 'reviews') h = 'hardware';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
     var v = MODE[h] || (h === 'ab-data' ? 'about' : h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
@@ -424,8 +425,8 @@ def build():
     var STEP = { goals: 1, profile: 2, solutions: 3, try: 4 };
     var JT = ['', 'Your goals', 'Your AI profile', 'Your solutions', 'Try and borrow'];
     var JH = ['', '#goals', '#profile', '#software', '#try'];
-    var JN = ['', 'Next: your AI profile', 'Next: your solutions', 'Next: try and borrow', 'Next: read the reviews'];
-    var JNH = ['', '#profile', '#software', '#try', '#reviews'];
+    var JN = ['', 'Next: your AI profile', 'Next: your solutions', 'Next: try and borrow', 'Next: get involved'];
+    var JNH = ['', '#profile', '#software', '#try', '#involved'];
     var jb = document.getElementById('journey'), sn = v === 'home' ? 0 : (STEP[navKey] || 0);
     if (jb) {
       jb.hidden = !sn;

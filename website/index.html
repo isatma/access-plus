@@ -573,6 +573,9 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 480px) { .fcols { grid-template-columns: 1fr; } }
 /* get involved band */
 .gi-band { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; }
+.gi-band.gi-solo { grid-template-columns: 1fr; }
+.gi-solo .gi-btns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .gi-solo .gi-btns { grid-template-columns: 1fr 1fr; } }
 .gi-box, .rv-box { display: grid; gap: 12px; align-content: start; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
 .gi-box { border-color: #7cc4ff; }
 .gi-box h2, .rv-box h2 { font: 600 1.2em var(--body); letter-spacing: 0; text-transform: none; }
@@ -958,6 +961,7 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 560px) {
 #view-tech .ri-list { grid-template-columns: 1fr; }
 }
+#view-tech .tg-neutralnote { margin: 0; color: var(--muted); font-size: 0.92em; }
 #view-tech .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 #view-tech .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 #view-tech .tg-tag.com { color: #ffc670; }
@@ -1281,7 +1285,7 @@ footer .wrap { padding-block: 22px; }
         </div>
     </div>
 
-    <p class="promise-wide">We lend equipment, review technology independently, and help you practice. Save your results to track your progress, or share them with a research study.</p>
+    <p class="promise-wide">We lend equipment, share neutral information about technology, and help you practice. Save your results to track your progress, or share them with a research study.</p>
 
     <section class="pillars" aria-label="What Access+ is">
       <div class="pillar"><span class="pk">Open source</span><p>Designs, code, keyboard layouts and findings are shared openly so others can build on them.</p></div>
@@ -1377,18 +1381,12 @@ footer .wrap { padding-block: 22px; }
       <a class="btn primary" href="#simulators">See all simulators</a>
     </section>
 
-    <section class="gi-band" id="involved" aria-label="Get involved and reviews">
+    <section class="gi-band gi-solo" id="involved" aria-label="Get involved">
       <div class="gi-box">
         <span class="eyebrow" style="color:#7cc4ff">Get involved</span>
         <h2>Help build Access+</h2>
         <p>We're looking for pilot participants, therapists and clinicians, families and caregivers, and partners and supporters.</p>
         <div class="gi-btns"><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      </div>
-      <div class="rv-box">
-        <span class="eyebrow">Independent reviews</span>
-        <h2>Reviews you can trust</h2>
-        <p>Neutral reviews of wheelchairs, robotic arms, lifts, communication devices and software. We are not a vendor and don't sell anything.</p>
-        <a class="btn primary" href="#reviews">Read the reviews</a>
       </div>
     </section>
 
@@ -1666,10 +1664,7 @@ footer .wrap { padding-block: 22px; }
 
     <nav class="tg-tabs" aria-label="Solution types"><a href="#software" data-tab="software">Software</a><a href="#hardware" data-tab="hardware">Hardware</a><a href="#advanced" data-tab="advanced">Advanced interfaces</a></nav>
 
-    <div class="tg-neutral">
-      <b>Independent reviews</b>
-      <p>Access+ reviews critical technology the way an independent consumer guide does: wheelchairs, robotic arms, communication devices, lifts and transfer equipment, adjustable tables, trapezes and mounting, as well as software. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word. <button type="button" class="tg-joinrev" id="tg-joinRev">Become a community reviewer</button></p>
-    </div>
+    <p class="tg-neutralnote">Neutral information, not endorsements. Access+ does not sell or promote any product.</p>
 
     <div class="tg-flow" aria-label="Input, interface, device">
       <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
@@ -1680,12 +1675,6 @@ footer .wrap { padding-block: 22px; }
     </div>
 
 
-    <section class="tg-revindex" hidden aria-labelledby="tg-riT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="tg-riT">Reviewed so far</h2><p>Every listing uses the same neutral template. Community reviews are opening soon.</p></div>
-      <div class="ri-group"><h3>Hardware</h3><div class="ri-list"><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Kinova JACO assistive robotic arm</b><small>Robotic arm</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Obi robotic eating device</b><small>Eating aid</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>Permobil Omni2</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net control system</b><small>Wheelchair electronics</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net Input/Output Module</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-      <div class="ri-group"><h3>Software</h3><div class="ri-list"><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Apple Voice Control</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Dragon Professional</b><small>Voice control and dictation</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Windows Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Talon Voice</b><small>Voice, noise and eye control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Google Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="mi"><span class="tg-tag com">Commercial</span><b>MotionInput</b><small>Camera, gesture and speech control</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-      <div class="ri-group"><h3>Advanced interfaces</h3><div class="ri-list"><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Neuralink (Telepathy)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Synchron (Stentrode)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Blackrock Neurotech</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Precision Neuroscience</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Paradromics (Connexus)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-    </section>
     <section class="tg-cats-sec" aria-labelledby="tg-tgCatsT" style="display:grid;gap:18px">
       <div class="tg-head"><h2 id="tg-tgCatsT">Choose an area</h2><p>Every listing is tagged so you can tell them apart at a glance.</p></div>
       <div class="tg-tags" aria-label="Tag key"><span class="tg-tag com">Commercial</span> sold by a company <span class="tg-tag open">Open source</span> free designs or code anyone can build or change <span class="tg-tag built">Built in</span> already on your phone, computer or chair <span class="tg-tag res">Research</span> in development</div>
@@ -2061,56 +2050,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
 
-    <section aria-labelledby="tg-revT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="tg-revT">Review it yourself: join our community reviewers</h2><p>Volunteer reviews from the people who use the technology every day.</p></div>
-      <div class="tg-reg">
-        <div class="tg-rules">
-          <p style="margin:0;color:var(--desc)">Do you use a wheelchair, a robotic arm, a lift, a communication device, a switch, an app or anything else in this guide? Sign up as a volunteer reviewer and share what it's really like, so the next person can decide with real information. Family members, caregivers and therapists are welcome too.</p>
-          <ul class="tg-steps">
-            <li><b>Your experience counts.</b> Every review uses the same simple questions, so reviews can be compared.</li>
-            <li><b>Your words, unchanged.</b> Makers can't edit or remove reviews. We only remove personal details or abuse.</li>
-            <li><b>Your choice of name.</b> Post with your first name, initials, or anonymously.</li>
-            <li><b>Any way you like.</b> Type, dictate, or talk it through with the AI agent and approve the summary.</li>
-          </ul>
-        </div>
-        <form class="tg-form" id="tg-tgRev" novalidate>
-          <span class="k">Preview form · not sent anywhere yet</span>
-          <div class="row"><label>Product you use<input name="product" placeholder="For example, a lift, an arm, an app"></label><label>How long you've used it<input name="length" placeholder="Weeks, months, years"></label></div>
-          <div class="row"><label>How you control it<input name="input" placeholder="Head array, switches, voice…"></label><label>You are<select name="role"><option>A user</option><option>Family or caregiver</option><option>A therapist or clinician</option></select></label></div>
-          <div class="row"><label>Ease of setup<select name="setup"><option>Choose</option><option>Easy</option><option>Manageable</option><option>Needed a lot of help</option></select></label><label>Day-to-day reliability<select name="rel"><option>Choose</option><option>Very reliable</option><option>Mostly reliable</option><option>Often a problem</option></select></label></div>
-          <label>What does it let you do?<textarea name="does"></textarea></label>
-          <label>What would you warn someone about?<textarea name="warn"></textarea></label>
-          <button type="submit">Sign up and preview my review</button>
-          <p class="done" id="tg-tgRevDone" hidden>Thank you. This is a preview, so nothing was sent. Reviewer sign-up opens when the pilot launches.</p>
-        </form>
-      </div>
-    </section>
 
-    <section aria-labelledby="tg-regT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="tg-regT">For companies and developers: list your product</h2><p>Free, neutral listings. Nothing here is for sale.</p></div>
-      <div class="tg-reg">
-        <div class="tg-rules">
-          <p style="margin:0;color:var(--desc)">Makers of commercial, open-source and research products can register to be listed in the guide. Every product gets the same template: what it does, how you control it, what it costs, how it's funded, who uses it, and the skills someone needs to use it, linked to an Access+ simulator where there is one.</p>
-          <ul class="tg-steps">
-            <li><b>No paid placement.</b> Listings are free and ordered the same way for everyone.</li>
-            <li><b>Facts, not marketing.</b> Access+ edits submissions into the neutral template and checks them against public sources.</li>
-            <li><b>Users have the last word.</b> Reviews come from people who use the technology, and makers can't edit them.</li>
-            <li><b>Open about ties.</b> Any partnership, advising role or donated loan equipment is shown on the listing, and anyone with a tie to a product stays out of reviewing it.</li>
-          </ul>
-        </div>
-        <form class="tg-form" id="tg-tgReg" novalidate>
-          <span class="k">Preview form · not sent anywhere yet</span>
-          <div class="row"><label>Organization<input name="org" autocomplete="organization"></label><label>Product name<input name="product"></label></div>
-          <div class="row"><label>Type<select name="type"><option>Hardware</option><option>Software</option><option>Both</option></select></label><label>License<select name="lic"><option>Commercial</option><option>Open source</option><option>Research</option></select></label></div>
-          <label>What it does<textarea name="what"></textarea></label>
-          <div class="row"><label>Inputs it works with<input name="inputs" placeholder="Switches, head array, sip-and-puff…"></label><label>Price range<input name="price"></label></div>
-          <label>How people fund it<input name="funding" placeholder="Medicaid, VA, private insurance, grants…"></label>
-          <label>Skills a user needs<textarea name="skills"></textarea></label>
-          <button type="submit">Preview submission</button>
-          <p class="done" id="tg-tgRegDone" hidden>Thanks. This is a preview, so nothing was sent. Listings open when the pilot launches.</p>
-        </form>
-      </div>
-    </section>
 
     <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
   </div>
@@ -2151,7 +2091,7 @@ footer .wrap { padding-block: 22px; }
         <div class="eyebrow">About Access+</div>
         <h1 id="ab-abT">Everyone deserves a way in</h1>
         <p class="lead">Access+ is an AI-assisted skill-building platform for assistive technology. It helps people with quadriplegia, ALS, and other conditions that limit hand use find, practice, and keep the ways of controlling technology that work for their bodies.</p>
-        <p>Instead of starting from a product catalog, Access+ starts with what a person wants to do: drive their chair, answer the phone, use a computer, talk with family, make music, or call for help at night. From there, people practice in simulators, borrow sensors by mail, read independent reviews, and build a profile that carries their skills and settings from one device to the next.</p>
+        <p>Instead of starting from a product catalog, Access+ starts with what a person wants to do: drive their chair, answer the phone, use a computer, talk with family, make music, or call for help at night. From there, people practice in simulators, borrow sensors by mail, explore neutral technology guides, and build a profile that carries their skills and settings from one device to the next.</p>
       </div>
       <canvas class="ab-cloud" id="ab-abCloud" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
     </section>
@@ -2195,12 +2135,11 @@ footer .wrap { padding-block: 22px; }
     <section aria-labelledby="ab-abPrinT" style="display:grid;gap:20px">
       <div class="ab-head"><h2 id="ab-abPrinT">What we stand for</h2></div>
       <ul class="ab-prin">
-        <li><b>We don't sell anything</b><span>We lend equipment, review technology honestly, and help people practice.</span></li>
+        <li><b>We don't sell anything</b><span>We lend equipment, share neutral information about technology, and help people practice.</span></li>
         <li><b>Never trapped</b><span>There is always a way to stop or get out, even if tracking or software fails.</span></li>
         <li><b>Needs first</b><span>Start with what you want to do, not with a product.</span></li>
         <li><b>Your data is yours</b><span>Results are saved on your own computer. You choose what to share, and with whom. Camera tracking stays on your device.</span></li>
         <li><b>Open to everyone</b><span>Use it alone, with family, or with your therapist. Share what works.</span></li>
-        <li><b>No conflicts in reviews</b><span>Team members disclose any ties to companies and never review products they are connected to. No one pays for a listing or a review.</span></li>
         <li><b>Open where we can</b><span>Designs, keyboard layouts and findings are shared so others can build on them.</span></li>
       </ul>
     </section>
@@ -2212,9 +2151,8 @@ footer .wrap { padding-block: 22px; }
         <div class="ab-c open"><span class="role">Invitation</span><b>ALS and spinal cord injury organizations</b><small>Help us reach people early, when there's time to explore options.</small></div>
         <div class="ab-c open"><span class="role">Invitation</span><b>Occupational and physical therapists</b><small>Guide trials, shape the simulators, and tell us what your clients need.</small></div>
         <div class="ab-c open"><span class="role">Invitation</span><b>Universities and student teams</b><small>Take on a design project, a study, or a new simulator.</small></div>
-        <div class="ab-c open"><span class="role">Invitation</span><b>Community reviewers</b><small>Use a wheelchair, lift, arm, communication device or app? Review it for others on the Software and Hardware solutions pages.</small></div>
         <div class="ab-c open"><span class="role">Invitation</span><b>Makers and open-source developers</b><small>Share switch designs, keyboard layouts and software.</small></div>
-        <div class="ab-c open"><span class="role">Invitation</span><b>Manufacturers</b><small>Lend equipment for trials and independent reviews.</small></div>
+        <div class="ab-c open"><span class="role">Invitation</span><b>Manufacturers</b><small>Lend equipment for trials and research.</small></div>
         <div class="ab-c open"><span class="role">Invitation</span><b>Funders and foundations</b><small>Support equipment loans, research and open access.</small></div>
         <div class="ab-c open"><span class="role">Invitation</span><b>Your organization</b><small>Have an idea we haven't thought of? We'd like to hear it.</small></div>
       </div>
@@ -2228,7 +2166,7 @@ footer .wrap { padding-block: 22px; }
       </div>
       <ul>
         <li><b>Test and give feedback</b> on the website, simulators and sensor kits.</li>
-        <li><b>Lend or review</b> equipment and software.</li>
+        <li><b>Lend</b> equipment and software for trials.</li>
         <li><b>Build</b> a simulator, a sensor, a keyboard or a study.</li>
         <li><b>Connect us</b> with people who could benefit.</li>
       </ul>
@@ -2269,7 +2207,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="hx" aria-labelledby="hxT">
-      <div class="hx-head"><h2 id="hxT">Head, nose and face tracking: what's available</h2><p>Independent summaries, not endorsements. Hands-on reviews and simulator scores are coming.</p></div>
+      <div class="hx-head"><h2 id="hxT">Head, nose and face tracking: what's available</h2><p>Independent summaries, not endorsements. Simulator scores are coming.</p></div>
       <div class="hx-legend"><span class="hx-tag free">Free</span><span class="hx-tag paid">Commercial</span><span class="hx-tag built">Built in</span><span class="hx-tag">Webcam</span><span class="hx-tag">Worn sensor</span></div>
       <h3 class="hx-group">Free webcam software</h3>
       <div class="hx-grid">
@@ -2296,7 +2234,7 @@ footer .wrap { padding-block: 22px; }
         <article class="hx-card"><div class="hx-tags"><span class="hx-tag paid">Commercial</span><span class="hx-tag">Worn sensor</span></div><h4>SmartNav (NaturalPoint)</h4><p>An infrared camera that follows a small reflective dot worn on the head. A long-established option; check current availability.</p><dl><dt>Clicking</dt><dd>Dwell software or switches</dd><dt>Works on</dt><dd>Windows</dd></dl><a class="hx-link" href="https://askjan.org/products/smartNAV.cfm" target="_blank" rel="noopener">Learn more &#8599;</a></article>
       </div>
 
-      <p class="hx-note">Details change often. Check the maker's site for current versions, prices and platforms. Have a product we've missed, or a review to share? Tell us on the About page.</p>
+      <p class="hx-note">Details change often. Check the maker's site for current versions, prices and platforms. Have a product we've missed? Tell us on the About page.</p>
     </section>
   </div>
 </main>
@@ -2311,13 +2249,13 @@ footer .wrap { padding-block: 22px; }
     <section class="jn-sec" id="join-everyone">
       <div class="jn-k">Open to everyone</div>
       <h2>Use it your way</h2>
-      <p>Anyone can try the simulators, read the reviews, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
+      <p>Anyone can try the simulators, explore solutions, and talk with the AI agent. Use it alone, with family, or with your therapist. Nothing is for sale.</p>
       <div class="jn-acts"><a class="btn primary" href="#goals">Start with a goal</a><a class="btn" href="#simulators">Try a simulator</a></div>
     </section>
     <section class="jn-sec" id="join-participants">
       <div class="jn-k">Become a participant</div>
       <h2>We're looking for pilot participants</h2>
-      <p>If you live with quadriplegia, ALS, or another condition that limits hand use, help us shape Access+. Participants try the simulators and sensor kits, tell us what works and what doesn't, and can review the technology they use.</p>
+      <p>If you live with quadriplegia, ALS, or another condition that limits hand use, help us shape Access+. Participants try the simulators and sensor kits, and tell us what works and what doesn't.</p>
       <ul class="jn-list"><li>Take part from home, on your own schedule</li><li>Borrow sensor kits by mail</li><li>Your feedback shapes what we build next</li></ul>
       <div class="jn-acts"><a class="btn primary" href="#profile">Start a profile (sample)</a><a class="btn" href="#borrow">See the sensor kit</a></div>
     </section>
@@ -2325,13 +2263,13 @@ footer .wrap { padding-block: 22px; }
       <div class="jn-k">Therapists and clinicians</div>
       <h2>A tool for your practice</h2>
       <p>Occupational, physical and speech therapists, seating specialists and rehabilitation engineers can use Access+ with the people they serve.</p>
-      <ul class="jn-list"><li>Order sensor kits for clients and run hands-on trials</li><li>Describe a client's needs, positions and goals in a shared profile</li><li>Use simulator results as evidence for equipment and funding decisions</li><li>Follow progress over time, in person or by telehealth</li><li>Help shape the simulators and reviews</li></ul>
+      <ul class="jn-list"><li>Order sensor kits for clients and run hands-on trials</li><li>Describe a client's needs, positions and goals in a shared profile</li><li>Use simulator results as evidence for equipment and funding decisions</li><li>Follow progress over time, in person or by telehealth</li><li>Help shape the simulators and guides</li></ul>
       <div class="jn-acts"><a class="btn primary" href="#borrow">Request a kit (preview)</a><a class="btn" href="#guide-ai">Ask the AI agent</a></div>
     </section>
     <section class="jn-sec" id="join-families">
       <div class="jn-k">Families and caregivers</div>
       <h2>Help someone get started</h2>
-      <p>Set up sensors, practice together, and keep track of what's working. You can also share your experience in a community review.</p>
+      <p>Set up sensors, practice together, and keep track of what's working.</p>
       <div class="jn-acts"><a class="btn primary" href="#goals">Pick a goal together</a><a class="btn" href="#hardware">Browse solutions</a></div>
     </section>
     <section class="jn-sec" id="join-supporters">
@@ -2404,7 +2342,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap jn-wrap">
     <section class="jn-intro"><div class="eyebrow">News and updates</div><h1>What's new on Access+</h1><p>This is an early pilot draft. Here is what has been added so far.</p></section>
     <article class="nw"><time>October 31, 2026</time><h2>A clearer path: four steps</h2><p>The site now follows four steps: your goals, your AI profile, your solutions, and try and borrow. A step bar on each page shows where you are, with a Next button.</p></article>
-    <article class="nw"><time>October 31, 2026</time><h2>Independent reviews and new guides</h2><p>New neutral guides to robotic arms, brain-computer interfaces, voice control and microphones, MotionInput, and more. Community members can sign up to review what they use, and companies can request a free, neutral listing.</p></article>
+    <article class="nw"><time>October 31, 2026</time><h2>New technology guides</h2><p>New neutral guides to robotic arms, brain-computer interfaces, voice control and microphones, MotionInput, and more.</p></article>
     <article class="nw"><time>October 31, 2026</time><h2>An AI agent that gets to know you</h2><p>Start with a goal, or describe your own, and the AI agent helps you find where to begin. It asks about your needs and hopes and builds your profile, including a gesture check. Microphone buttons let you speak instead of typing.</p></article>
     <article class="nw"><time>October 31, 2026</time><h2>Pilot draft shared for feedback</h2><p>The first version of the site is ready for comments from users, therapists and partners. Everything is a draft and open to change.</p></article>
   </div>
@@ -2429,12 +2367,12 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <p class="fmission">This website is supported by <b>a nonprofit coalition</b> striving to help people with complex disabilities find better access to assistive technology.</p>
     <div class="fcols">
-      <div class="fcol"><h2>Explore</h2><a href="#reviews">Independent reviews</a><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
+      <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:47 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:50 UTC</span></div>
   </div>
 </footer>
 
@@ -2964,7 +2902,7 @@ function AgentCloud(canvas, opts) {
   var RULES = [
     'You are the Access+ AI agent, a calm, friendly guide on the Access+ website. You have no personal name; if asked, say you are the Access+ AI agent. Keep a warm, professional tone.',
     'Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It helps people practice and explore new ways to control the devices they depend on: power wheelchairs and other mobility aids, phones, computers, communication devices and emerging electronics.',
-    'Access+ does not sell anything. It lends sensor kits by mail, publishes independent technology reviews, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
+    'Access+ does not sell anything. It lends sensor kits by mail, shares neutral information about technology, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
     'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',
     'Simulators: robotic arm, wheelchair driving, cell phone, computer exercises (point, click, drag, type, draw); more planned for communication boards, exercise, voice, smart home and music. Profiles store goals, movement, posture and positions (bed, chair, tilt, outdoors) and calibration such as rest position, range, dead zone, smoothing, dwell time and thresholds.',
     'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
@@ -2974,7 +2912,7 @@ function AgentCloud(canvas, opts) {
     'Engage people warmly and get to know them. Early in a conversation, and whenever it fits, ask open, friendly questions about the person: what they want to be able to do, what matters most to them, what a good day looks like, what frustrates them today, their routine in bed and in the chair, who helps them, what they enjoy, and what they hope for. Ask one question at a time, listen, reflect back briefly what you heard, and build on it. Respect their pace; they can skip any question. Never pressure, and do not ask for diagnoses or private medical details unless they offer them.',
     'When you have learned something useful, summarize it in a sentence or two and suggest a next step on the site, such as building their AI profile, trying a simulator, looking at solutions, or borrowing a kit.',
     'Data and research: Access+ is a skill-building and research platform. This pilot website does not collect or store personal data. People save their assessment and practice results as files on their own computer, load them later to track progress over time, and choose whether to share them with a research institution under that study\'s consent process.',
-    'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
+    'This website is an early pilot draft: profiles, sign-in and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
     'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
   ].join('\n\n');
   var log = document.getElementById('chatLog'), form = document.getElementById('askForm'), input = document.getElementById('askInput');
@@ -3096,7 +3034,7 @@ function AgentCloud(canvas, opts) {
       head: 'Head tracking uses a webcam or a small sensor to move the pointer with head or nose movement. It suits people with good head control. You need a webcam or head mouse, software such as built-in head pointer settings, and a way to click, like a dwell click, a switch or a facial gesture. Try the gesture check to see how steady your movement is.',
       eye: 'Eye tracking moves the pointer where you look. It suits people with little or no reliable head or hand movement, including later stages of ALS. You need an eye tracker, good positioning, and calibration in each position you use. Clicking is usually by dwelling your gaze or with a switch.',
       'switch': 'Switch interfaces turn any small, reliable movement, a breath, a cheek twitch, a finger, a foot, into a button press. With scanning, one or two switches can run a computer, phone or communication device. They are reliable and low-fatigue, but slower than pointing.',
-      hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral reviews.',
+      hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral information.',
       hybrid: 'Hybrid setups combine inputs so each does what it does best: for example eye gaze to point, a switch or facial gesture to click, and voice for typing. They reduce fatigue and keep you working if one method has a bad day.',
       fatigue: 'Plan for fatigue: use the lowest-effort input for long tasks, add short breaks, slow the pointer and enlarge targets, use dwell or switch clicks instead of repeated movement, and keep a backup input for later in the day. Tracking your scores over time shows when to adjust.',
       position: 'Lying down changes your range of motion, lighting and screen angle. Keep a separate profile for bed and for the chair: re-center tracking, adjust the dead zone, and mount the screen and switches for each position. Eye tracking needs recalibration whenever your position changes.'
@@ -3333,7 +3271,7 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
 
   // ---------- the AI agent ----------
   var RULES = [
-    'You are the Access+ AI agent, a calm, friendly guide on the Access+ website (you have no personal name). Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, reviews technology and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
+    'You are the Access+ AI agent, a calm, friendly guide on the Access+ website (you have no personal name). Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, shares neutral technology information and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
     'Right now you are helping the person build their Access+ profile by conversation, so they do not have to fill in forms. Interview them warmly, ONE short question at a time, and fill in the profile from what they say. Cover, roughly in this order: what to call them; what they want to be able to do (goals); which movements and senses they have and how strong (head turn, tilt, nod, face, eyes, breath, voice, shoulders, arms, fingers; fatigue); positions they spend time in (chair, tilted, bed, outdoors); the tools they use today and how well each works; who supports them and what equipment they have. Skip anything they already told you. Never push for medical details; record only what they choose to share.',
     'Get to know the person as a whole, not just their equipment: their needs, wants and hopes, what a good day looks like, what frustrates them now, what they enjoy, who helps them, and what they would do if technology were not in the way. Reflect back briefly what you heard before your next question. They can skip any question.',
     'When they describe current tools, assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
@@ -3731,6 +3669,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
   var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
+    if (h === 'reviews') h = 'hardware';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
     var v = MODE[h] || (h === 'ab-data' ? 'about' : h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
@@ -3744,8 +3683,8 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     var STEP = { goals: 1, profile: 2, solutions: 3, try: 4 };
     var JT = ['', 'Your goals', 'Your AI profile', 'Your solutions', 'Try and borrow'];
     var JH = ['', '#goals', '#profile', '#software', '#try'];
-    var JN = ['', 'Next: your AI profile', 'Next: your solutions', 'Next: try and borrow', 'Next: read the reviews'];
-    var JNH = ['', '#profile', '#software', '#try', '#reviews'];
+    var JN = ['', 'Next: your AI profile', 'Next: your solutions', 'Next: try and borrow', 'Next: get involved'];
+    var JNH = ['', '#profile', '#software', '#try', '#involved'];
     var jb = document.getElementById('journey'), sn = v === 'home' ? 0 : (STEP[navKey] || 0);
     if (jb) {
       jb.hidden = !sn;

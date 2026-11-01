@@ -85,6 +85,7 @@ a.tg-cat { text-decoration: none; }
 .ri b { font-weight: 600; } .ri small { color: var(--desc); } .ri .ri-c { color: var(--muted); font-size: 0.82em; }
 @media (max-width: 900px) { .ri-list { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 560px) { .ri-list { grid-template-columns: 1fr; } }
+.tg-neutralnote { margin: 0; color: var(--muted); font-size: 0.92em; }
 .tg-tags { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--muted); font-size: 0.86em; }
 .tg-tag { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 7px; border: 1px solid currentColor; }
 .tg-tag.com { color: #ffc670; } .tg-tag.open { color: var(--signal); } .tg-tag.built { color: #7cc4ff; } .tg-tag.res { color: #b9a4ff; }
@@ -127,10 +128,7 @@ a.tg-cat { text-decoration: none; }
 
     <nav class="tg-tabs" aria-label="Solution types"><a href="#software" data-tab="software">Software</a><a href="#hardware" data-tab="hardware">Hardware</a><a href="#advanced" data-tab="advanced">Advanced interfaces</a></nav>
 
-    <div class="tg-neutral">
-      <b>Independent reviews</b>
-      <p>Access+ reviews critical technology the way an independent consumer guide does: wheelchairs, robotic arms, communication devices, lifts and transfer equipment, adjustable tables, trapezes and mounting, as well as software. We are not a vendor, we don't sell anything, and no company pays for a listing or a better review. Every product is described the same way, and the people who use it have the last word. <button type="button" class="tg-joinrev" id="joinRev">Become a community reviewer</button></p>
-    </div>
+    <p class="tg-neutralnote">Neutral information, not endorsements. Access+ does not sell or promote any product.</p>
 
     <div class="tg-flow" aria-label="Input, interface, device">
       <div class="st"><b>1 · Your input</b><span>What you move or say</span><small>Head, breath, eyes, a switch, voice, a mini joystick, a small arm movement</small></div>
@@ -141,12 +139,6 @@ a.tg-cat { text-decoration: none; }
     </div>
 
 
-    <section class="tg-revindex" hidden aria-labelledby="riT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="riT">Reviewed so far</h2><p>Every listing uses the same neutral template. Community reviews are opening soon.</p></div>
-      <div class="ri-group"><h3>Hardware</h3><div class="ri-list"><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Kinova JACO assistive robotic arm</b><small>Robotic arm</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="arm"><span class="tg-tag com">Commercial</span><b>Obi robotic eating device</b><small>Eating aid</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>Permobil Omni2</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net control system</b><small>Wheelchair electronics</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="hardware" data-open="wheel"><span class="tg-tag com">Commercial</span><b>R-Net Input/Output Module</b><small>Wheelchair input module</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-      <div class="ri-group"><h3>Software</h3><div class="ri-list"><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Apple Voice Control</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Dragon Professional</b><small>Voice control and dictation</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Windows Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag com">Commercial</span><b>Talon Voice</b><small>Voice, noise and eye control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="voice"><span class="tg-tag built">Built in</span><b>Google Voice Access</b><small>Voice control</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="software" data-open="mi"><span class="tg-tag com">Commercial</span><b>MotionInput</b><small>Camera, gesture and speech control</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-      <div class="ri-group"><h3>Advanced interfaces</h3><div class="ri-list"><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Neuralink (Telepathy)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Synchron (Stentrode)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Blackrock Neurotech</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Precision Neuroscience</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button><button type="button" class="ri" data-mode="advanced" data-open="bci"><span class="tg-tag res">Research</span><b>Paradromics (Connexus)</b><small>Brain-computer interface</small><span class="ri-c">Community reviews: be the first</span></button></div></div>
-    </section>
     <section class="tg-cats-sec" aria-labelledby="tgCatsT" style="display:grid;gap:18px">
       <div class="tg-head"><h2 id="tgCatsT">Choose an area</h2><p>Every listing is tagged so you can tell them apart at a glance.</p></div>
       <div class="tg-tags" aria-label="Tag key"><span class="tg-tag com">Commercial</span> sold by a company <span class="tg-tag open">Open source</span> free designs or code anyone can build or change <span class="tg-tag built">Built in</span> already on your phone, computer or chair <span class="tg-tag res">Research</span> in development</div>
@@ -522,56 +514,7 @@ a.tg-cat { text-decoration: none; }
     </section>
 
 
-    <section aria-labelledby="revT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="revT">Review it yourself: join our community reviewers</h2><p>Volunteer reviews from the people who use the technology every day.</p></div>
-      <div class="tg-reg">
-        <div class="tg-rules">
-          <p style="margin:0;color:var(--desc)">Do you use a wheelchair, a robotic arm, a lift, a communication device, a switch, an app or anything else in this guide? Sign up as a volunteer reviewer and share what it's really like, so the next person can decide with real information. Family members, caregivers and therapists are welcome too.</p>
-          <ul class="tg-steps">
-            <li><b>Your experience counts.</b> Every review uses the same simple questions, so reviews can be compared.</li>
-            <li><b>Your words, unchanged.</b> Makers can't edit or remove reviews. We only remove personal details or abuse.</li>
-            <li><b>Your choice of name.</b> Post with your first name, initials, or anonymously.</li>
-            <li><b>Any way you like.</b> Type, dictate, or talk it through with the AI agent and approve the summary.</li>
-          </ul>
-        </div>
-        <form class="tg-form" id="tgRev" novalidate>
-          <span class="k">Preview form · not sent anywhere yet</span>
-          <div class="row"><label>Product you use<input name="product" placeholder="For example, a lift, an arm, an app"></label><label>How long you've used it<input name="length" placeholder="Weeks, months, years"></label></div>
-          <div class="row"><label>How you control it<input name="input" placeholder="Head array, switches, voice…"></label><label>You are<select name="role"><option>A user</option><option>Family or caregiver</option><option>A therapist or clinician</option></select></label></div>
-          <div class="row"><label>Ease of setup<select name="setup"><option>Choose</option><option>Easy</option><option>Manageable</option><option>Needed a lot of help</option></select></label><label>Day-to-day reliability<select name="rel"><option>Choose</option><option>Very reliable</option><option>Mostly reliable</option><option>Often a problem</option></select></label></div>
-          <label>What does it let you do?<textarea name="does"></textarea></label>
-          <label>What would you warn someone about?<textarea name="warn"></textarea></label>
-          <button type="submit">Sign up and preview my review</button>
-          <p class="done" id="tgRevDone" hidden>Thank you. This is a preview, so nothing was sent. Reviewer sign-up opens when the pilot launches.</p>
-        </form>
-      </div>
-    </section>
 
-    <section aria-labelledby="regT" style="display:grid;gap:18px">
-      <div class="tg-head"><h2 id="regT">For companies and developers: list your product</h2><p>Free, neutral listings. Nothing here is for sale.</p></div>
-      <div class="tg-reg">
-        <div class="tg-rules">
-          <p style="margin:0;color:var(--desc)">Makers of commercial, open-source and research products can register to be listed in the guide. Every product gets the same template: what it does, how you control it, what it costs, how it's funded, who uses it, and the skills someone needs to use it, linked to an Access+ simulator where there is one.</p>
-          <ul class="tg-steps">
-            <li><b>No paid placement.</b> Listings are free and ordered the same way for everyone.</li>
-            <li><b>Facts, not marketing.</b> Access+ edits submissions into the neutral template and checks them against public sources.</li>
-            <li><b>Users have the last word.</b> Reviews come from people who use the technology, and makers can't edit them.</li>
-            <li><b>Open about ties.</b> Any partnership, advising role or donated loan equipment is shown on the listing, and anyone with a tie to a product stays out of reviewing it.</li>
-          </ul>
-        </div>
-        <form class="tg-form" id="tgReg" novalidate>
-          <span class="k">Preview form · not sent anywhere yet</span>
-          <div class="row"><label>Organization<input name="org" autocomplete="organization"></label><label>Product name<input name="product"></label></div>
-          <div class="row"><label>Type<select name="type"><option>Hardware</option><option>Software</option><option>Both</option></select></label><label>License<select name="lic"><option>Commercial</option><option>Open source</option><option>Research</option></select></label></div>
-          <label>What it does<textarea name="what"></textarea></label>
-          <div class="row"><label>Inputs it works with<input name="inputs" placeholder="Switches, head array, sip-and-puff…"></label><label>Price range<input name="price"></label></div>
-          <label>How people fund it<input name="funding" placeholder="Medicaid, VA, private insurance, grants…"></label>
-          <label>Skills a user needs<textarea name="skills"></textarea></label>
-          <button type="submit">Preview submission</button>
-          <p class="done" id="tgRegDone" hidden>Thanks. This is a preview, so nothing was sent. Listings open when the pilot launches.</p>
-        </form>
-      </div>
-    </section>
 
     <p class="tg-note">Product names are trademarks of their makers and are listed for information only. Check details with the manufacturer or your supplier.</p>
   </div>

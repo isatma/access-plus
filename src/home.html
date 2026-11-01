@@ -573,6 +573,9 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 480px) { .fcols { grid-template-columns: 1fr; } }
 /* get involved band */
 .gi-band { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; }
+.gi-band.gi-solo { grid-template-columns: 1fr; }
+.gi-solo .gi-btns { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 860px) { .gi-solo .gi-btns { grid-template-columns: 1fr 1fr; } }
 .gi-box, .rv-box { display: grid; gap: 12px; align-content: start; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
 .gi-box { border-color: #7cc4ff; }
 .gi-box h2, .rv-box h2 { font: 600 1.2em var(--body); letter-spacing: 0; text-transform: none; }
@@ -733,7 +736,7 @@ footer .wrap { padding-block: 22px; }
         </div>
     </div>
 
-    <p class="promise-wide">We lend equipment, review technology independently, and help you practice. Save your results to track your progress, or share them with a research study.</p>
+    <p class="promise-wide">We lend equipment, share neutral information about technology, and help you practice. Save your results to track your progress, or share them with a research study.</p>
 
     <section class="pillars" aria-label="What Access+ is">
       <div class="pillar"><span class="pk">Open source</span><p>Designs, code, keyboard layouts and findings are shared openly so others can build on them.</p></div>
@@ -829,18 +832,12 @@ footer .wrap { padding-block: 22px; }
       <a class="btn primary" href="#simulators">See all simulators</a>
     </section>
 
-    <section class="gi-band" id="involved" aria-label="Get involved and reviews">
+    <section class="gi-band gi-solo" id="involved" aria-label="Get involved">
       <div class="gi-box">
         <span class="eyebrow" style="color:#7cc4ff">Get involved</span>
         <h2>Help build Access+</h2>
         <p>We're looking for pilot participants, therapists and clinicians, families and caregivers, and partners and supporters.</p>
         <div class="gi-btns"><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      </div>
-      <div class="rv-box">
-        <span class="eyebrow">Independent reviews</span>
-        <h2>Reviews you can trust</h2>
-        <p>Neutral reviews of wheelchairs, robotic arms, lifts, communication devices and software. We are not a vendor and don't sell anything.</p>
-        <a class="btn primary" href="#reviews">Read the reviews</a>
       </div>
     </section>
 
@@ -853,12 +850,12 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <p class="fmission">This website is supported by <b>a nonprofit coalition</b> striving to help people with complex disabilities find better access to assistive technology.</p>
     <div class="fcols">
-      <div class="fcol"><h2>Explore</h2><a href="#reviews">Independent reviews</a><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
+      <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:47 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:50 UTC</span></div>
   </div>
 </footer>
 
@@ -1388,7 +1385,7 @@ function AgentCloud(canvas, opts) {
   var RULES = [
     'You are the Access+ AI agent, a calm, friendly guide on the Access+ website. You have no personal name; if asked, say you are the Access+ AI agent. Keep a warm, professional tone.',
     'Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It helps people practice and explore new ways to control the devices they depend on: power wheelchairs and other mobility aids, phones, computers, communication devices and emerging electronics.',
-    'Access+ does not sell anything. It lends sensor kits by mail, publishes independent technology reviews, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
+    'Access+ does not sell anything. It lends sensor kits by mail, shares neutral information about technology, and offers custom browser simulators. People can use it on their own, with family or friends, or with occupational and physical therapists.',
     'Sensor kits can include: an interface box that makes any sensor act as a keyboard, mouse or gamepad; breath switch (sip-and-puff, switched or proportional); EMG muscle switch; adaptive button switches; twitch switch; sound switch; proximity switch; head tilt sensor (IMU); eye tracking equipment.',
     'Simulators: robotic arm, wheelchair driving, cell phone, computer exercises (point, click, drag, type, draw); more planned for communication boards, exercise, voice, smart home and music. Profiles store goals, movement, posture and positions (bed, chair, tilt, outdoors) and calibration such as rest position, range, dead zone, smoothing, dwell time and thresholds.',
     'Other input methods you can discuss: eye gaze (commercial and free options such as OptiKey), head and nose tracking (such as MotionInput, Project Gameface, head mice), mouth joysticks, voice control, EMG, and open-source DIY builds.',
@@ -1398,7 +1395,7 @@ function AgentCloud(canvas, opts) {
     'Engage people warmly and get to know them. Early in a conversation, and whenever it fits, ask open, friendly questions about the person: what they want to be able to do, what matters most to them, what a good day looks like, what frustrates them today, their routine in bed and in the chair, who helps them, what they enjoy, and what they hope for. Ask one question at a time, listen, reflect back briefly what you heard, and build on it. Respect their pace; they can skip any question. Never pressure, and do not ask for diagnoses or private medical details unless they offer them.',
     'When you have learned something useful, summarize it in a sentence or two and suggest a next step on the site, such as building their AI profile, trying a simulator, looking at solutions, or borrowing a kit.',
     'Data and research: Access+ is a skill-building and research platform. This pilot website does not collect or store personal data. People save their assessment and practice results as files on their own computer, load them later to track progress over time, and choose whether to share them with a research institution under that study\'s consent process.',
-    'This website is an early pilot draft: profiles, sign-in, reviews and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
+    'This website is an early pilot draft: profiles, sign-in and most simulators are not built yet, so never say you saved, changed or started something. Instead, say what the person could try and where on the site it will live.',
     'How to answer: plain, warm, practical language. Under 120 words unless asked for more. Plain text only, no markdown, no headings; short numbered steps are fine. Ask one short question when you need to know more about the person. Do not diagnose or give medical advice; for health, skin, breathing, swallowing or seating concerns, suggest checking with their therapist or clinician. Say so when you are not sure.'
   ].join('\n\n');
   var log = document.getElementById('chatLog'), form = document.getElementById('askForm'), input = document.getElementById('askInput');
@@ -1520,7 +1517,7 @@ function AgentCloud(canvas, opts) {
       head: 'Head tracking uses a webcam or a small sensor to move the pointer with head or nose movement. It suits people with good head control. You need a webcam or head mouse, software such as built-in head pointer settings, and a way to click, like a dwell click, a switch or a facial gesture. Try the gesture check to see how steady your movement is.',
       eye: 'Eye tracking moves the pointer where you look. It suits people with little or no reliable head or hand movement, including later stages of ALS. You need an eye tracker, good positioning, and calibration in each position you use. Clicking is usually by dwelling your gaze or with a switch.',
       'switch': 'Switch interfaces turn any small, reliable movement, a breath, a cheek twitch, a finger, a foot, into a button press. With scanning, one or two switches can run a computer, phone or communication device. They are reliable and low-fatigue, but slower than pointing.',
-      hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral reviews.',
+      hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral information.',
       hybrid: 'Hybrid setups combine inputs so each does what it does best: for example eye gaze to point, a switch or facial gesture to click, and voice for typing. They reduce fatigue and keep you working if one method has a bad day.',
       fatigue: 'Plan for fatigue: use the lowest-effort input for long tasks, add short breaks, slow the pointer and enlarge targets, use dwell or switch clicks instead of repeated movement, and keep a backup input for later in the day. Tracking your scores over time shows when to adjust.',
       position: 'Lying down changes your range of motion, lighting and screen angle. Keep a separate profile for bed and for the chair: re-center tracking, adjust the dead zone, and mount the screen and switches for each position. Eye tracking needs recalibration whenever your position changes.'
