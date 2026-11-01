@@ -1,5 +1,13 @@
 # Access+ changelog
 
+## Version 0.9 · Pilot draft · 2026-11-01 02:18 UTC
+
+- Top menu is just Home, the four steps and Sign in
+- New footer: Explore, Get involved, About, Contact us, and the nonprofit coalition statement
+- Get involved and Independent reviews band on the home page
+- New News and updates page and Contact us page (preview form)
+- Microphone buttons on AI agent boxes; compact goals with search
+
 ## Version 0.8 · Pilot draft · 2026-11-01 01:36 UTC
 
 - Site reorganized as a four-step journey: 1 Your goals, 2 Your AI profile, 3 Your solutions, 4 Try and borrow

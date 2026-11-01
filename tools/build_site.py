@@ -256,7 +256,47 @@ def build():
   </div>
 </main>
 '''
-    join_css = '''#view-try .try-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    news_html = '''<main id="view-news" class="view" hidden>
+  <div class="wrap jn-wrap">
+    <section class="jn-intro"><div class="eyebrow">News and updates</div><h1>What's new on Access+</h1><p>This is an early pilot draft. Here is what has been added so far.</p></section>
+    <article class="nw"><time>October 31, 2026</time><h2>A clearer path: four steps</h2><p>The site now follows four steps: your goals, your AI profile, your solutions, and try and borrow. A step bar on each page shows where you are, with a Next button.</p></article>
+    <article class="nw"><time>October 31, 2026</time><h2>Independent reviews and new guides</h2><p>New neutral guides to robotic arms, brain-computer interfaces, voice control and microphones, MotionInput, and more. Community members can sign up to review what they use, and companies can request a free, neutral listing.</p></article>
+    <article class="nw"><time>October 31, 2026</time><h2>An AI agent that gets to know you</h2><p>Start with a goal, or describe your own, and the AI agent helps you find where to begin. It asks about your needs and hopes and builds your profile, including a gesture check. Microphone buttons let you speak instead of typing.</p></article>
+    <article class="nw"><time>October 31, 2026</time><h2>Pilot draft shared for feedback</h2><p>The first version of the site is ready for comments from users, therapists and partners. Everything is a draft and open to change.</p></article>
+  </div>
+</main>
+'''
+    contact_html = '''<main id="view-contact" class="view" hidden>
+  <div class="wrap jn-wrap">
+    <section class="jn-intro"><div class="eyebrow">Contact us</div><h1>Get in touch</h1><p>Questions, ideas, or want to take part? Send us a note.</p></section>
+    <form class="ct-form" id="ctForm" novalidate>
+      <span class="ct-k">Preview form · not sent anywhere yet</span>
+      <div class="ct-row"><label>Your name<input name="name" autocomplete="name"></label><label>Email<input name="email" type="email" autocomplete="email"></label></div>
+      <label>I am<select name="role"><option>Someone who uses assistive technology</option><option>A family member or caregiver</option><option>A therapist or clinician</option><option>From an organization or company</option><option>Other</option></select></label>
+      <label>Message<textarea name="msg" rows="5"></textarea></label>
+      <button class="btn primary" type="submit">Send message</button>
+      <p class="ct-done" id="ctDone" hidden>Thank you. This is a preview, so nothing was sent yet. Messages will open when the pilot launches.</p>
+    </form>
+  </div>
+</main>
+'''
+    join_css = '''#view-news .jn-wrap, #view-contact .jn-wrap { gap: 22px !important; }
+#view-news .jn-intro, #view-contact .jn-intro { display: grid; gap: 12px; max-width: 52em; }
+#view-news .jn-intro h1, #view-contact .jn-intro h1 { font-size: 1.8em; line-height: 1.25; }
+#view-news .jn-intro p, #view-contact .jn-intro p { margin: 0; color: var(--desc); }
+#view-news .nw { display: grid; gap: 6px; padding: 20px 22px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); max-width: 52em; }
+#view-news .nw time { font: 500 0.7em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+#view-news .nw h2 { font: 600 1.1em var(--body); letter-spacing: 0; text-transform: none; }
+#view-news .nw p { margin: 0; color: var(--desc); }
+#view-contact .ct-form { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 22px; border: 1px dashed #ffc670; max-width: 46em; }
+#view-contact .ct-k { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+#view-contact label { display: grid; gap: 6px; color: var(--muted); font-size: 0.92em; }
+#view-contact input, #view-contact select, #view-contact textarea { width: 100%; min-width: 0; box-sizing: border-box; font: inherit; font-size: 1.05em; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); padding: 10px 12px; min-height: 48px; }
+#view-contact .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+#view-contact .btn { justify-self: start; }
+#view-contact .ct-done { margin: 0; color: #ffc670; }
+@media (max-width: 640px) { #view-contact .ct-row { grid-template-columns: 1fr; } }
+#view-try .try-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 #view-try .try-card { display: grid; gap: 10px; align-content: start; padding: 26px; min-height: 220px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); color: var(--ink); text-decoration: none; }
 #view-try .try-card:hover { border-color: var(--signal); }
 #view-try .try-card h2 { font: 600 1.3em var(--body); letter-spacing: 0; text-transform: none; }
@@ -343,15 +383,7 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside" href="#reviews" data-route="reviews">Reviews</a>'
-           '<a href="#about" data-route="about">About</a>'
-           '<a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
-    nav += ('</div>\n  <div class="wrap navrow aud"><nav class="nav2" aria-label="Who it is for"><span class="nav2-k">Get involved:</span>'
-            '<a href="#join-everyone" data-route="join-everyone">Open to everyone</a>'
-            '<a href="#join-participants" data-route="join-participants">Become a participant</a>'
-            '<a href="#join-clinicians" data-route="join-clinicians">Therapists and clinicians</a>'
-            '<a href="#join-families" data-route="join-families">Families and caregivers</a>'
-            '<a href="#join-supporters" data-route="join-supporters">Partners and supporters</a></nav>')
+           '<a class="navsign navside" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if 'id="journey"' not in home:
         home = home.replace('</header>', '</header>\n<div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>', 1)
@@ -366,8 +398,8 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html + '<!-- views:end -->\n'
-    home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer>', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer>', home, count=1, flags=re.S)
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html + news_html + contact_html + '<!-- views:end -->\n'
+    home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
@@ -375,7 +407,7 @@ def build():
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     var MODE = { software: 'tech', hardware: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
@@ -430,6 +462,7 @@ def build():
     else window.scrollTo({ top: 0, behavior: smooth });
   });
   try { AgentCloud(document.getElementById('gxFace')); } catch (e) {}
+  var ctf = document.getElementById('ctForm'); if (ctf) ctf.addEventListener('submit', function (e) { e.preventDefault(); document.getElementById('ctDone').hidden = false; });
   // microphone buttons
   (function () {
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
