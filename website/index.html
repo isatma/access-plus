@@ -744,6 +744,58 @@ footer .wrap { padding-block: 22px; }
 @media (prefers-reduced-motion: reduce) {
 #view-profile .card.flash { animation: none; }
 }
+#view-profile .mx-wrap { display: block !important; padding-top: 0 !important; }
+#view-profile .mx { display: grid; gap: 18px; margin-top: 0; padding-top: 28px; border-top: 1px solid var(--line-hi); }
+#view-profile .mx-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 28px; }
+#view-profile .mx-head h2 { font-size: 1.35em; margin: 4px 0 6px; }
+#view-profile .mx-head p { margin: 0; color: var(--desc); max-width: 44em; }
+#view-profile .mx-eyebrow { font: 500 0.68em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+#view-profile .mx-file { display: flex; flex-wrap: wrap; gap: 10px; }
+#view-profile .mx-open { position: relative; overflow: hidden; cursor: pointer; }
+#view-profile .mx-open input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+#view-profile .mx-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .mx-act { min-height: 48px; padding: 0 16px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 500 0.92em var(--body); cursor: pointer; }
+#view-profile .mx-act[aria-pressed="true"] { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+#view-profile .mx-actnote { margin: -6px 0 0; color: var(--desc); font-size: 0.92em; min-height: 1.4em; }
+#view-profile .mx-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+#view-profile .mx-card { display: grid; gap: 10px; align-content: start; padding: 16px 18px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+#view-profile .mx-card.dim { opacity: 0.38; }
+#view-profile .mx-card h3 { font: 600 1.05em var(--body); display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+#view-profile .mx-card h3 small { font: 500 0.62em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-profile .mx-set { margin: 0; display: grid; grid-template-columns: 1fr auto; gap: 3px 10px; font-size: 0.86em; }
+#view-profile .mx-set dt { color: var(--muted); }
+#view-profile .mx-set dd { margin: 0; color: var(--ink); text-align: right; }
+#view-profile .mx-kpi { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+#view-profile .mx-kpi .lbl { font-size: 0.82em; color: var(--desc); }
+#view-profile .mx-kpi .val { font: 600 1.15em var(--body); }
+#view-profile .mx-kpi .delta { font-size: 0.78em; }
+#view-profile .mx-up { color: var(--signal); }
+#view-profile .mx-down { color: #ff8a8a; }
+#view-profile .mx-flat { color: var(--muted); }
+#view-profile .mx-spark { width: 100%; height: 38px; display: block; }
+#view-profile .mx-card .btn { justify-self: start; min-height: 44px; font-size: 0.78em; }
+#view-profile .mx-focus { display: grid; gap: 16px; padding: 20px; border: 1px solid var(--signal); background: rgba(95,224,168,0.04); }
+#view-profile .mx-fhead { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+#view-profile .mx-fhead h3 { font: 600 1.25em var(--body); margin-top: 4px; }
+#view-profile .mx-metrics { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .mx-metric { min-height: 44px; padding: 0 14px; border: 1px solid var(--line-hi); background: transparent; color: var(--desc); font: 500 0.88em var(--body); cursor: pointer; }
+#view-profile .mx-metric[aria-pressed="true"] { border-color: var(--signal); color: var(--ink); background: var(--signal-soft); }
+#view-profile .mx-chart svg { width: 100%; height: auto; max-height: 300px; display: block; }
+#view-profile .mx-fcols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+#view-profile .mx-insight, #view-profile .mx-plan { display: grid; gap: 8px; align-content: start; padding: 14px 16px; border: 1px solid var(--line-hi); background: var(--panel); }
+#view-profile .mx-insight p { margin: 0; color: var(--desc); }
+#view-profile .mx-plan ul { margin: 0; padding-left: 18px; color: var(--desc); display: grid; gap: 4px; }
+#view-profile .mx-goal { display: grid; gap: 6px; font-size: 0.86em; color: var(--muted); }
+#view-profile .mx-bar { height: 8px; background: var(--line); }
+#view-profile .mx-bar i { display: block; height: 100%; width: 0; background: var(--signal); transition: width .4s ease; }
+#view-profile .mx-note { margin: 0; color: var(--muted); font-size: 0.84em; }
+@media (max-width: 960px) {
+#view-profile .mx-grid { grid-template-columns: 1fr 1fr; }
+#view-profile .mx-fcols { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+#view-profile .mx-grid { grid-template-columns: 1fr; }
+}
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1528,6 +1580,27 @@ footer .wrap { padding-block: 22px; }
       </div>
       <p class="note" id="pf-aceNote">The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
     </aside>
+  </div>
+  <div class="wrap mx-wrap">
+    <section class="mx" aria-labelledby="pf-mxT">
+      <div class="mx-head">
+        <div><span class="mx-eyebrow">Sample data · Jordan R. is a made-up person</span><h2 id="pf-mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
+        <div class="mx-file"><button class="btn primary" type="button" id="pf-mxSave">Save my profile</button><label class="btn mx-open">Open saved profile<input type="file" id="pf-mxOpen" accept=".json,application/json"></label></div>
+      </div>
+      <div class="mx-acts" role="group" aria-label="Activity profiles" id="pf-mxActs"></div>
+      <p class="mx-actnote" id="pf-mxActNote"></p>
+      <div class="mx-grid" id="pf-mxGrid"></div>
+      <div class="mx-focus" id="pf-mxFocus" hidden>
+        <div class="mx-fhead"><div><span class="mx-eyebrow" id="pf-mxFKind">Focus</span><h3 id="pf-mxFTitle"></h3></div><button class="btn" type="button" id="pf-mxFClose">Close focus</button></div>
+        <div class="mx-metrics" id="pf-mxMetrics" role="group" aria-label="Choose a measure"></div>
+        <div class="mx-chart" id="pf-mxChart" role="img"></div>
+        <div class="mx-fcols">
+          <div class="mx-insight"><b>What the AI agent noticed</b><p id="pf-mxInsight"></p></div>
+          <div class="mx-plan"><b>Practice plan</b><ul id="pf-mxPlan"></ul><div class="mx-goal"><span id="pf-mxGoalTxt"></span><div class="mx-bar"><i id="pf-mxGoalBar"></i></div></div><button class="btn primary" type="button" id="pf-mxSetGoal">Make this my focus skill</button></div>
+        </div>
+        <p class="mx-note">Suggestions are explained and never applied automatically. Review changes with your therapist when they affect safety, seating or driving.</p>
+      </div>
+    </section>
   </div>
 </main>
 <main id="view-keyboards" class="view" hidden>
@@ -2361,7 +2434,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:37 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:54 UTC</span></div>
   </div>
 </footer>
 
@@ -3343,6 +3416,142 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     note.textContent = 'The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.';
   }).catch(function () { setBusy(false); form.hidden = true; note.textContent = 'The AI agent isn’t available here. The profile shown is an example.'; });
 
+  })();
+
+  // ---------- skills, settings and trends (sample) ----------
+  (function () {
+    var grid = __ID('mxGrid'); if (!grid) return;
+    var MONTHS = ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov'];
+    var M = {
+      dwell: { title: 'Dwell selection', kind: 'Eye gaze and head pointer', settings: [['Dwell time', '850 ms'], ['Dwell zone', '42 px'], ['Smallest reliable target', '48 px'], ['Recalibrate', 'each position']],
+        metrics: {
+          dwellms: { label: 'Dwell time (ms)', unit: 'ms', data: [600, 620, 680, 720, 790, 850], better: 'down' },
+          accidental: { label: 'Accidental selections per minute', unit: '/min', data: [0.4, 0.5, 0.5, 0.8, 1.1, 1.3], better: 'down' },
+          abandoned: { label: 'Abandoned dwells per minute', unit: '/min', data: [1.2, 1.1, 1.4, 1.6, 1.9, 2.2], better: 'down' },
+          target: { label: 'Smallest reliable target (px)', unit: 'px', data: [36, 36, 40, 42, 44, 48], better: 'down' }
+        }, key: 'dwellms',
+        insight: 'Dwell time has crept up from 600 to 850 ms over five months, and accidental selections are rising, mostly after 2 pm. That pattern often means fatigue later in the day rather than a tracking problem.',
+        plan: ['Keep 850 ms in the morning; try an afternoon profile at 950 ms with larger targets', 'Five-minute target drill three times a week', 'Recalibrate after every position change'] },
+      head: { title: 'Head and nose tracking', kind: 'Webcam', settings: [['Sensitivity', '1.4'], ['Smoothing', 'Medium'], ['Dead zone', '6 px'], ['Weaker direction', 'Left']],
+        metrics: {
+          accuracy: { label: 'Pointing accuracy (%)', unit: '%', data: [91, 92, 92, 93, 94, 94], better: 'up' },
+          speed: { label: 'Targets per minute', unit: '/min', data: [18, 19, 20, 21, 21, 22], better: 'up' },
+          left: { label: 'Left-side misses per 50 targets', unit: '', data: [6, 6, 5, 5, 4, 4], better: 'down' }
+        }, key: 'accuracy',
+        insight: 'Head tracking is steady and improving. Left-side misses are falling with practice. This is a good primary pointer while dwell is getting harder.',
+        plan: ['Use head tracking for long computer sessions', 'Add a left-side reach drill once a week'] },
+      switch: { title: 'Switches and scanning', kind: 'Cheek switch and head array', settings: [['Switches', '2 (cheek, head left)'], ['Scan rate', '1.2 s'], ['Pattern', 'Row-column'], ['Accept delay', '150 ms']],
+        metrics: {
+          scan: { label: 'Comfortable scan rate (s)', unit: 's', data: [1.0, 1.0, 1.1, 1.1, 1.2, 1.2], better: 'down' },
+          missed: { label: 'Missed presses per 50', unit: '', data: [2, 2, 3, 3, 3, 4], better: 'down' },
+          endurance: { label: 'Minutes before errors rise', unit: 'min', data: [35, 34, 33, 30, 28, 27], better: 'up' }
+        }, key: 'endurance',
+        insight: 'Switch use is reliable but endurance is drifting down slowly. Scanning is a strong backup if eye gaze or head tracking has a bad day.',
+        plan: ['Practice the scanning keyboard ten minutes twice a week', 'Keep the switch mounted in bed as well as on the chair'] },
+      voice: { title: 'Voice control', kind: 'Dictation and commands', settings: [['Software', 'Built-in voice control'], ['Microphone', 'Headset boom'], ['Best time', 'Morning'], ['Not usable', 'On calls, when tired']],
+        metrics: {
+          recog: { label: 'Command recognition (%)', unit: '%', data: [95, 94, 93, 91, 90, 88], better: 'up' },
+          dict: { label: 'Dictation accuracy (%)', unit: '%', data: [93, 93, 91, 90, 89, 87], better: 'up' },
+          volume: { label: 'Speaking volume (dB at mic)', unit: 'dB', data: [68, 67, 66, 65, 64, 63], better: 'up' }
+        }, key: 'recog',
+        insight: 'Recognition is falling slowly along with speaking volume. This is a good time to start voice banking and to pair voice with a switch so typing does not depend on voice alone.',
+        plan: ['Talk with your speech therapist about voice banking', 'Add a microphone closer to the mouth', 'Use a facial gesture to start and stop dictation'] },
+      aac: { title: 'Communication', kind: 'Speech-generating app', settings: [['Access', 'Eye gaze, switch backup'], ['Buttons per page', '24'], ['Prediction', 'On'], ['Voice banking', 'Not started']],
+        metrics: {
+          wpm: { label: 'Words per minute', unit: 'wpm', data: [9, 9, 10, 10, 11, 11], better: 'up' },
+          pred: { label: 'Words chosen from prediction (%)', unit: '%', data: [30, 34, 38, 41, 44, 47], better: 'up' }
+        }, key: 'wpm',
+        insight: 'Communication speed is rising as you lean on word prediction more. Keep practicing with the communication partner who joins you most often.',
+        plan: ['Add ten personal phrases you use daily', 'Practice a two-minute conversation drill weekly'] },
+      arm: { title: 'Mobility and robotic arm', kind: 'Power chair and arm simulator', settings: [['Drive input', 'Chin joystick'], ['Backup', 'Head array'], ['Speed profile', 'Indoor 3'], ['Arm control', 'Control panel']],
+        metrics: {
+          armscore: { label: 'Arm skill test score', unit: '', data: [41, 46, 50, 55, 58, 62], better: 'up' },
+          drive: { label: 'Driving course time (s)', unit: 's', data: [142, 135, 130, 126, 124, 120], better: 'down' }
+        }, key: 'armscore',
+        insight: 'Arm skill scores have climbed from 41 to 62. That steady progress is useful evidence for an arm evaluation and funding request.',
+        plan: ['Two skill tests a week, saved as files', 'Try the pill bottle and phone tasks next'] }
+    };
+    var ACTS = [
+      { id: 'all', name: 'All skills', note: 'Everything in one place.', methods: ['dwell', 'head', 'switch', 'voice', 'aac', 'arm'] },
+      { id: 'computer', name: 'Computer work', note: 'Seated: head tracking to point, dwell to click, voice for typing in the morning. In bed: eye gaze with larger targets.', methods: ['head', 'dwell', 'voice', 'switch'] },
+      { id: 'talk', name: 'Communication', note: 'Eye gaze on the speech app, with a cheek switch for scanning when tired.', methods: ['aac', 'dwell', 'switch', 'voice'] },
+      { id: 'phone', name: 'Phone', note: 'Switch control with two switches, voice for calls and texts when it works well.', methods: ['switch', 'voice', 'head'] },
+      { id: 'drive', name: 'Driving the chair', note: 'Chin joystick indoors, head array as a backup. Practice in the simulator first.', methods: ['arm', 'switch'] },
+      { id: 'eat', name: 'Eating and drinking', note: 'Robotic arm practice with the control panel, scored by the skill test.', methods: ['arm'] },
+      { id: 'play', name: 'Gaming and music', note: 'Head tracking and facial gestures as game controls, breath for music.', methods: ['head', 'switch'] }
+    ];
+    var cur = { act: 'all', method: null, metric: null }, goals = {};
+
+    function trend(m) { var d = m.data, a = d[0], b = d[d.length - 1], ch = b - a; var good = m.better === 'up' ? ch > 0 : ch < 0; if (Math.abs(ch) < 1e-9) return ['flat', '→ steady']; return [good ? 'up' : 'down', (ch > 0 ? '↑ ' : '↓ ') + (Math.abs(ch) % 1 ? Math.abs(ch).toFixed(1) : Math.abs(ch)) + (m.unit && m.unit !== '%' ? ' ' + m.unit : m.unit) + ' since ' + MONTHS[0]]; }
+    function spark(data, cls) {
+      var w = 200, h = 38, min = Math.min.apply(null, data), max = Math.max.apply(null, data), r = max - min || 1;
+      var pts = data.map(function (v, i) { return [i * (w - 8) / (data.length - 1) + 4, h - 5 - (v - min) / r * (h - 10)]; });
+      var col = cls === 'up' ? '#5fe0a8' : cls === 'down' ? '#ff8a8a' : '#8fa3b8';
+      return '<svg class="mx-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="' + col + '" stroke-width="2" points="' + pts.map(function (p) { return p.join(','); }).join(' ') + '"/><circle cx="' + pts[pts.length - 1][0] + '" cy="' + pts[pts.length - 1][1] + '" r="3" fill="' + col + '"/></svg>';
+    }
+    function renderActs() {
+      var box = __ID('mxActs'); box.innerHTML = '';
+      ACTS.forEach(function (a) { var b = document.createElement('button'); b.type = 'button'; b.className = 'mx-act'; b.textContent = a.name; b.setAttribute('aria-pressed', a.id === cur.act ? 'true' : 'false'); b.addEventListener('click', function () { cur.act = a.id; renderActs(); renderGrid(); }); box.appendChild(b); });
+      var A = ACTS.filter(function (a) { return a.id === cur.act; })[0]; __ID('mxActNote').textContent = A.id === 'all' ? '' : 'Activity profile: ' + A.note;
+    }
+    function renderGrid() {
+      var A = ACTS.filter(function (a) { return a.id === cur.act; })[0]; grid.innerHTML = '';
+      var order = A.methods.concat(Object.keys(M).filter(function (k) { return A.methods.indexOf(k) < 0; }));
+      order.forEach(function (k) {
+        var m = M[k], km = m.metrics[m.key], t = trend(km), on = A.methods.indexOf(k) >= 0;
+        var c = document.createElement('article'); c.className = 'mx-card' + (on ? '' : ' dim');
+        c.innerHTML = '<h3></h3><dl class="mx-set"></dl><div class="mx-kpi"><span class="lbl"></span><span class="val"></span></div>' + spark(km.data, t[0]) + '<span class="delta mx-' + t[0] + '"></span><button class="btn" type="button">Focus on this skill</button>';
+        c.querySelector('h3').innerHTML = ''; var h = c.querySelector('h3'); h.appendChild(document.createTextNode(m.title)); var sm = document.createElement('small'); sm.textContent = m.kind; h.appendChild(sm);
+        var dl = c.querySelector('dl'); m.settings.forEach(function (s) { var dt = document.createElement('dt'); dt.textContent = s[0]; var dd = document.createElement('dd'); dd.textContent = s[1]; dl.appendChild(dt); dl.appendChild(dd); });
+        c.querySelector('.lbl').textContent = km.label; c.querySelector('.val').textContent = km.data[km.data.length - 1] + (km.unit === '%' ? '%' : '');
+        c.querySelector('.delta').textContent = t[1] + (goals[k] ? ' · focus skill' : '');
+        c.querySelector('button').addEventListener('click', function () { openFocus(k); });
+        grid.appendChild(c);
+      });
+    }
+    function chart(m) {
+      var W = 640, H = 240, pl = 48, pr = 16, pt = 16, pb = 34, d = m.data;
+      var lo = Math.min.apply(null, d), hi = Math.max.apply(null, d), span = (hi - lo) || Math.abs(hi) * 0.2 || 1, raw = span / 3, mag = Math.pow(10, Math.floor(Math.log10(raw))), st = [1, 2, 2.5, 5, 10].map(function (q) { return q * mag; }).filter(function (q) { return q >= raw; })[0]; var min = Math.floor(lo / st) * st, max = Math.ceil(hi / st) * st; if (max === min) max += st;
+      var x = function (i) { return pl + i * (W - pl - pr) / (d.length - 1); }, y = function (v) { return pt + (max - v) / (max - min) * (H - pt - pb); };
+      var t = trend(m), col = t[0] === 'up' ? '#5fe0a8' : t[0] === 'down' ? '#ff8a8a' : '#8fa3b8';
+      var g = '';
+      for (var v = min; v <= max + 1e-9; v += st) { var yy = y(v); g += '<line x1="' + pl + '" x2="' + (W - pr) + '" y1="' + yy + '" y2="' + yy + '" stroke="#22324a" stroke-width="1"/><text x="' + (pl - 8) + '" y="' + (yy + 4) + '" text-anchor="end" font-size="11" fill="#8fa3b8">' + (st < 1 ? v.toFixed(1) : Math.round(v)) + '</text>'; }
+      d.forEach(function (v, i) { g += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle" font-size="11" fill="#8fa3b8">' + MONTHS[i] + '</text>'; });
+      var path = d.map(function (v, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); }).join(' ');
+      g += '<path d="' + path + '" fill="none" stroke="' + col + '" stroke-width="2.5"/>';
+      d.forEach(function (v, i) { g += '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="' + (i === d.length - 1 ? 5 : 3.5) + '" fill="' + col + '"><title>' + MONTHS[i] + ': ' + v + ' ' + m.unit + '</title></circle>'; });
+      g += '<text x="' + (x(d.length - 1) - 8) + '" y="' + (y(d[d.length - 1]) - 10) + '" text-anchor="end" font-size="12" font-weight="600" fill="#e6edf5">' + d[d.length - 1] + ' ' + m.unit + '</text>';
+      return '<svg viewBox="0 0 ' + W + ' ' + H + '">' + g + '</svg>';
+    }
+    function openFocus(k, metric) {
+      var m = M[k]; cur.method = k; cur.metric = metric || m.key;
+      var f = __ID('mxFocus'); f.hidden = false;
+      __ID('mxFKind').textContent = 'Focus skill · ' + m.kind;
+      __ID('mxFTitle').textContent = m.title;
+      var mb = __ID('mxMetrics'); mb.innerHTML = '';
+      Object.keys(m.metrics).forEach(function (id) { var b = document.createElement('button'); b.type = 'button'; b.className = 'mx-metric'; b.textContent = m.metrics[id].label; b.setAttribute('aria-pressed', id === cur.metric ? 'true' : 'false'); b.addEventListener('click', function () { openFocus(k, id); }); mb.appendChild(b); });
+      var mm = m.metrics[cur.metric], ch = __ID('mxChart'); ch.innerHTML = chart(mm); ch.setAttribute('aria-label', mm.label + ' from ' + MONTHS[0] + ' to ' + MONTHS[MONTHS.length - 1] + ': ' + mm.data.join(', '));
+      __ID('mxInsight').textContent = m.insight;
+      var pl = __ID('mxPlan'); pl.innerHTML = ''; m.plan.forEach(function (p) { var li = document.createElement('li'); li.textContent = p; pl.appendChild(li); });
+      var g = goals[k] || 0; __ID('mxGoalTxt').textContent = goals[k] ? 'Focus skill: practice sessions this week ' + g + ' of 5' : 'Not a focus skill yet';
+      __ID('mxGoalBar').style.width = (g / 5 * 100) + '%';
+      __ID('mxSetGoal').textContent = goals[k] ? 'Log a practice session' : 'Make this my focus skill';
+      if (!metric) f.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    __ID('mxFClose').addEventListener('click', function () { __ID('mxFocus').hidden = true; });
+    __ID('mxSetGoal').addEventListener('click', function () { var k = cur.method; goals[k] = Math.min(5, (goals[k] || 0) + (goals[k] ? 1 : 1)); openFocus(k, cur.metric); renderGrid(); });
+    __ID('mxSave').addEventListener('click', function () {
+      var data = JSON.stringify({ app: 'Access+ ALS profile', version: 1, saved: new Date().toISOString(), note: 'Sample data', activity: cur.act, focusSkills: goals, months: MONTHS, methods: M }, null, 2);
+      var name = 'access-plus-profile-' + new Date().toISOString().slice(0, 10) + '.json';
+      function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+      if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+    });
+    __ID('mxOpen').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      var r = new FileReader(); r.onload = function () { try { var o = JSON.parse(r.result); if (o.methods) { Object.keys(o.methods).forEach(function (k) { if (M[k]) M[k] = o.methods[k]; }); } if (o.focusSkills) goals = o.focusSkills; if (o.activity) cur.act = o.activity; renderActs(); renderGrid(); __ID('mxActNote').textContent = 'Opened ' + f.name + '.'; } catch (err) { __ID('mxActNote').textContent = 'That file could not be read as an Access+ profile.'; } };
+      r.readAsText(f);
+    });
+    renderActs(); renderGrid();
   })();
 
 (function () {
