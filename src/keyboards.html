@@ -59,6 +59,12 @@
 .kb-note { margin: 0; color: var(--muted); font-size: 0.85em; }
 @media (max-width: 900px) { .kb-grid, .kb-share { grid-template-columns: 1fr; } .kb-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 520px) { .kb-steps { grid-template-columns: 1fr; } }
+.kb-vids { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.kb-vids a { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; min-height: 64px; padding: 10px 14px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; background: color-mix(in srgb, var(--panel) 94%, transparent); }
+.kb-vids a:hover { border-color: var(--signal); }
+.kb-vids .ico { width: 44px; height: 32px; display: grid; place-items: center; background: #c4302b; color: #fff; border-radius: 6px; }
+.kb-vids small { display: block; color: var(--muted); font-size: 0.8em; }
+@media (max-width: 900px) { .kb-vids { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -92,6 +98,15 @@
         <a class="kb-link" href="https://www.github.com/Hizoul/optikey-boardlayout" target="_blank" rel="noopener"><span class="kb-src">GitHub · Hizoul</span><b>Board layout editor</b><small>Design or rearrange an OptiKey keyboard visually in the browser.</small></a>
         <a class="kb-link" href="https://github.com/kmcnaught/optikey-keyboard-scripts" target="_blank" rel="noopener"><span class="kb-src">GitHub · kmcnaught</span><b>Keyboard scripts</b><small>Scripts that generate and edit dynamic keyboards, for makers.</small></a>
         <a class="kb-link" href="https://www.github.com/SpecialEffect/EyeMine/wiki/Customising-keyboards" target="_blank" rel="noopener"><span class="kb-src">SpecialEffect · EyeMine</span><b>EyeMine gaming keyboards</b><small>OptiKey-based keyboards for playing Minecraft with eye gaze, and how to customize them.</small></a>
+      </div>
+    </section>
+
+    <section aria-labelledby="kbVidT" style="display:grid;gap:18px">
+      <div class="kb-head"><h2 id="kbVidT">Watch: OptiKey in action</h2><p>About OptiKey: free and open source (GPL 3), for Windows, works with eye trackers, a webcam or a mouse. Created by Julius Sweetland, inspired by his aunt's motor neuron disease (ALS).</p></div>
+      <div class="kb-vids">
+        <a href="https://www.youtube.com/watch?v=HLkyORh7vKk" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>OptiKey introduction video<small>Typing, speaking and using the mouse with your eyes · YouTube</small></span></a>
+        <a href="https://learn.microsoft.com/en-us/shows/developer-stories/optikey" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>The story behind OptiKey<small>Microsoft Developer Stories, with creator Julius Sweetland</small></span></a>
+        <a href="https://www.youtube.com/results?search_query=OptiKey+eye+gaze+keyboard" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>More OptiKey videos<small>YouTube search: tutorials and user demos</small></span></a>
       </div>
     </section>
 

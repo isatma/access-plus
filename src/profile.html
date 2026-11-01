@@ -204,6 +204,10 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 .mx-focus { background: #f4fbf7; }
 .col .btn, .mx .btn { color: var(--ink); border-color: var(--line-hi); }
 .col .btn.primary, .mx .btn.primary { background: var(--signal); color: #fff; border-color: var(--signal); }
+.sample { display: none !important; }
+.example { display: none !important; }
+.card.hl .pf-title { font: 700 1.9em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); border-left: 6px solid var(--signal); padding-left: 12px; line-height: 1.1; }
+.card.hl { padding-top: 22px; }
 </style>
 </head>
 <body>
@@ -253,7 +257,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 
       <section class="card hl" id="c-who" aria-labelledby="whoName">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-          <span class="eyebrow">My profile</span><span class="example" id="exTag">Sample profile</span>
+          <span class="eyebrow pf-title">My Profile</span><span class="example" id="exTag">Sample profile</span>
         </div>
         <div class="who">
           <div class="avatar" id="initials" aria-hidden="true">SU</div>
@@ -305,7 +309,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   <div class="wrap mx-wrap">
     <section class="mx" aria-labelledby="mxT">
       <div class="mx-head">
-        <div><span class="mx-eyebrow">Sample data · example profile, not a real person</span><h2 id="mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
+        <div><span class="mx-eyebrow">Your profile</span><h2 id="mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
         <div class="mx-file"><button class="btn primary" type="button" id="mxSave">Save my profile</button><label class="btn mx-open">Open saved profile<input type="file" id="mxOpen" accept=".json,application/json"></label></div>
       </div>
       <div class="mx-acts" role="group" aria-label="Activity profiles" id="mxActs"></div>
@@ -325,7 +329,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:48 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:54 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.

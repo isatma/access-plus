@@ -849,6 +849,10 @@ footer .wrap { padding-block: 22px; }
 #view-profile .mx-focus { background: #f4fbf7; }
 #view-profile .col .btn, #view-profile .mx .btn { color: var(--ink); border-color: var(--line-hi); }
 #view-profile .col .btn.primary, #view-profile .mx .btn.primary { background: var(--signal); color: #fff; border-color: var(--signal); }
+#view-profile .sample { display: none !important; }
+#view-profile .example { display: none !important; }
+#view-profile .card.hl .pf-title { font: 700 1.9em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); border-left: 6px solid var(--signal); padding-left: 12px; line-height: 1.1; }
+#view-profile .card.hl { padding-top: 22px; }
 #view-find .fd-wrap { gap: 28px !important; }
 #view-find .fd-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 #view-find .fd-hero { position: relative; display: grid; gap: 14px; padding: 46px 0 34px; text-align: center; justify-items: center; border-bottom: 1px solid var(--line-hi); overflow: hidden; }
@@ -1079,6 +1083,14 @@ footer .wrap { padding-block: 22px; }
 }
 @media (max-width: 520px) {
 #view-keyboards .kb-steps { grid-template-columns: 1fr; }
+}
+#view-keyboards .kb-vids { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+#view-keyboards .kb-vids a { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; min-height: 64px; padding: 10px 14px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; background: color-mix(in srgb, var(--panel) 94%, transparent); }
+#view-keyboards .kb-vids a:hover { border-color: var(--signal); }
+#view-keyboards .kb-vids .ico { width: 44px; height: 32px; display: grid; place-items: center; background: #c4302b; color: #fff; border-radius: 6px; }
+#view-keyboards .kb-vids small { display: block; color: var(--muted); font-size: 0.8em; }
+@media (max-width: 900px) {
+#view-keyboards .kb-vids { grid-template-columns: 1fr; }
 }
 #view-tech .tg-wrap { gap: 40px !important; }
 #view-tech .tg-intro { display: grid; gap: 12px; max-width: 52em; }
@@ -1827,7 +1839,7 @@ footer .wrap { padding-block: 22px; }
 
       <section class="card hl" id="pf-c-who" aria-labelledby="pf-whoName">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
-          <span class="eyebrow">My profile</span><span class="example" id="pf-exTag">Sample profile</span>
+          <span class="eyebrow pf-title">My Profile</span><span class="example" id="pf-exTag">Sample profile</span>
         </div>
         <div class="pf-who">
           <div class="avatar" id="pf-initials" aria-hidden="true">SU</div>
@@ -1879,7 +1891,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap mx-wrap">
     <section class="mx" aria-labelledby="pf-mxT">
       <div class="mx-head">
-        <div><span class="mx-eyebrow">Sample data · example profile, not a real person</span><h2 id="pf-mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
+        <div><span class="mx-eyebrow">Your profile</span><h2 id="pf-mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
         <div class="mx-file"><button class="btn primary" type="button" id="pf-mxSave">Save my profile</button><label class="btn mx-open">Open saved profile<input type="file" id="pf-mxOpen" accept=".json,application/json"></label></div>
       </div>
       <div class="mx-acts" role="group" aria-label="Activity profiles" id="pf-mxActs"></div>
@@ -1993,6 +2005,15 @@ footer .wrap { padding-block: 22px; }
       </div>
     </section>
 
+    <section aria-labelledby="kb-kbVidT" style="display:grid;gap:18px">
+      <div class="kb-head"><h2 id="kb-kbVidT">Watch: OptiKey in action</h2><p>About OptiKey: free and open source (GPL 3), for Windows, works with eye trackers, a webcam or a mouse. Created by Julius Sweetland, inspired by his aunt's motor neuron disease (ALS).</p></div>
+      <div class="kb-vids">
+        <a href="https://www.youtube.com/watch?v=HLkyORh7vKk" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>OptiKey introduction video<small>Typing, speaking and using the mouse with your eyes · YouTube</small></span></a>
+        <a href="https://learn.microsoft.com/en-us/shows/developer-stories/optikey" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>The story behind OptiKey<small>Microsoft Developer Stories, with creator Julius Sweetland</small></span></a>
+        <a href="https://www.youtube.com/results?search_query=OptiKey+eye+gaze+keyboard" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>More OptiKey videos<small>YouTube search: tutorials and user demos</small></span></a>
+      </div>
+    </section>
+
     <section class="kb-share" aria-labelledby="kb-kbShareT">
       <div style="display:grid;gap:10px">
         <h3 id="kb-kbShareT">Share your keyboard</h3>
@@ -2063,6 +2084,7 @@ footer .wrap { padding-block: 22px; }
           <div class="tg-cats" role="group" aria-label="Hardware areas">
             <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
             <button class="tg-cat ready" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Guide ready</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+            <button class="tg-cat ready" type="button" data-cat="ctrl" aria-pressed="false"><span class="st8">Guide ready · Catalog</span><b>Game controllers</b><small>Mouth, breath and switch-operated controllers for consoles and PCs</small></button>
             <button class="tg-cat ready" type="button" data-cat="eyes" aria-pressed="false"><span class="st8">Guide ready · Hardware and software</span><b>Eye tracking</b><small>Screen-mounted trackers and low-cost DIY eye-tracking glasses</small></button>
             <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches</b><small>Button, breath, EMG and proximity switches, commercial and open source</small></button>
             <button class="tg-cat" type="button" data-cat="aacdev" aria-pressed="false"><span class="st8">Coming next</span><b>Communication devices</b><small>Speech-generating devices, eye-gaze communicators, mounts</small></button>
@@ -2448,6 +2470,12 @@ footer .wrap { padding-block: 22px; }
             <dt>Why it matters</dt><dd>Commercial eye trackers can cost thousands of dollars. A low-cost, open design lets people try eye control early, keep a spare, and lets volunteer makers and researchers adapt it</dd>
           </dl>
           <div class="tg-links"><a href="https://github.com/JEOresearch/EyeTracker" target="_blank" rel="noopener">EyeTracker on GitHub &#8599;</a><a href="https://www.hackster.io/news/ar-and-vr-researcher-jason-orlosky-gets-gaze-tracking-working-in-python-for-under-20-f8de7b7de5e9" target="_blank" rel="noopener">Article (Hackster) &#8599;</a><a href="https://sites.google.com/site/jeoindex/ccslab" target="_blank" rel="noopener">ARVR Lab &#8599;</a></div>
+          <span class="cat-h">Watch</span>
+          <div class="cat-media">
+            <a href="https://www.youtube.com/results?search_query=Jason+Orlosky+eye+tracker" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>Build and demo videos<small>YouTube search: Jason Orlosky eye tracker</small></span></a>
+            <a href="https://youtu.be/WoGK_Xf9cdU" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>EyeShadows: fast gaze selection<small>Research video from his lab, 2024</small></span></a>
+            <a href="https://youtu.be/Jr8me5uMl-c" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>ARVR Lab introduction<small>Augusta University</small></span></a>
+          </div>
         </article>
         <article class="tg-item">
           <span class="kind">Two kinds of eye tracker</span>
@@ -2470,7 +2498,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="tg-panel" id="tg-panel-play" hidden aria-labelledby="tg-playT">
-      <div class="tg-head"><h2 id="tg-playT">Gaming and music</h2><p>Instruments and games you can play with your eyes, head, breath or switches.</p></div>
+      <div class="tg-head"><h2 id="tg-playT">Gaming and music</h2><p>Instruments and games you can play with your eyes, head, breath or switches. For game controllers such as the QuadStick, see Hardware.</p></div>
       <div class="cat-std"><b>Catalog listing</b> Every entry uses the same layout: what it is, at a glance, watch and read, evidence, insights, and community comments.</div>
       <div class="cat-list">
         <article class="cat-card" id="tg-cat-eyeharp">
@@ -2503,6 +2531,80 @@ footer .wrap { padding-block: 22px; }
             <ul><li>A 2016 study found it allows expressive performance, with a learning curve similar to an average traditional instrument; playing with the eyes was more tiring and harder to keep in tempo than with the hands. Testers were non-disabled musicians.<cite><a class="inline-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4915213" target="_blank" rel="noopener">Vamvakousis and Ramirez, Frontiers in Psychology, 2016 &#8599;</a></cite></li></ul>
             <span class="cat-h">Insights</span>
             <ul><li>Users grew from 192 in 2021 to 485 in 2024, with schools and care centers in Greece and Spain and pilots in other countries, including the US<cite><a class="inline-link" href="https://zeroproject.org/view/project/54c09fbb-2b54-f011-877b-6045bddd5972" target="_blank" rel="noopener">Zero Project &#8599;</a></cite></li><li>Newer work connects EyeHarp to robotic arms that play real instruments, such as the piano</li><li>Disabled users train as instructors, in a train-the-trainer model</li></ul>
+            <div class="cat-comments"><b>Community comments</b><span>Coming later. Comments from people who use it, and from therapists, will appear here once sign-in, moderation and consent are in place.</span></div>
+          </div>
+        </article>
+        <article class="cat-card" id="tg-cat-magicflute">
+          <div class="cat-main">
+            <div class="cat-top">
+              <span class="kind">Hardware · music · breath and head movement</span>
+              <h3>Magic Flute</h3>
+              <span class="by">My Breath My Music, a non-profit foundation in the Netherlands, founded in 2008 by respiratory therapist Ruud van der Wel</span>
+              <div class="cat-tags"><span class="tg-tag com">Commercial</span><span class="tg-tag built">Non-profit maker</span></div>
+            </div>
+            <p>An electronic wind instrument played with no hands. It sits on a microphone or camera stand; you blow into it and tilt your head to move the flute up or down, which changes the note. Blowing harder plays louder. A control box with a display offers 128 sounds, including saxophone, trumpet and electric guitar, and it can connect to synthesizers or MIDI computers.</p>
+            <dl class="cat-glance">
+              <dt>Works with</dt><dd>Breath and small head movements; scale selection makes it easy to jam and improvise</dd>
+              <dt>Mounting</dt><dd>Microphone or camera stand with a pivoting bracket; optional handles</dd>
+              <dt>Also from them</dt><dd>EyePlayMusic, a free instrument for children who use eye gaze; the Magic Switch for switch players; GroovTubes for breathing exercises with music apps; adapted instruments and teaching methods</dd>
+              <dt>Cost</dt><dd>Price on request from sellers</dd>
+              <dt>Good for</dt><dd>People with little or no arm movement; also used for breathing exercises</dd>
+              <dt>Website</dt><dd><a class="inline-link" href="https://www.mybreathmymusic.com/" target="_blank" rel="noopener">mybreathmymusic.com &#8599;</a></dd>
+            </dl>
+            <p class="cat-dated">Details from public listings and articles, checked November 2026. Confirm details with the foundation.</p>
+          </div>
+          <div class="cat-side">
+            <span class="cat-h">Watch and read</span>
+            <div class="cat-media">
+              <a href="https://www.mybreathmymusic.com/en/magic-flute" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9835;</span><span>Magic Flute<small>mybreathmymusic.com</small></span></a>
+              <a href="https://cdn.shopify.com/s/files/1/0753/1197/2628/files/magic_flute_manual.pdf" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Magic Flute manual<small>PDF</small></span></a>
+              <a href="https://www.eastersealstech.com/2019/04/29/create-your-own-music-with-the-magic-flute" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Create your own music with the Magic Flute<small>Easterseals Tech, 2019</small></span></a>
+              <a href="https://www.ahk.nl/lectoraten/educatie/trainingen-en-evenementen/my-music-ability/my-breath-my-music/" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>About My Breath My Music<small>Amsterdam University of the Arts</small></span></a>
+              
+            </div>
+            <span class="cat-h">Insights</span>
+            <ul><li>The foundation grew out of therapy: its founder began using electronic wind instruments with patients in 2000<cite><a class="inline-link" href="https://www.ahk.nl/lectoraten/educatie/trainingen-en-evenementen/my-music-ability/my-breath-my-music/" target="_blank" rel="noopener">AHK &#8599;</a></cite></li><li>Players have performed in concerts, including with professional musicians</li><li>Several of their instruments can be played with a switch, so they fit people who use switch access elsewhere</li></ul>
+            <div class="cat-comments"><b>Community comments</b><span>Coming later, once sign-in, moderation and consent are in place.</span></div>
+          </div>
+        </article>
+      </div>
+      <p class="tg-safe">Listings are neutral information, not endorsements, and are not paid for.</p>
+    </section>
+
+    <section class="tg-panel" id="tg-panel-ctrl" hidden aria-labelledby="tg-ctrlT">
+      <div class="tg-head"><h2 id="tg-ctrlT">Game controllers</h2><p>Hardware that replaces a hand-held game controller. For adapters and hubs, see Bridges and interfaces.</p></div>
+      <div class="cat-std"><b>Catalog listing</b> Every entry uses the same layout: what it is, at a glance, watch and read, evidence, insights, and community comments.</div>
+      <div class="cat-list">
+        <article class="cat-card" id="tg-cat-quadstick">
+          <div class="cat-main">
+            <div class="cat-top">
+              <span class="kind">Hardware · game controller · mouth and breath</span>
+              <h3>QuadStick</h3>
+              <span class="by">QuadStick, Great Falls, Montana. A leading mouth-operated game controller since 2014.</span>
+              <div class="cat-tags"><span class="tg-tag com">Proprietary</span></div>
+            </div>
+            <p>A game controller you work entirely with your mouth: a mouthpiece joystick, sip-and-puff sensors and a lip sensor stand in for sticks, buttons and triggers. Profiles map each game's controls to soft and hard sips and puffs, and extra switches or joysticks can be plugged in.</p>
+            <dl class="cat-glance">
+              <dt>Models</dt><dd><b>FPS:</b> precise joystick, four sip-and-puff sensors and a lip sensor. <b>Original:</b> same sensors and software, less expensive joystick. <b>Singleton:</b> joystick and one sip-and-puff sensor, for operating a PC</dd>
+              <dt>Works with</dt><dd>PlayStation 3 and 4, Nintendo Switch, Windows and Mac directly; Xbox and PlayStation 5 through a USB adapter; also Android and iPhone or iPad</dd>
+              <dt>Cost</dt><dd>The FPS was $549.99 in a 2021 review, with a mounting arm kit about $105 extra. Check the maker's shop for current prices</dd>
+              <dt>Features</dt><dd>Stores game profiles; one sip can press several buttons; latching holds a button for you; community-shared profiles</dd>
+              <dt>Good for</dt><dd>People with good lip and breath control and little or no hand use who want full control of complex games. A lighter joystick spring suits limited lip strength</dd>
+              <dt>Website</dt><dd><a class="inline-link" href="https://quadstick.com/" target="_blank" rel="noopener">quadstick.com &#8599;</a></dd>
+            </dl>
+            <p class="cat-dated">Details from the QuadStick website, AbleGamers and New Mobility, checked November 2026. Prices and compatibility change; confirm with the maker.</p>
+          </div>
+          <div class="cat-side">
+            <span class="cat-h">Watch and read</span>
+            <div class="cat-media">
+              <a href="https://quadstick.com/videos" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>QuadStick videos<small>Gameplay and setup, on quadstick.com</small></span></a>
+              <a href="https://quadstick.s3.amazonaws.com/documents/user_manual/um/fps_models_.htm" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>User guide<small>FPS models</small></span></a>
+              <a href="https://newmobility.com/the-quadstick-fps" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Review by a quadriplegic gamer<small>New Mobility, 2021</small></span></a>
+              <a href="https://ablegamers.org/knowledge-base/quadstick/" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>AbleGamers knowledge base<small>Setup tips and adapters</small></span></a>
+              
+            </div>
+            <span class="cat-h">Insights</span>
+            <ul><li>A C5-6 quadriplegic reviewer found it reliable with no significant glitches, but hard to learn: telling soft and hard sips apart took practice, and he kept a cheat sheet<cite><a class="inline-link" href="https://newmobility.com/the-quadstick-fps" target="_blank" rel="noopener">New Mobility &#8599;</a></cite></li><li>Capable enough for shooters, sports and online role-playing games; profiles for each game make switching quick<cite><a class="inline-link" href="https://ablegamers.org/knowledge-base/quadstick/" target="_blank" rel="noopener">AbleGamers &#8599;</a></cite></li><li>Mount it on a flexible arm on the wheelchair, desk or bedside table</li><li>Practice the sip-and-puff controls in the simulators first</li></ul>
             <div class="cat-comments"><b>Community comments</b><span>Coming later. Comments from people who use it, and from therapists, will appear here once sign-in, moderation and consent are in place.</span></div>
           </div>
         </article>
@@ -2886,7 +2988,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:48 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:54 UTC</span></div>
   </div>
 </footer>
 
