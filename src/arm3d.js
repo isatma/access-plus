@@ -540,11 +540,13 @@
     // ---------- render loop ----------
     var last = performance.now(), visible = true, t0 = last;
     function resize() {
-      var w = host.clientWidth || 400, h = Math.round(w / 1.6);
+      var ar = parseFloat(getComputedStyle(host).getPropertyValue('--ar')) || 1.6, w = host.clientWidth || 400, h = Math.round(w / ar);
       renderer.setSize(w, h, false); renderer.domElement.style.width = '100%'; renderer.domElement.style.height = 'auto';
-      camera.aspect = w / h; camera.updateProjectionMatrix();
+      camera.aspect = w / h; camera.fov = (w / h) < 1.45 ? 40 : 38;
+      if ((w / h) < 1.45) { camera.position.set(-0.1, 4.1, 6.3); camera.lookAt(-0.5, 0.35, -0.25); } else { camera.position.copy(CAM.pos); camera.lookAt(CAM.look); }
+      camera.updateProjectionMatrix();
     }
-    window.addEventListener('resize', resize); resize();
+    window.addEventListener('resize', resize); resize(); setTimeout(resize, 300);
     try { new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(host); } catch (e) {}
     function frame(now) {
       requestAnimationFrame(frame);

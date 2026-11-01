@@ -270,6 +270,23 @@ footer { padding-bottom: 90px; }
 .feature .viz { border-bottom: 1px solid var(--line-hi); background: linear-gradient(180deg, var(--signal-soft), transparent); }
 .feature svg { display: block; width: 100%; height: auto; max-width: 100%; }
 .feature .body { display: grid; gap: 10px; padding: 22px; align-content: start; }
+@media (min-width: 1100px) {
+  .hero { grid-template-columns: minmax(0, 0.82fr) minmax(0, 2.18fr); gap: 28px; }
+  .hero .intro h1 { font-size: 1.95em; }
+  #arm3d { --ar: 1.3; }
+  .hero-head canvas { width: 88px; height: 88px; }
+  .hero-head { gap: 14px; }
+  #guide { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr; }
+  #guide > .modes-top { grid-column: 1; grid-row: 1; }
+  #guide > .stage3d { grid-column: 1; grid-row: 2; }
+  #guide > #armSel { grid-column: 1; grid-row: 3; align-self: start; }
+  #guide > .body { grid-column: 2; grid-row: 1 / span 3; border-left: 1px solid var(--line-hi); padding: 18px; }
+  #guide > .body h3 { font-size: 1.15em; }
+  #guide .armctl .btn, #guide .armctl2 .btn { font-size: 0.75em; }
+  #guide .mp { min-height: 54px; font-size: 0.8em; }
+  #guide .armctl2 { grid-template-columns: 1fr 1fr; }
+  #guide .armctl2 .testbtn { grid-column: span 2; }
+}
 .feature h3 { font-size: 1.35em; }
 .feature p, .sim p { margin: 0; color: var(--desc); }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -331,7 +348,7 @@ footer { padding-bottom: 90px; }
 .has3d .stage3d .viz::after { display: none; }
 .arm3d:focus-visible { box-shadow: inset 0 0 0 3px var(--signal); }
 .armctl2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
-.mpanel { margin: 0; padding: 14px 18px; border: 0; border-bottom: 1px solid var(--signal); background: rgba(95,224,168,0.05); display: grid; gap: 12px; }
+.mpanel { margin: 4px 0 0; padding: 14px; border: 1px solid var(--signal); background: rgba(95,224,168,0.05); display: grid; gap: 12px; }
 .mp-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .mp-head b { font-weight: 600; }
 .mp-head .btn { min-height: 44px; font-size: 0.75em; }
@@ -1148,39 +1165,39 @@ footer .wrap { padding-block: 22px; }
             </svg>
           </div></div>
           <p class="armsel armsel-top" id="armSel" aria-live="polite">Step 1, your goals: Pick what you want to do, like drink, eat, call for help or play.</p>
-          <div class="mpanel" id="armPanel" hidden role="group" aria-label="Manual control panel">
-              <div class="mp-head"><b>Manual control panel</b><button class="btn" id="mpClose" type="button">Close panel</button></div>
-              <div class="mp-grid">
-                <button class="btn mp" type="button" data-ax="2" data-s="1">&uarr; Up</button>
-                <button class="btn mp" type="button" data-ax="1" data-s="1">Reach out</button>
-                <button class="btn mp mp-grip" type="button" data-ax="4" data-s="1">Pick up</button>
-                <button class="btn mp" type="button" data-ax="0" data-s="-1">&larr; Left</button>
-                <button class="btn mp mp-stop" type="button" data-stop="1">Stop</button>
-                <button class="btn mp" type="button" data-ax="0" data-s="1">Right &rarr;</button>
-                <button class="btn mp" type="button" data-ax="2" data-s="-1">&darr; Down</button>
-                <button class="btn mp" type="button" data-ax="1" data-s="-1">Reach in</button>
-                <button class="btn mp mp-grip" type="button" data-ax="4" data-s="-1">Let go</button>
-              </div>
-              <div class="mp-wrist"><span>Wrist</span><button class="btn mp" type="button" data-ax="3" data-s="-1">&#8634; Turn</button><button class="btn mp" type="button" data-ax="3" data-s="1">Turn &#8635;</button></div>
-              <p class="mp-note">Hold a button to keep moving. Works with a mouse, nose or eye tracking, or switch scanning.</p>
-            </div>
-            <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual control</button><button class="btn testbtn" id="armTest" type="button">Skill test</button></div>
-            <div class="armres" id="armRes" hidden role="status">
-              <div class="armres-top"><div class="armres-score"><b data-r="score">0</b><span>out of 100</span></div><dl><div><dt>Time</dt><dd data-r="time"></dd></div><div><dt>Inputs</dt><dd data-r="inputs"></dd></div><div><dt>Grip actions</dt><dd data-r="switch"></dd></div></dl></div>
-              <ol class="armres-trials" data-r="trials"></ol>
-              <p class="armres-note">Your results stay on this device. Save them as a file to compare over time or share with your therapist or a research study.</p>
-              <div class="armres-acts"><button class="btn primary" id="armSave" type="button">Save my results</button><button class="btn" id="armAgain" type="button">Try again</button></div>
-            </div>
 
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>The arm reaches across the table in 3D. Navigate: it grasps a tile to open that page. Pick things up: it brings a drink to the mouth, the phone to the ear, the pill bottle to the tray, or presses a button, confirming before it moves near the face. Manual control opens a control panel, and the Skill test scores your reach and grasp. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Reach, grasp and navigate in 3D. Choose a tile or object and press Go, or open Manual control. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
               <button class="btn" id="armRight" type="button" aria-label="Turn arm right">Right &rarr;</button>
             </div>
+            <div class="mpanel" id="armPanel" hidden role="group" aria-label="Manual control panel">
+                <div class="mp-head"><b>Manual control panel</b><button class="btn" id="mpClose" type="button">Close panel</button></div>
+                <div class="mp-grid">
+                  <button class="btn mp" type="button" data-ax="2" data-s="1">&uarr; Up</button>
+                  <button class="btn mp" type="button" data-ax="1" data-s="1">Reach out</button>
+                  <button class="btn mp mp-grip" type="button" data-ax="4" data-s="1">Pick up</button>
+                  <button class="btn mp" type="button" data-ax="0" data-s="-1">&larr; Left</button>
+                  <button class="btn mp mp-stop" type="button" data-stop="1">Stop</button>
+                  <button class="btn mp" type="button" data-ax="0" data-s="1">Right &rarr;</button>
+                  <button class="btn mp" type="button" data-ax="2" data-s="-1">&darr; Down</button>
+                  <button class="btn mp" type="button" data-ax="1" data-s="-1">Reach in</button>
+                  <button class="btn mp mp-grip" type="button" data-ax="4" data-s="-1">Let go</button>
+                </div>
+                <div class="mp-wrist"><span>Wrist</span><button class="btn mp" type="button" data-ax="3" data-s="-1">&#8634; Turn</button><button class="btn mp" type="button" data-ax="3" data-s="1">Turn &#8635;</button></div>
+                <p class="mp-note">Hold a button to keep moving. Works with a mouse, nose or eye tracking, or switch scanning.</p>
+              </div>
+              <div class="armctl2" id="armCtl2" hidden><button class="btn stopbtn" id="armStop" type="button">Stop</button><button class="btn" id="armManual" type="button" aria-pressed="false">Manual control</button><button class="btn testbtn" id="armTest" type="button">Skill test</button></div>
+              <div class="armres" id="armRes" hidden role="status">
+                <div class="armres-top"><div class="armres-score"><b data-r="score">0</b><span>out of 100</span></div><dl><div><dt>Time</dt><dd data-r="time"></dd></div><div><dt>Inputs</dt><dd data-r="inputs"></dd></div><div><dt>Grip actions</dt><dd data-r="switch"></dd></div></dl></div>
+                <ol class="armres-trials" data-r="trials"></ol>
+                <p class="armres-note">Your results stay on this device. Save them as a file to compare over time or share with your therapist or a research study.</p>
+                <div class="armres-acts"><button class="btn primary" id="armSave" type="button">Save my results</button><button class="btn" id="armAgain" type="button">Try again</button></div>
+              </div>
             <p class="armread" id="armRead" hidden></p>
           </div>
         </div>
@@ -2302,7 +2319,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:03 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:11 UTC</span></div>
   </div>
 </footer>
 
@@ -4086,11 +4103,13 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     // ---------- render loop ----------
     var last = performance.now(), visible = true, t0 = last;
     function resize() {
-      var w = host.clientWidth || 400, h = Math.round(w / 1.6);
+      var ar = parseFloat(getComputedStyle(host).getPropertyValue('--ar')) || 1.6, w = host.clientWidth || 400, h = Math.round(w / ar);
       renderer.setSize(w, h, false); renderer.domElement.style.width = '100%'; renderer.domElement.style.height = 'auto';
-      camera.aspect = w / h; camera.updateProjectionMatrix();
+      camera.aspect = w / h; camera.fov = (w / h) < 1.45 ? 40 : 38;
+      if ((w / h) < 1.45) { camera.position.set(-0.1, 4.1, 6.3); camera.lookAt(-0.5, 0.35, -0.25); } else { camera.position.copy(CAM.pos); camera.lookAt(CAM.look); }
+      camera.updateProjectionMatrix();
     }
-    window.addEventListener('resize', resize); resize();
+    window.addEventListener('resize', resize); resize(); setTimeout(resize, 300);
     try { new IntersectionObserver(function (es) { visible = es[0].isIntersecting; }).observe(host); } catch (e) {}
     function frame(now) {
       requestAnimationFrame(frame);
