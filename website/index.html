@@ -635,6 +635,23 @@ footer .wrap { padding-block: 22px; }
 .sb-stage.revealed .sb-cap { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .sb-wipe { display: none; } .sb-stage .sb-cap { opacity: 1; transform: none; transition: none; } }
 @media (max-width: 900px) { .simbanner { grid-template-columns: 1fr; } .sb-stage { border-left: 0; border-top: 1px solid var(--line-hi); min-height: 440px; } .sb-text { padding: 28px 20px; } }
+.sb-how { position: absolute; right: 16px; bottom: 16px; z-index: 3; min-height: 52px; padding: 0 18px; border: 1px solid var(--signal); background: rgba(5,10,20,0.85); color: var(--signal); font: 600 0.85em var(--body); cursor: pointer; backdrop-filter: blur(4px); }
+.sb-how:hover, .sb-how[aria-expanded="true"] { background: var(--signal); color: var(--signal-ink); }
+.sb-pop { position: absolute; right: 16px; bottom: 78px; z-index: 4; width: min(400px, calc(100% - 32px)); max-height: calc(100% - 100px); overflow-y: auto; padding: 16px 18px; display: grid; gap: 12px; background: rgba(8,14,26,0.96); border: 1px solid var(--signal); box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+.sb-pop-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.sb-pop-head b { font: 600 1.05em var(--body); }
+.sb-x { width: 44px; height: 44px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font-size: 1.4em; cursor: pointer; }
+.sb-tabs { display: flex; flex-wrap: wrap; gap: 6px; }
+.sb-tabs button { min-height: 40px; padding: 0 10px; border: 1px solid var(--line-hi); background: transparent; color: var(--desc); font: 500 0.8em var(--body); cursor: pointer; }
+.sb-tabs button[aria-selected="true"] { border-color: var(--tc, var(--signal)); color: var(--ink); background: color-mix(in srgb, var(--tc, var(--signal)) 18%, transparent); }
+.sb-tabs button .now { font: 500 0.75em var(--mono); color: var(--tc, var(--signal)); margin-left: 4px; }
+.sb-pane { display: grid; gap: 8px; }
+.sb-pane dl { margin: 0; display: grid; grid-template-columns: 6.5em 1fr; gap: 6px 10px; font-size: 0.9em; }
+.sb-pane dt { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--tc, var(--signal)); padding-top: 2px; }
+.sb-pane dd { margin: 0; color: var(--ink); }
+.sb-pane p { margin: 0; color: var(--desc); font-size: 0.88em; }
+.sb-pop-note { margin: 0; color: var(--muted); font-size: 0.8em; }
+@media (max-width: 560px) { .sb-pop { left: 12px; right: 12px; width: auto; bottom: 74px; } .sb-how { right: 12px; bottom: 12px; } .sb-cap { bottom: 74px; } }
 /* views-css:start */
 #view-borrow .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 #view-borrow > .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
@@ -1716,6 +1733,13 @@ footer .wrap { padding-block: 22px; }
       <figure class="sb-stage" id="sbStage">
         <canvas id="sbCanvas" role="img" aria-label="Animated preview: a power wheelchair drives a course up a steep hill, across a narrow bridge over water and along a side slope, switching between head array, sip and puff, switch and mini joystick controls"></canvas>
         <figcaption class="sb-cap"><span class="sb-badge">Sneak peek</span><b>Wheelchair course simulator</b><small>Preview animation, not yet playable</small></figcaption>
+        <button class="sb-how" id="sbHow" type="button" aria-expanded="false" aria-controls="sbPop">How it works <span aria-hidden="true">&#9432;</span></button>
+        <div class="sb-pop" id="sbPop" role="dialog" aria-label="How the wheelchair simulator works" hidden>
+          <div class="sb-pop-head"><b>How the simulator works</b><button class="sb-x" type="button" id="sbX" aria-label="Close">&times;</button></div>
+          <div class="sb-tabs" role="tablist" id="sbTabs"></div>
+          <div class="sb-pane" id="sbPane"></div>
+          <p class="sb-pop-note">Settings vary: your seating provider programs the chair to suit you. Practice here first, then bring your scores to the fitting.</p>
+        </div>
         <div class="sb-wipe" aria-hidden="true"></div>
       </figure>
     </section>
@@ -3107,7 +3131,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:38 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:42 UTC</span></div>
   </div>
 </footer>
 
@@ -3891,6 +3915,7 @@ function AgentCloud(canvas, opts) {
     var braking = phase === 'stop' || phase === 'hold', resuming = phase === 'go' || goT > 0;
     if (dist >= TOTAL * (lap + 1)) { lap++; best = best === null ? lapT : Math.min(best, lapT); lapT = 0; gatesHit = 0; GATES.forEach(function (g) { g.lit = 0; }); }
     var inp = INPUTS[lap % INPUTS.length];
+    if (stage.getAttribute('data-input') !== inp[0]) { stage.setAttribute('data-input', inp[0]); if (window.sbInputChanged) window.sbInputChanged(inp[0]); }
     var camBack = 5.5, camH = 2.6, F = Math.min(W, H) * 0.95;
     var cx = here[0] - Math.sin(here[2]) * camBack, cz = here[1] - Math.cos(here[2]) * camBack, ca = here[2];
     var camYt = Math.max(yHere, floorY(cx, cz) + 0.4) + camH; camYs = camYs === null ? camYt : camYs + (camYt - camYs) * Math.min(1, dt * 4);
@@ -4141,19 +4166,50 @@ function AgentCloud(canvas, opts) {
         ctx.globalAlpha = 1; ctx.textAlign = 'left';
       }
     });
-    // technique tip for the current input
-    (function () {
-      var tp = mp.tip, tw = 270, th = 104, tx = W - tw - 14, ty = 152, fade = Math.min(1, lapT / 1.2);
-      if (compact) return;
-      ctx.globalAlpha = fade; ctx.fillStyle = 'rgba(5,10,20,0.86)'; ctx.fillRect(tx, ty, tw, th); ctx.strokeStyle = inp[1]; ctx.lineWidth = 1.5; ctx.strokeRect(tx + 0.5, ty + 0.5, tw - 1, th - 1);
-      ctx.fillStyle = inp[1]; ctx.fillRect(tx, ty, 4, th);
-      ctx.textAlign = 'left'; ctx.font = '600 10.5px "IBM Plex Mono", monospace'; ctx.fillStyle = inp[1]; ctx.fillText(tp[0], tx + 14, ty + 18);
-      ctx.font = '500 11.5px "IBM Plex Sans", sans-serif'; ctx.fillStyle = '#f0f5fa';
-      for (var ti = 1; ti < tp.length; ti++) ctx.fillText('\u2022 ' + tp[ti], tx + 14, ty + 18 + ti * 19);
-      ctx.globalAlpha = 1;
-    })();
   }
   requestAnimationFrame(frame);
+})();
+
+/* Simulator banner: "How it works" pop-up, opens on hover, focus or tap, and follows the input on screen */
+(function () {
+  var btn = document.getElementById('sbHow'), pop = document.getElementById('sbPop'), tabs = document.getElementById('sbTabs'), pane = document.getElementById('sbPane'), x = document.getElementById('sbX');
+  if (!btn || !pop) return;
+  var T = [
+    { k: 'SIP AND PUFF', name: 'Sip and puff', c: '#7cc4ff', rows: [['Forward', 'Hard puff. It stays on (latched), so you don’t keep blowing'], ['Stop', 'Hard sip. Then a hard puff to start again'], ['Turn', 'Soft sip turns left, soft puff turns right; forward stays on'], ['Straight', 'Stop sipping or puffing'], ['Speed', 'Set by drive profiles, such as indoor or outdoor, not by breath']], p: 'Breath control works for people with little or no movement below the neck. Some clinics program one hard puff to both start and stop.' },
+    { k: 'HEAD ARRAY', name: 'Head array', c: '#5fe0a8', rows: [['Forward', 'Lean back into the centre pad'], ['Stop', 'Release the pads; the chair brakes by itself'], ['Turn', 'Press the left or right side pad'], ['Reverse', 'Usually a mode change, with a switch'], ['Speed', 'Drive profiles; proportional arrays use how far or hard you press']], p: 'Sensors or switches in the headrest. Good head control is needed, but very little force.' },
+    { k: 'SWITCH SCANNING', name: 'Switch scanning', c: '#ffc670', rows: [['How', 'Forward, stop, left and right light up in turn'], ['Choose', 'Press your switch when the one you want is lit'], ['Turn', 'The turn lasts while the switch is held'], ['Stop', 'Choose STOP, or let go'], ['Speed', 'Drive profile; scan speed is set to suit you']], p: 'Any one reliable movement can drive: a cheek, finger, knee or eyebrow.' },
+    { k: 'MINI JOYSTICK', name: 'Mini joystick', c: '#f7b2c4', rows: [['Forward', 'Push forward; the further you push, the faster you go'], ['Turn', 'Push at an angle to steer'], ['Stop', 'Let go; it springs back to centre and the chair stops'], ['Use', 'Very light touch, by chin, lip or finger']], p: 'Full proportional control with tiny movements.' }
+  ];
+  var cur = 'SIP AND PUFF', sel = null, pinned = false;
+  function render() {
+    var show = sel || cur;
+    tabs.innerHTML = '';
+    T.forEach(function (t) {
+      var b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab'); b.style.setProperty('--tc', t.c);
+      b.setAttribute('aria-selected', t.k === show ? 'true' : 'false'); b.textContent = t.name;
+      if (t.k === cur) { var n = document.createElement('span'); n.className = 'now'; n.textContent = '● now'; b.appendChild(n); }
+      b.addEventListener('click', function (e) { e.stopPropagation(); sel = t.k; pinned = true; render(); });
+      tabs.appendChild(b);
+    });
+    var t = T.filter(function (q) { return q.k === show; })[0];
+    pane.style.setProperty('--tc', t.c);
+    pane.innerHTML = '<dl></dl><p></p>';
+    var dl = pane.querySelector('dl');
+    t.rows.forEach(function (r) { var dt = document.createElement('dt'), dd = document.createElement('dd'); dt.textContent = r[0]; dd.textContent = r[1]; dl.appendChild(dt); dl.appendChild(dd); });
+    pane.querySelector('p').textContent = t.p;
+  }
+  window.sbInputChanged = function (k) { cur = k; if (!pop.hidden) render(); };
+  function open() { if (!pop.hidden) return; sel = null; render(); pop.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+  function close() { pop.hidden = true; pinned = false; btn.setAttribute('aria-expanded', 'false'); }
+  var hideT = null;
+  btn.addEventListener('mouseenter', function () { clearTimeout(hideT); open(); });
+  pop.addEventListener('mouseenter', function () { clearTimeout(hideT); });
+  [btn, pop].forEach(function (el) { el.addEventListener('mouseleave', function () { if (!pinned) hideT = setTimeout(close, 350); }); });
+  btn.addEventListener('click', function () { if (pop.hidden) { open(); pinned = true; } else if (pinned) close(); else pinned = true; });
+  btn.addEventListener('focus', open);
+  x.addEventListener('click', function () { close(); btn.focus(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) { close(); btn.focus(); } }, true);
+  render();
 })();
 </script>
 <script>
