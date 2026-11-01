@@ -112,6 +112,13 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
 @media (max-width: 860px) { .catalog { grid-template-columns: 1fr; } .kit { position: static; } }
 @media (max-width: 520px) { .intro h1 { font-size: 1.45em; } }
 @media (prefers-reduced-motion: no-preference) { .item, .item::before, .item::after { transition: all .18s ease; } }
+.lend { display: grid; gap: 16px; margin-top: 8px; }
+.lend-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.lend-grid > div { display: grid; gap: 6px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); border-top: 2px solid var(--signal); background: var(--panel); }
+.lend-grid b { font-weight: 600; }
+.lend-grid span { color: var(--desc); font-size: 0.92em; }
+@media (max-width: 900px) { .lend-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .lend-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -154,8 +161,8 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
 
           <button class="item" type="button" aria-pressed="false" data-name="Breath switch" data-kind="Breath">
             <div class="top"><h3>Breath switch</h3><span class="check">Add</span></div>
-            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control.</p>
-            <div class="chips"><span class="chip">Switched</span><span class="chip">Proportional</span></div>
+            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control. The mouthpiece, filter and tubing are new and yours to keep.</p>
+            <div class="chips"><span class="chip">Switched</span><span class="chip">Proportional</span><span class="chip inc">Mouthpiece is yours to keep</span></div>
           </button>
 
           <button class="item" type="button" aria-pressed="false" data-name="EMG switch" data-kind="Muscle">
@@ -200,6 +207,12 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
             <div class="chips"><span class="chip">Pointing</span></div>
           </button>
 
+          <button class="item" type="button" aria-pressed="false" data-name="Omni2 wheelchair interface (proposed)" data-kind="Wheelchair">
+            <div class="top"><h3>Omni2 wheelchair interface</h3><span class="check">Add</span></div>
+            <p>Proposed. Lets a head array, sip-and-puff or switches drive an R-net power chair, and reach a phone or computer by Bluetooth. Your seating provider installs and programs it.</p>
+            <div class="chips"><span class="chip">R-net chairs only</span><span class="chip">Bridge</span><span class="chip">Proposed</span></div>
+          </button>
+
           <div class="item soon">
             <div class="top"><h3>More sensors</h3><span class="check">Coming</span></div>
             <p>New sensors and equipment will be added to the menu over time.</p>
@@ -217,10 +230,20 @@ main .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
       </aside>
     </div>
 
+
+    <section class="lend" aria-labelledby="lendT">
+      <div class="head"><h2 id="lendT">How lending works</h2><p>Draft policy for the pilot.</p></div>
+      <div class="lend-grid">
+        <div><b>What we lend</b><span>Sensors, switches, interface boxes, eye-tracking equipment and, as a proposal, wheelchair interfaces such as the Omni2. We don't lend wheelchairs.</span></div>
+        <div><b>Yours to keep</b><span>Anything that goes in or near your mouth, such as sip-and-puff mouthpieces, filters and tubing, is new and stays with you. It is never returned or lent again.</span></div>
+        <div><b>Cleaned between loans</b><span>Returned equipment is checked and cleaned under a set protocol before it goes to the next person. Electrodes and other single-use parts are replaced.</span></div>
+        <div><b>Connecting to a wheelchair</b><span>Anything that changes how a chair drives must be installed, programmed and tested by your seating provider or dealer. Access+ doesn't program chairs.</span></div>
+      </div>
+    </section>
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:29 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:31 UTC</span></div></footer>
 
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 

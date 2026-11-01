@@ -694,6 +694,17 @@ footer .wrap { padding-block: 22px; }
 @media (prefers-reduced-motion: no-preference) {
 #view-borrow .item, #view-borrow .item::before, #view-borrow .item::after { transition: all .18s ease; }
 }
+#view-borrow .lend { display: grid; gap: 16px; margin-top: 8px; }
+#view-borrow .lend-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+#view-borrow .lend-grid > div { display: grid; gap: 6px; align-content: start; padding: 16px; border: 1px solid var(--line-hi); border-top: 2px solid var(--signal); background: var(--panel); }
+#view-borrow .lend-grid b { font-weight: 600; }
+#view-borrow .lend-grid span { color: var(--desc); font-size: 0.92em; }
+@media (max-width: 900px) {
+#view-borrow .lend-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 520px) {
+#view-borrow .lend-grid { grid-template-columns: 1fr; }
+}
 #view-profile .btn:disabled { opacity: .45; cursor: not-allowed; }
 #view-profile > .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 24px; align-items: start; }
 #view-profile .col { display: grid; gap: 18px; min-width: 0; }
@@ -1754,8 +1765,8 @@ footer .wrap { padding-block: 22px; }
 
           <button class="item" type="button" aria-pressed="false" data-name="Breath switch" data-kind="Breath">
             <div class="top"><h3>Breath switch</h3><span class="check">Add</span></div>
-            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control.</p>
-            <div class="bw-chips"><span class="bw-chip">Switched</span><span class="bw-chip">Proportional</span></div>
+            <p>Sip-and-puff. Use soft or hard sips and puffs as clicks, or as smooth proportional control. The mouthpiece, filter and tubing are new and yours to keep.</p>
+            <div class="bw-chips"><span class="bw-chip">Switched</span><span class="bw-chip">Proportional</span><span class="bw-chip inc">Mouthpiece is yours to keep</span></div>
           </button>
 
           <button class="item" type="button" aria-pressed="false" data-name="EMG switch" data-kind="Muscle">
@@ -1800,6 +1811,12 @@ footer .wrap { padding-block: 22px; }
             <div class="bw-chips"><span class="bw-chip">Pointing</span></div>
           </button>
 
+          <button class="item" type="button" aria-pressed="false" data-name="Omni2 wheelchair interface (proposed)" data-kind="Wheelchair">
+            <div class="top"><h3>Omni2 wheelchair interface</h3><span class="check">Add</span></div>
+            <p>Proposed. Lets a head array, sip-and-puff or switches drive an R-net power chair, and reach a phone or computer by Bluetooth. Your seating provider installs and programs it.</p>
+            <div class="bw-chips"><span class="bw-chip">R-net chairs only</span><span class="bw-chip">Bridge</span><span class="bw-chip">Proposed</span></div>
+          </button>
+
           <div class="item soon">
             <div class="top"><h3>More sensors</h3><span class="check">Coming</span></div>
             <p>New sensors and equipment will be added to the menu over time.</p>
@@ -1817,6 +1834,16 @@ footer .wrap { padding-block: 22px; }
       </aside>
     </div>
 
+
+    <section class="lend" aria-labelledby="bw-lendT">
+      <div class="bw-head"><h2 id="bw-lendT">How lending works</h2><p>Draft policy for the pilot.</p></div>
+      <div class="lend-grid">
+        <div><b>What we lend</b><span>Sensors, switches, interface boxes, eye-tracking equipment and, as a proposal, wheelchair interfaces such as the Omni2. We don't lend wheelchairs.</span></div>
+        <div><b>Yours to keep</b><span>Anything that goes in or near your mouth, such as sip-and-puff mouthpieces, filters and tubing, is new and stays with you. It is never returned or lent again.</span></div>
+        <div><b>Cleaned between loans</b><span>Returned equipment is checked and cleaned under a set protocol before it goes to the next person. Electrodes and other single-use parts are replaced.</span></div>
+        <div><b>Connecting to a wheelchair</b><span>Anything that changes how a chair drives must be installed, programmed and tested by your seating provider or dealer. Access+ doesn't program chairs.</span></div>
+      </div>
+    </section>
   </div>
 </main>
 <main id="view-profile" class="view" hidden>
@@ -2669,11 +2696,41 @@ footer .wrap { padding-block: 22px; }
         <div><b>Standard controls</b><small>Computers, phones and consoles understand keyboards, mice and gamepads (a standard called HID). A bridge translates an adaptive control into one of those.</small></div>
       </div>
       <div class="tg-items">
-        <article class="tg-item">
-          <span class="kind">Into and out of the chair · R-Net</span><span class="tg-tag com">Proprietary</span>
-          <h3>Omni2 specialty input display</h3>
-          <p>Connects up to two specialty input devices, such as joysticks, switch panels, head controls, sip-and-puff and scanners, to an R-Net chair. Built-in Bluetooth lets the user switch between up to four computers, tablets and phones from the display, and it can learn infrared codes to work a TV.</p>
-          <div class="tg-links"><a href="https://industrial.curtisswright.com/en-gb/medical-mobility/rnet/omni2-speciality-control-interface" target="_blank" rel="noopener">Curtiss-Wright Omni2 &#8599;</a></div>
+        <article class="cat-card tg-listing" id="tg-cat-omni2" style="grid-column: 1 / -1">
+          <div class="cat-main">
+            <div class="cat-top">
+              <span class="kind">Hardware bridge · into and out of the chair · R-net</span>
+              <h3>Omni2 specialty input display</h3>
+              <span class="by">Made by Curtiss-Wright (PG Drives Technology) for R-net chairs, and sold by chair makers such as Permobil and Quickie. Replaces the original Omni, which is no longer made.</span>
+              <div class="cat-tags"><span class="tg-tag com">Proprietary</span><span class="tg-tag dir">Possible Access+ loan item</span></div>
+            </div>
+            <p><b>Why it's used:</b> it is the interface R-net chairs need for alternative drive controls. A person who can't use a hand joystick plugs in a head array, sip-and-puff, chin or mini joystick, or switches, and drives the chair, runs the seating, and reaches a phone, computer or TV, all from one input.</p>
+            <dl class="cat-glance">
+              <dt>Compatibility</dt><dd>Power chairs with R-net electronics (used by Permobil, Quickie and other makers). Chairs with Invacare LiNX or Quantum Q-Logic electronics need their makers' own interfaces</dd>
+              <dt>Display section</dt><dd>3.5-inch colour screen with light sensor; buttons for on and off, profile, mode, settings and navigation; speaker and horn</dd>
+              <dt>Input section</dt><dd>R-net connector; two 9-way D-type sockets for specialty input devices; two 3.5 mm user-switch jacks; a sip-and-puff input; an optional external on/off jack; USB charging</dd>
+              <dt>Connects to</dt><dd>Up to two input devices at once, such as joysticks, switch panels, switched or proportional head controls, sip-and-puff and scanners</dd>
+              <dt>Out of the chair</dt><dd>Bluetooth to up to four devices (two as a mouse, two for iPhone and iPad Switch Control); learns infrared codes for a TV and other devices</dd>
+              <dt>How it's used</dt><dd>The user switch changes profiles and modes (drive, seating, Bluetooth, infrared) and doubles as an emergency stop. Drive profiles set speed and response for indoors, outdoors or tired days</dd>
+              <dt>To lend one</dt><dd>The chair must have R-net electronics; you also need the display, the input section, the connecting cable, a mount and the user's input device. Setup and programming are done by the seating provider</dd>
+            </dl>
+            <p class="cat-dated">Details from Curtiss-Wright, Permobil and the Omni2 manual, checked November 2026. Confirm compatibility for a specific chair with the chair maker or dealer.</p>
+          </div>
+          <div class="cat-side">
+            <span class="cat-h">Installation, in brief</span>
+            <ol class="tg-steps"><li>Assess the user and choose the input device</li><li>Mount the input section with its connectors facing down, to keep out moisture</li><li>Mount the display on a flexible arm, such as a gooseneck</li><li>Connect it to the chair's R-net system and plug in the input device</li><li>Match the Omni2 to the input device, then tune it to the user</li><li>Set the chair's driving characteristics and test</li></ol>
+            <span class="cat-h">Safety</span>
+            <ul><li>Programming is done on the display or by PC, only by professionals trained on R-net systems</li><li>Use a user switch that stops the chair if it is unplugged, and keep switch detection on, so the emergency stop always works</li><li>Don't drive if the screen is damaged or not working</li></ul>
+            <span class="cat-h">Watch and read</span>
+            <div class="cat-media">
+              <a href="https://industrial.curtisswright.com/en-gb/medical-mobility/rnet/omni2-speciality-control-interface" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Omni2 by Curtiss-Wright<small>Specifications</small></span></a>
+              <a href="https://www.permobil.com/en-us/products/electronics/permobil-omni2" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Permobil Omni2<small>Features and guides</small></span></a>
+              <a href="https://manuals.online/curtiss-wright/recording-equipment/r-net-omni2/user-manual/1udgm" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9776;</span><span>Omni2 manual<small>Installation and programming</small></span></a>
+              <a href="https://www.youtube.com/results?search_query=R-net+Omni2+setup" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>Setup videos<small>YouTube search: R-net Omni2 setup</small></span></a>
+            </div>
+            <span class="cat-h">Insights</span>
+            <ul><li>An equipment library run by MND NSW in Australia already lends an Omni2 to people with motor neurone disease (ALS), without programming or setup, cleaned between loans<cite><a class="inline-link" href="https://www.flexequip.mndnsw.asn.au/product-library/mobility/wheelchair-accessory-miscellaneous/wheelchair-accessory-r-net-omni-2-eq5639" target="_blank" rel="noopener">FlexEquip &#8599;</a></cite></li><li>Practicing a head array or sip-and-puff in the simulator first can shorten the fitting</li></ul>
+          </div>
         </article>
         <article class="tg-item">
           <span class="kind">Out of the chair · R-Net</span><span class="tg-tag com">Proprietary</span>
@@ -3050,7 +3107,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:29 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 21:31 UTC</span></div>
   </div>
 </footer>
 

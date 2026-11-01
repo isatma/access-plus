@@ -16,6 +16,7 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay
+- Lending (Nov 1, 2026): draft policy (no wheelchairs; mouth-contact parts are kept, never re-lent; cleaning protocol; seating provider installs anything that drives a chair); Omni2 proposed as a loan item with full catalog card (compatibility, components, install steps, safety). Next: confirm R-net models list with dealers, loan logistics
 - Ability checks (Nov 1, 2026): gesture check reframed as one of several checks the AI agent chooses (eye movement, breath, EMG, switch timing, face and head gestures, BCI referral); studio suggests checks from answers. Next: build eye movement, breath, EMG and switch timing checks
 - Catalog entries added (Nov 1, 2026): QuadStick (new Game controllers area), Magic Flute (My Breath My Music), video links for Orlosky eye tracker and OptiKey
 - Catalog listing format (Nov 1, 2026): standard card (what it is, at a glance, watch and read, evidence, insights, community comments placeholder); first entry EyeHarp under Gaming and music. Next: convert other guides to catalog cards; real comments need sign-in, moderation, consent
