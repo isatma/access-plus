@@ -129,6 +129,7 @@ footer { padding-bottom: 90px; }
 .ex-row .ex-chips { flex-direction: column; }
 .ex-row .ex-chip { width: 100%; text-align: left; }
 .side-k:has(+ .starters[hidden]) { display: none; }
+.fd-cta { justify-content: center; min-height: 56px; }
 .topics { display: grid; gap: 8px; }
 .topic { min-height: 48px; padding: 8px 14px; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.95em var(--body); cursor: pointer; }
 .topic:hover, .topic[aria-expanded="true"] { border-color: var(--signal); color: var(--signal); }
@@ -799,6 +800,44 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 600px) {
 #view-profile .mx-grid { grid-template-columns: 1fr; }
 }
+#view-find .fd-wrap { gap: 22px !important; max-width: 920px; }
+#view-find .fd-intro { display: grid; gap: 10px; }
+#view-find .fd-intro h1 { font-size: 1.9em; line-height: 1.2; }
+#view-find .fd-intro p { margin: 0; color: var(--desc); }
+#view-find .fd-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
+#view-find .fd-prog { display: flex; gap: 6px; }
+#view-find .fd-prog i { flex: 1; height: 6px; background: var(--line-hi); }
+#view-find .fd-prog i.on { background: var(--signal); }
+#view-find .fd-card { display: grid; gap: 16px; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
+#view-find .fd-q { font: 600 1.35em var(--body); line-height: 1.3; }
+#view-find .fd-hint { margin: -8px 0 0; color: var(--muted); font-size: 0.92em; }
+#view-find .fd-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+#view-find .fd-opt { min-height: 64px; padding: 12px 16px; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 1em var(--body); cursor: pointer; display: grid; gap: 2px; }
+#view-find .fd-opt small { color: var(--muted); font-size: 0.82em; font-weight: 400; }
+#view-find .fd-opt:hover { border-color: var(--signal); }
+#view-find .fd-opt[aria-pressed="true"] { border-color: var(--signal); background: var(--signal-soft); color: var(--signal); box-shadow: inset 4px 0 0 var(--signal); }
+#view-find .fd-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+#view-find .fd-nav .btn { min-height: 56px; min-width: 140px; justify-content: center; }
+#view-find .fd-res { display: grid; gap: 16px; }
+#view-find .fd-top { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+#view-find .fd-pick { display: grid; gap: 6px; align-content: start; padding: 18px; border: 1px solid var(--line-hi); background: var(--panel); }
+#view-find .fd-pick.primary { border-color: var(--signal); background: rgba(95,224,168,0.07); }
+#view-find .fd-pick .r { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-find .fd-pick.primary .r { color: var(--signal); }
+#view-find .fd-pick b { font: 600 1.15em var(--body); }
+#view-find .fd-pick p { margin: 0; color: var(--desc); font-size: 0.92em; }
+#view-find .fd-more { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+#view-find .fd-box { display: grid; gap: 8px; align-content: start; padding: 16px 18px; border: 1px solid var(--line-hi); background: var(--panel); }
+#view-find .fd-box b { font-weight: 600; }
+#view-find .fd-box ul { margin: 0; padding-left: 18px; color: var(--desc); display: grid; gap: 4px; font-size: 0.94em; }
+#view-find .fd-ai { padding: 16px 18px; border: 1px solid #7cc4ff; background: rgba(124,196,255,0.06); display: grid; gap: 8px; }
+#view-find .fd-ai p { margin: 0; color: var(--ink); white-space: pre-wrap; }
+#view-find .fd-acts { display: flex; flex-wrap: wrap; gap: 10px; }
+#view-find .fd-acts .btn { min-height: 56px; }
+#view-find .fd-note { margin: 0; color: var(--muted); font-size: 0.86em; }
+@media (max-width: 760px) {
+#view-find .fd-opts, #view-find .fd-top, #view-find .fd-more { grid-template-columns: 1fr; }
+}
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1172,8 +1211,8 @@ footer .wrap { padding-block: 22px; }
       <div class="hero-agent">
         <canvas id="heroAgent" aria-hidden="true"></canvas>
         <div class="ha-text">
-          <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
-          <span class="ha-acts"><a class="primary" href="#profile">Build my profile</a><a href="#guide-ai">Ask a question</a></span>
+          <span class="ha-line">Answer a few questions and the AI agent helps you find the right technology, then practice it.</span>
+          <span class="ha-acts"><a class="primary" href="#find">Find my technology</a><a href="#profile">Build my profile</a></span>
         </div>
       </div>
     </section>
@@ -1297,7 +1336,7 @@ footer .wrap { padding-block: 22px; }
       <div class="head how-head"><h2 id="howTitle">How Access+ works</h2></div>
       <ol class="jsteps">
         <li><a class="jstep" href="#goals"><span class="n">Step 1 · Start here</span><h3>Your goals</h3><p>Pick what you want to do: drink, eat, call for help, create, play.</p></a></li>
-        <li><a class="jstep" href="#profile"><span class="n">Step 2</span><h3>Your AI profile</h3><p>The AI agent asks what you want to accomplish and checks your movements.</p></a></li>
+        <li><a class="jstep" href="#find"><span class="n">Step 2</span><h3>Your AI profile</h3><p>Answer a few questions to find the right technology, and build your profile.</p></a></li>
         <li><a class="jstep" href="#software"><span class="n">Step 3</span><h3>Your solutions</h3><p>Software, hardware and advanced interfaces that fit your profile.</p></a></li>
         <li><a class="jstep" href="#try"><span class="n">Step 4</span><h3>Try and borrow</h3><p>Practice in simulators, then borrow a kit to try at home.</p></a></li>
       </ol>
@@ -1337,6 +1376,7 @@ footer .wrap { padding-block: 22px; }
           <div class="chat-head"><span>ACCESS+ AI AGENT</span><span class="tag-ex" id="chatTag">Example</span></div>
           <div class="chat-side">
             <canvas id="aceFace" class="aceface" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+            <a class="btn primary fd-cta" href="#find">Find my technology &rarr;</a>
             <span class="side-k">Start with</span>
             <div class="starters" id="starters">
               <button class="chip small primarystart" type="button" id="getToKnow">Get to know me first</button>
@@ -1496,7 +1536,7 @@ footer .wrap { padding-block: 22px; }
 
   <div class="wrap">
     <div class="steps4" aria-label="Build your AI custom profile">
-      <button class="st4" type="button" id="pf-stepAsk"><span class="n">Step 1</span><b>Tell the AI agent what you want to accomplish</b><small>A few easy questions about your goals, movement, positions and the tools you use now.</small></button>
+      <a class="st4" href="#find"><span class="n">Step 1</span><b>Find my technology</b><small>Six quick questions about your goals and movements, and a starting recommendation.</small></a>
       <a class="st4" href="#gesture"><span class="n">Step 2</span><b>Do the gesture check</b><small>Your webcam tests smile, nose, head tilt and turn to find your most reliable movements.</small></a>
       <a class="st4" href="#simulators"><span class="n">Step 3</span><b>Practice in a simulator</b><small>Build skills with the methods that suit you.</small></a>
       <a class="st4" href="#borrow"><span class="n">Step 4</span><b>Borrow a kit</b><small>Try real sensors at home, alone or with your therapist.</small></a>
@@ -1598,6 +1638,40 @@ footer .wrap { padding-block: 22px; }
         </div>
         <p class="mx-note">Suggestions are explained and never applied automatically. Review changes with your therapist when they affect safety, seating or driving.</p>
       </div>
+    </section>
+  </div>
+</main>
+<main id="view-find" class="view" hidden>
+
+  <div class="wrap fd-wrap">
+    <section class="fd-intro">
+      <span class="fd-k">Your AI profile · Find my technology</span>
+      <h1>Find the right technology for you</h1>
+      <p>Answer a few quick questions. You'll get a starting recommendation, a backup, and something to plan ahead for, then you can practice it right away.</p>
+    </section>
+    <div class="fd-prog" id="fd-fdProg" aria-hidden="true"></div>
+    <section class="fd-card" id="fd-fdCard" aria-live="polite">
+      <h2 class="fd-q" id="fd-fdQ"></h2>
+      <p class="fd-hint" id="fd-fdHint"></p>
+      <div class="fd-opts" id="fd-fdOpts" role="group"></div>
+      <div class="fd-nav"><button class="btn" type="button" id="fd-fdBack">&larr; Back</button><button class="btn primary" type="button" id="fd-fdNext">Next &rarr;</button></div>
+    </section>
+    <section class="fd-res" id="fd-fdRes" hidden aria-live="polite">
+      <div class="fd-top" id="fd-fdTop"></div>
+      <div class="fd-more">
+        <div class="fd-box"><b>How to click and select</b><ul id="fd-fdClick"></ul></div>
+        <div class="fd-box"><b>For your goals</b><ul id="fd-fdGoals"></ul></div>
+        <div class="fd-box"><b>Bed and chair</b><ul id="fd-fdPos"></ul></div>
+        <div class="fd-box"><b>Avoiding fatigue</b><ul id="fd-fdFat"></ul></div>
+      </div>
+      <div class="fd-ai" id="fd-fdAi" hidden><span class="fd-k" style="color:#7cc4ff">The AI agent explains</span><p id="fd-fdAiText"></p></div>
+      <div class="fd-acts">
+        <a class="btn primary" id="fd-fdPractice" href="#simulators">Practice this now &rarr;</a>
+        <button class="btn" type="button" id="fd-fdExplain" hidden>Ask the AI agent to explain</button>
+        <button class="btn" type="button" id="fd-fdSave">Save my recommendation</button>
+        <button class="btn" type="button" id="fd-fdRestart">Start over</button>
+      </div>
+      <p class="fd-note">This is a starting point for learning and practice, not a medical assessment. Try options with your therapist or a borrowed kit before deciding.</p>
     </section>
   </div>
 </main>
@@ -2372,7 +2446,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:50 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:56 UTC</span></div>
   </div>
 </footer>
 
@@ -3338,10 +3412,6 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     log.innerHTML = '';
     talk('Please start my profile interview. Greet me warmly, then get to know me: ask first what I want to accomplish, then learn about my needs, wants and hopes, what a good day looks like, and what frustrates me now, one question at a time, before moving on to movement, positions and tools.', false);
   });
-  __ID('stepAsk').addEventListener('click', function () {
-    __ID('startBtn').click();
-    var a = document.querySelector('.ace'); if (a) a.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
   __ID('assessBtn').addEventListener('click', function () {
     if (isExample) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = []; log.innerHTML = ''; }
     talk('I’d like you to assess the tools I use today. Ask me what I use, one at a time.', true);
@@ -3492,6 +3562,140 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     renderActs(); renderGrid();
   })();
 
+(function () {
+var __ID = function (x) { return document.getElementById('fd-' + x) || document.getElementById(x); };
+
+(function () {
+  var Q = [
+    { id: 'goals', q: 'What do you most want to do?', hint: 'Choose all that apply.', multi: true, opts: [
+      ['computer', 'Use a computer'], ['phone', 'Use a phone or tablet'], ['talk', 'Communicate', 'speech device or messages'], ['drive', 'Drive my wheelchair'],
+      ['eat', 'Eat and drink on my own'], ['home', 'Control my home', 'lights, TV, bed, calling for help'], ['play', 'Play games or make music']] },
+    { id: 'moves', q: 'Which movements are reliable for you?', hint: 'Choose all you can do comfortably and repeatedly.', multi: true, opts: [
+      ['head', 'Head turn or tilt'], ['eyes', 'Eye movement'], ['face', 'Facial movement', 'smile, eyebrows, cheek, blink'], ['breath', 'Breath', 'sip and puff'],
+      ['voice', 'Voice'], ['hand', 'A small hand or finger movement'], ['foot', 'A foot or knee movement']] },
+    { id: 'speech', q: 'How is your speech for talking to devices?', opts: [
+      ['clear', 'Clear and reliable'], ['changing', 'Changing or tiring', 'works some of the time'], ['none', 'Not usable for control']] },
+    { id: 'fatigue', q: 'How tiring are long sessions?', opts: [
+      ['low', 'Fine for an hour or more'], ['mid', 'Tired after 20 to 30 minutes'], ['high', 'Tired quickly']] },
+    { id: 'where', q: 'Where do you use technology most?', opts: [
+      ['chair', 'In my wheelchair'], ['bed', 'In bed'], ['both', 'Both, at different times']] },
+    { id: 'change', q: 'Are your abilities changing?', opts: [
+      ['stable', 'Fairly stable'], ['slow', 'Changing slowly'], ['fast', 'Changing quickly', 'for example with ALS']] }
+  ];
+  var A = {}, step = 0;
+  var prog = __ID('fdProg'), qEl = __ID('fdQ'), hint = __ID('fdHint'), opts = __ID('fdOpts');
+  var back = __ID('fdBack'), next = __ID('fdNext'), card = __ID('fdCard'), res = __ID('fdRes');
+  function has(k, v) { var a = A[k]; return Array.isArray(a) ? a.indexOf(v) >= 0 : a === v; }
+  function render() {
+    prog.innerHTML = ''; Q.forEach(function (_, i) { var b = document.createElement('i'); if (i <= step) b.className = 'on'; prog.appendChild(b); });
+    var q = Q[step]; qEl.textContent = (step + 1) + '. ' + q.q; hint.textContent = q.hint || ''; hint.hidden = !q.hint;
+    opts.innerHTML = ''; opts.setAttribute('aria-label', q.q);
+    q.opts.forEach(function (o) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'fd-opt';
+      b.textContent = o[1]; if (o[2]) { var s = document.createElement('small'); s.textContent = o[2]; b.appendChild(s); }
+      b.setAttribute('aria-pressed', has(q.id, o[0]) ? 'true' : 'false');
+      b.addEventListener('click', function () {
+        if (q.multi) { var a = A[q.id] || []; var i = a.indexOf(o[0]); if (i >= 0) a.splice(i, 1); else a.push(o[0]); A[q.id] = a; render(); }
+        else { A[q.id] = o[0]; render(); setTimeout(go, 220); }
+      });
+      opts.appendChild(b);
+    });
+    back.disabled = step === 0; next.textContent = step === Q.length - 1 ? 'See my recommendation →' : 'Next →';
+    var answered = q.multi ? (A[q.id] || []).length > 0 : !!A[q.id]; next.disabled = !answered;
+  }
+  function go() { if (step < Q.length - 1) { step++; render(); } else result(); }
+  next.addEventListener('click', go);
+  back.addEventListener('click', function () { if (step > 0) { step--; render(); } });
+
+  var METH = {
+    head: { name: 'Head tracking', why: 'A webcam or head mouse moves the pointer with small head or nose movements. Fast and accurate for computers and tablets.', sim: '#sim-pointing' },
+    eyes: { name: 'Eye gaze', why: 'An eye tracker moves the pointer where you look. Works with very little movement and keeps working as other movement changes.', sim: '#sim-pointing' },
+    sw: { name: 'Switch scanning', why: 'One or two switches, worked by any small reliable movement, step through choices on screen. Very reliable and low effort.', sim: '#sim-scanning' },
+    voice: { name: 'Voice control', why: 'Speak commands and dictate text. Fast for writing when your voice is clear.', sim: '#guide-ai' },
+    sip: { name: 'Sip and puff', why: 'Breath controls a switch or joystick. Common for wheelchair driving and as a switch for scanning.', sim: '#sim-scanning' }
+  };
+  function score() {
+    var s = { head: 0, eyes: 0, sw: 0, voice: 0, sip: 0 };
+    if (has('moves', 'head')) s.head += 5; if (has('moves', 'eyes')) s.eyes += 4;
+    if (has('moves', 'face') || has('moves', 'hand') || has('moves', 'foot')) s.sw += 4;
+    if (has('moves', 'breath')) { s.sip += 4; s.sw += 1; }
+    if (has('moves', 'voice')) s.voice += 3;
+    if (A.speech === 'clear') s.voice += 3; if (A.speech === 'changing') s.voice -= 1; if (A.speech === 'none') s.voice = -9;
+    if (A.fatigue === 'high') { s.sw += 2; s.eyes += 1; s.head -= 1; } if (A.fatigue === 'mid') { s.sw += 1; }
+    if (A.where === 'bed') { s.eyes += 2; s.sw += 1; s.head -= 1; } if (A.where === 'both') { s.eyes += 1; }
+    if (A.change === 'fast') { s.eyes += 2; s.sw += 1; s.voice -= 1; }
+    if (has('goals', 'drive')) s.sip += 1;
+    if (has('goals', 'talk')) { s.eyes += 1; s.sw += 1; }
+    return Object.keys(s).filter(function (k) { return s[k] > 0; }).sort(function (a, b) { return s[b] - s[a]; });
+  }
+  var rec = null;
+  function li(ul, items) { ul.innerHTML = ''; items.forEach(function (t) { var l = document.createElement('li'); l.textContent = t; ul.appendChild(l); }); }
+  function result() {
+    var r = score(); if (!r.length) r = ['sw'];
+    var primary = r[0], backup = r[1] || (primary === 'sw' ? 'eyes' : 'sw');
+    var ahead = null;
+    if (A.change === 'fast' || A.change === 'slow') ahead = ['eyes', 'sw'].filter(function (k) { return k !== primary && k !== backup; })[0] || null;
+    if (!ahead && A.speech === 'changing') ahead = 'voice-bank';
+    rec = { primary: primary, backup: backup, ahead: ahead, answers: JSON.parse(JSON.stringify(A)) };
+    var top = __ID('fdTop'); top.innerHTML = '';
+    function pick(role, key, cls) {
+      var d = document.createElement('div'); d.className = 'fd-pick' + (cls ? ' ' + cls : '');
+      var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your own voice now so a speech device can sound like you later.' : METH[key].why;
+      d.innerHTML = '<span class="r"></span><b></b><p></p>'; d.querySelector('.r').textContent = role; d.querySelector('b').textContent = name; d.querySelector('p').textContent = why; top.appendChild(d);
+    }
+    pick('Start with', primary, 'primary'); pick('Backup', backup);
+    if (ahead) pick('Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
+    var click = [];
+    if (primary === 'head' || primary === 'eyes') { click.push('Dwell to click: hold the pointer still on a target'); if (has('moves', 'face')) click.push('Or a facial gesture, like a smile or eyebrow raise, as a click'); if (has('moves', 'hand') || has('moves', 'foot') || has('moves', 'breath')) click.push('Or a switch as a click, which is faster and causes fewer accidental selections'); }
+    if (primary === 'sw' || primary === 'sip') click.push('Scanning: choices light up in turn and you press when the right one is lit', 'Start with a slower scan and speed up with practice');
+    if (primary === 'voice') click.push('Voice commands like "click Send", with a switch to start and stop listening');
+    li(__ID('fdClick'), click);
+    var g = [];
+    if (has('goals', 'computer')) g.push('Computer: ' + METH[primary].name.toLowerCase() + ' with an on-screen keyboard such as OptiKey');
+    if (has('goals', 'phone')) g.push('Phone: built-in switch control, head tracking or voice control on iPhone and Android');
+    if (has('goals', 'talk')) g.push('Communication: a speech app or device using ' + METH[primary].name.toLowerCase() + (A.speech !== 'clear' ? ', and consider voice banking now' : ''));
+    if (has('goals', 'drive')) g.push('Wheelchair: an alternative drive input such as a head array, chin or mini joystick, or sip and puff, set up by your seating clinic');
+    if (has('goals', 'eat')) g.push('Eating and drinking: a robotic arm or a tabletop eating aid. Try the robotic arm demo');
+    if (has('goals', 'home')) g.push('Home: smart plugs, lights and TV through your phone or computer, plus more than one way to call for help');
+    if (has('goals', 'play')) g.push('Games and music: head tracking or facial gestures as controls, breath-played instruments');
+    li(__ID('fdGoals'), g.length ? g : ['Explore Your solutions for ideas']);
+    var pos = [];
+    if (A.where !== 'chair') pos.push('In bed: mount the screen and switches where you can reach them lying down, and use larger targets');
+    if (A.where !== 'bed') pos.push('In the chair: mount the screen at eye level and keep a switch within easy reach');
+    if (A.where === 'both') pos.push('Keep a separate setup for bed and chair, and recalibrate when you change position');
+    li(__ID('fdPos'), pos);
+    var fat = ['Use the lowest-effort method for long tasks', 'Take short breaks and keep a backup method for later in the day'];
+    if (A.fatigue !== 'low') fat.push('Slow the pointer, enlarge targets, and lengthen dwell or scan time when tired');
+    if (A.fatigue === 'high') fat.push('Switch scanning or eye gaze usually tire people less than repeated head movement');
+    li(__ID('fdFat'), fat);
+    var p = __ID('fdPractice'), target = METH[primary].sim;
+    if (has('goals', 'eat') && primary !== 'head' && primary !== 'eyes') target = '#home';
+    if (target.indexOf('#sim-') === 0 && !__ID(target.slice(1))) target = '#simulators';
+    p.href = target; p.textContent = 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
+    if (target === '#home') p.textContent = 'Try the robotic arm →';
+    card.hidden = true; prog.hidden = true; res.hidden = false; __ID('fdAi').hidden = true;
+    res.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  __ID('fdRestart').addEventListener('click', function () { A = {}; step = 0; rec = null; card.hidden = false; prog.hidden = false; res.hidden = true; render(); });
+  __ID('fdSave').addEventListener('click', function () {
+    if (!rec) return;
+    var name = 'access-plus-recommendation-' + new Date().toISOString().slice(0, 10) + '.json';
+    var data = JSON.stringify({ app: 'Access+ ALS', type: 'Find my technology', date: new Date().toISOString(), recommendation: { start: METH[rec.primary].name, backup: METH[rec.backup].name, planAhead: rec.ahead === 'voice-bank' ? 'Voice banking' : (rec.ahead ? METH[rec.ahead].name : null) }, answers: rec.answers }, null, 2);
+    function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+    if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+  });
+  var sampleFn = null;
+  if (window.claude && window.claude.use) window.claude.use('sample').then(function (f) { sampleFn = f; if (f) __ID('fdExplain').hidden = false; }).catch(function () {});
+  __ID('fdExplain').addEventListener('click', function () {
+    if (!sampleFn || !rec) return;
+    var box = __ID('fdAi'), t = __ID('fdAiText'); box.hidden = false; t.textContent = 'Thinking…';
+    var prompt = 'You are the Access+ AI agent, a calm, friendly guide for people with ALS and other complex disabilities. In under 140 words, plain language, explain why this starting setup suits the person and suggest one first practice step. Do not diagnose or give medical advice; suggest trying options with a therapist. Answers: ' + JSON.stringify(rec.answers) + '. Recommendation: start with ' + METH[rec.primary].name + ', backup ' + METH[rec.backup].name + (rec.ahead ? ', plan ahead for ' + (rec.ahead === 'voice-bank' ? 'voice banking' : METH[rec.ahead].name) : '') + '.';
+    sampleFn(prompt, { modelTier: 'quick', cache: false, onText: function (e) { t.textContent = e.text; } }).then(function (r) { t.textContent = r.text; }).catch(function () { t.textContent = 'The AI agent is not available right now. The recommendation above still applies.'; });
+  });
+  render();
+})();
+
+})();
 (function () {
 var __ID = function (x) { return document.getElementById('kb-' + x) || document.getElementById(x); };
 
@@ -3666,7 +3870,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
@@ -3678,6 +3882,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
     if (v === 'keyboards') navKey = 'solutions';
     if (v === 'borrow') navKey = 'try';
+    if (v === 'find') navKey = 'profile';
     if (v === 'gesture') navKey = (window.__lastNav === 'solutions') ? 'solutions' : 'profile';
     window.__lastNav = navKey;
     var STEP = { goals: 1, profile: 2, solutions: 3, try: 4 };

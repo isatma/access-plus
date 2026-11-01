@@ -122,6 +122,11 @@ def build():
     profile = ('<main id="view-profile" class="view" hidden>\n  <div class="wrap backwrap"><div class="backrow"><button class="btn back" type="button" data-back>&larr; Back</button></div></div>\n' + main + '</main>\n',
                scope(css, 'profile'), js)
 
+    # ---------- find my technology ----------
+    css, main, js = fragment(ROOT / 'src' / 'find.html')
+    main, js = prefix_ids(main, js, 'fd-')
+    find = ('<main id="view-find" class="view" hidden>\n' + main + '</main>\n', scope(css, 'find'), js)
+
     # ---------- keyboards ----------
     css, main, js = fragment(ROOT / 'src' / 'keyboards.html')
     js = js.replace('/*KB_DATA*/', (ROOT / 'src' / 'keyboards-data.js').read_text(encoding='utf-8'))
@@ -399,16 +404,16 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + find[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
-    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + keyboards[1] + tech[1] + about[1] + gesture_css + join_css + '/* views-css:end */\n'
+    views_css = '/* views-css:start */\n' + borrow[1] + profile[1] + find[1] + keyboards[1] + tech[1] + about[1] + gesture_css + join_css + '/* views-css:end */\n'
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
@@ -420,6 +425,7 @@ def build():
     if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
     if (v === 'keyboards') navKey = 'solutions';
     if (v === 'borrow') navKey = 'try';
+    if (v === 'find') navKey = 'profile';
     if (v === 'gesture') navKey = (window.__lastNav === 'solutions') ? 'solutions' : 'profile';
     window.__lastNav = navKey;
     var STEP = { goals: 1, profile: 2, solutions: 3, try: 4 };
@@ -517,7 +523,7 @@ def build():
     addMic(document.getElementById('pf-askIn'), document.getElementById('pf-sendBtn'));
   })();
 '''
-    views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {\n' + keyboards[2] + '\n})();\n(function () {\n' + tech[2] + '\n})();\n(function () {\n' + about[2] + '\n})();\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
+    views_js = '<script>\n// views-js:start\n(function () {\n' + borrow[2] + '\n})();\n' + profile[2] + '\n(function () {\n' + find[2] + '\n})();\n(function () {\n' + keyboards[2] + '\n})();\n(function () {\n' + tech[2] + '\n})();\n(function () {\n' + about[2] + '\n})();\n(function () {' + router + '})();\n// views-js:end\n</script>\n'
     home = home.replace('</script>\n</body>', '</script>\n' + views_js + '</body>', 1) if '</body>' in home else home + views_js
 
     # arm dial: all destinations go through the router

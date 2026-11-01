@@ -129,6 +129,7 @@ footer { padding-bottom: 90px; }
 .ex-row .ex-chips { flex-direction: column; }
 .ex-row .ex-chip { width: 100%; text-align: left; }
 .side-k:has(+ .starters[hidden]) { display: none; }
+.fd-cta { justify-content: center; min-height: 56px; }
 .topics { display: grid; gap: 8px; }
 .topic { min-height: 48px; padding: 8px 14px; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.95em var(--body); cursor: pointer; }
 .topic:hover, .topic[aria-expanded="true"] { border-color: var(--signal); color: var(--signal); }
@@ -623,8 +624,8 @@ footer .wrap { padding-block: 22px; }
       <div class="hero-agent">
         <canvas id="heroAgent" aria-hidden="true"></canvas>
         <div class="ha-text">
-          <span class="ha-line">Create and keep your own profile, and build your skills step by step.</span>
-          <span class="ha-acts"><a class="primary" href="#profile">Build my profile</a><a href="#guide-ai">Ask a question</a></span>
+          <span class="ha-line">Answer a few questions and the AI agent helps you find the right technology, then practice it.</span>
+          <span class="ha-acts"><a class="primary" href="#find">Find my technology</a><a href="#profile">Build my profile</a></span>
         </div>
       </div>
     </section>
@@ -748,7 +749,7 @@ footer .wrap { padding-block: 22px; }
       <div class="head how-head"><h2 id="howTitle">How Access+ works</h2></div>
       <ol class="jsteps">
         <li><a class="jstep" href="#goals"><span class="n">Step 1 · Start here</span><h3>Your goals</h3><p>Pick what you want to do: drink, eat, call for help, create, play.</p></a></li>
-        <li><a class="jstep" href="#profile"><span class="n">Step 2</span><h3>Your AI profile</h3><p>The AI agent asks what you want to accomplish and checks your movements.</p></a></li>
+        <li><a class="jstep" href="#find"><span class="n">Step 2</span><h3>Your AI profile</h3><p>Answer a few questions to find the right technology, and build your profile.</p></a></li>
         <li><a class="jstep" href="#software"><span class="n">Step 3</span><h3>Your solutions</h3><p>Software, hardware and advanced interfaces that fit your profile.</p></a></li>
         <li><a class="jstep" href="#try"><span class="n">Step 4</span><h3>Try and borrow</h3><p>Practice in simulators, then borrow a kit to try at home.</p></a></li>
       </ol>
@@ -788,6 +789,7 @@ footer .wrap { padding-block: 22px; }
           <div class="chat-head"><span>ACCESS+ AI AGENT</span><span class="tag-ex" id="chatTag">Example</span></div>
           <div class="chat-side">
             <canvas id="aceFace" class="aceface" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+            <a class="btn primary fd-cta" href="#find">Find my technology &rarr;</a>
             <span class="side-k">Start with</span>
             <div class="starters" id="starters">
               <button class="chip small primarystart" type="button" id="getToKnow">Get to know me first</button>
@@ -855,7 +857,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:50 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:56 UTC</span></div>
   </div>
 </footer>
 

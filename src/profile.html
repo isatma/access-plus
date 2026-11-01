@@ -203,7 +203,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 <main>
   <div class="wrap">
     <div class="steps4" aria-label="Build your AI custom profile">
-      <button class="st4" type="button" id="stepAsk"><span class="n">Step 1</span><b>Tell the AI agent what you want to accomplish</b><small>A few easy questions about your goals, movement, positions and the tools you use now.</small></button>
+      <a class="st4" href="#find"><span class="n">Step 1</span><b>Find my technology</b><small>Six quick questions about your goals and movements, and a starting recommendation.</small></a>
       <a class="st4" href="#gesture"><span class="n">Step 2</span><b>Do the gesture check</b><small>Your webcam tests smile, nose, head tilt and turn to find your most reliable movements.</small></a>
       <a class="st4" href="#simulators"><span class="n">Step 3</span><b>Practice in a simulator</b><small>Build skills with the methods that suit you.</small></a>
       <a class="st4" href="#borrow"><span class="n">Step 4</span><b>Borrow a kit</b><small>Try real sensors at home, alone or with your therapist.</small></a>
@@ -309,7 +309,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:50 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 14:56 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
@@ -571,10 +571,6 @@ function AgentCloud(canvas, opts) {
     isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = [];
     log.innerHTML = '';
     talk('Please start my profile interview. Greet me warmly, then get to know me: ask first what I want to accomplish, then learn about my needs, wants and hopes, what a good day looks like, and what frustrates me now, one question at a time, before moving on to movement, positions and tools.', false);
-  });
-  document.getElementById('stepAsk').addEventListener('click', function () {
-    document.getElementById('startBtn').click();
-    var a = document.querySelector('.ace'); if (a) a.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
   document.getElementById('assessBtn').addEventListener('click', function () {
     if (isExample) { isExample = false; P = JSON.parse(JSON.stringify(BLANK)); render(); turns = []; log.innerHTML = ''; }
