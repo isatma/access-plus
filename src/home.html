@@ -125,7 +125,10 @@ footer { padding-bottom: 90px; }
 .band .bd, .band .bd-deco { display: none; }
 .band-bottom { border-bottom: none; border-top: 1px solid var(--line); }
 .band-top { margin-top: 18px; margin-bottom: 8px; border-top: 1px solid var(--line); }
-.ex-row { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.ex-row { margin-top: 6px; display: grid; gap: 8px; }
+.ex-row .ex-chips { flex-direction: column; }
+.ex-row .ex-chip { width: 100%; text-align: left; }
+.side-k:has(+ .starters[hidden]) { display: none; }
 .ex-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .ex-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .ex-chip { min-height: 44px; padding: 0 14px; border: 1px solid var(--line-hi); background: transparent; color: var(--desc); font: 400 0.9em var(--body); cursor: pointer; }
@@ -425,7 +428,20 @@ footer { padding-bottom: 90px; }
 .chat-note { margin: 0; color: var(--muted); font-size: 0.8em; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-@media (max-width: 900px) { .ai { grid-template-columns: 1fr; } }
+.ai { display: grid !important; grid-template-columns: 1fr !important; gap: 24px; }
+.ai-list { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.ai-list li { border-left: 0; border-top: 2px solid var(--signal); padding: 16px 18px; background: color-mix(in srgb, var(--panel) 85%, transparent); gap: 6px; align-content: start; }
+.ai-list .ai-n { display: inline-grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--signal); color: var(--signal); font: 600 0.85em var(--body); margin-bottom: 4px; }
+.chat { grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.6fr); grid-template-areas: "head head" "side main"; column-gap: 24px; }
+.chat-head { grid-area: head; }
+.chat-side { grid-area: side; display: grid; gap: 12px; align-content: start; }
+.chat-main { grid-area: main; display: grid; gap: 12px; align-content: start; min-width: 0; }
+.chat-side .aceface { height: 200px; }
+.side-k { font: 500 0.68em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.chat-side .starters { flex-direction: column; }
+.chat-side .starters .chip { width: 100%; justify-content: flex-start; }
+.chat-main .log { min-height: 200px; }
+@media (max-width: 900px) { .ai-list { grid-template-columns: 1fr; } .chat { grid-template-columns: 1fr; grid-template-areas: "head" "side" "main"; } .chat-side .aceface { height: 140px; } }
 
 .simstrip { margin-top: 8px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 28px; padding: 24px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); }
 .simstrip > div { display: grid; gap: 6px; max-width: 46em; }
@@ -757,22 +773,27 @@ footer .wrap { padding-block: 22px; }
       <div class="head"><h2 id="aiTitle">Your AI agent</h2><p>The AI agent assesses your needs, suggests the technology and sensors that fit you, and then helps you practice in the simulators.</p></div>
       <div class="ai">
         <ul class="ai-list">
-          <li><b>Gets to know you</b><span>Asks what you want to do and finds your most reliable way to control technology.</span></li>
-          <li><b>Follows you across devices</b><span>One profile for your computer, phone, chair and home, and it notices early when your needs change.</span></li>
-          <li><b>You stay in control</b><span>Every suggestion is explained, you decide, and your practice becomes evidence for your therapist and funders.</span></li>
+          <li><span class="ai-n">1</span><b>Gets to know you</b><span>Asks what you want to do and finds your most reliable way to control technology.</span></li>
+          <li><span class="ai-n">2</span><b>Follows you across devices</b><span>One profile for your computer, phone, chair and home, and it notices early when your needs change.</span></li>
+          <li><span class="ai-n">3</span><b>You stay in control</b><span>Every suggestion is explained, you decide, and your practice becomes evidence for your therapist and funders.</span></li>
         </ul>
         <div class="chat" id="chat" aria-label="Chat with the AI guide">
           <div class="chat-head"><span>ACCESS+ AI AGENT</span><span class="tag-ex" id="chatTag">Example</span></div>
-          <canvas id="aceFace" class="aceface" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+          <div class="chat-side">
+            <canvas id="aceFace" class="aceface" role="img" aria-label="The Access+ AI agent, shown as a moving cloud of light"></canvas>
+            <span class="side-k">Start with</span>
+            <div class="starters" id="starters">
+              <button class="chip small primarystart" type="button" id="getToKnow">Get to know me first</button>
+              <button class="chip small" type="button">What input should I try first?</button>
+              <button class="chip small" type="button">How does sip-and-puff work?</button>
+              <button class="chip small" type="button">I'm in bed this week. What changes?</button>
+            </div>
+            <div class="ex-row" role="group" aria-label="Example situations"><span class="ex-k">Or try an example situation</span><span class="ex-chips" id="storyChips"></span></div>
+          </div>
+          <div class="chat-main">
           <div class="log" id="chatLog" aria-live="polite">
             <div class="msg me">I'm in bed this week and nose tracking keeps drifting.</div>
             <div class="msg ai-msg">Lying down changes your range of motion. Let's make an in-bed profile: I'll re-center your rest position and widen the dead zone a little. Then try two minutes of the pointing exercise and I'll compare it with your seated scores.</div>
-          </div>
-          <div class="starters" id="starters">
-            <button class="chip small primarystart" type="button" id="getToKnow">Get to know me first</button>
-            <button class="chip small" type="button">What input should I try first?</button>
-            <button class="chip small" type="button">How does sip-and-puff work?</button>
-            <button class="chip small" type="button">I'm in bed this week. What changes?</button>
           </div>
           <form class="ask" id="askForm" autocomplete="off">
             <label class="sr" for="askInput">Ask the AI agent</label>
@@ -781,9 +802,9 @@ footer .wrap { padding-block: 22px; }
             <button class="btn" id="stopBtn" type="button" hidden>Stop</button>
           </form>
           <p class="chat-note" id="chatNote">The guide uses Claude on your own Claude account. It's for learning and practice, not medical advice.</p>
+          </div>
         </div>
       </div>
-      <div class="ex-row" role="group" aria-label="Example situations"><span class="ex-k">Try an example situation</span><span class="ex-chips" id="storyChips"></span></div>
       <div class="cases" id="casesBox" hidden>
         <div class="cases-head"><h3>Meet example users</h3><p>Six fictional stories from the Access+ research proposal, based on real clinical patterns. Pick one and the AI agent walks you through it.</p></div>
         <div class="case-grid" id="caseGrid"></div>
@@ -824,7 +845,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:21 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:27 UTC</span></div>
   </div>
 </footer>
 
