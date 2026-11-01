@@ -191,7 +191,7 @@
       var tile = mesh(new THREE.BoxGeometry(0.86, 0.06, 0.43), [side, side, top, side, side, side]);
       var at = polar(deg, r, 0.03); tile.position.copy(at);
       tile.rotation.y = Math.atan2(at.x - BASE.x, at.z - BASE.z) * 0.35;
-      scene.add(tile);
+      if (opts.navTiles) scene.add(tile);
       var halo = new THREE.Mesh(new THREE.RingGeometry(0.44, 0.48, 48), new THREE.MeshBasicMaterial({ color: GREEN, transparent: true, opacity: 0, side: THREE.DoubleSide }));
       halo.rotation.x = -Math.PI / 2; halo.scale.set(1, 0.62, 1); halo.position.set(at.x, 0.006, at.z); scene.add(halo);
       return { d: d, mesh: tile, at: at.clone(), home: at.clone(), halo: halo, h: 0.06 };

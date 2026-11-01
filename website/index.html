@@ -273,11 +273,15 @@ footer { padding-bottom: 90px; }
 @media (min-width: 1100px) {
   .hero { grid-template-columns: minmax(0, 0.82fr) minmax(0, 2.18fr); gap: 28px; }
   .hero .intro h1 { font-size: 1.95em; }
-  #arm3d { --ar: 1.3; }
+  #arm3d { --ar: 1.1; }
   .hero-head canvas { width: 88px; height: 88px; }
   .hero-head { gap: 14px; }
   #guide { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); grid-template-rows: auto auto 1fr; }
   #guide > .modes-top { grid-column: 1; grid-row: 1; }
+  #guide.has3d { grid-template-rows: auto 1fr; }
+  #guide.has3d > .stage3d { grid-row: 1; }
+  #guide.has3d > #armSel { grid-row: 2; }
+  #guide.has3d > .body { grid-row: 1 / span 2; }
   #guide > .stage3d { grid-column: 1; grid-row: 2; }
   #guide > #armSel { grid-column: 1; grid-row: 3; align-self: start; }
   #guide > .body { grid-column: 2; grid-row: 1 / span 3; border-left: 1px solid var(--line-hi); padding: 18px; }
@@ -343,7 +347,7 @@ footer { padding-bottom: 90px; }
 @media (prefers-reduced-motion: no-preference) { .arm3d-label.pop b { animation: lblpop .35s ease; } @keyframes lblpop { from { transform: translateY(-4px); opacity: .3; } to { transform: none; opacity: 1; } } }
 @media (max-width: 520px) { .arm3d-label b { font-size: 1.15em; } .arm3d-label span { display: none; } }
 .has3d .arm3d { display: block; }
-.has3d #armSvg, .has3d #aceWrap { display: none !important; }
+.has3d #armSvg, .has3d #aceWrap, .has3d > .modes-top { display: none !important; }
 .has3d .stage3d .viz { transform: none !important; }
 .has3d .stage3d .viz::after { display: none; }
 .arm3d:focus-visible { box-shadow: inset 0 0 0 3px var(--signal); }
@@ -1169,7 +1173,7 @@ footer .wrap { padding-block: 22px; }
           <div class="body">
             <span class="eyebrow">Try it now · Robotic arm</span>
             <h3>Steer the robotic arm</h3>
-            <p>Reach, grasp and navigate in 3D. Choose a tile or object and press Go, or open Manual control. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
+            <p>Reach and grasp in 3D. Choose an object with Left and Right and press Pick up, or open Manual control to drive the arm yourself. Works with nose tracking, eye gaze, a switch or the arrow keys.</p>
             <div class="armctl" role="group" aria-label="Arm controls">
               <button class="btn" id="armLeft" type="button" aria-label="Turn arm left">&larr; Left</button>
               <button class="btn primary" id="armGo" type="button">Go</button>
@@ -2319,7 +2323,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:11 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:14 UTC</span></div>
   </div>
 </footer>
 
@@ -3000,6 +3004,7 @@ function AgentCloud(canvas, opts) {
       try {
         var api = window.initArm3D({ host: host, ui: ui, dests: dests, go: function (h) { if (location.hash === h) window.dispatchEvent(new HashChangeEvent('hashchange')); else location.hash = h; } });
         if (!api) return;
+        api.setMode('play');
         feat.classList.add('has3d');
         document.getElementById('armCtl2').hidden = false; document.getElementById('armRead').hidden = false;
       } catch (err) { console.warn('3D arm unavailable', err); feat.classList.remove('has3d'); }
@@ -3754,7 +3759,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
       var tile = mesh(new THREE.BoxGeometry(0.86, 0.06, 0.43), [side, side, top, side, side, side]);
       var at = polar(deg, r, 0.03); tile.position.copy(at);
       tile.rotation.y = Math.atan2(at.x - BASE.x, at.z - BASE.z) * 0.35;
-      scene.add(tile);
+      if (opts.navTiles) scene.add(tile);
       var halo = new THREE.Mesh(new THREE.RingGeometry(0.44, 0.48, 48), new THREE.MeshBasicMaterial({ color: GREEN, transparent: true, opacity: 0, side: THREE.DoubleSide }));
       halo.rotation.x = -Math.PI / 2; halo.scale.set(1, 0.62, 1); halo.position.set(at.x, 0.006, at.z); scene.add(halo);
       return { d: d, mesh: tile, at: at.clone(), home: at.clone(), halo: halo, h: 0.06 };
