@@ -35,7 +35,7 @@
 
     var hemi = new THREE.HemisphereLight(0xbcd6f0, 0x05080f, 0.9); scene.add(hemi);
     var roomLight = new THREE.PointLight(0xfff1d6, 0, 14, 1.4); roomLight.position.set(0, 4.5, 0.5); scene.add(roomLight);
-    var roomGlow = 0;
+    var roomGlow = 0, lightOn = false, glowT = 0;
     var key = new THREE.DirectionalLight(0xffffff, 1.1);
     key.position.set(2.5, 6, 3.5); key.castShadow = true;
     key.shadow.mapSize.set(1024, 1024);
@@ -285,7 +285,7 @@
       if (manual) { setStatus('Manual control: use the control panel. Hold a button to keep moving.'); showLabel('Manual control', ''); return; }
       var it = list()[sel]; if (!it) return;
       if (mode === 'nav') { setStatus(it.d.name + (it.d.cap ? ': ' + it.d.cap : '')); showLabel(it.d.name, it.d.cap); }
-      else { var ACT = { cup: 'Pick up a drink', phone: 'Pick up the phone', pill: 'Move the pill bottle', button: 'Turn on the light' }; setStatus((ACT[it.key] || it.name) + ': press Pick up.'); showLabel(ACT[it.key] || it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: 'Turn on the light' }[it.key]); }
+      else { var ACT = { cup: 'Pick up a drink', phone: 'Pick up the phone', pill: 'Move the pill bottle', button: lightOn ? 'Turn off the light' : 'Turn on the light' }; setStatus((ACT[it.key] || it.name) + ': press Pick up.'); showLabel(ACT[it.key] || it.name, { cup: 'Bring a drink to the mouth', phone: 'Hold the phone at the ear', pill: 'Move it to the tray', button: lightOn ? 'Turn off the light' : 'Turn on the light' }[it.key]); }
     }
     function point() {
       if (manual || busy) return;
@@ -323,9 +323,9 @@
       if (o.key === 'button') {
         var face = o.at.clone().add(dir.clone().multiplyScalar(-0.12)); face.y = 0.62;
         var back = face.clone().add(dir.clone().multiplyScalar(-0.4));
-        queue = []; to(back, Math.PI / 2, { grip: 1, speed: 2 }); to(face, Math.PI / 2, { speed: 0.8, then: function () { var r = o.g.userData.lamp; r.rotation.x = -0.18; r.material.emissive.setHex(0xffd27a); roomGlow = 1; setStatus(o.done + '. The room brightens.'); } });
+        queue = []; to(back, Math.PI / 2, { grip: 1, speed: 2 }); to(face, Math.PI / 2, { speed: 0.8, then: function () { var r = o.g.userData.lamp; lightOn = !lightOn; r.rotation.x = lightOn ? -0.18 : 0.18; r.material.emissive.setHex(lightOn ? 0xffd27a : 0); setStatus(lightOn ? 'Light on. Press again to turn it off.' : 'Light off.'); describe(); } });
         to(face, Math.PI / 2, { wait: 400 }); to(back, Math.PI / 2, { speed: 1.2, grip: 0 });
-        run(function () { busy = false; lock(false); setTimeout(function () { var r = o.g.userData.lamp; r.rotation.x = 0.18; r.material.emissive.setHex(0); }, 3200); });
+        run(function () { busy = false; lock(false); });
         return;
       }
       queue = [];
@@ -587,8 +587,7 @@
       }
       var tw = tipWorld(); eyes.forEach(function (eg) { var lp = USER.worldToLocal(tw.clone()); lp.sub(eg.position); eg.rotation.y = Math.max(-0.6, Math.min(0.6, Math.atan2(lp.x, lp.z))); eg.rotation.x = Math.max(-0.4, Math.min(0.4, -Math.atan2(lp.y, Math.hypot(lp.x, lp.z)))); });
       var blink = ((now / 1000) % 4.2) < 0.12 ? 0.12 : 1; eyes.forEach(function (eg) { eg.scale.y = blink; });
-      if (roomGlow > 0) { roomGlow = Math.max(0, roomGlow - dt / 3.2); }
-      var gl = roomGlow > 0.85 ? (1 - roomGlow) / 0.15 : roomGlow / 0.85; gl = Math.min(1, gl) * (roomGlow > 0 ? 1 : 0);
+      glowT += ((lightOn ? 1 : 0) - glowT) * Math.min(1, dt * 3); var gl = glowT;
       roomLight.intensity = 2.2 * gl; hemi.intensity = 0.9 + 0.9 * gl;
       if (host.parentNode) host.style.background = gl > 0.01 ? 'radial-gradient(ellipse at 50% 20%, rgba(255,236,190,' + (0.22 * gl).toFixed(3) + '), transparent 70%)' : '';
       var pulse = 0.55 + 0.35 * Math.sin((now - t0) / 380);
