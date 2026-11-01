@@ -353,7 +353,23 @@ section[id] { scroll-margin-top: 210px; }
 /* goals and who */
 .two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 .chips { display: flex; flex-wrap: wrap; gap: 10px; }
-.goal-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; }
+.goal-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 28px; margin-top: 16px; }
+.goal-groups.collapsed .goal-group:not(.open) { display: none; }
+.goal-groups.collapsed { grid-template-columns: 1fr; }
+.gsearch { display: flex; gap: 10px; margin-bottom: 14px; }
+.gsearch input { flex: 1 1 auto; min-width: 0; min-height: 52px; padding: 0 14px; font: inherit; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); }
+.gsearch input:focus { border-color: var(--signal); outline: none; }
+.gtiles { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; }
+.gtile { display: grid; gap: 4px; align-content: start; text-align: left; padding: 12px 12px 14px; min-height: 92px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); color: var(--ink); font: inherit; cursor: pointer; }
+.gtile:hover, .gtile[aria-expanded="true"] { border-color: var(--signal); }
+.gtile[aria-expanded="true"] { background: rgba(95,224,168,0.08); }
+.gtile b { font-weight: 600; font-size: 0.95em; line-height: 1.25; }
+.gtile small { color: var(--desc); font-size: 0.78em; line-height: 1.35; }
+.gtile .gdot { width: 10px; height: 10px; border-radius: 50%; margin-bottom: 4px; }
+.gnone { margin: 12px 0 0; color: var(--desc); }
+.nextrow { gap: 10px; flex-wrap: wrap; }
+@media (max-width: 1000px) { .gtiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .gtiles { grid-template-columns: 1fr 1fr; } .gsearch { flex-direction: column; } }
 .goal-group { display: grid; gap: 10px; align-content: start; }
 .goal-group h3 { font: 500 0.72em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 #goals .chip { min-height: 52px; font-size: 0.9em; }
@@ -972,7 +988,14 @@ footer .wrap { padding-block: 22px; }
 
     <section id="goals" aria-labelledby="goalsTitle">
       <div class="head"><h2 id="goalsTitle">Start with a goal</h2><p>Pick what matters to you. The AI agent will suggest where to begin.</p></div>
-      <div class="goal-groups">
+      <form class="gsearch" id="goalSearch" autocomplete="off" role="search">
+        <label class="sr" for="goalQ">Search goals or describe your own</label>
+        <input id="goalQ" type="search" placeholder="Search goals, or describe your own, like &ldquo;turn pages of a book&rdquo;">
+        <button class="btn primary" type="submit">Ask the AI agent</button>
+      </form>
+      <div class="gtiles" id="goalTiles" role="group" aria-label="Goal categories"></div>
+      <p class="gnone" id="goalNone" hidden>No matching goal yet. Press <b>Ask the AI agent</b> and it will help with your own goal.</p>
+      <div class="goal-groups" id="goalGroups">
         <div class="goal-group"><h3>Daily living</h3><div class="chips"><button class="chip" type="button">Give myself a drink</button><button class="chip" type="button">Feed myself</button><button class="chip" type="button">Use my phone</button><button class="chip" type="button">Use a computer</button><button class="chip" type="button">Control my home</button></div></div>
         <div class="goal-group"><h3>Safety</h3><div class="chips"><button class="chip" type="button">Call for help in more than one way</button><button class="chip" type="button">Emergency response at night</button></div></div>
         <div class="goal-group"><h3>Comfort and position</h3><div class="chips"><button class="chip" type="button">Sit without fatigue</button><button class="chip" type="button">Use my technology lying in bed</button><button class="chip" type="button">Switch functions between bed and chair</button><button class="chip" type="button">Move my hospital bed myself</button></div></div>
@@ -981,7 +1004,7 @@ footer .wrap { padding-block: 22px; }
         <div class="goal-group"><h3>Creativity</h3><div class="chips"><button class="chip" type="button">Play and make music</button><button class="chip" type="button">Paint and make adaptive art</button><button class="chip" type="button">Adaptive photography</button></div></div>
         <div class="goal-group"><h3>Sport and outdoors</h3><div class="chips"><button class="chip" type="button">Sail an electronic sailboat</button><button class="chip" type="button">Adaptive skiing, such as the Tetra ski</button><button class="chip" type="button">Bowling</button><button class="chip" type="button">Adaptive golf</button><button class="chip" type="button">Exercise</button></div></div>
       </div>
-      <div class="nextrow"><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
+      <div class="nextrow"><button class="btn" type="button" id="goalAll" aria-expanded="false">See all goals</button><a class="btn primary" href="#profile">Next: Step 2, your AI profile &rarr;</a></div>
     </section>
 
     <section id="simulators" aria-labelledby="simTitle">
@@ -2266,6 +2289,59 @@ function AgentCloud(canvas, opts) {
       else if (inp) { inp.value = 'My goal: ' + b.textContent + '. Where should I start?'; toastSay('Goal added to the AI agent box.'); }
     });
   });
+
+  (function () {
+    var groups = [].slice.call(document.querySelectorAll('#goalGroups .goal-group'));
+    var wrap = document.getElementById('goalGroups'), tiles = document.getElementById('goalTiles');
+    var all = document.getElementById('goalAll'), q = document.getElementById('goalQ'), none = document.getElementById('goalNone');
+    if (!wrap || !tiles) return;
+    var COL = ['#5fe0a8', '#ff8a8a', '#7cc4ff', '#ffc670', '#b9a4ff', '#f7b2c4', '#a9e4c4'];
+    wrap.classList.add('collapsed');
+    groups.forEach(function (g, i) {
+      var name = g.querySelector('h3').textContent;
+      var ex = [].slice.call(g.querySelectorAll('.chip')).slice(0, 3).map(function (c) { return c.textContent.replace(/^(Give myself a|Use my|Call for help in more than one way)/, function (m) { return m; }); });
+      var t = document.createElement('button'); t.type = 'button'; t.className = 'gtile'; t.setAttribute('aria-expanded', 'false');
+      t.innerHTML = '<span class="gdot"></span><b></b><small></small>';
+      t.querySelector('.gdot').style.background = COL[i % COL.length];
+      t.querySelector('b').textContent = name;
+      t.querySelector('small').textContent = g.querySelectorAll('.chip').length + ' goals';
+      t.addEventListener('click', function () {
+        var open = !g.classList.contains('open');
+        groups.forEach(function (x) { x.classList.remove('open'); });
+        tiles.querySelectorAll('.gtile').forEach(function (x) { x.setAttribute('aria-expanded', 'false'); });
+        if (open) { g.classList.add('open'); t.setAttribute('aria-expanded', 'true'); }
+        wrap.classList.add('collapsed'); all.setAttribute('aria-expanded', 'false'); all.textContent = 'See all goals';
+      });
+      tiles.appendChild(t);
+    });
+    all.addEventListener('click', function () {
+      var showAll = wrap.classList.contains('collapsed');
+      wrap.classList.toggle('collapsed', !showAll);
+      if (showAll) { groups.forEach(function (x) { x.classList.remove('open'); }); tiles.querySelectorAll('.gtile').forEach(function (x) { x.setAttribute('aria-expanded', 'false'); }); }
+      all.setAttribute('aria-expanded', showAll ? 'true' : 'false'); all.textContent = showAll ? 'Show fewer' : 'See all goals';
+    });
+    q.addEventListener('input', function () {
+      var v = q.value.trim().toLowerCase(), hits = 0;
+      groups.forEach(function (g) {
+        var any = false;
+        g.querySelectorAll('.chip').forEach(function (c) { var m = !v || c.textContent.toLowerCase().indexOf(v) >= 0 || g.querySelector('h3').textContent.toLowerCase().indexOf(v) >= 0; c.hidden = !m; if (m) any = true; });
+        g.classList.toggle('open', !!v && any);
+        if (v && any) hits++;
+      });
+      if (v) { wrap.classList.add('collapsed'); tiles.querySelectorAll('.gtile').forEach(function (x) { x.setAttribute('aria-expanded', 'false'); }); }
+      else { groups.forEach(function (g) { g.classList.remove('open'); g.querySelectorAll('.chip').forEach(function (c) { c.hidden = false; }); }); }
+      none.hidden = !v || hits > 0;
+    });
+    document.getElementById('goalSearch').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = q.value.trim(); if (!v) { q.focus(); return; }
+      var f = document.getElementById('askForm'), inp = document.getElementById('askInput');
+      location.hash = 'guide-ai';
+      var msg = 'My goal: ' + v + '. Where should I start?';
+      if (f && inp && !f.hidden && !inp.disabled) { inp.value = msg; f.requestSubmit(); }
+      else if (inp) { inp.value = msg; toastSay('Your goal is in the AI agent box.'); }
+    });
+  })();
 
   // guide arm
   var NS = 'http://www.w3.org/2000/svg';
