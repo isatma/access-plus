@@ -905,7 +905,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:39 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:55 UTC</span></div>
   </div>
 </footer>
 
@@ -1758,6 +1758,20 @@ function AgentCloud(canvas, opts) {
         ctx.fillStyle = col; ctx.font = '600 ' + Math.max(9, Math.min(16, F / b1[2] * 0.45)) + 'px "IBM Plex Mono", monospace'; ctx.textAlign = 'center'; ctx.fillText(String(gi2 + 1), (t1[0] + t2[0]) / 2, Math.min(t1[1], t2[1]) - 4);
       } });
     });
+    // headlight beams on the ground ahead of the chair
+    (function () {
+      var fx = Math.sin(here[2]), fz = Math.cos(here[2]), rx0 = Math.cos(here[2]), rz0 = -Math.sin(here[2]);
+      ctx.globalCompositeOperation = 'lighter';
+      [-0.32, 0.32].forEach(function (sd) {
+        var ox = here[0] + fx * 0.5 + rx0 * sd, oz = here[1] + fz * 0.5 + rz0 * sd;
+        var pts = [[0, 0], [12, -3.4], [12, 3.4]].map(function (q) { var x = ox + fx * q[0] + rx0 * (q[1] + sd * 2), z = oz + fz * q[0] + rz0 * (q[1] + sd * 2); return proj(x, z, pathY(x, z) + 0.03); });
+        if (pts.some(function (q) { return !q; })) return;
+        var mx = (pts[1][0] + pts[2][0]) / 2, my = (pts[1][1] + pts[2][1]) / 2, gr = ctx.createLinearGradient(pts[0][0], pts[0][1], mx, my);
+        gr.addColorStop(0, 'rgba(225,248,255,0.55)'); gr.addColorStop(0.35, 'rgba(160,220,255,0.22)'); gr.addColorStop(1, 'rgba(124,196,255,0)');
+        ctx.fillStyle = gr; ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); ctx.lineTo(pts[1][0], pts[1][1]); ctx.lineTo(pts[2][0], pts[2][1]); ctx.closePath(); ctx.fill();
+      });
+      ctx.globalCompositeOperation = 'source-over';
+    })();
     items.sort(function (a, b) { return b.z - a.z; }).forEach(function (it) { it.f(); });
     ctx.globalCompositeOperation = 'lighter';
     sparks = sparks.filter(function (sp) { sp.t += dt; sp.x += sp.vx*dt; sp.z += sp.vz*dt; sp.vy -= 6*dt; sp.y = Math.max(sp.fl, sp.y + sp.vy*dt); var pr = proj(sp.x, sp.z, sp.y); if (pr) { ctx.fillStyle = sp.c; ctx.globalAlpha = Math.max(0, 1 - sp.t / 1.1); ctx.beginPath(); ctx.arc(pr[0], pr[1], Math.max(1, F / pr[2] * 0.05), 0, 6.283); ctx.fill(); } return sp.t < 1.1; });
@@ -1766,12 +1780,27 @@ function AgentCloud(canvas, opts) {
     var base = proj(here[0], here[1], yHere); if (base) {
       var s = F / base[2], bx = base[0], by = base[1], tiltDeg = Math.atan(rollS) * 57.3, risky = Math.abs(tiltDeg) > 9;
       ctx.save(); ctx.translate(bx, by); ctx.rotate(-Math.atan(rollS) * 0.9 + turn * 0.05);
-      ctx.fillStyle = onBridge ? 'rgba(124,196,255,0.18)' : 'rgba(95,224,168,0.18)'; ctx.beginPath(); ctx.ellipse(0, 0, s*0.75, s*0.16, 0, 0, 6.283); ctx.fill();
+      var ug = ctx.createRadialGradient(0, 0, 0, 0, 0, s*1.1); ug.addColorStop(0, 'rgba(95,240,200,0.75)'); ug.addColorStop(0.45, 'rgba(95,224,168,0.28)'); ug.addColorStop(1, 'rgba(95,224,168,0)');
+      ctx.save(); ctx.scale(1, 0.24); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = ug; ctx.beginPath(); ctx.arc(0, 0, s*1.1, 0, 6.283); ctx.fill(); ctx.restore();
       ctx.fillStyle = '#0b1220'; ctx.strokeStyle = '#3b5476'; ctx.lineWidth = 2;
       [-1, 1].forEach(function (sd) { ctx.beginPath(); ctx.ellipse(sd * s*0.42, -s*0.22, s*0.12, s*0.24, 0, 0, 6.283); ctx.fill(); ctx.stroke(); });
       ctx.fillStyle = '#15233a'; ctx.fillRect(-s*0.34, -s*0.36, s*0.68, s*0.2);
       ctx.fillStyle = '#1b2d4a'; ctx.fillRect(-s*0.3, -s*0.95, s*0.6, s*0.62);
       ctx.strokeStyle = risky ? '#ffc670' : inp[1]; ctx.lineWidth = 2; ctx.strokeRect(-s*0.3, -s*0.95, s*0.6, s*0.62);
+      // lights: wheel rim LEDs, side light bars, tail lights, headlight glow
+      ctx.globalCompositeOperation = 'lighter';
+      function glowDot(x, y, r, col, a) { var g2 = ctx.createRadialGradient(x, y, 0, x, y, r); g2.addColorStop(0, 'rgba(255,255,255,' + a + ')'); g2.addColorStop(0.25, col); g2.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = g2; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill(); }
+      var flick = 0.85 + 0.15 * Math.sin(now / 60);
+      [-1, 1].forEach(function (sd) {
+        ctx.strokeStyle = inp[1]; ctx.lineWidth = Math.max(2, s*0.035); ctx.shadowColor = inp[1]; ctx.shadowBlur = s*0.25;
+        ctx.beginPath(); ctx.ellipse(sd * s*0.42, -s*0.22, s*0.1, s*0.21, 0, 0, 6.283); ctx.stroke();
+        var spin = now / 120 * sd; ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(sd * s*0.42 + Math.cos(spin) * s*0.1, -s*0.22 + Math.sin(spin) * s*0.21, s*0.025, 0, 6.283); ctx.fill();
+        ctx.shadowBlur = 0;
+        glowDot(sd * s*0.24, -s*0.42, s*0.22 * flick, 'rgba(255,40,60,0.85)', 0.95);
+        glowDot(sd * s*0.36, -s*0.62, s*0.5, 'rgba(225,248,255,0.25)', 0.35);
+      });
+      ctx.fillStyle = 'rgba(255,60,80,0.9)'; ctx.fillRect(-s*0.3, -s*0.44, s*0.6, Math.max(2, s*0.03));
+      ctx.globalCompositeOperation = 'source-over';
       var pulse = 0.5 + 0.5 * Math.sin(now / 160);
       ctx.fillStyle = '#c4d0dd'; ctx.beginPath(); ctx.arc(0, -s*1.12, s*0.14, 0, 6.283); ctx.fill();
       ctx.strokeStyle = inp[1]; ctx.globalAlpha = 0.5 + 0.5 * pulse; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(0, -s*1.12, s*0.22, Math.PI * 0.15, Math.PI * 0.85, true); ctx.stroke(); ctx.globalAlpha = 1;
