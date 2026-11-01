@@ -129,6 +129,10 @@ footer { padding-bottom: 90px; }
 .ex-row .ex-chips { flex-direction: column; }
 .ex-row .ex-chip { width: 100%; text-align: left; }
 .side-k:has(+ .starters[hidden]) { display: none; }
+.topics { display: grid; gap: 8px; }
+.topic { min-height: 48px; padding: 8px 14px; text-align: left; background: transparent; color: var(--ink); border: 1px solid var(--line-hi); font: 500 0.95em var(--body); cursor: pointer; }
+.topic:hover, .topic[aria-expanded="true"] { border-color: var(--signal); color: var(--signal); }
+.subtopics { display: flex; flex-wrap: wrap; gap: 6px; padding: 2px 0 6px 12px; border-left: 2px solid var(--signal); }
 .ex-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .ex-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .ex-chip { min-height: 44px; padding: 0 14px; border: 1px solid var(--line-hi); background: transparent; color: var(--desc); font: 400 0.9em var(--body); cursor: pointer; }
@@ -784,11 +788,20 @@ footer .wrap { padding-block: 22px; }
             <span class="side-k">Start with</span>
             <div class="starters" id="starters">
               <button class="chip small primarystart" type="button" id="getToKnow">Get to know me first</button>
-              <button class="chip small" type="button">What input should I try first?</button>
-              <button class="chip small" type="button">How does sip-and-puff work?</button>
-              <button class="chip small" type="button">I'm in bed this week. What changes?</button>
             </div>
-            <div class="ex-row" role="group" aria-label="Example situations"><span class="ex-k">Or try an example situation</span><span class="ex-chips" id="storyChips"></span></div>
+            <span class="side-k">Ask about</span>
+            <div class="topics" id="topics">
+              <button class="topic" type="button" data-t="right" aria-expanded="false">What's the right technology for me?</button>
+              <div class="subtopics" id="subtopics" hidden>
+                <button class="chip small" type="button" data-t="head">Head tracking</button>
+                <button class="chip small" type="button" data-t="eye">Eye tracking</button>
+                <button class="chip small" type="button" data-t="switch">Switch interfaces</button>
+                <button class="chip small" type="button" data-t="hw">Hardware solutions</button>
+                <button class="chip small" type="button" data-t="hybrid">Hybrid solutions</button>
+              </div>
+              <button class="topic" type="button" data-t="fatigue">How do I avoid fatigue?</button>
+              <button class="topic" type="button" data-t="position">Lying down or in the chair</button>
+            </div>
           </div>
           <div class="chat-main">
           <div class="log" id="chatLog" aria-live="polite">
@@ -845,7 +858,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:27 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 12:37 UTC</span></div>
   </div>
 </footer>
 
@@ -1490,6 +1503,41 @@ function AgentCloud(canvas, opts) {
   }
   form.addEventListener('submit', function (e) { e.preventDefault(); ask(input.value); });
   stopChat.addEventListener('click', function () { if (ctl) ctl.abort(); });
+
+  (function () {
+    var Q = {
+      right: 'What is the right technology for me?',
+      head: 'Tell me about head tracking. Who is it good for, and what do I need?',
+      eye: 'Tell me about eye tracking. Who is it good for, and what do I need?',
+      'switch': 'Tell me about switch interfaces. Who are they good for, and what do I need?',
+      hw: 'What hardware solutions could help me, like wheelchair inputs, robotic arms, mounts or lifts?',
+      hybrid: 'What are hybrid solutions, combining more than one input?',
+      fatigue: 'How do I avoid fatigue when using assistive technology?',
+      position: 'What changes when I use my technology lying down in bed versus sitting in my chair?'
+    };
+    var A = {
+      right: 'It depends on what you want to do and the movements that are most reliable for you. Pick one of the options below, or press Get to know me first and I’ll ask a few questions.',
+      head: 'Head tracking uses a webcam or a small sensor to move the pointer with head or nose movement. It suits people with good head control. You need a webcam or head mouse, software such as built-in head pointer settings, and a way to click, like a dwell click, a switch or a facial gesture. Try the gesture check to see how steady your movement is.',
+      eye: 'Eye tracking moves the pointer where you look. It suits people with little or no reliable head or hand movement, including later stages of ALS. You need an eye tracker, good positioning, and calibration in each position you use. Clicking is usually by dwelling your gaze or with a switch.',
+      'switch': 'Switch interfaces turn any small, reliable movement, a breath, a cheek twitch, a finger, a foot, into a button press. With scanning, one or two switches can run a computer, phone or communication device. They are reliable and low-fatigue, but slower than pointing.',
+      hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral reviews.',
+      hybrid: 'Hybrid setups combine inputs so each does what it does best: for example eye gaze to point, a switch or facial gesture to click, and voice for typing. They reduce fatigue and keep you working if one method has a bad day.',
+      fatigue: 'Plan for fatigue: use the lowest-effort input for long tasks, add short breaks, slow the pointer and enlarge targets, use dwell or switch clicks instead of repeated movement, and keep a backup input for later in the day. Tracking your scores over time shows when to adjust.',
+      position: 'Lying down changes your range of motion, lighting and screen angle. Keep a separate profile for bed and for the chair: re-center tracking, adjust the dead zone, and mount the screen and switches for each position. Eye tracking needs recalibration whenever your position changes.'
+    };
+    var box = document.getElementById('topics'), sub = document.getElementById('subtopics'); if (!box) return;
+    box.querySelectorAll('[data-t]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var t = b.dataset.t;
+        if (t === 'right') { var o = sub.hidden; sub.hidden = !o; b.setAttribute('aria-expanded', o ? 'true' : 'false'); }
+        if (typeof sampleFn !== 'undefined' && sampleFn && !form.hidden) { ask(Q[t]); return; }
+        if (!started) { started = true; log.innerHTML = ''; }
+        tag.textContent = 'Example answer';
+        chatBubble('me', Q[t]); chatBubble('ai-msg', A[t]);
+        aceFace.talk(Math.min(5000, 400 + A[t].length * 20));
+      });
+    });
+  })();
   starters.querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { ask(b.id === 'getToKnow' ? 'Please get to know me. Greet me briefly and ask me your first question about what I want to be able to do.' : b.textContent); }); });
   setBusy(true); askBtn.disabled = true; note.textContent = 'Connecting the guide…';
   (window.claude ? window.claude.use('sample') : Promise.resolve(null)).then(function (fn) {
