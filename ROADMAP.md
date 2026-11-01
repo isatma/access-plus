@@ -16,6 +16,7 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay
+- Catalog listing format (Nov 1, 2026): standard card (what it is, at a glance, watch and read, evidence, insights, community comments placeholder); first entry EyeHarp under Gaming and music. Next: convert other guides to catalog cards; real comments need sign-in, moderation, consent
 - Eye tracking guide (Nov 1, 2026): screen-mounted vs head-worn, with the low-cost open-source eye-tracking glasses from Dr. Jason Orlosky (Augusta University)
 - Solutions organized (Nov 1, 2026): three kinds, software (commercial, open source, built in), hardware (proprietary, open source), bridges and interfaces (into the chair, out of the chair, into devices); new Bridges tab with a wheelchair bridges guide. Next: switch interfaces, gaming bridges, home and infrared bridges
 - Simulator banner (Nov 1, 2026): home sneak peek of a wheelchair course with a steep hill, narrow bridge over water, side slope, slope and tilt meters and hazard warnings. Ideas next: curb cuts and doorways, van ramp, night drive with headlights, moving obstacles, recreational courses (sailing, go-kart)

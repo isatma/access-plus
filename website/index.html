@@ -1256,6 +1256,40 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 900px) {
 #view-tech .tg-hid { grid-template-columns: 1fr; }
 }
+#view-tech .cat-list { display: grid; gap: 16px; }
+#view-tech .cat-std { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 12px 16px; border: 1px dashed var(--line-hi); color: var(--muted); font-size: 0.86em; }
+#view-tech .cat-std b { font: 500 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+#view-tech .cat-card { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 94%, transparent); position: relative; }
+#view-tech .cat-card::before { content: ""; position: absolute; top: -1px; left: -1px; width: 14px; height: 14px; border: solid var(--signal); border-width: 2px 0 0 2px; }
+#view-tech .cat-main, #view-tech .cat-side { padding: 20px; display: grid; gap: 12px; align-content: start; min-width: 0; }
+#view-tech .cat-side { border-left: 1px solid var(--line-hi); background: rgba(124,196,255,0.04); }
+#view-tech .cat-top { display: grid; gap: 6px; }
+#view-tech .cat-top .kind { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--signal); }
+#view-tech .cat-top h3 { font: 600 1.3em var(--body); letter-spacing: 0; }
+#view-tech .cat-top .by { color: var(--muted); font-size: 0.9em; }
+#view-tech .cat-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+#view-tech .cat-main > p { margin: 0; color: var(--desc); }
+#view-tech .cat-glance { margin: 0; display: grid; grid-template-columns: 8.5em 1fr; gap: 6px 12px; font-size: 0.9em; }
+#view-tech .cat-glance dt { font: 500 0.76em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+#view-tech .cat-glance dd { margin: 0; color: var(--ink); }
+#view-tech .cat-h { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #7cc4ff; }
+#view-tech .cat-media { display: grid; gap: 8px; }
+#view-tech .cat-media a { display: grid; grid-template-columns: 44px 1fr; gap: 12px; align-items: center; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; }
+#view-tech .cat-media a:hover { border-color: var(--signal); }
+#view-tech .cat-media .ico { width: 44px; height: 32px; display: grid; place-items: center; background: #c4302b; color: #fff; font-size: 0.9em; border-radius: 6px; }
+#view-tech .cat-media .ico.doc { background: var(--line-hi); }
+#view-tech .cat-media small { display: block; color: var(--muted); font-size: 0.8em; }
+#view-tech .cat-side ul { margin: 0; padding-left: 18px; color: var(--desc); display: grid; gap: 5px; font-size: 0.9em; }
+#view-tech .cat-side cite { display: block; color: var(--muted); font-size: 0.78em; font-style: normal; margin-top: 2px; }
+#view-tech .cat-comments { padding: 12px 14px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.05); display: grid; gap: 6px; font-size: 0.88em; color: var(--desc); }
+#view-tech .cat-comments b { color: #ffc670; font: 500 0.78em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
+#view-tech .cat-dated { margin: 0; color: var(--muted); font-size: 0.78em; }
+@media (max-width: 900px) {
+#view-tech .cat-card { grid-template-columns: 1fr; }
+#view-tech .cat-side { border-left: 0; border-top: 1px solid var(--line-hi); }
+#view-tech .cat-glance { grid-template-columns: 1fr; gap: 2px; }
+#view-tech .cat-glance dd { margin-bottom: 6px; }
+}
 #view-about .ab-wrap { gap: 48px !important; }
 #view-about .ab-intro { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 32px; align-items: center; }
 #view-about .ab-intro h1 { font-size: 1.9em; line-height: 1.25; }
@@ -2048,7 +2082,7 @@ footer .wrap { padding-block: 22px; }
             <button class="tg-cat" type="button" data-cat="computer" aria-pressed="false"><span class="st8">Coming next</span><b>Computer access</b><small>Eye, head and nose tracking, alternative mice</small></button>
             <button class="tg-cat" type="button" data-cat="phone" aria-pressed="false"><span class="st8">Coming next</span><b>Phones and tablets</b><small>Switch control, voice, head tracking</small></button>
             <button class="tg-cat" type="button" data-cat="aac" aria-pressed="false"><span class="st8">Coming next</span><b>Communication</b><small>Talking boards, speech apps, soundboards</small></button>
-            <button class="tg-cat" type="button" data-cat="play" aria-pressed="false"><span class="st8">Coming next</span><b>Gaming and music</b><small>Hands-free games, adaptive play, instruments</small></button>
+            <button class="tg-cat ready" type="button" data-cat="play" aria-pressed="false"><span class="st8">Guide ready · Catalog</span><b>Gaming and music</b><small>Hands-free games, adaptive play, instruments</small></button>
           </div>
         </div>
         <div class="tg-group br">
@@ -2435,6 +2469,47 @@ footer .wrap { padding-block: 22px; }
       <p class="tg-safe">Research and DIY projects are shared for information. They are not medical devices; for communication you depend on, use a supported device and keep a backup method.</p>
     </section>
 
+    <section class="tg-panel" id="tg-panel-play" hidden aria-labelledby="tg-playT">
+      <div class="tg-head"><h2 id="tg-playT">Gaming and music</h2><p>Instruments and games you can play with your eyes, head, breath or switches.</p></div>
+      <div class="cat-std"><b>Catalog listing</b> Every entry uses the same layout: what it is, at a glance, watch and read, evidence, insights, and community comments.</div>
+      <div class="cat-list">
+        <article class="cat-card" id="tg-cat-eyeharp">
+          <div class="cat-main">
+            <div class="cat-top">
+              <span class="kind">Software · music · eye and head control</span>
+              <h3>EyeHarp</h3>
+              <span class="by">EyeHarp Association, a non-profit in Barcelona, Spain. Began as a research project at Pompeu Fabra University.</span>
+              <div class="cat-tags"><span class="tg-tag com">Commercial</span><span class="tg-tag open">Free basic version</span><span class="tg-tag res">Research-based</span></div>
+            </div>
+            <p>A digital musical instrument you play by looking at notes on the screen. One layer builds chords and rhythms like a step sequencer; another plays melodies. The layout adapts to your musical level and physical abilities, and it can also send MIDI to other music software. Music therapists and teachers use it, and players have performed in concert halls.</p>
+            <dl class="cat-glance">
+              <dt>Works with</dt><dd>Supported eye trackers (Tobii, IntelliGaze, alea), or a head mouse or anything that moves the mouse pointer</dd>
+              <dt>Platform</dt><dd>Windows</dd>
+              <dt>Cost</dt><dd>Free basic version; a paid full version adds more sounds, learning tools, performance feedback and songs, with a 30-day free trial</dd>
+              <dt>Good for</dt><dd>People with very limited movement, including ALS and cerebral palsy; any level of musical experience</dd>
+              <dt>Website</dt><dd><a class="inline-link" href="https://eyeharp.org/" target="_blank" rel="noopener">eyeharp.org &#8599;</a></dd>
+            </dl>
+            <p class="cat-dated">Details from the EyeHarp website and public reports, checked November 2026. Prices and features change; confirm with the maker.</p>
+          </div>
+          <div class="cat-side">
+            <span class="cat-h">Watch and read</span>
+            <div class="cat-media">
+              <a href="https://www.youtube.com/theeyeharp" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>EyeHarp YouTube channel<small>Performances and demos</small></span></a>
+              <a href="https://youtu.be/5sFO3DXwfLs?list=PLgC365yyktyzrbSQpn3r3L1z2hNjeKd7Q" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>Tutorial playlist<small>Learning to play, step by step</small></span></a>
+              <a href="https://youtu.be/furQ0lldVGk" target="_blank" rel="noopener"><span class="ico" aria-hidden="true">&#9654;</span><span>Installation guide<small>Video</small></span></a>
+              <a href="https://eyeharp.org/performances/" target="_blank" rel="noopener"><span class="ico doc" aria-hidden="true">&#9835;</span><span>Performances<small>eyeharp.org</small></span></a>
+            </div>
+            <span class="cat-h">Evidence</span>
+            <ul><li>A 2016 study found it allows expressive performance, with a learning curve similar to an average traditional instrument; playing with the eyes was more tiring and harder to keep in tempo than with the hands. Testers were non-disabled musicians.<cite><a class="inline-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4915213" target="_blank" rel="noopener">Vamvakousis and Ramirez, Frontiers in Psychology, 2016 &#8599;</a></cite></li></ul>
+            <span class="cat-h">Insights</span>
+            <ul><li>Users grew from 192 in 2021 to 485 in 2024, with schools and care centers in Greece and Spain and pilots in other countries, including the US<cite><a class="inline-link" href="https://zeroproject.org/view/project/54c09fbb-2b54-f011-877b-6045bddd5972" target="_blank" rel="noopener">Zero Project &#8599;</a></cite></li><li>Newer work connects EyeHarp to robotic arms that play real instruments, such as the piano</li><li>Disabled users train as instructors, in a train-the-trainer model</li></ul>
+            <div class="cat-comments"><b>Community comments</b><span>Coming later. Comments from people who use it, and from therapists, will appear here once sign-in, moderation and consent are in place.</span></div>
+          </div>
+        </article>
+      </div>
+      <p class="tg-safe">Listings are neutral information, not endorsements, and are not paid for.</p>
+    </section>
+
     <section class="tg-panel" id="tg-panel-bridges" hidden aria-labelledby="tg-brT">
       <div class="tg-head"><h2 id="tg-brT">Wheelchair bridges</h2><p>Connecting adaptive controls to a power wheelchair, and the chair's controls to everything else.</p></div>
       <div class="tg-hid">
@@ -2811,7 +2886,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:45 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:48 UTC</span></div>
   </div>
 </footer>
 
