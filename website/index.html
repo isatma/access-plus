@@ -661,7 +661,7 @@ footer .wrap { padding-block: 22px; }
 #view-borrow .item, #view-borrow .item::before, #view-borrow .item::after { transition: all .18s ease; }
 }
 #view-profile .btn:disabled { opacity: .45; cursor: not-allowed; }
-#view-profile > .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+#view-profile > .wrap { padding-block: 32px 72px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 24px; align-items: start; }
 #view-profile .col { display: grid; gap: 18px; min-width: 0; }
 #view-profile .card { position: relative; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--line-hi); padding: 18px; display: grid; gap: 12px; min-width: 0; }
 #view-profile .card::before, #view-profile .card::after { content: ""; position: absolute; width: 12px; height: 12px; border: solid var(--line-hi); }
@@ -1656,6 +1656,30 @@ footer .wrap { padding-block: 22px; }
       <a class="st4" href="#simulators"><span class="n">Step 3</span><b>Practice in a simulator</b><small>Build skills with the methods that suit you.</small></a>
       <a class="st4" href="#borrow"><span class="n">Step 4</span><b>Borrow a kit</b><small>Try real sensors at home, alone or with your therapist.</small></a>
     </div>
+    <aside class="card ace" aria-labelledby="pf-aceT">
+      <div class="acehead">
+        <canvas id="pf-aceFace" aria-hidden="true"></canvas>
+        <div><h2 id="pf-aceT">Build it with the AI agent</h2><p>Just talk. The AI agent asks questions and fills in your profile as you go.</p></div>
+      </div>
+      <div class="log" id="pf-log" aria-live="polite">
+        <div class="msg pf-ai">Hi, I'm the Access+ AI agent. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
+      </div>
+      <div class="quick" id="pf-quick">
+        <button class="btn primary" id="pf-startBtn" type="button">Start my profile</button>
+        <button class="btn" id="pf-assessBtn" type="button">Assess my current tools</button>
+        <a class="btn" href="#gesture">Do the gesture check</a>
+      </div>
+      <form class="ask" id="pf-askForm" autocomplete="off">
+        <label class="sr" for="pf-askIn">Talk to the AI agent</label>
+        <textarea id="pf-askIn" rows="2" placeholder="Talk to the AI agent…"></textarea>
+        <button class="btn primary" id="pf-sendBtn" type="submit">Send</button>
+      </form>
+      <div class="toggles">
+        <button class="btn" id="pf-speakBtn" type="button" aria-pressed="false">Read replies aloud</button>
+        <button class="btn" id="pf-stopBtn" type="button" hidden>Stop</button>
+      </div>
+      <p class="note" id="pf-aceNote">The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
+    </aside>
     <div class="col" id="pf-profileCol">
       <div class="sample" id="pf-sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and the AI agent will help you build your own.</div>
 
@@ -1709,30 +1733,6 @@ footer .wrap { padding-block: 22px; }
       <p class="note">Your profile is yours. This pilot doesn't collect your data: in the finished site you save your profile and results as files on your own computer, load them again to track progress over time, and choose whether to share them with a research study.</p>
     </div>
 
-    <aside class="card ace" aria-labelledby="pf-aceT">
-      <div class="acehead">
-        <canvas id="pf-aceFace" aria-hidden="true"></canvas>
-        <div><h2 id="pf-aceT">Build it with the AI agent</h2><p>Just talk. The AI agent asks questions and fills in your profile as you go.</p></div>
-      </div>
-      <div class="log" id="pf-log" aria-live="polite">
-        <div class="msg pf-ai">Hi, I'm the Access+ AI agent. The profile you see is a sample, so you can see what one looks like. Press <b>Start my profile</b> and I'll ask you a few easy questions. You can answer by typing or with your computer's dictation.</div>
-      </div>
-      <div class="quick" id="pf-quick">
-        <button class="btn primary" id="pf-startBtn" type="button">Start my profile</button>
-        <button class="btn" id="pf-assessBtn" type="button">Assess my current tools</button>
-        <a class="btn" href="#gesture">Do the gesture check</a>
-      </div>
-      <form class="ask" id="pf-askForm" autocomplete="off">
-        <label class="sr" for="pf-askIn">Talk to the AI agent</label>
-        <textarea id="pf-askIn" rows="2" placeholder="Talk to the AI agent…"></textarea>
-        <button class="btn primary" id="pf-sendBtn" type="submit">Send</button>
-      </form>
-      <div class="toggles">
-        <button class="btn" id="pf-speakBtn" type="button" aria-pressed="false">Read replies aloud</button>
-        <button class="btn" id="pf-stopBtn" type="button" hidden>Stop</button>
-      </div>
-      <p class="note" id="pf-aceNote">The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
-    </aside>
   </div>
   <div class="wrap mx-wrap">
     <section class="mx" aria-labelledby="pf-mxT">
@@ -2587,7 +2587,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:12 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:14 UTC</span></div>
   </div>
 </footer>
 
