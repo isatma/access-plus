@@ -233,15 +233,15 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
       <p class="note" id="aceNote">The AI agent uses Claude on your own Claude account. For learning and practice, not medical advice.</p>
     </aside>
     <div class="col" id="profileCol">
-      <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> Jordan R. is a made-up person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and the AI agent will help you build your own.</div>
+      <div class="sample" id="sampleBanner" role="note"><b>Sample profile.</b> This is an example, not a real person, shown so you can see what a profile looks like. Press <b>Start my profile</b> and the AI agent will help you build your own.</div>
 
       <section class="card hl" id="c-who" aria-labelledby="whoName">
         <div style="display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
           <span class="eyebrow">My profile</span><span class="example" id="exTag">Sample profile</span>
         </div>
         <div class="who">
-          <div class="avatar" id="initials" aria-hidden="true">JR</div>
-          <div><h1 id="whoName">Jordan R.</h1><p id="whoLine">Building skills for the computer, phone and power chair</p></div>
+          <div class="avatar" id="initials" aria-hidden="true">SU</div>
+          <div><h1 id="whoName">Sample User</h1><p id="whoLine">Building skills for the computer, phone and power chair</p></div>
         </div>
         <div class="facts" id="facts"></div>
       </section>
@@ -289,7 +289,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   <div class="wrap mx-wrap">
     <section class="mx" aria-labelledby="mxT">
       <div class="mx-head">
-        <div><span class="mx-eyebrow">Sample data · Jordan R. is a made-up person</span><h2 id="mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
+        <div><span class="mx-eyebrow">Sample data · example profile, not a real person</span><h2 id="mxT">Skills, settings and trends</h2><p>Each way of controlling technology has its own settings and scores, saved with the date so changes show up early. Build a profile for a specific activity, or focus on one skill.</p></div>
         <div class="mx-file"><button class="btn primary" type="button" id="mxSave">Save my profile</button><label class="btn mx-open">Open saved profile<input type="file" id="mxOpen" accept=".json,application/json"></label></div>
       </div>
       <div class="mx-acts" role="group" aria-label="Activity profiles" id="mxActs"></div>
@@ -309,7 +309,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 15:55 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:39 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
@@ -382,7 +382,7 @@ function AgentCloud(canvas, opts) {
 (function () {
   // ---------- data ----------
   var EXAMPLE = {
-    name: 'Jordan R.',
+    name: 'Sample User',
     headline: 'Building skills for the computer, phone and power chair',
     facts: { 'Main condition': 'C4 spinal cord injury', 'Hand use': 'None', 'Best movements': 'Head, face, breath', 'Uses Access+': 'On own and with OT' },
     skills: [
