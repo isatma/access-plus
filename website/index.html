@@ -2007,7 +2007,7 @@ footer .wrap { padding-block: 22px; }
         </a>
         <a class="tg-kind hw" href="#hardware" data-tab="hardware">
           <b>Hardware</b><h3>Devices and inputs</h3><p>The things you use and the controls you press, sip, look at or move.</p>
-          <div class="tg-ksplit"><div><span class="tg-tag com">Proprietary</span><small>Made and sold by a company with a closed design: eye trackers, head mice, robotic arms, wheelchair controls</small></div><div><span class="tg-tag open">Open source</span><small>Published designs you or a volunteer can build, such as the LipSync mouth-operated mouse and 3D-printed switches</small></div></div>
+          <div class="tg-ksplit"><div><span class="tg-tag com">Proprietary</span><small>Made and sold by a company with a closed design: eye trackers, head mice, robotic arms, wheelchair controls</small></div><div><span class="tg-tag open">Open source</span><small>Published designs you or a volunteer can build, such as low-cost eye-tracking glasses, the LipSync mouth-operated mouse and 3D-printed switches</small></div></div>
           <span class="go">See hardware &rarr;</span>
         </a>
         <a class="tg-kind br" href="#bridges" data-tab="bridges">
@@ -2029,6 +2029,7 @@ footer .wrap { padding-block: 22px; }
           <div class="tg-cats" role="group" aria-label="Hardware areas">
             <button class="tg-cat ready" type="button" data-cat="wheel" aria-pressed="true"><span class="st8">Guide ready</span><b>Power wheelchairs</b><small>Drive systems, input modules, alternate drive controls</small></button>
             <button class="tg-cat ready" type="button" data-cat="arm" aria-pressed="false"><span class="st8">Guide ready</span><b>Robotic arms</b><small>Assistive arms for eating, drinking and reaching</small></button>
+            <button class="tg-cat ready" type="button" data-cat="eyes" aria-pressed="false"><span class="st8">Guide ready · Hardware and software</span><b>Eye tracking</b><small>Screen-mounted trackers and low-cost DIY eye-tracking glasses</small></button>
             <button class="tg-cat" type="button" data-cat="switch" aria-pressed="false"><span class="st8">Coming next</span><b>Switches</b><small>Button, breath, EMG and proximity switches, commercial and open source</small></button>
             <button class="tg-cat" type="button" data-cat="aacdev" aria-pressed="false"><span class="st8">Coming next</span><b>Communication devices</b><small>Speech-generating devices, eye-gaze communicators, mounts</small></button>
             <button class="tg-cat" type="button" data-cat="lifts" aria-pressed="false"><span class="st8">Coming next</span><b>Lifts and transfers</b><small>Portable and ceiling lifts, slings, transfer boards and aids</small></button>
@@ -2395,6 +2396,43 @@ footer .wrap { padding-block: 22px; }
           <div class="tg-links"><a href="#guide-ai">Ask the AI agent for a voice plan</a><a href="#gesture">Head and face tracking</a></div>
         </article>
       </div>
+    </section>
+
+    <section class="tg-panel" id="tg-panel-eyes" hidden aria-labelledby="tg-eyesT">
+      <div class="tg-head"><h2 id="tg-eyesT">Eye tracking</h2><p>Controlling technology with where you look. Often the method that keeps working as other movement changes.</p></div>
+      <div class="tg-items">
+        <article class="tg-item tg-listing">
+          <span class="kind">Hardware and software · research</span><span style="display:flex;gap:6px;flex-wrap:wrap"><span class="tg-tag open">Open source</span><span class="tg-tag res">Research</span></span>
+          <h3>Low-cost DIY eye-tracking glasses (Augusta University)</h3>
+          <p>Dr. Jason Orlosky, an associate professor in Augusta University's School of Computer and Cyber Sciences, has published an open-source eye tracker that runs on a pair of inexpensive glasses. A small infrared camera, around $17, clips to the frame and watches one eye. Free Python software finds the pupil and works out where the eye is pointing in 3D.</p>
+          <dl>
+            <dt>Hardware</dt><dd>Ordinary glasses or sunglasses with a small infrared eye camera attached; no special headset</dd>
+            <dt>Software</dt><dd>One Python script using OpenCV; shows gaze direction live and can save it to a file</dd>
+            <dt>What it can do</dt><dd>Gaze direction can work as a control input, for example looking at a menu item and blinking to select it</dd>
+            <dt>Background</dt><dd>Builds on a 3D eye-tracking system Orlosky and colleagues released in 2017; his lab works on augmented and virtual reality, eye tracking and AI</dd>
+            <dt>License</dt><dd>MIT (free to use, change and share)</dd>
+            <dt>Why it matters</dt><dd>Commercial eye trackers can cost thousands of dollars. A low-cost, open design lets people try eye control early, keep a spare, and lets volunteer makers and researchers adapt it</dd>
+          </dl>
+          <div class="tg-links"><a href="https://github.com/JEOresearch/EyeTracker" target="_blank" rel="noopener">EyeTracker on GitHub &#8599;</a><a href="https://www.hackster.io/news/ar-and-vr-researcher-jason-orlosky-gets-gaze-tracking-working-in-python-for-under-20-f8de7b7de5e9" target="_blank" rel="noopener">Article (Hackster) &#8599;</a><a href="https://sites.google.com/site/jeoindex/ccslab" target="_blank" rel="noopener">ARVR Lab &#8599;</a></div>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Two kinds of eye tracker</span>
+          <h3>On the screen or on your face</h3>
+          <ul><li><b>Screen-mounted:</b> a bar under the monitor or tablet; the usual choice for speech devices and computer access <span class="tg-tag com">Proprietary</span></li><li><b>Head-worn glasses:</b> the camera moves with you, so it can work in bed, in the chair, or away from a screen</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Things to know</span>
+          <h3>What to expect</h3>
+          <ul><li>Calibration matters, and needs redoing when you change position</li><li>Bright sunlight and some glasses can confuse the camera</li><li>Selecting usually means dwelling (holding your gaze) or a blink or switch</li><li>DIY builds may need a helper or maker group to assemble and set up</li></ul>
+        </article>
+        <article class="tg-item">
+          <span class="kind">Practice first</span>
+          <h3>See if eye control suits you</h3>
+          <p>Find my technology will tell you whether eye gaze is a good fit, and the pointing practice builds dwell skills before you use a real tracker.</p>
+          <div class="tg-links"><a href="#find">Find my technology</a><a href="#simulators">Simulators</a></div>
+        </article>
+      </div>
+      <p class="tg-safe">Research and DIY projects are shared for information. They are not medical devices; for communication you depend on, use a supported device and keep a backup method.</p>
     </section>
 
     <section class="tg-panel" id="tg-panel-bridges" hidden aria-labelledby="tg-brT">
@@ -2773,7 +2811,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:43 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-01 18:45 UTC</span></div>
   </div>
 </footer>
 
