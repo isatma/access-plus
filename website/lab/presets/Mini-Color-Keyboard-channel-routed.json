@@ -1,0 +1,372 @@
+{
+  "name": "🎨 Mini Color Keyboard — Lead + Chords (channel routed)",
+  "theme": "studio",
+  "settings": {
+    "instrument": "flute",
+    "volume": -6,
+    "reverb": 0.5,
+    "octaveShift": 0,
+    "bpm": 90
+  },
+  "notation": "Melody keys (C4–C5) → MIDI Channel 2 (your LEAD instrument). C·F·G chord pads + their 🎸 strummers → Channel 1 (your CHORD instrument). In your DAW make two tracks: one MIDI-input on Ch 1, one on Ch 2, arm both. Strummers automatically follow their linked chord's channel.",
+  "contributor": "Dave",
+  "country": "—",
+  "layouts": {
+    "screen": [
+      {
+        "id": "y6r1ph8",
+        "type": "scoreboard",
+        "x": 0.2576,
+        "y": 0.2831,
+        "size": 28,
+        "color": "#ffffff",
+        "label": "Hello! This is the first Songboard example demos the ability to create strummed notes and the ability to set up a custom array playing a melody.",
+        "text": "Hello! This is the first Songboard example demos the ability to create strummed notes and the ability to set up a custom array playing a melody.",
+        "width": 0.4625,
+        "height": 0.3203,
+        "imageUrl": "scores/score-twinkle.svg",
+        "scoreList": [
+          "scores/score-twinkle.svg",
+          "scores/score-mary-lamb.svg",
+          "scores/score-row-boat.svg",
+          "scores/score-london-bridge.svg",
+          "scores/score-frere-jacques.svg",
+          "scores/score-ode-to-joy.svg"
+        ]
+      },
+      {
+        "id": "y27gifu",
+        "type": "note",
+        "x": 0.08,
+        "y": 0.78,
+        "size": 110,
+        "color": "#E50000",
+        "label": "C4",
+        "notes": [
+          "C4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "a9xegwy",
+        "type": "note",
+        "x": 0.2,
+        "y": 0.78,
+        "size": 110,
+        "color": "#FF8200",
+        "label": "D4",
+        "notes": [
+          "D4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "2gtiksx",
+        "type": "note",
+        "x": 0.321,
+        "y": 0.78,
+        "size": 110,
+        "color": "#FFE800",
+        "label": "E4",
+        "notes": [
+          "E4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "z9sdtro",
+        "type": "note",
+        "x": 0.442,
+        "y": 0.78,
+        "size": 110,
+        "color": "#52E018",
+        "label": "F4",
+        "notes": [
+          "F4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "1s4chq8",
+        "type": "note",
+        "x": 0.563,
+        "y": 0.78,
+        "size": 110,
+        "color": "#00A859",
+        "label": "G4",
+        "notes": [
+          "G4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "1kr5jy6",
+        "type": "note",
+        "x": 0.684,
+        "y": 0.78,
+        "size": 110,
+        "color": "#7B2FA9",
+        "label": "A4",
+        "notes": [
+          "A4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "pzb3tl6",
+        "type": "note",
+        "x": 0.805,
+        "y": 0.78,
+        "size": 110,
+        "color": "#E91E63",
+        "label": "B4",
+        "notes": [
+          "B4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "v1soku0",
+        "type": "note",
+        "x": 0.92,
+        "y": 0.78,
+        "size": 110,
+        "color": "#E50000",
+        "label": "C'",
+        "notes": [
+          "C5"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "vdjhbqd",
+        "type": "panic",
+        "x": 0.97,
+        "y": 0.0926,
+        "size": 44,
+        "color": "#dc2626",
+        "label": "OFF",
+        "emoji": "🔇"
+      },
+      {
+        "id": "ct9fe71",
+        "type": "note",
+        "x": 0.5547,
+        "y": 0.1708,
+        "size": 90,
+        "color": "#ffa94d",
+        "label": "C",
+        "notes": [
+          "C4",
+          "E4",
+          "G4"
+        ],
+        "midiChannel": 1
+      },
+      {
+        "id": "5nfzg73",
+        "type": "note",
+        "x": 0.6445,
+        "y": 0.1662,
+        "size": 90,
+        "color": "#84cc16",
+        "label": "F",
+        "notes": [
+          "F4",
+          "A4",
+          "C5"
+        ],
+        "midiChannel": 1
+      },
+      {
+        "id": "9g7pxej",
+        "type": "note",
+        "x": 0.7414,
+        "y": 0.1662,
+        "size": 90,
+        "color": "#f59e0b",
+        "label": "G",
+        "notes": [
+          "G4",
+          "B4",
+          "D5"
+        ],
+        "midiChannel": 1
+      },
+      {
+        "id": "zlwi625",
+        "type": "rhythm",
+        "x": 0.556,
+        "y": 0.3513,
+        "size": 80,
+        "color": "#34d399",
+        "emoji": "🎸",
+        "label": "D-DU-UDU",
+        "strumPattern": "D-DU-UDU",
+        "linkId": "ct9fe71",
+        "midiChannel": 1,
+        "notes": [
+          "C4"
+        ]
+      },
+      {
+        "id": "0lnvztf",
+        "type": "rhythm",
+        "x": 0.6568,
+        "y": 0.3515,
+        "size": 80,
+        "color": "#6bcf7f",
+        "emoji": "🎸",
+        "label": "D-DU-UDU",
+        "strumPattern": "D-DU-UDU",
+        "linkId": "5nfzg73",
+        "midiChannel": 1,
+        "notes": [
+          "C4"
+        ]
+      },
+      {
+        "id": "o0238xs",
+        "type": "rhythm",
+        "x": 0.7456,
+        "y": 0.3513,
+        "size": 80,
+        "color": "#ffd93d",
+        "emoji": "🎸",
+        "label": "D-DU-UDU",
+        "strumPattern": "D-DU-UDU",
+        "linkId": "9g7pxej",
+        "midiChannel": 1,
+        "notes": [
+          "C4"
+        ]
+      }
+    ],
+    "phone": [
+      {
+        "id": "p_y27gifu",
+        "type": "note",
+        "x": 0.08,
+        "y": 0.5,
+        "size": 60,
+        "color": "#E50000",
+        "label": "C4",
+        "notes": [
+          "C4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_a9xegwy",
+        "type": "note",
+        "x": 0.2,
+        "y": 0.5,
+        "size": 60,
+        "color": "#FF8200",
+        "label": "D4",
+        "notes": [
+          "D4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_2gtiksx",
+        "type": "note",
+        "x": 0.321,
+        "y": 0.5,
+        "size": 60,
+        "color": "#FFE800",
+        "label": "E4",
+        "notes": [
+          "E4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_z9sdtro",
+        "type": "note",
+        "x": 0.442,
+        "y": 0.5,
+        "size": 60,
+        "color": "#52E018",
+        "label": "F4",
+        "notes": [
+          "F4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_1s4chq8",
+        "type": "note",
+        "x": 0.563,
+        "y": 0.5,
+        "size": 60,
+        "color": "#00A859",
+        "label": "G4",
+        "notes": [
+          "G4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_1kr5jy6",
+        "type": "note",
+        "x": 0.684,
+        "y": 0.5,
+        "size": 60,
+        "color": "#7B2FA9",
+        "label": "A4",
+        "notes": [
+          "A4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_pzb3tl6",
+        "type": "note",
+        "x": 0.805,
+        "y": 0.5,
+        "size": 60,
+        "color": "#E91E63",
+        "label": "B4",
+        "notes": [
+          "B4"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_v1soku0",
+        "type": "note",
+        "x": 0.92,
+        "y": 0.5,
+        "size": 60,
+        "color": "#E50000",
+        "label": "C'",
+        "notes": [
+          "C5"
+        ],
+        "midiChannel": 2
+      },
+      {
+        "id": "p_panic",
+        "type": "panic",
+        "x": 0.06,
+        "y": 0.08,
+        "size": 36,
+        "color": "#dc2626",
+        "label": "OFF",
+        "emoji": "🔇"
+      },
+      {
+        "id": "p_sb",
+        "type": "scoreboard",
+        "x": 0.5,
+        "y": 0.5,
+        "size": 28,
+        "color": "#ffffff",
+        "label": "C-major scale in Boomwhackers rainbow colors. 8 huge keys C4→C5.",
+        "text": "C-major scale in Boomwhackers rainbow colors."
+      }
+    ]
+  }
+}
