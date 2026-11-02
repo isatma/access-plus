@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Virtual Harmonica v7.1 — Vintage Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js" crossorigin="anonymous"></script>
+
+  <style>
+    :root {
+      --wood-dark: #2c1a0e;
+      --wood-mid: #5c3317;
+      --wood-light: #8b5e3c;
+      --wood-pale: #c4955a;
+      --brass: #b8860b;
+      --brass-light: #d4a017;
+      --brass-shine: #f0c040;
+      --ivory: #f5f0e8;
+      --ivory-dim: #d4c9b0;
+      --felt-green: #2d5a27;
+      --felt-bright: #3a7a33;
+      --copper: #b87333;
+      --shadow: rgba(0,0,0,0.6);
+      --glow-brass: rgba(212,160,23,0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: radial-gradient(ellipse at center, #1a0f05 0%, #0d0803 100%);
+      color: var(--ivory);
+      font-family: 'Courier Prime', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 24px 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.004) 3px, rgba(255,255,255,0.004) 4px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--brass-light);
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 0 0 20px var(--glow-brass);
+      margin-bottom: 4px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-family: 'Special Elite', cursive;
+      font-size: 12px;
+      color: var(--wood-pale);
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* MAIN CABINET */
+    #cabinet {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(160deg, #3d2010 0%, #2c1a0e 40%, #1e1008 100%);
+      border: 3px solid var(--wood-light);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow:
+        0 0 0 1px rgba(184,134,11,0.3),
+        0 0 40px rgba(0,0,0,0.8),
+        inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    #cabinet::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(184,134,11,0.2);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    /* CONTROL PANEL */
+    #control-panel {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      justify-content: center;
+      background: linear-gradient(180deg, #1e1008 0%, #2a1809 100%);
+      border: 1px solid var(--brass);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    #control-panel::before {
+      content: '— CONTROLS —';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Special Elite', cursive;
+      font-size: 10px;
+      color: var(--brass);
+      background: #1e1008;
+      padding: 0 10px;
+      letter-spacing: 3px;
+    }
+
+    .ctrl-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .ctrl-group label {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--brass-light);
+      text-transform: uppercase;
+      font-family: 'Special Elite', cursive;
+    }
+
+    .ctrl-group select,
+    .ctrl-group input[type="range"] {
+      background: var(--wood-dark);
+      border: 1px solid var(--brass);
+      color: var(--ivory);
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-family: 'Courier Prime', monospace;
+      font-size: 12px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .ctrl-group select:hover,
+    .ctrl-group select:focus {
+      border-color: var(--brass-shine);
+      box-shadow: 0 0 6px var(--glow-brass);
+    }
+
+    .ctrl-group input[type="range"] {
+      -webkit-appearance: none;
+      width: 120px;
+      height: 6px;
+      background: var(--wood-dark);
+      border-radius: 3px;
+      padding: 0;
+    }
+
+    .ctrl-group input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--brass-light);
+      border: 1px solid var(--brass-shine);
+      cursor: pointer;
+    }
+
+    .ctrl-val {
+      font-size: 10px;
+      color: var(--ivory-dim);
+      text-align: center;
+    }
+
+    /* BIG BRASS BUTTON */
+    #recenter-btn {
+      background: linear-gradient(180deg, var(--brass-shine) 0%, var(--brass) 50%, #7a5c00 100%);
+      border: 2px solid var(--brass-shine);
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      font-family: 'Special Elite', cursive;
+      font-size: 9px;
+      color: var(--wood-dark);
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      text-align: center;
+      line-height: 1.3;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.3);
+      transition: all 0.1s;
+      align-self: center;
+    }
+
+    #recenter-btn:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    #recenter-btn.active {
+      background: linear-gradient(180deg, #ff6600 0%, #cc4400 100%);
+      border-color: #ff9944;
+      color: white;
+      animation: pulse-btn 0.5s infinite alternate;
+    }
+
+    @keyframes pulse-btn { to { box-shadow: 0 0 20px rgba(255,100,0,0.7); } }
+
+    /* MAIN LAYOUT ROW */
+    #main-row {
+      display: flex;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    /* VU METERS */
+    .vu-meter {
+      width: 56px;
+      background: linear-gradient(180deg, #1a0f05 0%, #110a03 100%);
+      border: 1px solid var(--brass);
+      border-radius: 8px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vu-title {
+      font-family: 'Special Elite', cursive;
+      font-size: 8px;
+      color: var(--brass-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .bar-track {
+      width: 18px;
+      flex: 1;
+      background: #050200;
+      border: 1px solid #3a2a10;
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      border-radius: 4px;
+      transition: height 0.05s linear;
+    }
+
+    #mouth-fill {
+      background: linear-gradient(to top, #44ff44 0%, #aaff00 60%, #ff4400 100%);
+    }
+
+    .bend-track {
+      position: relative;
+    }
+
+    #bend-fill-up {
+      position: absolute;
+      bottom: 50%;
+      width: 100%;
+      background: #4488ff;
+      border-radius: 4px 4px 0 0;
+      transition: height 0.05s linear;
+    }
+
+    #bend-fill-down {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      background: #ff8844;
+      border-radius: 0 0 4px 4px;
+      transition: height 0.05s linear;
+    }
+
+    .bend-center-line {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      height: 1px;
+      background: rgba(255,255,255,0.4);
+    }
+
+    #bend-marker {
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      background: var(--brass-shine);
+      left: 0;
+      top: 50%;
+      box-shadow: 0 0 4px var(--brass-shine);
+      transition: top 0.05s linear;
+    }
+
+    .vu-readout {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      color: var(--ivory-dim);
+      text-align: center;
+    }
+
+    /* VIDEO BOX */
+    #video-box {
+      position: relative;
+      width: 640px;
+      height: 480px;
+      background: #000;
+      border: 2px solid var(--brass);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8), inset 0 0 40px rgba(0,0,0,0.5);
+    }
+
+    video, #output_canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      transform: scaleX(-1);
+    }
+
+    /* HARMONICA OVERLAY */
+    #harmonica-wrap {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 92%;
+    }
+
+    #harmonica {
+      display: flex;
+      height: 58px;
+      background: linear-gradient(180deg, #8b5e3c 0%, #5c3317 40%, #3d2010 100%);
+      border: 2px solid var(--brass-light);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    #harmonica::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, transparent, transparent calc(10% - 1px), rgba(0,0,0,0.4) calc(10% - 1px), rgba(0,0,0,0.4) 10%);
+      pointer-events: none;
+    }
+
+    .hole {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier Prime', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ivory-dim);
+      cursor: default;
+      position: relative;
+      border-right: 1px solid rgba(0,0,0,0.5);
+      transition: background 0.08s;
+      gap: 2px;
+    }
+
+    .hole-num {
+      font-size: 8px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 400;
+    }
+
+    .hole.active-hole {
+      background: rgba(212,160,23,0.35);
+      color: var(--brass-shine);
+      text-shadow: 0 0 8px var(--brass-shine);
+      box-shadow: inset 0 0 12px rgba(212,160,23,0.5);
+    }
+
+    .hole.active-hole .hole-num { color: var(--brass-light); }
+
+    /* STATUS BAR */
+    #status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 10px;
+      height: 28px;
+    }
+
+    #status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #555;
+      transition: all 0.3s;
+    }
+
+    #status-dot.ok { background: var(--felt-bright); box-shadow: 0 0 6px var(--felt-bright); }
+    #status-dot.warn { background: #ff9900; box-shadow: 0 0 6px #ff9900; animation: blink 0.5s infinite; }
+
+    @keyframes blink { 50% { opacity: 0.2; } }
+
+    #status-text {
+      font-family: 'Special Elite', cursive;
+      font-size: 12px;
+      color: var(--ivory-dim);
+      letter-spacing: 1px;
+    }
+
+    /* SCALE BADGE */
+    #scale-badge {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      color: var(--brass-light);
+      background: var(--wood-dark);
+      border: 1px solid var(--brass);
+      border-radius: 3px;
+      padding: 2px 8px;
+      letter-spacing: 1px;
+    }
+
+    /* HOLE COUNT CONTROL */
+    #hole-count-wrap {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hole-btn {
+      width: 22px;
+      height: 22px;
+      background: var(--wood-dark);
+      border: 1px solid var(--brass);
+      color: var(--brass-light);
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hole-btn:hover { border-color: var(--brass-shine); color: var(--brass-shine); }
+
+    #hole-count-val {
+      font-size: 13px;
+      color: var(--ivory);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    /* Decorative screw corners on cabinet */
+    .screw {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, var(--brass-light), var(--brass) 60%, #5a4200);
+      border: 1px solid #7a6010;
+    }
+    .screw::after {
+      content: '+';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8px;
+      color: rgba(0,0,0,0.4);
+      line-height: 1;
+    }
+
+    .screw.tl { top: 10px; left: 10px; }
+    .screw.tr { top: 10px; right: 10px; }
+    .screw.bl { bottom: 10px; left: 10px; }
+    .screw.br { bottom: 10px; right: 10px; }
+
+    /* ALL NOTES OFF BUTTON */
+    #all-notes-off {
+      position: absolute;
+      top: 12px;
+      right: 52px;
+      background: linear-gradient(180deg, #8b0000 0%, #5a0000 60%, #3a0000 100%);
+      border: 2px solid #cc2200;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-family: 'Special Elite', cursive;
+      font-size: 9px;
+      color: #ff9988;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      line-height: 1.4;
+      text-align: center;
+      transition: all 0.1s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,100,80,0.2);
+      z-index: 10;
+    }
+    #all-notes-off:hover { border-color: #ff4422; color: #ffbbaa; box-shadow: 0 0 10px rgba(200,30,0,0.5); }
+    #all-notes-off:active { transform: scale(0.95); }
+    #all-notes-off.flash { background: linear-gradient(180deg, #ff2200 0%, #aa1100 100%); border-color: #ff6644; }
+
+    /* MIDI MONITOR */
+    #midi-monitor {
+      width: 180px;
+      background: linear-gradient(180deg, #0a0600 0%, #110800 100%);
+      border: 1px solid var(--brass);
+      border-radius: 8px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    #midi-monitor-title {
+      font-family: 'Special Elite', cursive;
+      font-size: 9px;
+      color: var(--brass-light);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      border-bottom: 1px solid rgba(184,134,11,0.3);
+      padding-bottom: 6px;
+    }
+
+    #midi-log {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .midi-line {
+      font-family: 'Courier Prime', monospace;
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      border-left: 2px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      opacity: 1;
+      transition: opacity 2s ease;
+      color: var(--ivory-dim);
+      background: rgba(255,255,255,0.03);
+    }
+    .midi-line.note-on  { border-left-color: #44ff88; color: #88ffbb; background: rgba(68,255,136,0.06); }
+    .midi-line.note-off { border-left-color: #ff4444; color: #ff8888; background: rgba(255,68,68,0.05); }
+    .midi-line.bend     { border-left-color: #4488ff; color: #88aaff; background: rgba(68,136,255,0.05); }
+    .midi-line.panic    { border-left-color: #ffaa00; color: #ffcc44; background: rgba(255,170,0,0.08); }
+    .midi-line.faded    { opacity: 0.25; }
+
+    #midi-activity {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #333;
+      margin: 0 auto;
+      transition: background 0.05s;
+    }
+    /* v7.1 web fixes */
+    #start-gate { position:absolute; inset:0; z-index:20; display:flex; flex-direction:column; gap:12px; align-items:center; justify-content:center; background:rgba(13,8,3,0.82); text-align:center; padding:16px; }
+    #start-gate button { font-family:'Special Elite', cursive; font-size:16px; letter-spacing:2px; padding:16px 26px; border-radius:999px; cursor:pointer; background:linear-gradient(180deg,var(--brass-shine),var(--brass)); color:var(--wood-dark); border:2px solid var(--brass-shine); min-height:56px; }
+    #start-gate button.alt { background:transparent; color:var(--brass-light); font-size:13px; }
+    #start-gate p { color:var(--ivory-dim); font-size:12px; max-width:420px; line-height:1.5; }
+    #video-box { max-width:100%; aspect-ratio:4/3; height:auto; }
+    #center-col { min-width:0; flex:1 1 640px; max-width:640px; }
+    #mouse-hint { position:absolute; top:8px; left:50%; transform:translateX(-50%); z-index:5; font-family:'Special Elite', cursive; font-size:11px; color:var(--brass-light); background:rgba(0,0,0,0.55); padding:4px 10px; border-radius:4px; display:none; pointer-events:none; }
+    body.mouse-mode #mouse-hint { display:block; }
+    body.mouse-mode #video-box { cursor:crosshair; touch-action:none; }
+    @media (max-width: 1000px) {
+      #main-row { flex-wrap:wrap; justify-content:center; }
+      #midi-monitor { width:100%; max-height:150px; }
+      #cabinet { padding:16px; width:100%; }
+      #all-notes-off { position:static; display:block; margin:0 auto 14px; }
+    }
+    @media (max-width: 560px) { .vu-meter { width:44px; } #main-row { flex-wrap:nowrap; } #midi-monitor { display:none; } body { padding:12px 8px; } body.mouse-mode #mouse-hint { display:none; } }
+    #midi-activity.pulse { background: #44ff88; box-shadow: 0 0 6px #44ff88; }
+  </style>
+</head>
+<body>
+
+  <h1>Virtual Harmonica</h1>
+  <div class="subtitle">Face-Tracked Chromatic Controller &bull; v7.1</div>
+
+  <div id="cabinet">
+    <div class="screw tl"></div>
+    <div class="screw tr"></div>
+    <div class="screw bl"></div>
+    <div class="screw br"></div>
+
+    <!-- ALL NOTES OFF — top right -->
+    <button id="all-notes-off" onclick="allNotesOff()">ALL<br>NOTES<br>OFF</button>
+
+    <!-- CONTROL PANEL -->
+    <div id="control-panel">
+
+      <button id="recenter-btn" onclick="startCalibration()">RE-<br>CENTER<br>NOSE</button>
+
+      <div class="ctrl-group">
+        <label>Audio Source</label>
+        <select id="audio-mode">
+          <option value="internal" selected>Internal Synth</option>
+          <option value="midi">MIDI Out</option>
+        </select>
+      </div>
+
+      <div class="ctrl-group">
+        <label>MIDI Port</label>
+        <select id="midi-select"></select>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Root Key</label>
+        <select id="root-select">
+          <option value="60">C</option>
+          <option value="61">C#/Db</option>
+          <option value="62">D</option>
+          <option value="63">D#/Eb</option>
+          <option value="64">E</option>
+          <option value="65">F</option>
+          <option value="66">F#/Gb</option>
+          <option value="67">G</option>
+          <option value="68">G#/Ab</option>
+          <option value="69">A</option>
+          <option value="70">A#/Bb</option>
+          <option value="71">B</option>
+        </select>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Scale / Tuning</label>
+        <select id="scale-select">
+          <optgroup label="— Major Modes —">
+            <option value="major">Major (Ionian)</option>
+            <option value="dorian">Dorian</option>
+            <option value="phrygian">Phrygian</option>
+            <option value="lydian">Lydian</option>
+            <option value="mixolydian">Mixolydian</option>
+            <option value="aeolian">Natural Minor (Aeolian)</option>
+            <option value="locrian">Locrian</option>
+          </optgroup>
+          <optgroup label="— Minor Scales —">
+            <option value="harmonic_minor">Harmonic Minor</option>
+            <option value="melodic_minor">Melodic Minor</option>
+          </optgroup>
+          <optgroup label="— Pentatonic —">
+            <option value="major_penta">Major Pentatonic</option>
+            <option value="minor_penta">Minor Pentatonic</option>
+          </optgroup>
+          <optgroup label="— Blues —">
+            <option value="blues">Blues</option>
+            <option value="blues_major">Major Blues</option>
+          </optgroup>
+          <optgroup label="— Chromatic —">
+            <option value="chromatic">Full Chromatic</option>
+            <option value="whole_tone">Whole Tone</option>
+          </optgroup>
+          <optgroup label="— World —">
+            <option value="hirajoshi">Hirajoshi (Japanese)</option>
+            <option value="hungarian_minor">Hungarian Minor</option>
+            <option value="arabic">Arabic (Hijaz)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Holes</label>
+        <div id="hole-count-wrap">
+          <button class="hole-btn" onclick="changeHoles(-1)">&#8722;</button>
+          <span id="hole-count-val">10</span>
+          <button class="hole-btn" onclick="changeHoles(1)">+</button>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <label>Sensitivity <span class="ctrl-val" id="sens-val">0.25</span></label>
+        <input type="range" id="sens-slider" min="0.08" max="0.6" step="0.01" value="0.25" oninput="document.getElementById('sens-val').innerText=parseFloat(this.value).toFixed(2)">
+      </div>
+
+      <div class="ctrl-group">
+        <label>Bend Curve <span class="ctrl-val" id="exp-val">0.8</span></label>
+        <input type="range" id="exp-slider" min="0.0" max="2.0" step="0.1" value="0.8" oninput="document.getElementById('exp-val').innerText=parseFloat(this.value).toFixed(1)">
+      </div>
+
+      <div class="ctrl-group">
+        <label>Open Threshold <span class="ctrl-val" id="thresh-val">15</span></label>
+        <input type="range" id="thresh-slider" min="5" max="60" step="1" value="15" oninput="document.getElementById('thresh-val').innerText=this.value">
+      </div>
+
+    </div>
+
+    <!-- MAIN ROW -->
+    <div id="main-row">
+
+      <!-- LEFT VU: Volume -->
+      <div class="vu-meter">
+        <div class="vu-title">Vol<br>Mouth</div>
+        <div class="bar-track">
+          <div class="bar-fill" id="mouth-fill" style="height:0%"></div>
+        </div>
+        <div class="vu-readout" id="vol-readout">0</div>
+      </div>
+
+      <!-- CENTER -->
+      <div id="center-col">
+        <div id="video-box">
+          <video id="input_video" playsinline></video>
+          <canvas id="output_canvas"></canvas>
+
+          <div id="mouse-hint">Mouse mode: move across to choose a hole, up and down to bend, hold the button to blow</div>
+          <div id="start-gate">
+            <button type="button" id="start-face">&#9654; Start with face tracking</button>
+            <button type="button" class="alt" id="start-mouse">Try with mouse or touch instead</button>
+            <p>Face tracking uses your webcam in this browser; nothing is recorded. Turn your head left and right to pick a hole, tilt up or down to bend, open your mouth to play.</p>
+          </div>
+          <div id="harmonica-wrap">
+            <div id="harmonica"></div>
+          </div>
+        </div>
+
+        <div id="status-bar">
+          <div id="status-dot"></div>
+          <div id="status-text">Loading face tracker...</div>
+          <div id="scale-badge">C MAJOR</div>
+        </div>
+      </div>
+
+      <!-- RIGHT VU: Pitch Bend -->
+      <div class="vu-meter">
+        <div class="vu-title">Pitch<br>Bend</div>
+        <div class="bar-track bend-track">
+          <div id="bend-fill-up" style="height:0%"></div>
+          <div class="bend-center-line"></div>
+          <div id="bend-fill-down" style="height:0%"></div>
+          <div id="bend-marker"></div>
+        </div>
+        <div class="vu-readout" id="bend-readout">8192</div>
+      </div>
+
+      <!-- MIDI MONITOR -->
+      <div id="midi-monitor">
+        <div id="midi-monitor-title">&#9654; MIDI Monitor</div>
+        <div id="midi-log"></div>
+        <div id="midi-activity"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ─── SCALE DEFINITIONS ─────────────────────────────────────────────────────
+    // Each scale is an array of semitone intervals from root
+    const SCALES = {
+      major:           [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24],
+      dorian:          [0,2,3,5,7,9,10,12,14,15,17,19,21,22,24],
+      phrygian:        [0,1,3,5,7,8,10,12,13,15,17,19,20,22,24],
+      lydian:          [0,2,4,6,7,9,11,12,14,16,18,19,21,23,24],
+      mixolydian:      [0,2,4,5,7,9,10,12,14,16,17,19,21,22,24],
+      aeolian:         [0,2,3,5,7,8,10,12,14,15,17,19,20,22,24],
+      locrian:         [0,1,3,5,6,8,10,12,13,15,17,18,20,22,24],
+      harmonic_minor:  [0,2,3,5,7,8,11,12,14,15,17,19,20,23,24],
+      melodic_minor:   [0,2,3,5,7,9,11,12,14,15,17,19,21,23,24],
+      major_penta:     [0,2,4,7,9,12,14,16,19,21,24,26,28,31,33],
+      minor_penta:     [0,3,5,7,10,12,15,17,19,22,24,27,29,31,34],
+      blues:           [0,3,5,6,7,10,12,15,17,18,19,22,24,27,29],
+      blues_major:     [0,2,3,4,7,9,12,14,15,16,19,21,24,26,27],
+      chromatic:       [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+      whole_tone:      [0,2,4,6,8,10,12,14,16,18,20,22,24,26,28],
+      hirajoshi:       [0,2,3,7,8,12,14,15,19,20,24,26,27,31,32],
+      hungarian_minor: [0,2,3,6,7,8,11,12,14,15,18,19,20,23,24],
+      arabic:          [0,1,4,5,7,8,11,12,13,16,17,19,20,23,24],
+    };
+
+    const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+    // ─── STATE ─────────────────────────────────────────────────────────────────
+    let holeCount = 10;
+    let currentNotes = [];
+    let centerNoseX = 0.5, centerNoseY = 0.5;
+    // FIX: calibration now uses a frame accumulator for reliability
+    let calibState = 'idle'; // 'idle' | 'counting' | 'sampling' | 'done'
+    let calibCountdown = 0;
+    let calibSamples = [];
+    const CALIB_SAMPLE_FRAMES = 15; // average over 15 frames after countdown
+
+    let lastNote = -1;
+    let midiOutput = null;
+    let audioResumed = false;
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let inputMode = 'none'; // 'face' | 'mouse'
+    let oscillator = null;
+    const gainNode = audioCtx.createGain();
+    const filterNode = audioCtx.createBiquadFilter();
+    filterNode.type = 'lowpass';
+    filterNode.frequency.value = 2000;
+    gainNode.connect(filterNode);
+    filterNode.connect(audioCtx.destination);
+    gainNode.gain.value = 0;
+
+    // ─── MIDI ──────────────────────────────────────────────────────────────────
+    navigator.requestMIDIAccess && navigator.requestMIDIAccess().then(access => {
+      const refresh = () => {
+        const sel = document.getElementById('midi-select');
+        sel.innerHTML = '';
+        const outputs = Array.from(access.outputs.values());
+        if (outputs.length === 0) {
+          const o = document.createElement('option');
+          o.text = '— No MIDI devices —';
+          sel.appendChild(o);
+        } else {
+          outputs.forEach(out => {
+            const o = document.createElement('option');
+            o.value = out.id; o.text = out.name;
+            sel.appendChild(o);
+          });
+          midiOutput = outputs[0];
+        }
+        sel.onchange = () => {
+          midiOutput = access.outputs.get(sel.value) || null;
+        };
+      };
+      refresh();
+      access.onstatechange = refresh;
+    }).catch(() => {});
+
+    // ─── BUILD HARMONICA ────────────────────────────────────────────────────────
+    function buildHarmonica() {
+      const root = parseInt(document.getElementById('root-select').value);
+      const scaleName = document.getElementById('scale-select').value;
+      const pattern = SCALES[scaleName];
+
+      currentNotes = [];
+      for (let i = 0; i < holeCount; i++) {
+        const semitone = pattern[i % pattern.length] + Math.floor(i / pattern.length) * 12;
+        currentNotes.push(root + semitone);
+      }
+
+      const harp = document.getElementById('harmonica');
+      harp.innerHTML = '';
+      currentNotes.forEach((midi, i) => {
+        const noteName = NOTE_NAMES[midi % 12];
+        const octave = Math.floor(midi / 12) - 1;
+        const el = document.createElement('div');
+        el.className = 'hole';
+        el.id = `h${i}`;
+        el.innerHTML = `<span class="hole-num">${i+1}</span><span>${noteName}${octave}</span>`;
+        harp.appendChild(el);
+      });
+
+      // Update badge
+      const rootName = NOTE_NAMES[root % 12];
+      const scaleLabel = document.getElementById('scale-select').options[document.getElementById('scale-select').selectedIndex].text;
+      document.getElementById('scale-badge').innerText = `${rootName} ${scaleLabel.split('(')[0].trim().toUpperCase()}`;
+    }
+
+    function changeHoles(delta) {
+      holeCount = Math.max(4, Math.min(16, holeCount + delta));
+      document.getElementById('hole-count-val').innerText = holeCount;
+      buildHarmonica();
+    }
+
+    document.getElementById('root-select').onchange = buildHarmonica;
+    document.getElementById('scale-select').onchange = buildHarmonica;
+
+    buildHarmonica(); // initial
+
+    // ─── CALIBRATION (FIXED) ───────────────────────────────────────────────────
+    function startCalibration() {
+      if (calibState === 'counting' || calibState === 'sampling') return;
+      calibState = 'counting';
+      calibCountdown = 5;
+      calibSamples = [];
+
+      const btn = document.getElementById('recenter-btn');
+      btn.classList.add('active');
+
+      const dot = document.getElementById('status-dot');
+      dot.classList.remove('ok');
+      dot.classList.add('warn');
+
+      let ct = calibCountdown;
+      setStatus(`Centering in ${ct}...`);
+
+      const timer = setInterval(() => {
+        ct--;
+        if (ct > 0) {
+          setStatus(`Centering in ${ct}...`);
+        } else {
+          clearInterval(timer);
+          calibState = 'sampling'; // onResults will now accumulate samples
+          setStatus('Hold still...');
+        }
+      }, 1000);
+    }
+
+    // Called from onResults with current nose landmark
+    function handleCalibSample(nose) {
+      if (calibState !== 'sampling') return;
+
+      calibSamples.push({ x: nose.x, y: nose.y });
+
+      if (calibSamples.length >= CALIB_SAMPLE_FRAMES) {
+        // Average the samples for a stable center
+        centerNoseX = calibSamples.reduce((s, p) => s + p.x, 0) / calibSamples.length;
+        centerNoseY = calibSamples.reduce((s, p) => s + p.y, 0) / calibSamples.length;
+
+        calibState = 'done';
+        calibSamples = [];
+
+        document.getElementById('recenter-btn').classList.remove('active');
+        document.getElementById('status-dot').classList.remove('warn');
+        document.getElementById('status-dot').classList.add('ok');
+        setStatus('Center locked \u2714');
+      }
+    }
+
+    function setStatus(msg) {
+      document.getElementById('status-text').innerText = msg;
+    }
+
+    // ─── INTERNAL SYNTH ────────────────────────────────────────────────────────
+    function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+    function ensureAudio() {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function startInternalNote(freq) {
+      if (oscillator) { try { oscillator.stop(); } catch(e){} oscillator = null; }
+      oscillator = audioCtx.createOscillator();
+      oscillator.type = 'sawtooth'; // richer than sine — more harmonica-like
+      oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      oscillator.connect(gainNode);
+      oscillator.start();
+    }
+
+    // ─── MIDI MONITOR ──────────────────────────────────────────────────────────
+    const MAX_MIDI_LINES = 10;
+    let activityTimer = null;
+
+    function midiLog(msg, type = '') {
+      const log = document.getElementById('midi-log');
+      const line = document.createElement('div');
+      line.className = 'midi-line' + (type ? ' ' + type : '');
+      line.innerText = msg;
+      log.prepend(line);
+      while (log.children.length > MAX_MIDI_LINES) log.removeChild(log.lastChild);
+      // fade older lines
+      Array.from(log.children).forEach((el, i) => {
+        el.classList.toggle('faded', i >= 4);
+      });
+      // flash activity LED
+      const led = document.getElementById('midi-activity');
+      led.classList.add('pulse');
+      if (activityTimer) clearTimeout(activityTimer);
+      activityTimer = setTimeout(() => led.classList.remove('pulse'), 120);
+    }
+
+    function fmtNote(midi) {
+      const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+      return names[midi % 12] + (Math.floor(midi / 12) - 1);
+    }
+
+    // ─── ALL NOTES OFF ─────────────────────────────────────────────────────────
+    function allNotesOff() {
+      // Send MIDI All Notes Off (CC 123) on all 16 channels + kill any hanging note
+      if (midiOutput) {
+        for (let ch = 0; ch < 16; ch++) {
+          midiOutput.send([0xB0 | ch, 123, 0]); // All Notes Off
+          midiOutput.send([0xB0 | ch, 120, 0]); // All Sound Off (belt + suspenders)
+        }
+      }
+      // Kill internal synth
+      if (oscillator) {
+        try { oscillator.stop(); } catch(e) {}
+        oscillator = null;
+      }
+      gainNode.gain.cancelScheduledValues(audioCtx.currentTime);
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+      lastNote = -1;
+
+      midiLog('!! ALL NOTES OFF !!', 'panic');
+
+      // Flash the button red briefly
+      const btn = document.getElementById('all-notes-off');
+      btn.classList.add('flash');
+      setTimeout(() => btn.classList.remove('flash'), 300);
+    }
+
+    // Wrap midiOutput.send to also log — store original ref
+    function sendMidi(bytes, logMsg, logType) {
+      if (midiOutput) midiOutput.send(bytes);
+      if (logMsg) midiLog(logMsg, logType);
+    }
+
+    // ─── FACE MESH RESULTS ─────────────────────────────────────────────────────
+    function onResults(results) {
+      if (!results.multiFaceLandmarks || !results.multiFaceLandmarks[0]) return;
+      const lm = results.multiFaceLandmarks[0];
+      const nose = lm[4];
+
+      // Update status dot once tracking starts
+      if (calibState === 'idle') {
+        document.getElementById('status-dot').classList.add('ok');
+        setStatus('Tracking active — RE-CENTER NOSE to calibrate');
+        calibState = 'done'; // stop showing this message repeatedly
+      }
+
+      // FIX: feed samples during sampling phase
+      if (calibState === 'sampling') {
+        handleCalibSample(nose);
+      }
+
+      // 1. HORIZONTAL → hole selection
+      const range = parseFloat(document.getElementById('sens-slider').value);
+      let normalizedX = ((centerNoseX - nose.x) / range) + 0.5;
+      normalizedX = Math.max(0, Math.min(0.9999, normalizedX));
+
+      // 2. VERTICAL → pitch bend input (-1..1)
+      const diffY = centerNoseY - nose.y;
+      let normY = Math.max(-1, Math.min(1, diffY / 0.12));
+
+      // 3. VOLUME from lip distance
+      // Use landmarks 13 (upper lip) and 14 (lower lip)
+      const lipDist = Math.abs(lm[13].y - lm[14].y);
+      const volume = Math.min(127, Math.max(0, Math.round((lipDist - 0.008) * 2200)));
+      lastFaceAt = performance.now();
+      applyControl(normalizedX, normY, volume);
+    }
+
+    // Shared by face tracking and mouse mode
+    let lastFaceAt = 0;
+    function applyControl(normalizedX, normY, volume) {
+      let holeIndex = Math.floor(Math.max(0, Math.min(0.9999, normalizedX)) * holeCount);
+      const expPower = parseFloat(document.getElementById('exp-slider').value) + 1.0;
+      let expY = Math.sign(normY) * Math.pow(Math.abs(normY), expPower);
+      let bendValue = Math.round(8192 + expY * 8191);
+      bendValue = Math.max(0, Math.min(16383, bendValue));
+
+      const threshold = parseInt(document.getElementById('thresh-slider').value);
+
+      // ── UI UPDATES ────────────────────────────────────────────────────────
+      document.querySelectorAll('.hole').forEach(h => h.classList.remove('active-hole'));
+      const activeEl = document.getElementById(`h${holeIndex}`);
+      if (activeEl) activeEl.classList.add('active-hole');
+
+      document.getElementById('mouth-fill').style.height = `${(volume / 127) * 100}%`;
+      document.getElementById('vol-readout').innerText = volume;
+
+      // Bend bar — positive normY = up bend (blue), negative = down bend (orange)
+      const pct = Math.abs(expY) * 50;
+      if (expY >= 0) {
+        document.getElementById('bend-fill-up').style.height = `${pct}%`;
+        document.getElementById('bend-fill-down').style.height = '0%';
+      } else {
+        document.getElementById('bend-fill-up').style.height = '0%';
+        document.getElementById('bend-fill-down').style.height = `${pct}%`;
+      }
+      document.getElementById('bend-marker').style.top = `${50 - normY * 48}%`;
+      document.getElementById('bend-readout').innerText = bendValue;
+
+      // ── AUDIO OUTPUT ──────────────────────────────────────────────────────
+      if (document.getElementById('audio-mode').value === 'internal') {
+        ensureAudio();
+        if (volume > threshold) {
+          gainNode.gain.setTargetAtTime(volume / 127 * 0.8, audioCtx.currentTime, 0.04);
+          const freq = midiToFreq(currentNotes[holeIndex]);
+          const detuneAmt = expY * 200;
+          if (!oscillator) startInternalNote(freq);
+          oscillator.frequency.setTargetAtTime(freq, audioCtx.currentTime, 0.04);
+          oscillator.detune.setTargetAtTime(detuneAmt, audioCtx.currentTime, 0.04);
+          filterNode.frequency.setTargetAtTime(800 + volume * 15, audioCtx.currentTime, 0.05);
+        } else {
+          gainNode.gain.setTargetAtTime(0, audioCtx.currentTime, 0.04);
+          if (gainNode.gain.value < 0.001 && oscillator) {
+            try { oscillator.stop(); } catch(e){}
+            oscillator = null;
+          }
+        }
+      } else if (midiOutput) {
+        // Pitch bend — only send when playing
+        if (volume > threshold) {
+          const bendMsg = `PB  ${bendValue}`;
+          sendMidi([0xE0, bendValue & 0x7F, (bendValue >> 7) & 0x7F], bendValue !== 8192 ? bendMsg : null, 'bend');
+        }
+        if (volume > threshold) {
+          if (lastNote !== currentNotes[holeIndex]) {
+            if (lastNote !== -1) {
+              sendMidi([0x80, lastNote, 0], `OFF ${fmtNote(lastNote)}`, 'note-off');
+            }
+            const vel = Math.min(127, volume);
+            sendMidi([0x90, currentNotes[holeIndex], vel], `ON  ${fmtNote(currentNotes[holeIndex])} v${vel}`, 'note-on');
+            lastNote = currentNotes[holeIndex];
+          }
+        } else if (lastNote !== -1) {
+          sendMidi([0x80, lastNote, 0], `OFF ${fmtNote(lastNote)}`, 'note-off');
+          lastNote = -1;
+        }
+      }
+    }
+
+    // ─── MEDIAPIPE ─────────────────────────────────────────────────────────────
+    const videoEl = document.getElementById('input_video');
+    let faceMesh = null;
+    try {
+    faceMesh = new FaceMesh({
+      locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/${f}`
+    });
+    faceMesh.setOptions({
+      maxNumFaces: 1,
+      refineLandmarks: true,
+      minDetectionConfidence: 0.7,
+      minTrackingConfidence: 0.7
+    });
+    faceMesh.onResults(onResults);
+    } catch (e) { faceMesh = null; }
+
+    // Start only after a click, so the browser allows sound and asks for the camera at a sensible moment
+    let camStarted = false;
+    function startFace() {
+      ensureAudio();
+      document.getElementById('start-gate').style.display = 'none';
+      inputMode = 'face';
+      document.body.classList.remove('mouse-mode');
+      if (!faceMesh) { setStatus('Face tracker could not load: use mouse mode'); return; }
+      if (camStarted) return;
+      camStarted = true;
+      setStatus('Starting camera...');
+      try {
+        const cam = new Camera(videoEl, {
+          onFrame: async () => { await faceMesh.send({ image: videoEl }); },
+          width: 640,
+          height: 480
+        });
+        const p = cam.start();
+        if (p && p.catch) p.catch(() => { setStatus('Camera unavailable here: use mouse mode, or open this page directly'); document.getElementById('status-dot').classList.add('warn'); });
+      } catch (e) {
+        setStatus('Camera unavailable here: use mouse mode, or open this page directly');
+      }
+    }
+    // If the face leaves the frame, stop the note instead of leaving it hanging
+    setInterval(() => {
+      if (inputMode === 'face' && lastFaceAt && performance.now() - lastFaceAt > 400) { lastFaceAt = 0; applyControl(0.5, 0, 0); }
+    }, 200);
+
+    // Mouse / touch mode: x picks the hole, y bends, holding the button blows
+    let mouseDown = false, mx = 0.5, my = 0;
+    function startMouse() {
+      ensureAudio();
+      document.getElementById('start-gate').style.display = 'none';
+      inputMode = 'mouse';
+      document.body.classList.add('mouse-mode');
+      setStatus('Mouse mode: hold the button over the harmonica to play');
+      document.getElementById('status-dot').classList.add('ok');
+    }
+    const vbox = document.getElementById('video-box');
+    function mousePos(e) {
+      const r = vbox.getBoundingClientRect();
+      mx = (e.clientX - r.left) / r.width;
+      my = Math.max(-1, Math.min(1, 1 - 2 * (e.clientY - r.top) / r.height));
+    }
+    vbox.addEventListener('pointerdown', e => { if (inputMode !== 'mouse') return; e.preventDefault(); mousePos(e); mouseDown = true; try { vbox.setPointerCapture(e.pointerId); } catch (_) {} applyControl(mx, my, 110); });
+    vbox.addEventListener('pointermove', e => { if (inputMode !== 'mouse') return; mousePos(e); applyControl(mx, my, mouseDown ? 110 : 0); });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => vbox.addEventListener(ev, () => { if (inputMode !== 'mouse') return; mouseDown = false; applyControl(mx, my, 0); }));
+    document.getElementById('start-face').addEventListener('click', startFace);
+    document.getElementById('start-mouse').addEventListener('click', startMouse);
+    setStatus('Press Start to begin');
+  </script>
+</body>
+</html>
