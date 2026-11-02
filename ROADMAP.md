@@ -61,3 +61,5 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - Wheelchair driving simulator placeholder on Simulators page (#wheelchair-sim), reusing the banner animation via window.wcSim(stage, canvas); real inputs to come.
 
 - Recreation lab (#lab): experimental ISATMA apps (Songboards, Speaking Boards, ergometers, Dance Board, Motion Lab, camera test) published as-is under website/lab/, with search and filters; MediaPipe versions pinned in isatma_ergometer_v4.
+
+- Lab: Musical Dial v9.1 (built-in Web Audio synth, sound unlock, wedge dwell, fit-to-screen, stuck-note fix, breath preset sync); MIDI optional.
