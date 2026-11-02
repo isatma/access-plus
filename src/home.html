@@ -787,6 +787,21 @@ footer .wrap { padding-block: 22px; }
 .cmp-p.mine { border-color: #7cc4ff; }
 .cmp-p .cmp-addl { margin: 0; min-height: 1.2em; font-size: 0.72em; color: #7cc4ff; }
 @media (max-width: 640px) { .cmp-add { grid-template-columns: 1fr; } }
+@media (min-width: 1000px) {
+  .hero { grid-template-columns: minmax(0, 1fr) !important; gap: 30px !important; }
+  .hero .intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: 48px; row-gap: 14px; align-items: center; max-width: none; padding-top: 0 !important; }
+  .hero .intro .hero-head { grid-row: span 2; }
+  .hero .intro > p, .hero .intro .hero-agent { grid-column: 2; }
+}
+.cmp-top { justify-content: center; text-align: center; flex-direction: column; align-items: center; }
+.cmp-top h2 { font-size: clamp(1.4em, 2.6vw, 2em) !important; }
+.cmp-panels { gap: 14px; }
+.cmp-p { padding: 12px; }
+.cmp-p header b { font-size: 1em; }
+.cmp-p canvas { aspect-ratio: 1.35; }
+.cmp-m { font-size: 0.82em; }
+.cmp-tools { display: grid; gap: 12px; padding-top: 6px; border-top: 1px solid var(--line); }
+.cmp-tools .cmp-lead { text-align: center; }
 </style>
 
 <div class="draftbar" role="note"><b>Draft website · under construction</b><span>For review and discussion purposes only. Partners, products, data and features shown are illustrative ideas, not commitments.</span></div>
@@ -818,7 +833,14 @@ footer .wrap { padding-block: 22px; }
     </section>
       <div class="cmp" id="cmp" aria-labelledby="cmpTitle">
         <div class="cmp-top"><div><span class="eyebrow">Compare the core technologies</span><h2 id="cmpTitle">Which control works best, and when?</h2></div><span class="cmp-tag">Simulated demo · for discussion</span></div>
-        <p class="cmp-lead">Move the sliders to describe a person. Watch head and gesture tracking, eye tracking and switch scanning try the same task, and see which fits best as abilities change.</p>
+        <div class="cmp-panels">
+          <article class="cmp-p" data-k="head"><header><b>Head and gesture tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+          <article class="cmp-p" data-k="eyes"><header><b>Eye tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+          <article class="cmp-p" data-k="sw"><header><b>Switch scanning</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+        </div>
+        <div class="cmp-tools">
+        <p class="cmp-lead">The three windows above show head and gesture tracking, eye tracking and switch scanning trying the same task. Describe a person below and see which fits best as abilities change.</p>
+
         <div class="cmp-ctl" role="group" aria-label="Describe the person">
           <label><span>Ability <b id="cmpAv">Early</b></span><input type="range" id="cmpA" min="0" max="100" value="20" aria-describedby="cmpAh"><small id="cmpAh">early ← → advanced loss of movement</small></label>
           <label><span>Fatigue <b id="cmpFv">Fresh</b></span><input type="range" id="cmpF" min="0" max="100" value="15"><small>morning ← → tired evening</small></label>
@@ -836,13 +858,10 @@ footer .wrap { padding-block: 22px; }
             <button type="button" data-add="voice" aria-pressed="false">Voice commands</button>
           </div>
         </div>
-        <div class="cmp-panels">
-          <article class="cmp-p" data-k="head"><header><b>Head and gesture tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
-          <article class="cmp-p" data-k="eyes"><header><b>Eye tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
-          <article class="cmp-p" data-k="sw"><header><b>Switch scanning</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
-        </div>
+
         <div class="cmp-cont"><svg id="cmpChart" viewBox="0 0 720 210" role="img" aria-label="Useful selections per minute for each technology across the ability range"></svg><p class="cmp-find" id="cmpFind" aria-live="polite"></p></div>
         <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">See the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
+        </div>
       </div>
     </div>
 
@@ -1025,7 +1044,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:42 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:53 UTC</span></div>
   </div>
 </footer>
 
