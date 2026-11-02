@@ -216,8 +216,8 @@
       ['low', 'Fine for an hour or more'], ['mid', 'Tired after 20 to 30 minutes'], ['high', 'Tired quickly']] },
     { id: 'where', q: 'Where do you use technology most?', opts: [
       ['chair', 'In my wheelchair'], ['bed', 'In bed'], ['both', 'Both, at different times']] },
-    { id: 'change', q: 'Are your abilities changing?', opts: [
-      ['stable', 'Fairly stable'], ['slow', 'Changing slowly'], ['fast', 'Changing quickly', 'for example with ALS']] }
+    { id: 'change', q: 'How settled are your needs right now?', opts: [
+      ['stable', 'Fairly settled'], ['slow', 'Shifting a little over time'], ['fast', 'Shifting more quickly', 'for example with ALS']] }
   ];
   function label(qid, v) { var q = Q.filter(function (x) { return x.id === qid; })[0]; var o = q && q.opts.filter(function (x) { return x[0] === v; })[0]; return o ? o[1] : v; }
   var METH = {
@@ -259,7 +259,7 @@
     if (A.fatigue === 'mid') add('sw', 1, 'low effort helps longer sessions');
     if (A.where === 'bed') { add('eyes', 2, 'works lying down'); add('sw', 1, 'switch can mount on the bed'); add('head', -1, 'harder to move the head in bed'); }
     if (A.where === 'both') add('eyes', 1, 'one tracker can move between bed and chair');
-    if (A.change === 'fast') { add('eyes', 2, 'keeps working as movement changes'); add('sw', 1, 'switch site can move as needed'); add('voice', -1, 'speech may change'); }
+    if (A.change === 'fast') { add('eyes', 2, 'works with very little movement'); add('sw', 1, 'switch site can move as needed'); add('voice', -1, 'good to pair with another method'); }
     if (has('goals', 'drive')) add('sip', 1, 'common for wheelchair driving');
     if (has('goals', 'talk')) { add('eyes', 1, 'gaze speech apps'); add('sw', 1, 'switch speech apps'); }
     return { s: s, why: why };

@@ -1999,13 +1999,13 @@ footer .wrap { padding-block: 22px; }
         <div class="cmp-gal" role="group" aria-label="Choose three methods to compare" id="cmpGal"></div>
         <div class="cmp-panels" id="cmpPanels"></div>
         <div class="cmp-tools">
-        <p class="cmp-lead">Pick any three methods from the gallery, and choose a type in each window. Then describe a person below and see which fits best as abilities change.</p>
+        <p class="cmp-lead">Pick any three methods from the gallery, and choose a type in each window. Then describe a person below and see which fits best today, and what else could help if needs shift.</p>
 
         <div class="cmp-ctl" role="group" aria-label="Describe the person">
-          <label><span>Ability <b id="cmpAv">Early</b></span><input type="range" id="cmpA" min="0" max="100" value="20" aria-describedby="cmpAh"><small id="cmpAh">early ← → advanced loss of movement</small></label>
+          <label><span>Movement <b id="cmpAv">Plenty</b></span><input type="range" id="cmpA" min="0" max="100" value="20" aria-describedby="cmpAh"><small id="cmpAh">more movement ← → less movement</small></label>
           <label><span>Fatigue <b id="cmpFv">Fresh</b></span><input type="range" id="cmpF" min="0" max="100" value="15"><small>morning ← → tired evening</small></label>
           <label><span>Spasticity and tremor <b id="cmpTv">Mild</b></span><input type="range" id="cmpT" min="0" max="100" value="20"><small>none ← → strong</small></label>
-          <label><span>Speech <b id="cmpSv">Clear</b></span><input type="range" id="cmpS" min="0" max="100" value="10"><small>clear ← → not usable</small></label>
+          <label><span>Speech <b id="cmpSv">Clear</b></span><input type="range" id="cmpS" min="0" max="100" value="10"><small>clear ← → harder to understand</small></label>
           <div class="cmp-pos"><span>Position</span><div role="group" aria-label="Position"><button type="button" data-pos="chair" aria-pressed="true">Chair</button><button type="button" data-pos="bed" aria-pressed="false">Bed</button></div></div>
         </div>
         <div class="cmp-add" role="group" aria-label="Your setup and add-ons">
@@ -2177,7 +2177,7 @@ footer .wrap { padding-block: 22px; }
     <section class="resband" id="research-band" aria-labelledby="rbT">
       <div class="rb-text">
         <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
-        <h2 id="rbT">See skills change over time, and catch problems early</h2>
+        <h2 id="rbT">See skills grow, and find what helps most</h2>
         <p>A research workspace for scientists that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
         <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
         <div class="rb-btns"><a class="btn primary" href="#research">Open the research workspace</a></div>
@@ -2544,8 +2544,8 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap rs-wrap">
     <header class="rs-hero">
       <span class="rs-k">Research workspace · for scientists <span class="rs-proto">Prototype · draft for discussion</span></span>
-      <h1>Abilities, technologies and <span>change over time</span></h1>
-      <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
+      <h1>Skills, technologies and <span>what works best</span></h1>
+      <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and notice early when a setting, some practice or another tool could make things easier. Built for participants, clinicians and researchers.</p>
     </header>
     <div class="rs-sim" role="note"><b>Prototype · simulated data</b><span>A draft for discussion, with generic, illustrative data: 60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rs-rsMethodLink">how the data was made</a>.</span></div>
     <div class="rolebar" data-rolebar="researcher" data-ok="You see coded, de-identified data from people who opted in. No names, and no way to change anyone's settings." data-preview="Shown to everyone in this draft. In the finished site this workspace needs a researcher sign-in, and real data comes only from people who turn on sharing in their profile."></div>
@@ -2579,7 +2579,7 @@ footer .wrap { padding-block: 22px; }
         </article>
 
         <article class="rs-card">
-          <h2>Early warning before a switch</h2>
+          <h2>Before a change of method</h2>
           <p class="sub">The selected measure for people who later moved off this technology, lined up on the week they switched.</p>
           <div id="rs-warnC"></div>
           <p class="find" id="rs-warnF"></p>
@@ -4020,7 +4020,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 21:05 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 21:15 UTC</span></div>
   </div>
 </footer>
 
@@ -4573,8 +4573,8 @@ function AgentCloud(canvas, opts) {
     { name: 'Maria', color: '#7cc4ff', about: 'Uses a head-controlled wheelchair, eye-gaze communication and switches', hl: 'From three systems to one seamless day', ins: ['Head control', 'Eye gaze', 'Switches'],
       story: 'Maria already uses three good systems: a head-controlled wheelchair, an eye-tracking communication device, and switches for her apartment. Each works, but none work together, so every change of task means changing posture, device and method. Access+ leaves her equipment in place and learns how she naturally combines head movement, gaze and switches into one profile that follows her across all three.',
       ask: ['How would one profile work across her three systems?', 'Where would Maria start on this site?'] },
-    { name: 'Elena', color: '#f7b2c4', about: 'Lives with ALS · uses a light-touch joystick and voice', hl: 'Never losing access as ALS progresses', ins: ['Mini joystick', 'Voice', 'Eye gaze'],
-      story: 'Elena controls her computer and communication device with a light-touch joystick and voice, and she knows that will change, just not when. Usually, losing hand function means new evaluations, funding requests and months of retraining at the worst time. With Access+, brief practice sessions track her strength, precision and fatigue, and I suggest adding eye gaze alongside the joystick well before it becomes unreliable. Her layouts and shortcuts carry over; only the input changes. Access+ can’t slow ALS, but it keeps her technology from moving backward with it.',
+    { name: 'Elena', color: '#f7b2c4', about: 'Lives with ALS · uses a light-touch joystick and voice', hl: 'Staying connected, whatever comes next', ins: ['Mini joystick', 'Voice', 'Eye gaze'],
+      story: 'Elena controls her computer and communication device with a light-touch joystick and voice, and she likes to be prepared. Usually, a change in hand function means new evaluations, funding requests and months of retraining, all at once. With Access+, brief practice sessions keep track of her strength, precision and comfort, and eye gaze is practiced alongside the joystick so it is ready if she ever wants it. Her layouts and shortcuts carry over; only the input changes. Whatever comes, her technology keeps up with her.',
       ask: ['How would Elena practice eye gaze early?', 'What signs would suggest it’s time to add gaze?'] },
     { name: 'Jamal', color: '#ffc670', about: '19 · cerebral palsy · loves gaming', hl: 'From user to developer on the same platform', ins: ['Head movement', 'Two switches'],
       story: 'Standard game controllers need hand movements Jamal can’t make consistently. Access+ finds that head movement and two adaptive switches are his most reliable signals, and that profile carries from games to schoolwork to coding tools. Because Access+ is open, Jamal starts editing his own control mappings, then shares them with other users. Calibration becomes technical training.',
@@ -4599,7 +4599,7 @@ function AgentCloud(canvas, opts) {
     caseGrid.appendChild(b);
   });
   var chipsBox = document.getElementById('storyChips');
-  var SITU = ['Funding a robotic arm', 'Three devices, one profile', 'Changing needs with ALS', 'Gaming to coding', 'Rural, no clinic nearby', 'Working on the phone'];
+  var SITU = ['Funding a robotic arm', 'Three devices, one profile', 'Ready for what comes next', 'Gaming to coding', 'Rural, no clinic nearby', 'Working on the phone'];
   if (chipsBox) CASES.forEach(function (c, i) {
     var b = document.createElement('button'); b.type = 'button'; b.className = 'ex-chip'; b.textContent = SITU[i] || c.hl;
     b.addEventListener('click', function () { showCase(i); });
@@ -4678,7 +4678,7 @@ function AgentCloud(canvas, opts) {
     var A = {
       right: 'It depends on what you want to do and the movements that are most reliable for you. Pick one of the options below, or press Get to know me first and I’ll ask a few questions.',
       head: 'Head tracking uses a webcam or a small sensor to move the pointer with head or nose movement. It suits people with good head control. You need a webcam or head mouse, software such as built-in head pointer settings, and a way to click, like a dwell click, a switch or a facial gesture. Try the gesture check to see how steady your movement is.',
-      eye: 'Eye tracking moves the pointer where you look. It suits people with little or no reliable head or hand movement, including later stages of ALS. You need an eye tracker, good positioning, and calibration in each position you use. Clicking is usually by dwelling your gaze or with a switch.',
+      eye: 'Eye tracking moves the pointer where you look. It suits people with little or no reliable head or hand movement, including people with ALS who have very little movement. You need an eye tracker, good positioning, and calibration in each position you use. Clicking is usually by dwelling your gaze or with a switch.',
       'switch': 'Switch interfaces turn any small, reliable movement, a breath, a cheek twitch, a finger, a foot, into a button press. With scanning, one or two switches can run a computer, phone or communication device. They are reliable and low-fatigue, but slower than pointing.',
       hw: 'Hardware solutions include wheelchair input modules such as head arrays and sip-and-puff, robotic arms for eating and drinking, mounts that hold screens and switches in reach, and lifts and transfer aids. See Your solutions, then Hardware, for neutral information.',
       hybrid: 'Hybrid setups combine inputs so each does what it does best: for example eye gaze to point, a switch or facial gesture to click, and voice for typing. They reduce fatigue and keep you working if one method has a bad day.',
@@ -5198,10 +5198,10 @@ wcSim(document.getElementById('wcStage'), document.getElementById('wcCanvas'));
   }
   function update() {
     S.a = +document.getElementById('cmpA').value / 100; S.f = +document.getElementById('cmpF').value / 100; S.t = +document.getElementById('cmpT').value / 100; S.sp = +document.getElementById('cmpS').value / 100;
-    document.getElementById('cmpAv').textContent = label(S.a, ['Early', 'Moderate', 'Advanced', 'Late']);
+    document.getElementById('cmpAv').textContent = label(S.a, ['Plenty', 'Some', 'A little', 'Very little']);
     document.getElementById('cmpFv').textContent = label(S.f, ['Fresh', 'A little tired', 'Tired', 'Exhausted']);
     document.getElementById('cmpTv').textContent = label(S.t, ['None', 'Mild', 'Moderate', 'Strong']);
-    document.getElementById('cmpSv').textContent = label(S.sp, ['Clear', 'Changing', 'Hard to understand', 'Not usable']);
+    document.getElementById('cmpSv').textContent = label(S.sp, ['Clear', 'A little unclear', 'Harder to understand', 'Very hard to understand']);
     var best = null;
     SEL.forEach(function (k) { M[k] = model(k, S.a, S.f, S.t, S.sp, S.bed); if (!MTH[k].pot && (!best || M[k].use > M[best].use)) best = k; });
     SEL.forEach(function (k) {
@@ -5228,7 +5228,7 @@ wcSim(document.getElementById('wcStage'), document.getElementById('wcCanvas'));
     var cross = []; for (i = 1; i <= N; i++) if (bestAt[i] !== bestAt[i - 1]) cross.push([i / N, bestAt[i - 1], bestAt[i]]);
     cross.forEach(function (c) { g += '<line x1="' + X(c[0]) + '" x2="' + X(c[0]) + '" y1="' + y0 + '" y2="' + (y0 + h) + '" stroke="#4b5a6b" stroke-dasharray="3 3"/>'; });
     if (best) g += '<line x1="' + X(S.a) + '" x2="' + X(S.a) + '" y1="' + (y0 - 4) + '" y2="' + (y0 + h) + '" stroke="#0b1220" stroke-width="2"/><circle cx="' + X(S.a) + '" cy="' + Y(M[best].use) + '" r="6" fill="#0b1220"/><text x="' + clamp(X(S.a), x0 + 30, x0 + w - 30) + '" y="' + (y0 + h + 30) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b1220">this person</text>';
-    g += '<text x="' + x0 + '" y="' + (y0 + h + 16) + '" font-size="11" fill="#4b5a6b">early</text><text x="' + (x0 + w) + '" y="' + (y0 + h + 16) + '" text-anchor="end" font-size="11" fill="#4b5a6b">advanced loss of movement</text><text x="' + (x0 + 4) + '" y="' + (y0 + 12) + '" font-size="11" fill="#4b5a6b">useful selections a minute</text>';
+    g += '<text x="' + x0 + '" y="' + (y0 + h + 16) + '" font-size="11" fill="#4b5a6b">more movement</text><text x="' + (x0 + w) + '" y="' + (y0 + h + 16) + '" text-anchor="end" font-size="11" fill="#4b5a6b">less movement</text><text x="' + (x0 + 4) + '" y="' + (y0 + 12) + '" font-size="11" fill="#4b5a6b">useful selections a minute</text>';
     var lx = x0 + w - 3 * 140; SEL.forEach(function (k, j) { g += '<rect x="' + (lx + j * 140) + '" y="' + (y0 + 2) + '" width="12" height="4" fill="' + SLOTL[j] + '"/><text x="' + (lx + j * 140 + 16) + '" y="' + (y0 + 8) + '" font-size="10.5" fill="#24344a">' + name(k) + '</text>'; });
     svg.innerHTML = g;
     var txt = best ? '<b>' + name(best) + '</b> fits best for this person right now.' : 'Choose at least one method that is in use today.';
@@ -5743,8 +5743,8 @@ var __ID = function (x) { return document.getElementById('fd-' + x) || document.
       ['low', 'Fine for an hour or more'], ['mid', 'Tired after 20 to 30 minutes'], ['high', 'Tired quickly']] },
     { id: 'where', q: 'Where do you use technology most?', opts: [
       ['chair', 'In my wheelchair'], ['bed', 'In bed'], ['both', 'Both, at different times']] },
-    { id: 'change', q: 'Are your abilities changing?', opts: [
-      ['stable', 'Fairly stable'], ['slow', 'Changing slowly'], ['fast', 'Changing quickly', 'for example with ALS']] }
+    { id: 'change', q: 'How settled are your needs right now?', opts: [
+      ['stable', 'Fairly settled'], ['slow', 'Shifting a little over time'], ['fast', 'Shifting more quickly', 'for example with ALS']] }
   ];
   function label(qid, v) { var q = Q.filter(function (x) { return x.id === qid; })[0]; var o = q && q.opts.filter(function (x) { return x[0] === v; })[0]; return o ? o[1] : v; }
   var METH = {
@@ -5786,7 +5786,7 @@ var __ID = function (x) { return document.getElementById('fd-' + x) || document.
     if (A.fatigue === 'mid') add('sw', 1, 'low effort helps longer sessions');
     if (A.where === 'bed') { add('eyes', 2, 'works lying down'); add('sw', 1, 'switch can mount on the bed'); add('head', -1, 'harder to move the head in bed'); }
     if (A.where === 'both') add('eyes', 1, 'one tracker can move between bed and chair');
-    if (A.change === 'fast') { add('eyes', 2, 'keeps working as movement changes'); add('sw', 1, 'switch site can move as needed'); add('voice', -1, 'speech may change'); }
+    if (A.change === 'fast') { add('eyes', 2, 'works with very little movement'); add('sw', 1, 'switch site can move as needed'); add('voice', -1, 'good to pair with another method'); }
     if (has('goals', 'drive')) add('sip', 1, 'common for wheelchair driving');
     if (has('goals', 'talk')) { add('eyes', 1, 'gaze speech apps'); add('sw', 1, 'switch speech apps'); }
     return { s: s, why: why };
