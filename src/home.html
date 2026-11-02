@@ -182,6 +182,15 @@ footer { padding-bottom: 90px; }
   @keyframes banddrift { 0%,100% { translate: 0 -50%; } 50% { translate: 14px -50%; } }
 }
 @media (max-width: 640px) { .bd:nth-child(even) { display: none; } }
+.wc-sec { display: grid; gap: 14px; margin-bottom: 34px; }
+.wc-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.wc-head h2 { margin: 0; }
+.wc-tag { font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 2px 8px; }
+.wc-sec p { margin: 0; color: var(--desc); max-width: 60em; }
+.wc-stage { min-height: clamp(360px, 56vh, 560px); border: 1px solid var(--line-hi); }
+.wc-inputs { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.wc-inputs li { padding: 8px 12px; border: 1px dashed var(--line-hi); color: var(--desc); font-size: 0.92em; }
+.wc-inputs li b { color: var(--ink); }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
 .hero .intro { align-content: start; gap: 26px; }
@@ -874,7 +883,7 @@ footer .wrap { padding-block: 22px; }
         </div>
 
         <div class="cmp-cont"><svg id="cmpChart" viewBox="0 0 720 210" role="img" aria-label="Useful selections per minute for each technology across the ability range"></svg><p class="cmp-find" id="cmpFind" aria-live="polite"></p></div>
-        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">Run real tests and studies in the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
+        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">Run real tests and studies in the research workspace</a> · <a href="#simulators">Robotic arm simulator</a></p>
         </div>
       </div>
     </div>
@@ -1016,9 +1025,9 @@ footer .wrap { padding-block: 22px; }
       <div class="rb-text">
         <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
         <h2 id="rbT">See skills change over time, and catch problems early</h2>
-        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
+        <p>A research workspace for scientists that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
         <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
-        <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
+        <div class="rb-btns"><a class="btn primary" href="#research">Open the research workspace</a></div>
       </div>
       <div class="rb-viz" aria-hidden="true">
         <svg viewBox="0 0 420 220"><g font-family="IBM Plex Sans, sans-serif">
@@ -1055,10 +1064,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:09 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:37 UTC</span></div>
   </div>
 </footer>
 
@@ -1789,8 +1798,7 @@ function AgentCloud(canvas, opts) {
   })();
 
 /* Simulator banner: autoplay preview of a wheelchair course with a hill, a side slope and a narrow bridge over water. Chase camera, pseudo-3D. */
-(function () {
-  var stage = document.getElementById('sbStage'), cv = document.getElementById('sbCanvas');
+function wcSim(stage, cv) {
   if (!stage || !cv) return;
   var ctx = cv.getContext('2d'), reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vis = false, io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { stage.classList.add('revealed'); vis = true; } else vis = false; }); }, { threshold: 0.3 }) : null;
@@ -2095,7 +2103,10 @@ function AgentCloud(canvas, opts) {
     });
   }
   requestAnimationFrame(frame);
-})();
+}
+window.wcSim = wcSim;
+wcSim(document.getElementById('sbStage'), document.getElementById('sbCanvas'));
+wcSim(document.getElementById('wcStage'), document.getElementById('wcCanvas'));
 
 /* Simulator banner: "How it works" pop-up, opens on hover, focus or tap, and follows the input on screen */
 (function () {

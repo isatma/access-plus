@@ -56,3 +56,6 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - Owned equipment and frequency of use: profile tools table shows how often each item is used and flags rarely used items gently; research dashboard card plus owned_equipment.csv (simulated). Escalation wording softened: changing technology is optional.
 
 - Research dashboard: Activity studies (one method, comparison, learning curve, posture) over 4 activities with simulated 40-person group; working test screen (click, dwell, switch scanning) whose sessions overlay the charts; activity_study.csv and my_test_sessions.csv.
+
+- Roles: demo sign-in picker (participant, care team, researcher); Research workspace naming with role bar; Care team view (#care) with suggestions; profile "My data and sharing" (tests, research consent, care access, approve suggestions, download).
+- Wheelchair driving simulator placeholder on Simulators page (#wheelchair-sim), reusing the banner animation via window.wcSim(stage, canvas); real inputs to come.

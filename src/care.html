@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ care team</title>
+<style>
+.ct-wrap { gap: 22px !important; }
+.ct-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
+.ct-hero h1 { font-size: clamp(2em, 5vw, 3.2em); line-height: 1.06; margin: 0; }
+.ct-hero h1 span { color: #ffc670; }
+.ct-hero p { margin: 0; color: var(--desc); max-width: 52em; font-size: 1.06em; }
+.ct-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #ffc670; }
+.ct-proto { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; }
+.ct-board { --ink: #0b1220; --desc: #24344a; --muted: #4b5a6b; --line: #d7dee6; --line-hi: #b7c3cf; color: #0b1220; color-scheme: light; background: #f4f7fa; border: 1px solid #b7c3cf; padding: 20px; display: grid; gap: 16px; }
+@media (max-width: 560px) { .ct-board { padding: 12px; } }
+.ct-people { display: flex; flex-wrap: wrap; gap: 8px; }
+.ct-people button { min-height: 52px; padding: 0 16px; border: 1px solid var(--line-hi); background: #fff; color: #0b1220; font: 600 1em var(--body); cursor: pointer; text-align: left; }
+.ct-people button[aria-pressed="true"] { border: 2px solid #b07a00; background: #fff7e6; }
+.ct-people small { display: block; font: 500 0.72em var(--mono); color: #4b5a6b; letter-spacing: 0.06em; text-transform: uppercase; }
+.ct-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) { .ct-grid { grid-template-columns: minmax(0, 1fr); } }
+.ct-card { background: #fff; border: 1px solid var(--line-hi); padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; grid-template-columns: minmax(0, 1fr); }
+.ct-card.wide { grid-column: 1 / -1; }
+.ct-card h2 { margin: 0; font: 600 1.1em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; }
+.ct-card .sub { margin: -4px 0 0; color: #4b5a6b; font-size: 0.9em; }
+.ct-dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: 0.95em; }
+.ct-dl dt { color: #4b5a6b; } .ct-dl dd { margin: 0; color: #0b1220; font-weight: 600; }
+.ct-trend { display: grid; gap: 8px; }
+.ct-row { display: grid; grid-template-columns: minmax(110px, 1fr) minmax(0, 2fr) 70px; gap: 10px; align-items: center; font-size: 0.92em; color: #0b1220; }
+.ct-row svg { width: 100%; height: 34px; display: block; }
+.ct-row .d { font: 600 0.9em var(--mono); text-align: right; }
+.ct-row .d.dn { color: #a33a1a; } .ct-row .d.up { color: #08734b; }
+.ct-note { margin: 0; padding: 8px 12px; border-left: 3px solid #b07a00; background: #fff7e6; color: #0b1220; font-size: 0.92em; }
+.ct-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 14px; }
+@media (max-width: 760px) { .ct-form { grid-template-columns: minmax(0, 1fr); } }
+.ct-form label { display: grid; gap: 4px; font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: #4b5a6b; min-width: 0; }
+.ct-form select, .ct-form input, .ct-form textarea { min-height: 46px; padding: 6px 10px; font: 500 1.3em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; background: #fff; border: 1px solid var(--line-hi); max-width: 100%; }
+.ct-form textarea { min-height: 80px; resize: vertical; }
+.ct-form .full { grid-column: 1 / -1; }
+.ct-form .btn { min-height: 52px; color: #fff; background: #08734b; border-color: #08734b; justify-self: start; }
+.ct-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ct-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); background: #fbfcfd; color: #0b1220; }
+.ct-list li small { grid-column: 1 / -1; color: #4b5a6b; }
+.ct-st { font: 600 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; white-space: nowrap; }
+.ct-st.pending { color: #8a5a00; } .ct-st.approved { color: #08734b; } .ct-st.declined { color: #a33a1a; }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap ct-wrap">
+    <header class="ct-hero">
+      <span class="ct-k">Care team · clinicians and therapists <span class="ct-proto">Prototype · draft for discussion</span></span>
+      <h1>People who <span>invited you</span></h1>
+      <p>Follow progress for the people who gave you access, and suggest setting changes. You can't change anything yourself: each suggestion goes to the person, who approves or declines it.</p>
+    </header>
+    <div class="rolebar" data-rolebar="care" data-ok="You see only people who invited you, and only what they chose to share." data-preview="In the finished site, this page needs a care team sign-in and an invitation from each person."></div>
+
+    <section class="ct-board" aria-label="Care team workspace">
+      <div class="ct-people" role="group" aria-label="People" id="ctPeople"></div>
+      <div class="ct-grid">
+        <article class="ct-card">
+          <h2>Current setup</h2>
+          <p class="sub">From their profile, as shared with you.</p>
+          <dl class="ct-dl" id="ctSetup"></dl>
+        </article>
+        <article class="ct-card">
+          <h2>Recent trends</h2>
+          <p class="sub">Last eight weeks of practice sessions. Simulated for this draft.</p>
+          <div class="ct-trend" id="ctTrend"></div>
+          <p class="ct-note" id="ctTrendNote"></p>
+        </article>
+        <article class="ct-card wide">
+          <h2>Suggest a setting change</h2>
+          <p class="sub">The person sees your suggestion in their profile, with your reason, and decides. Review anything that affects safety, seating or driving in person.</p>
+          <form class="ct-form" id="ctForm">
+            <label>Method <select id="ctMeth"><option>Head tracking</option><option>Eye tracking</option><option>Switch scanning</option><option>Chin joystick (wheelchair)</option><option>Voice control</option></select></label>
+            <label>Setting <select id="ctSet"><option>Dwell time</option><option>Scan speed</option><option>Pointer speed</option><option>Target size</option><option>Position profile</option><option>Practice plan</option></select></label>
+            <label>Suggested value <input id="ctVal" type="text" value="1.2 seconds"></label>
+            <label class="full">Why <textarea id="ctWhy">Accuracy drops late in the day. A slightly longer dwell should cut mis-clicks without slowing much.</textarea></label>
+            <button class="btn" type="submit">Send suggestion</button>
+          </form>
+        </article>
+        <article class="ct-card wide">
+          <h2>Your suggestions</h2>
+          <ul class="ct-list" id="ctList"></ul>
+        </article>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+(function () {
+  function el(id) { return document.getElementById(id); }
+  var PEOPLE = [
+    { id: 'sample', name: 'Sample User', note: 'Shares: progress, settings, suggestions', setup: [['Computer', 'Nose-tracking webcam, OptiKey keyboard'], ['Phone', 'Built-in voice control'], ['Wheelchair', 'Chin joystick, indoor speed 3'], ['Backup', 'Switch scanning, practiced'], ['Positions', 'Chair by day, bed in the evening']],
+      trend: [['Pointing accuracy', [88, 87, 89, 86, 85, 86, 84, 83], '%'], ['Useful selections a minute', [11.2, 11.6, 11.4, 11.8, 11.5, 11.3, 11.1, 10.9], ''], ['Stamina', [38, 37, 37, 35, 35, 34, 33, 33], 'min']],
+      note: 'Accuracy and stamina have eased down over eight weeks while speed held. Worth a check-in: settings such as dwell time or target size may help, and no change of method is needed.' },
+    { id: 'p2', name: 'Example person 2', note: 'Shares: progress only', setup: [['Computer', 'Eye tracker, dwell 0.9 s'], ['Phone', 'Switch access, two switches'], ['Positions', 'Mostly bed']],
+      trend: [['Gaze accuracy', [81, 82, 84, 85, 85, 86, 87, 87], '%'], ['Useful selections a minute', [6.1, 6.6, 7.2, 7.5, 7.9, 8.1, 8.2, 8.4], ''], ['Stamina', [30, 31, 31, 32, 33, 33, 34, 34], 'min']],
+      note: 'Steady gains since starting eye tracking: still on the learning curve.', noSuggest: true }
+  ];
+  var cur = PEOPLE[0];
+  function sugg() { try { return JSON.parse(localStorage.getItem('accessplus-suggestions') || '[]') || []; } catch (e) { return []; } }
+  function save(a) { try { localStorage.setItem('accessplus-suggestions', JSON.stringify(a)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function spark(v) { var mn = Math.min.apply(null, v), mx = Math.max.apply(null, v), r = mx - mn || 1; return '<svg viewBox="0 0 160 34" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#b07a00" stroke-width="2.5" points="' + v.map(function (y, i) { return (i * 160 / (v.length - 1)).toFixed(1) + ',' + (30 - 26 * (y - mn) / r).toFixed(1); }).join(' ') + '"/></svg>'; }
+  function people() {
+    el('ctPeople').innerHTML = PEOPLE.map(function (p) { return '<button type="button" data-p="' + p.id + '" aria-pressed="' + (p === cur) + '">' + esc(p.name) + '<small>' + esc(p.note) + '</small></button>'; }).join('');
+    Array.prototype.forEach.call(el('ctPeople').children, function (b) { b.addEventListener('click', function () { cur = PEOPLE.filter(function (p) { return p.id === b.getAttribute('data-p'); })[0]; draw(); }); });
+  }
+  function draw() {
+    people();
+    el('ctSetup').innerHTML = cur.setup.map(function (r) { return '<dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('');
+    el('ctTrend').innerHTML = cur.trend.map(function (t) { var v = t[1], d = v[v.length - 1] - v[0], cls = d < 0 ? 'dn' : d > 0 ? 'up' : ''; return '<div class="ct-row"><span>' + esc(t[0]) + '</span>' + spark(v) + '<span class="d ' + cls + '">' + (d > 0 ? '+' : '') + (Math.round(d * 10) / 10) + (t[2] === '%' ? '%' : t[2] ? ' ' + t[2] : '') + '</span></div>'; }).join('');
+    el('ctTrendNote').textContent = cur.note;
+    var f = el('ctForm'); Array.prototype.forEach.call(f.elements, function (x) { x.disabled = !!cur.noSuggest; });
+    var mine = sugg().filter(function (s) { return s.person === cur.id; });
+    el('ctList').innerHTML = cur.noSuggest ? '<li>This person shares progress only, so suggestions are turned off.</li>' : mine.length ? mine.slice().reverse().map(function (s) { return '<li><span><b>' + esc(s.setting) + '</b> for ' + esc(s.method.toLowerCase()) + ': ' + esc(s.value) + '</span><span class="ct-st ' + s.status + '">' + { pending: 'Waiting for approval', approved: 'Approved', declined: 'Declined' }[s.status] + '</span><small>' + esc(s.date) + ' · ' + esc(s.why) + '</small></li>'; }).join('') : '<li>No suggestions yet.</li>';
+  }
+  el('ctForm').addEventListener('submit', function (e) {
+    e.preventDefault(); if (cur.noSuggest) return;
+    var a = sugg(); a.push({ id: Date.now(), person: cur.id, from: 'Example therapist', date: new Date().toISOString().slice(0, 10), method: el('ctMeth').value, setting: el('ctSet').value, value: el('ctVal').value || '(no value)', why: el('ctWhy').value || '', status: 'pending' });
+    save(a); draw();
+  });
+  window.addEventListener('hashchange', function () { if (location.hash === '#care') draw(); });
+  draw();
+})();
+</script>
+</body>
+</html>

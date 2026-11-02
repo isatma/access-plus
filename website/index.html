@@ -182,6 +182,15 @@ footer { padding-bottom: 90px; }
   @keyframes banddrift { 0%,100% { translate: 0 -50%; } 50% { translate: 14px -50%; } }
 }
 @media (max-width: 640px) { .bd:nth-child(even) { display: none; } }
+.wc-sec { display: grid; gap: 14px; margin-bottom: 34px; }
+.wc-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.wc-head h2 { margin: 0; }
+.wc-tag { font: 500 0.72em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 2px 8px; }
+.wc-sec p { margin: 0; color: var(--desc); max-width: 60em; }
+.wc-stage { min-height: clamp(360px, 56vh, 560px); border: 1px solid var(--line-hi); }
+.wc-inputs { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0; padding: 0; }
+.wc-inputs li { padding: 8px 12px; border: 1px dashed var(--line-hi); color: var(--desc); font-size: 0.92em; }
+.wc-inputs li b { color: var(--ink); }
 /* hero */
 .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
 .hero .intro { align-content: start; gap: 26px; }
@@ -819,6 +828,28 @@ footer .wrap { padding-block: 22px; }
 .cmp-cat { font-size: 0.74em; color: var(--signal); }
 .cmp-p.potp canvas { opacity: 0.55; }
 /* views-css:start */
+
+.si-back { position: fixed; inset: 0; z-index: 60; background: rgba(3,8,16,0.72); display: grid; place-items: center; padding: 16px; }
+.si-back[hidden] { display: none; }
+.si-box { width: min(880px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; color: #0b1220; border: 1px solid #b7c3cf; padding: 24px; display: grid; gap: 16px; }
+.si-box h2 { margin: 0; font: 700 1.6em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; }
+.si-box p { margin: 0; color: #24344a; }
+.si-tag { font: 500 0.7em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
+.si-roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .si-roles { grid-template-columns: minmax(0, 1fr); } }
+.si-role { display: grid; gap: 8px; align-content: start; text-align: left; min-height: 150px; padding: 16px; border: 2px solid #b7c3cf; border-top: 6px solid var(--rc); background: #fff; color: #0b1220; font: inherit; cursor: pointer; }
+.si-role:hover, .si-role:focus-visible { border-color: var(--rc); background: color-mix(in srgb, var(--rc) 8%, #fff); outline: none; }
+.si-role[aria-pressed="true"] { border-color: var(--rc); box-shadow: inset 0 0 0 2px var(--rc); }
+.si-role b { font: 700 1.2em var(--body); }
+.si-role span { color: #24344a; font-size: 0.95em; line-height: 1.4; }
+.si-role small { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #4b5a6b; }
+.si-foot { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.si-foot .btn { min-height: 52px; }
+.si-box .btn { color: #0b1220; border-color: #4b5a6b; background: #fff; }
+.nav .navsign .navrole { margin-left: 8px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; background: var(--rc, #5fe0a8); color: #04201a; }
+.rolebar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border: 1px solid var(--rc, #7cc4ff); background: color-mix(in srgb, var(--rc, #7cc4ff) 10%, transparent); color: var(--ink); font-size: 0.95em; }
+.rolebar b { font: 600 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--rc, #7cc4ff); }
+.rolebar button { min-height: 44px; padding: 0 14px; border: 1px solid var(--rc, #7cc4ff); background: transparent; color: var(--ink); font: 600 0.9em var(--body); cursor: pointer; }
 #view-borrow .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 #view-borrow > .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
 #view-borrow .eyebrow { font: 500 0.75em var(--mono); color: var(--signal); letter-spacing: 0.16em; text-transform: uppercase; }
@@ -1050,6 +1081,25 @@ footer .wrap { padding-block: 22px; }
 #view-profile .card.hl .pf-title { font: 700 1.9em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); border-left: 6px solid var(--signal); padding-left: 12px; line-height: 1.1; }
 #view-profile .card.hl { padding-top: 22px; }
 #view-profile .rare-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: #7a5200; background: #fff3d6; border: 1px solid #e0b553; white-space: nowrap; }
+#view-profile .md-block { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid #d7dee6; }
+#view-profile .md-block h3 { margin: 0; font: 600 1.02em var(--body); color: #0b1220; letter-spacing: 0; text-transform: none; }
+#view-profile .md-sub { margin: 0; color: #24344a; font-size: 0.93em; }
+#view-profile .md-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-profile .md .btn { min-height: 52px; }
+#view-profile .col .md .btn:not(.primary) { color: #0b1220; border-color: #4b5a6b; background: #fff; }
+#view-profile .md-sw, #view-profile .md-sugg { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+#view-profile .md-sw li, #view-profile .md-sugg li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid #d7dee6; background: #fbfcfd; color: #0b1220; }
+#view-profile .md-sw li small, #view-profile .md-sugg li small { grid-column: 1 / 2; color: #4b5a6b; font-size: 0.85em; }
+#view-profile .md-tog { min-height: 48px; min-width: 96px; padding: 0 14px; border: 2px solid #4b5a6b; background: #fff; color: #0b1220; font: 700 0.9em var(--body); cursor: pointer; grid-row: span 2; }
+#view-profile .md-tog[aria-pressed="true"] { background: #08734b; border-color: #08734b; color: #fff; }
+#view-profile .md-sugg .act { display: flex; gap: 6px; grid-row: span 2; }
+#view-profile .md-sugg .act button { min-height: 48px; padding: 0 14px; border: 2px solid #4b5a6b; background: #fff; color: #0b1220; font: 700 0.9em var(--body); cursor: pointer; }
+#view-profile .md-sugg .act button.ok { background: #08734b; border-color: #08734b; color: #fff; }
+#view-profile .md-st { font: 600 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; grid-row: span 2; }
+#view-profile .md-st.approved { color: #08734b; }
+#view-profile .md-st.declined { color: #a33a1a; }
+#view-profile .md-log { margin: 0; font: 500 0.78em var(--mono); color: #4b5a6b; }
+#view-profile .md svg { width: 100%; max-width: 420px; height: 70px; display: block; }
 #view-find .fd-wrap { gap: 28px !important; }
 #view-find .fd-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 #view-find .fd-hero { position: relative; display: grid; gap: 14px; padding: 46px 0 34px; text-align: center; justify-items: center; border-bottom: 1px solid var(--line-hi); overflow: hidden; }
@@ -1370,6 +1420,55 @@ footer .wrap { padding-block: 22px; }
 @media (prefers-reduced-motion: reduce) {
 #view-research .st-flash { animation: none; }
 }
+#view-care .ct-wrap { gap: 22px !important; }
+#view-care .ct-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
+#view-care .ct-hero h1 { font-size: clamp(2em, 5vw, 3.2em); line-height: 1.06; margin: 0; }
+#view-care .ct-hero h1 span { color: #ffc670; }
+#view-care .ct-hero p { margin: 0; color: var(--desc); max-width: 52em; font-size: 1.06em; }
+#view-care .ct-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #ffc670; }
+#view-care .ct-proto { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; }
+#view-care .ct-board { --ink: #0b1220; --desc: #24344a; --muted: #4b5a6b; --line: #d7dee6; --line-hi: #b7c3cf; color: #0b1220; color-scheme: light; background: #f4f7fa; border: 1px solid #b7c3cf; padding: 20px; display: grid; gap: 16px; }
+@media (max-width: 560px) {
+#view-care .ct-board { padding: 12px; }
+}
+#view-care .ct-people { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-care .ct-people button { min-height: 52px; padding: 0 16px; border: 1px solid var(--line-hi); background: #fff; color: #0b1220; font: 600 1em var(--body); cursor: pointer; text-align: left; }
+#view-care .ct-people button[aria-pressed="true"] { border: 2px solid #b07a00; background: #fff7e6; }
+#view-care .ct-people small { display: block; font: 500 0.72em var(--mono); color: #4b5a6b; letter-spacing: 0.06em; text-transform: uppercase; }
+#view-care .ct-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) {
+#view-care .ct-grid { grid-template-columns: minmax(0, 1fr); }
+}
+#view-care .ct-card { background: #fff; border: 1px solid var(--line-hi); padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; grid-template-columns: minmax(0, 1fr); }
+#view-care .ct-card.wide { grid-column: 1 / -1; }
+#view-care .ct-card h2 { margin: 0; font: 600 1.1em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; }
+#view-care .ct-card .sub { margin: -4px 0 0; color: #4b5a6b; font-size: 0.9em; }
+#view-care .ct-dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; margin: 0; font-size: 0.95em; }
+#view-care .ct-dl dt { color: #4b5a6b; }
+#view-care .ct-dl dd { margin: 0; color: #0b1220; font-weight: 600; }
+#view-care .ct-trend { display: grid; gap: 8px; }
+#view-care .ct-row { display: grid; grid-template-columns: minmax(110px, 1fr) minmax(0, 2fr) 70px; gap: 10px; align-items: center; font-size: 0.92em; color: #0b1220; }
+#view-care .ct-row svg { width: 100%; height: 34px; display: block; }
+#view-care .ct-row .d { font: 600 0.9em var(--mono); text-align: right; }
+#view-care .ct-row .d.dn { color: #a33a1a; }
+#view-care .ct-row .d.up { color: #08734b; }
+#view-care .ct-note { margin: 0; padding: 8px 12px; border-left: 3px solid #b07a00; background: #fff7e6; color: #0b1220; font-size: 0.92em; }
+#view-care .ct-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 14px; }
+@media (max-width: 760px) {
+#view-care .ct-form { grid-template-columns: minmax(0, 1fr); }
+}
+#view-care .ct-form label { display: grid; gap: 4px; font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: #4b5a6b; min-width: 0; }
+#view-care .ct-form select, #view-care .ct-form input, #view-care .ct-form textarea { min-height: 46px; padding: 6px 10px; font: 500 1.3em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; background: #fff; border: 1px solid var(--line-hi); max-width: 100%; }
+#view-care .ct-form textarea { min-height: 80px; resize: vertical; }
+#view-care .ct-form .full { grid-column: 1 / -1; }
+#view-care .ct-form .btn { min-height: 52px; color: #fff; background: #08734b; border-color: #08734b; justify-self: start; }
+#view-care .ct-list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+#view-care .ct-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid var(--line); background: #fbfcfd; color: #0b1220; }
+#view-care .ct-list li small { grid-column: 1 / -1; color: #4b5a6b; }
+#view-care .ct-st { font: 600 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; white-space: nowrap; }
+#view-care .ct-st.pending { color: #8a5a00; }
+#view-care .ct-st.approved { color: #08734b; }
+#view-care .ct-st.declined { color: #a33a1a; }
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1814,7 +1913,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#research" data-route="research">Research dashboard<span class="navproto">Prototype</span></a><a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a><a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -1864,7 +1963,7 @@ footer .wrap { padding-block: 22px; }
         </div>
 
         <div class="cmp-cont"><svg id="cmpChart" viewBox="0 0 720 210" role="img" aria-label="Useful selections per minute for each technology across the ability range"></svg><p class="cmp-find" id="cmpFind" aria-live="polite"></p></div>
-        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">Run real tests and studies in the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
+        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">Run real tests and studies in the research workspace</a> · <a href="#simulators">Robotic arm simulator</a></p>
         </div>
       </div>
     </div>
@@ -2006,9 +2105,9 @@ footer .wrap { padding-block: 22px; }
       <div class="rb-text">
         <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
         <h2 id="rbT">See skills change over time, and catch problems early</h2>
-        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
+        <p>A research workspace for scientists that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
         <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
-        <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
+        <div class="rb-btns"><a class="btn primary" href="#research">Open the research workspace</a></div>
       </div>
       <div class="rb-viz" aria-hidden="true">
         <svg viewBox="0 0 420 220"><g font-family="IBM Plex Sans, sans-serif">
@@ -2039,6 +2138,19 @@ footer .wrap { padding-block: 22px; }
 </main>
 
 <!-- views:start -->
+
+<div class="si-back" id="siBack" hidden>
+  <div class="si-box" role="dialog" aria-modal="true" aria-labelledby="siT">
+    <div><h2 id="siT">Sign in <span class="si-tag">Demo</span></h2></div>
+    <p>One account, with a role for each way you use Access+. No real accounts exist in this draft: pick a role to see what that person would see.</p>
+    <div class="si-roles" role="group" aria-label="Choose a role">
+      <button type="button" class="si-role" data-role="participant" style="--rc:#5fe0a8"><small>For you</small><b>Participant</b><span>Your own profile, settings, test sessions and trends. You decide what, if anything, to share.</span></button>
+      <button type="button" class="si-role" data-role="care" style="--rc:#ffc670"><small>Clinicians and therapists</small><b>Care team</b><span>See the people who invited you. Follow their progress and suggest setting changes they approve.</span></button>
+      <button type="button" class="si-role" data-role="researcher" style="--rc:#7cc4ff"><small>Scientists</small><b>Researcher</b><span>Design studies and analyze coded, de-identified data from people who opted in. No names, no setting changes.</span></button>
+    </div>
+    <div class="si-foot"><p>One person can hold more than one role, for example a participant who is also a researcher.</p><div><button class="btn" type="button" id="siOut" hidden>Sign out</button> <button class="btn" type="button" id="siClose">Close</button></div></div>
+  </div>
+</div>
 <main id="view-borrow" class="view" hidden>
 
   <div class="wrap">
@@ -2241,6 +2353,32 @@ footer .wrap { padding-block: 22px; }
         <ul class="plain" id="pf-next"></ul>
       </section>
 
+      <section class="card md" id="pf-c-data" aria-labelledby="pf-dataT">
+        <h2 id="pf-dataT">My data and sharing <small>you decide</small></h2>
+        <div class="md-block">
+          <h3>Suggestions from my care team</h3>
+          <ul class="md-sugg" id="pf-mdSugg"></ul>
+        </div>
+        <div class="md-block">
+          <h3>My test sessions</h3>
+          <p class="md-sub" id="pf-mdTests"></p>
+          <div id="pf-mdSpark"></div>
+          <div class="md-btns"><button class="btn primary" type="button" id="pf-mdRun">Run a test session</button><button class="btn" type="button" id="pf-mdDl">Download all my data</button></div>
+        </div>
+        <div class="md-block">
+          <h3>Share with research</h3>
+          <p class="md-sub">Off unless you turn it on. Researchers would see a coded ID (like <b id="pf-mdCode">P-7K2Q</b>), your measures and dates. Never your name, contact details or anything you type to the AI agent. You can stop at any time.</p>
+          <ul class="md-sw" id="pf-mdShare"></ul>
+          <button class="btn" type="button" id="pf-mdWithdraw">Stop sharing with all research</button>
+        </div>
+        <div class="md-block">
+          <h3>Care team access</h3>
+          <ul class="md-sw" id="pf-mdCare"></ul>
+          <p class="md-sub">Invite a clinician or therapist by email in the finished site. They can only suggest changes; you approve every one.</p>
+        </div>
+        <p class="md-log" id="pf-mdLog"></p>
+      </section>
+
       <p class="note">Your profile is yours. This pilot doesn't collect your data: in the finished site you save your profile and results as files on your own computer, load them again to track progress over time, and choose whether to share them with a research study.</p>
     </div>
 
@@ -2332,11 +2470,12 @@ footer .wrap { padding-block: 22px; }
 
   <div class="wrap rs-wrap">
     <header class="rs-hero">
-      <span class="rs-k">Research and science · Data dashboard <span class="rs-proto">Prototype · draft for discussion</span></span>
+      <span class="rs-k">Research workspace · for scientists <span class="rs-proto">Prototype · draft for discussion</span></span>
       <h1>Abilities, technologies and <span>change over time</span></h1>
       <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
     </header>
     <div class="rs-sim" role="note"><b>Prototype · simulated data</b><span>A draft for discussion, with generic, illustrative data: 60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rs-rsMethodLink">how the data was made</a>.</span></div>
+    <div class="rolebar" data-rolebar="researcher" data-ok="You see coded, de-identified data from people who opted in. No names, and no way to change anyone's settings." data-preview="Shown to everyone in this draft. In the finished site this workspace needs a researcher sign-in, and real data comes only from people who turn on sharing in their profile."></div>
 
     <section class="rs-board" aria-label="Research dashboard">
       <div class="rs-filters" role="group" aria-label="Filters">
@@ -2474,6 +2613,49 @@ footer .wrap { padding-block: 22px; }
           </div>
         </div>
       </article>
+    </section>
+  </div>
+</main>
+<main id="view-care" class="view" hidden>
+
+  <div class="wrap ct-wrap">
+    <header class="ct-hero">
+      <span class="ct-k">Care team · clinicians and therapists <span class="ct-proto">Prototype · draft for discussion</span></span>
+      <h1>People who <span>invited you</span></h1>
+      <p>Follow progress for the people who gave you access, and suggest setting changes. You can't change anything yourself: each suggestion goes to the person, who approves or declines it.</p>
+    </header>
+    <div class="rolebar" data-rolebar="care" data-ok="You see only people who invited you, and only what they chose to share." data-preview="In the finished site, this page needs a care team sign-in and an invitation from each person."></div>
+
+    <section class="ct-board" aria-label="Care team workspace">
+      <div class="ct-people" role="group" aria-label="People" id="ct-ctPeople"></div>
+      <div class="ct-grid">
+        <article class="ct-card">
+          <h2>Current setup</h2>
+          <p class="sub">From their profile, as shared with you.</p>
+          <dl class="ct-dl" id="ct-ctSetup"></dl>
+        </article>
+        <article class="ct-card">
+          <h2>Recent trends</h2>
+          <p class="sub">Last eight weeks of practice sessions. Simulated for this draft.</p>
+          <div class="ct-trend" id="ct-ctTrend"></div>
+          <p class="ct-note" id="ct-ctTrendNote"></p>
+        </article>
+        <article class="ct-card wide">
+          <h2>Suggest a setting change</h2>
+          <p class="sub">The person sees your suggestion in their profile, with your reason, and decides. Review anything that affects safety, seating or driving in person.</p>
+          <form class="ct-form" id="ct-ctForm">
+            <label>Method <select id="ct-ctMeth"><option>Head tracking</option><option>Eye tracking</option><option>Switch scanning</option><option>Chin joystick (wheelchair)</option><option>Voice control</option></select></label>
+            <label>Setting <select id="ct-ctSet"><option>Dwell time</option><option>Scan speed</option><option>Pointer speed</option><option>Target size</option><option>Position profile</option><option>Practice plan</option></select></label>
+            <label>Suggested value <input id="ct-ctVal" type="text" value="1.2 seconds"></label>
+            <label class="full">Why <textarea id="ct-ctWhy">Accuracy drops late in the day. A slightly longer dwell should cut mis-clicks without slowing much.</textarea></label>
+            <button class="btn" type="submit">Send suggestion</button>
+          </form>
+        </article>
+        <article class="ct-card wide">
+          <h2>Your suggestions</h2>
+          <ul class="ct-list" id="ct-ctList"></ul>
+        </article>
+      </div>
     </section>
   </div>
 </main>
@@ -3633,7 +3815,18 @@ footer .wrap { padding-block: 22px; }
         </div>
     </section>
 
-        <section id="simulators" aria-labelledby="simTitle">
+        <section class="wc-sec" id="wheelchair-sim" aria-labelledby="wcT">
+      <div class="wc-head"><h2 id="wcT">Wheelchair driving simulator</h2><span class="wc-tag">Placeholder · not yet playable</span></div>
+      <p>A temporary stand-in: the course plays on its own, with a hill, a narrow bridge over water and a side slope, switching between control methods. Real inputs come next, so you can drive it yourself.</p>
+      <figure class="sb-stage wc-stage" id="wcStage">
+        <canvas id="wcCanvas" role="img" aria-label="Animated placeholder: a power wheelchair drives a course with a hill, a narrow bridge over water and a side slope"></canvas>
+      </figure>
+      <ul class="wc-inputs" aria-label="Inputs planned">
+        <li><b>Planned inputs:</b></li><li>Mini or chin joystick</li><li>Head array</li><li>Sip and puff</li><li>Switches</li><li>Head and face tracking (webcam)</li><li>Keyboard and mouse, for testing</li>
+      </ul>
+    </section>
+
+    <section id="simulators" aria-labelledby="simTitle">
       <div class="head"><h2 id="simTitle">Simulators</h2><p>Try them now with nose tracking, eye gaze or a mouse.</p></div>
       <div class="sims">
         <div class="side">
@@ -3642,11 +3835,11 @@ footer .wrap { padding-block: 22px; }
             <h3>Robotic arm</h3>
             <p>Cutting edge: reach, grasp and drink in 3D. Try it above.</p>
           </button>
-          <a class="sim" href="#" data-msg="Wheelchair simulator: coming soon.">
+          <button class="sim" type="button" data-scrollto="wheelchair-sim" style="text-align:left;font:inherit;cursor:pointer">
             <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><circle cx="16" cy="27" r="9"/><circle cx="31" cy="33" r="3"/><path d="M14 6v12h12l5 15M14 18h-4"/></svg>
             <h3>Wheelchair driving</h3>
-            <p>Obstacle courses with levels, using any input.</p>
-          </a>
+            <p>Placeholder preview now; real inputs next. Watch it above.</p>
+          </button>
           <a class="sim" href="#" data-msg="Phone simulator: coming soon.">
             <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="12" y="4" width="16" height="32" rx="3"/><line x1="18" y1="31" x2="22" y2="31"/></svg>
             <h3>Cell phone</h3>
@@ -3714,10 +3907,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:09 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:37 UTC</span></div>
   </div>
 </footer>
 
@@ -4448,8 +4641,7 @@ function AgentCloud(canvas, opts) {
   })();
 
 /* Simulator banner: autoplay preview of a wheelchair course with a hill, a side slope and a narrow bridge over water. Chase camera, pseudo-3D. */
-(function () {
-  var stage = document.getElementById('sbStage'), cv = document.getElementById('sbCanvas');
+function wcSim(stage, cv) {
   if (!stage || !cv) return;
   var ctx = cv.getContext('2d'), reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var vis = false, io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { stage.classList.add('revealed'); vis = true; } else vis = false; }); }, { threshold: 0.3 }) : null;
@@ -4754,7 +4946,10 @@ function AgentCloud(canvas, opts) {
     });
   }
   requestAnimationFrame(frame);
-})();
+}
+window.wcSim = wcSim;
+wcSim(document.getElementById('sbStage'), document.getElementById('sbCanvas'));
+wcSim(document.getElementById('wcStage'), document.getElementById('wcCanvas'));
 
 /* Simulator banner: "How it works" pop-up, opens on hover, focus or tap, and follows the input on screen */
 (function () {
@@ -5381,6 +5576,46 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     renderActs(); renderGrid();
   })();
 
+/* My data and sharing: test sessions, research consent, care team access and suggestions (stored in this browser only) */
+(function () {
+  function el(id) { return __ID(id); }
+  if (!el('mdShare')) return;
+  function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch (e) { return d; } }
+  function put(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var STUDIES = [['activity', 'Activity studies', 'Your test sessions: speed, accuracy, effort, position'], ['cohort', 'Year-long progression study', 'Check-ins every two weeks, all measures'], ['equipment', 'Equipment use', 'How often you use what you own']];
+  var C = get('accessplus-consent', { share: {}, care: { view: true, suggest: true }, log: '' });
+  var code = get('accessplus-code', ''); if (!code) { code = 'P-' + Math.random().toString(36).slice(2, 6).toUpperCase(); put('accessplus-code', code); }
+  el('mdCode').textContent = code;
+  function stamp(what) { C.log = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' · ' + what; put('accessplus-consent', C); }
+  function tog(on, label) { return '<button type="button" class="md-tog" aria-pressed="' + !!on + '" aria-label="' + esc(label) + '">' + (on ? 'On' : 'Off') + '</button>'; }
+  function draw() {
+    var T = get('accessplus-tests', []);
+    if (T.length) {
+      var last = T[T.length - 1], v = T.map(function (t) { return t.useful; }), mx = Math.max.apply(null, v.concat([1]));
+      el('mdTests').innerHTML = T.length + ' session' + (T.length > 1 ? 's' : '') + ' so far. Latest: <b>' + last.useful + '</b> useful selections a minute, ' + last.acc + '% accuracy.';
+      el('mdSpark').innerHTML = v.length > 1 ? '<svg viewBox="0 0 420 70" preserveAspectRatio="none" role="img" aria-label="Useful selections a minute, session by session"><polyline fill="none" stroke="#08734b" stroke-width="3" points="' + v.map(function (y, i) { return (10 + i * 400 / (v.length - 1)).toFixed(1) + ',' + (62 - 54 * y / mx).toFixed(1); }).join(' ') + '"/></svg>' : '';
+    } else { el('mdTests').textContent = 'No test sessions yet. A test takes about a minute and works with a mouse, head mouse, eye tracker, touch or a switch.'; el('mdSpark').innerHTML = ''; }
+    el('mdShare').innerHTML = STUDIES.map(function (st) { var on = !!C.share[st[0]]; return '<li data-k="' + st[0] + '"><b>' + st[1] + '</b>' + tog(on, 'Share with ' + st[1]) + '<small>' + st[2] + (on ? ' · shared as ' + code : '') + '</small></li>'; }).join('');
+    Array.prototype.forEach.call(el('mdShare').querySelectorAll('li'), function (li) { li.querySelector('button').addEventListener('click', function () { var k = li.getAttribute('data-k'); C.share[k] = !C.share[k]; stamp((C.share[k] ? 'Started' : 'Stopped') + ' sharing: ' + STUDIES.filter(function (x) { return x[0] === k; })[0][1]); draw(); }); });
+    el('mdCare').innerHTML = '<li data-k="view"><b>Example therapist · can view progress</b>' + tog(C.care.view, 'Example therapist can view progress') + '<small>Occupational therapist, invited by you</small></li><li data-k="suggest"><b>Example therapist · can suggest changes</b>' + tog(C.care.suggest && C.care.view, 'Example therapist can suggest changes') + '<small>Suggestions wait for your approval</small></li>';
+    Array.prototype.forEach.call(el('mdCare').querySelectorAll('li'), function (li) { li.querySelector('button').addEventListener('click', function () { var k = li.getAttribute('data-k'); C.care[k] = !(k === 'suggest' ? C.care.suggest && C.care.view : C.care[k]); if (k === 'suggest' && C.care.suggest) C.care.view = true; stamp('Care team access changed'); draw(); }); });
+    var S = get('accessplus-suggestions', []).filter(function (x) { return x.person === 'sample'; });
+    el('mdSugg').innerHTML = !C.care.suggest || !C.care.view ? '<li>Suggestions are turned off for your care team.</li>' : S.length ? S.slice().reverse().map(function (x) { return '<li data-id="' + x.id + '"><span><b>' + esc(x.setting) + '</b> for ' + esc(x.method.toLowerCase()) + ': ' + esc(x.value) + '</span>' + (x.status === 'pending' ? '<span class="act"><button type="button" class="ok">Approve</button><button type="button" class="no">Decline</button></span>' : '<span class="md-st ' + x.status + '">' + (x.status === 'approved' ? 'Approved' : 'Declined') + '</span>') + '<small>From ' + esc(x.from) + ', ' + esc(x.date) + ': ' + esc(x.why) + '</small></li>'; }).join('') : '<li>No suggestions right now. When your care team suggests a change, it appears here for you to approve or decline.</li>';
+    Array.prototype.forEach.call(el('mdSugg').querySelectorAll('li[data-id]'), function (li) { Array.prototype.forEach.call(li.querySelectorAll('.act button'), function (b) { b.addEventListener('click', function () { var all = get('accessplus-suggestions', []), id = +li.getAttribute('data-id'); all.forEach(function (x) { if (x.id === id) x.status = b.classList.contains('ok') ? 'approved' : 'declined'; }); put('accessplus-suggestions', all); stamp('Answered a care team suggestion'); draw(); }); }); });
+    el('mdLog').textContent = C.log ? 'Last change: ' + C.log : 'Nothing shared. Stored only in this browser in this draft.';
+  }
+  el('mdWithdraw').addEventListener('click', function () { C.share = {}; stamp('Stopped sharing with all research'); draw(); });
+  el('mdRun').addEventListener('click', function () { location.hash = '#research'; setTimeout(function () { var t = __ID('rs-stTest'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); });
+  el('mdDl').addEventListener('click', function () {
+    var data = JSON.stringify({ code: code, consent: C, tests: get('accessplus-tests', []), suggestions: get('accessplus-suggestions', []) }, null, 2), name = 'my_access_plus_data.json';
+    function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+    if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+  });
+  window.addEventListener('hashchange', function () { if (location.hash === '#profile') draw(); });
+  draw();
+})();
+
 (function () {
 var __ID = function (x) { return document.getElementById('fd-' + x) || document.getElementById(x); };
 
@@ -5755,7 +5990,7 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
   function rows(k, extra) { return R.filter(function (r) { return r.activity === ST.act && r.method === k && (ST.stage === 'all' || r.stage === ST.stage) && (!extra || extra(r)); }); }
   function fin(k) { return rows(k, function (r) { return r.session === 12 && r.position === 'up'; }); }
   function mine(k, pos) { return ST.act !== 'point' ? [] : MINE.filter(function (m) { return m.method === k && (!pos || m.pos === pos); }); }
-  function key(ks, you) { return '<div class="st-key">' + ks.map(function (k) { return '<span style="--k:' + MS[k][1] + '">' + MS[k][0] + '</span>'; }).join('') + (you ? '<span class="you">Your sessions</span>' : '') + '</div>'; }
+  function key(ks, you) { return '<div class="st-key">' + ks.map(function (k) { return '<span style="--k:' + MS[k][1] + '">' + MS[k][0] + '</span>'; }).join('') + (you ? '<span class="you">Your sessions (only you see these)</span>' : '') + '</div>'; }
   function dia(x, y) { return '<path d="M' + x + ' ' + (y - 7) + 'l7 7l-7 7l-7 -7z" fill="#0b1220" stroke="#fff" stroke-width="1.5"/>'; }
   function axisY(x0, y0, w, h, mx, lbl) { var g = '', st = mx > 40 ? 20 : mx > 16 ? 5 : mx > 8 ? 2 : 1; for (var v = 0; v <= mx + 0.001; v += st) { var y = y0 + h - h * v / mx; g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e8ee"/><text x="' + (x0 - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#4b5a6b">' + v + '</text>'; } return g + '<text x="' + x0 + '" y="' + (y0 - 6) + '" font-size="11" fill="#4b5a6b">' + lbl + '</text>'; }
   function nice(v) { return v <= 10 ? Math.ceil(v / 2) * 2 : v <= 40 ? Math.ceil(v / 5) * 5 : Math.ceil(v / 20) * 20; }
@@ -6263,6 +6498,90 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
 
 })();
 (function () {
+var __ID = function (x) { return document.getElementById('ct-' + x) || document.getElementById(x); };
+
+(function () {
+  function el(id) { return __ID(id); }
+  var PEOPLE = [
+    { id: 'sample', name: 'Sample User', note: 'Shares: progress, settings, suggestions', setup: [['Computer', 'Nose-tracking webcam, OptiKey keyboard'], ['Phone', 'Built-in voice control'], ['Wheelchair', 'Chin joystick, indoor speed 3'], ['Backup', 'Switch scanning, practiced'], ['Positions', 'Chair by day, bed in the evening']],
+      trend: [['Pointing accuracy', [88, 87, 89, 86, 85, 86, 84, 83], '%'], ['Useful selections a minute', [11.2, 11.6, 11.4, 11.8, 11.5, 11.3, 11.1, 10.9], ''], ['Stamina', [38, 37, 37, 35, 35, 34, 33, 33], 'min']],
+      note: 'Accuracy and stamina have eased down over eight weeks while speed held. Worth a check-in: settings such as dwell time or target size may help, and no change of method is needed.' },
+    { id: 'p2', name: 'Example person 2', note: 'Shares: progress only', setup: [['Computer', 'Eye tracker, dwell 0.9 s'], ['Phone', 'Switch access, two switches'], ['Positions', 'Mostly bed']],
+      trend: [['Gaze accuracy', [81, 82, 84, 85, 85, 86, 87, 87], '%'], ['Useful selections a minute', [6.1, 6.6, 7.2, 7.5, 7.9, 8.1, 8.2, 8.4], ''], ['Stamina', [30, 31, 31, 32, 33, 33, 34, 34], 'min']],
+      note: 'Steady gains since starting eye tracking: still on the learning curve.', noSuggest: true }
+  ];
+  var cur = PEOPLE[0];
+  function sugg() { try { return JSON.parse(localStorage.getItem('accessplus-suggestions') || '[]') || []; } catch (e) { return []; } }
+  function save(a) { try { localStorage.setItem('accessplus-suggestions', JSON.stringify(a)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function spark(v) { var mn = Math.min.apply(null, v), mx = Math.max.apply(null, v), r = mx - mn || 1; return '<svg viewBox="0 0 160 34" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="#b07a00" stroke-width="2.5" points="' + v.map(function (y, i) { return (i * 160 / (v.length - 1)).toFixed(1) + ',' + (30 - 26 * (y - mn) / r).toFixed(1); }).join(' ') + '"/></svg>'; }
+  function people() {
+    el('ctPeople').innerHTML = PEOPLE.map(function (p) { return '<button type="button" data-p="' + p.id + '" aria-pressed="' + (p === cur) + '">' + esc(p.name) + '<small>' + esc(p.note) + '</small></button>'; }).join('');
+    Array.prototype.forEach.call(el('ctPeople').children, function (b) { b.addEventListener('click', function () { cur = PEOPLE.filter(function (p) { return p.id === b.getAttribute('data-p'); })[0]; draw(); }); });
+  }
+  function draw() {
+    people();
+    el('ctSetup').innerHTML = cur.setup.map(function (r) { return '<dt>' + esc(r[0]) + '</dt><dd>' + esc(r[1]) + '</dd>'; }).join('');
+    el('ctTrend').innerHTML = cur.trend.map(function (t) { var v = t[1], d = v[v.length - 1] - v[0], cls = d < 0 ? 'dn' : d > 0 ? 'up' : ''; return '<div class="ct-row"><span>' + esc(t[0]) + '</span>' + spark(v) + '<span class="d ' + cls + '">' + (d > 0 ? '+' : '') + (Math.round(d * 10) / 10) + (t[2] === '%' ? '%' : t[2] ? ' ' + t[2] : '') + '</span></div>'; }).join('');
+    el('ctTrendNote').textContent = cur.note;
+    var f = el('ctForm'); Array.prototype.forEach.call(f.elements, function (x) { x.disabled = !!cur.noSuggest; });
+    var mine = sugg().filter(function (s) { return s.person === cur.id; });
+    el('ctList').innerHTML = cur.noSuggest ? '<li>This person shares progress only, so suggestions are turned off.</li>' : mine.length ? mine.slice().reverse().map(function (s) { return '<li><span><b>' + esc(s.setting) + '</b> for ' + esc(s.method.toLowerCase()) + ': ' + esc(s.value) + '</span><span class="ct-st ' + s.status + '">' + { pending: 'Waiting for approval', approved: 'Approved', declined: 'Declined' }[s.status] + '</span><small>' + esc(s.date) + ' · ' + esc(s.why) + '</small></li>'; }).join('') : '<li>No suggestions yet.</li>';
+  }
+  el('ctForm').addEventListener('submit', function (e) {
+    e.preventDefault(); if (cur.noSuggest) return;
+    var a = sugg(); a.push({ id: Date.now(), person: cur.id, from: 'Example therapist', date: new Date().toISOString().slice(0, 10), method: el('ctMeth').value, setting: el('ctSet').value, value: el('ctVal').value || '(no value)', why: el('ctWhy').value || '', status: 'pending' });
+    save(a); draw();
+  });
+  window.addEventListener('hashchange', function () { if (location.hash === '#care') draw(); });
+  draw();
+})();
+
+})();
+
+(function () {
+  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#research'] };
+  var back = document.getElementById('siBack'), lastFocus = null;
+  var role = ''; try { role = localStorage.getItem('accessplus-role') || ''; } catch (e) {}
+  if (!ROLES[role]) role = '';
+  window.accessRole = function () { return role; };
+  function paint() {
+    document.documentElement.setAttribute('data-role', role || 'none');
+    Array.prototype.forEach.call(document.querySelectorAll('.navsign'), function (a) {
+      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in<span class="navdemo">Demo</span>';
+      a.setAttribute('aria-label', role ? 'Signed in as ' + ROLES[role][0] + ' (demo). Change role' : 'Sign in (demo)');
+    });
+    Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-role') === role ? 'true' : 'false'); });
+    document.getElementById('siOut').hidden = !role;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rolebar]'), function (bar) {
+      var need = bar.getAttribute('data-rolebar'), ok = role === need, R = ROLES[need];
+      bar.style.setProperty('--rc', R[1]);
+      bar.innerHTML = ok ? '<b>Signed in as ' + R[0].toLowerCase() + ' · demo</b><span>' + bar.getAttribute('data-ok') + '</span>' : '<b>Preview</b><span>' + bar.getAttribute('data-preview') + '</span><button type="button" data-signas="' + need + '">Sign in as ' + R[0].toLowerCase() + ' (demo)</button>';
+    });
+    window.dispatchEvent(new CustomEvent('accessrole', { detail: role }));
+  }
+  function open() { lastFocus = document.activeElement; back.hidden = false; var b = back.querySelector('.si-role[aria-pressed="true"]') || back.querySelector('.si-role'); b.focus(); }
+  function close() { back.hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+  function setRole(r, go) { role = r; try { if (r) localStorage.setItem('accessplus-role', r); else localStorage.removeItem('accessplus-role'); } catch (e) {} paint(); if (go && r) { location.hash = ROLES[r][2]; window.scrollTo(0, 0); } }
+  window.accessSignIn = open;
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('.navsign, .signin, [data-signin], [data-signas]') : null;
+    if (t) { e.preventDefault(); if (t.hasAttribute('data-signas')) setRole(t.getAttribute('data-signas'), false); else open(); return; }
+    if (e.target === back) close();
+  });
+  Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.addEventListener('click', function () { setRole(b.getAttribute('data-role'), true); close(); }); });
+  document.getElementById('siClose').addEventListener('click', close);
+  document.getElementById('siOut').addEventListener('click', function () { setRole('', false); close(); });
+  document.addEventListener('keydown', function (e) {
+    if (back.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }
+    if (e.key === 'Tab') { var f = back.querySelectorAll('button:not([hidden])'), a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } }
+  }, true);
+  window.addEventListener('hashchange', function () { if (location.hash === '#signin') { history.replaceState(null, '', '#home'); window.dispatchEvent(new HashChangeEvent('hashchange')); open(); } });
+  paint();
+})();
+
+(function () {
 var __ID = function (x) { return document.getElementById('kb-' + x) || document.getElementById(x); };
 
 var KB_FILES = {"Dave_Keyboard2": {"layout": {"rows": 8, "cols": 21, "keys": [{"r": 0, "c": 0, "w": 1, "h": 3, "t": "◤", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 0, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 0, "w": 1, "h": 3, "t": "◣", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 20, "w": 1, "h": 3, "t": "◥", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 3, "c": 20, "w": 1, "h": 2, "t": "■", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 5, "c": 20, "w": 1, "h": 3, "t": "◢", "bg": "#5A5A5A", "fg": "White", "op": 0.45}, {"r": 0, "c": 1, "w": 17, "h": 1, "t": "Typed text appears here", "k": "pad"}, {"r": 0, "c": 18, "w": 1, "h": 1, "t": "▬", "bg": "#A86868", "fg": "White"}, {"r": 1, "c": 1, "w": 19, "h": 1, "t": "Word suggestions", "k": "sug"}, {"r": 0, "c": 19, "w": 1, "h": 1, "t": "X", "bg": "#A86868", "fg": "White"}, {"r": 2, "c": 1, "w": 2, "h": 1, "t": "Menu"}, {"r": 2, "c": 4, "w": 3, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 7, "w": 3, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 10, "w": 3, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 2, "c": 13, "w": 3, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 2, "c": 16, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 2, "c": 3, "w": 1, "h": 1, "t": "🖱", "bg": "#5A65A2", "fg": "White"}, {"r": 2, "c": 18, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}, {"r": 3, "c": 1, "w": 1, "h": 1, "t": "Esc"}, {"r": 3, "c": 2, "w": 1, "h": 1, "t": "`\n~", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 3, "w": 1, "h": 1, "t": "1\n!", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 4, "w": 1, "h": 1, "t": "2\n@", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 5, "w": 1, "h": 1, "t": "3\n#", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 6, "w": 1, "h": 1, "t": "4\n$", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 7, "w": 1, "h": 1, "t": "5\n%", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 8, "w": 1, "h": 1, "t": "6\n^", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 9, "w": 1, "h": 1, "t": "7\n&", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 10, "w": 1, "h": 1, "t": "8\n*", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 11, "w": 1, "h": 1, "t": "9\n(", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 12, "w": 1, "h": 1, "t": "Ø\n)", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 13, "w": 1, "h": 1, "t": "-\n_", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 14, "w": 2, "h": 1, "t": "=\n+", "bg": "#4B5690", "fg": "White"}, {"r": 3, "c": 16, "w": 2, "h": 1, "t": "Home", "bg": "#525D9A", "fg": "White"}, {"r": 3, "c": 18, "w": 2, "h": 1, "t": "PgUp", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 1, "w": 1, "h": 1, "t": "Tab"}, {"r": 4, "c": 2, "w": 1, "h": 1, "t": "q"}, {"r": 4, "c": 3, "w": 1, "h": 1, "t": "w"}, {"r": 4, "c": 4, "w": 1, "h": 1, "t": "e"}, {"r": 4, "c": 5, "w": 1, "h": 1, "t": "r"}, {"r": 4, "c": 6, "w": 1, "h": 1, "t": "t"}, {"r": 4, "c": 7, "w": 1, "h": 1, "t": "y"}, {"r": 4, "c": 8, "w": 1, "h": 1, "t": "u"}, {"r": 4, "c": 9, "w": 1, "h": 1, "t": "i"}, {"r": 4, "c": 10, "w": 1, "h": 1, "t": "o"}, {"r": 4, "c": 11, "w": 1, "h": 1, "t": "p"}, {"r": 4, "c": 12, "w": 1, "h": 1, "t": "[\n{", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 13, "w": 1, "h": 1, "t": "]\n}", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 14, "w": 2, "h": 1, "t": "\\\n|", "bg": "#4B5690", "fg": "White"}, {"r": 4, "c": 16, "w": 2, "h": 1, "t": "End", "bg": "#525D9A", "fg": "White"}, {"r": 4, "c": 18, "w": 2, "h": 1, "t": "PgDn", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 1, "w": 1, "h": 1, "t": "Caps", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 5, "c": 2, "w": 1, "h": 1, "t": "a"}, {"r": 5, "c": 3, "w": 1, "h": 1, "t": "s"}, {"r": 5, "c": 4, "w": 1, "h": 1, "t": "d"}, {"r": 5, "c": 5, "w": 1, "h": 1, "t": "f"}, {"r": 5, "c": 6, "w": 1, "h": 1, "t": "g"}, {"r": 5, "c": 7, "w": 1, "h": 1, "t": "h"}, {"r": 5, "c": 8, "w": 1, "h": 1, "t": "j"}, {"r": 5, "c": 9, "w": 1, "h": 1, "t": "k"}, {"r": 5, "c": 10, "w": 1, "h": 1, "t": "l"}, {"r": 5, "c": 11, "w": 1, "h": 1, "t": "●\n❟", "bg": "#4B5690", "fg": "White"}, {"r": 5, "c": 12, "w": 1, "h": 1, "t": "'\n\"", "bg": "#4B5690", "fg": "White"}, {"r": 7, "c": 13, "w": 3, "h": 1, "t": "Enter"}, {"r": 5, "c": 16, "w": 2, "h": 1, "t": "Esc", "bg": "#525D9A", "fg": "White"}, {"r": 5, "c": 18, "w": 2, "h": 1, "t": "🎤", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 1, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 3, "w": 1, "h": 1, "t": "z"}, {"r": 6, "c": 4, "w": 1, "h": 1, "t": "x"}, {"r": 6, "c": 5, "w": 1, "h": 1, "t": "c"}, {"r": 6, "c": 6, "w": 1, "h": 1, "t": "v"}, {"r": 6, "c": 7, "w": 1, "h": 1, "t": "b"}, {"r": 6, "c": 8, "w": 1, "h": 1, "t": "n"}, {"r": 6, "c": 9, "w": 1, "h": 1, "t": "m"}, {"r": 6, "c": 10, "w": 1, "h": 1, "t": "❟\n<", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 11, "w": 1, "h": 1, "t": "●\n>", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 12, "w": 1, "h": 1, "t": "/\n?", "bg": "#4B5690", "fg": "White"}, {"r": 6, "c": 13, "w": 1, "h": 1, "t": "↑", "bg": "#5A65A2", "fg": "White"}, {"r": 6, "c": 14, "w": 2, "h": 1, "t": "SHIFT"}, {"r": 6, "c": 16, "w": 2, "h": 1, "t": "Copy", "bg": "#525D9A", "fg": "White"}, {"r": 6, "c": 18, "w": 2, "h": 1, "t": "Paste", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 1, "w": 2, "h": 1, "t": "Ctrl", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 3, "w": 2, "h": 1, "t": "⊞", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 5, "w": 2, "h": 1, "t": "Alt", "bg": "#3C4675", "fg": "#D0D4E8"}, {"r": 7, "c": 7, "w": 6, "h": 1, "t": "SPACE"}, {"r": 5, "c": 13, "w": 1, "h": 1, "t": "←", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 14, "w": 1, "h": 1, "t": "↓", "bg": "#5A65A2", "fg": "White"}, {"r": 5, "c": 15, "w": 1, "h": 1, "t": "→", "bg": "#5A65A2", "fg": "White"}, {"r": 7, "c": 16, "w": 2, "h": 1, "t": "Bksp", "bg": "#525D9A", "fg": "White"}, {"r": 7, "c": 18, "w": 2, "h": 1, "t": "Del", "bg": "#525D9A", "fg": "White"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Keyboard.xml  -  custom OptiKey dynamic keyboard\n\n  Layout (8 rows x 21 columns: edge column each side):\n    Row 0  Scratchpad (typed text)\n    Row 1  Word suggestions\n    Row 2  UTILITY ROW: Quit | Menu | Left click | Right click |\n                        Double click | Drag | dash key at far right (-> Dave_Mouse.xml) | Scroll up | Scroll down\n    Rows 3-7  Full Windows On-Screen-Keyboard layout, including the nav block\n              (Home/PgUp, End/PgDn, Insert/Pause, PrtScn/ScrLk, Speak/Clear)\n\n  Install: Management Console (Alt+M) -> Visuals -> Startup keyboard -> \"Custom Keyboard File\"\n           and point it at this file, then OK.  Adjust Width / Height below if it does not fit.\n-->\n<Keyboard>\n    <Name>Dave_Keyboard</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>50%</Width>\n    <Height>35%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>8</Rows>\n        <Cols>21</Cols>\n    </Grid>\n\n    <!-- Colour groups so the special rows stand out -->\n    <KeyGroup Name=\"Utility\"  SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n        <KeyGroup Name=\"Quit\"     BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" />\n    <KeyGroup Name=\"NavKey\"   BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Nav\" />\n    <KeyGroup Name=\"Dual\"     BackgroundColor=\"#4B5690\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Dim\"      BackgroundColor=\"#3C4675\" ForegroundColor=\"#D0D4E8\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"Edge\"     BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" Opacity=\"0.45\" />\n    <KeyGroup Name=\"UtilityDash\" BackgroundColor=\"#A86868\" ForegroundColor=\"White\" KeyDownBackground=\"#C89090\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"MouseDash\"   BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Dash\" />\n    <KeyGroup Name=\"NavIcon\"  BackgroundColor=\"#525D9A\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"ArrowKey\" BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" />\n    <KeyGroup Name=\"SpaceBar\" SharedSizeGroup=\"SpaceBar\" />\n    <KeyGroup Name=\"ShiftKey\" SharedSizeGroup=\"ShiftKey\" />\n\n    <Content>\n        <!-- Left edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◤</Label><Action>MoveToTopAndLeftBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"0\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"0\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◣</Label><Action>MoveToBottomAndLeftBoundaries</Action></DynamicKey>\n        <!-- Right edge: corner jumps and a centring key -->\n        <DynamicKey Row=\"0\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◥</Label><Action>MoveToTopAndRightBoundaries</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"20\" Height=\"2\"><KeyGroup>Edge</KeyGroup><Label>■</Label><ChangeKeyboard BackReturnsHere=\"False\">Dave_Keyboard2.xml</ChangeKeyboard></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"20\" Height=\"3\"><KeyGroup>Edge</KeyGroup><Label>◢</Label><Action>MoveToBottomAndRightBoundaries</Action></DynamicKey>\n\n        <!-- ===================== Row 0 : scratchpad ===================== -->\n        <Scratchpad Row=\"0\" Col=\"1\" Width=\"17\" Height=\"1\" BackgroundColor=\"#202020\" Opacity=\"1\" />\n        <!-- Yellow keys: jump the keyboard to a screen corner (keeps its size; corner moves never dock) -->\n        <!-- Home key: reloads this keyboard so it returns to its default spot (top, centred) -->\n        <!-- Hide key (upper right): swaps to the tiny Dave_Mini.xml restore button -->\n        <DynamicKey Row=\"0\" Col=\"18\">\n            <KeyGroup>UtilityDash</KeyGroup>\n            <Label>▬</Label>\n            <ChangeKeyboard>Dave_Mini.xml</ChangeKeyboard>\n        </DynamicKey>\n\n        <!-- ===================== Row 1 : suggestions ==================== -->\n        <SuggestionRow Row=\"1\" Col=\"1\" Width=\"19\" Height=\"1\" />\n\n        <!-- ===================== Row 2 : UTILITY ROW ==================== -->\n        <!-- Quit OptiKey (OptiKey asks for confirmation first) -->\n        <DynamicKey Row=\"0\" Col=\"19\" Width=\"1\">\n            <KeyGroup>Quit</KeyGroup>\n            <Label>X</Label>\n            <Action>Quit</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"1\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Label>Menu</Label>\n            <Action>MenuKeyboard</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"4\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"7\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"10\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"13\" Width=\"3\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n                <DynamicKey Row=\"2\" Col=\"16\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"3\" Width=\"1\">\n            <KeyGroup>MouseDash</KeyGroup>\n            <Symbol>MouseIcon</Symbol>\n            <ChangeKeyboard>Dave_Mouse.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"2\" Col=\"18\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n\n        <!-- ===================== Row 3 : Esc ` 1-0 - = Backspace | Home PgUp ===================== -->\n        <DynamicKey Row=\"3\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>`\\n~</Label><ShiftDownLabel>~</ShiftDownLabel><Text>`</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"3\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>1\\n!</Label><ShiftDownLabel>!</ShiftDownLabel><Text>1</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"4\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>2\\n@</Label><ShiftDownLabel>@</ShiftDownLabel><Text>2</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"5\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>3\\n#</Label><ShiftDownLabel>#</ShiftDownLabel><Text>3</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"6\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>4\\n$</Label><ShiftDownLabel>$</ShiftDownLabel><Text>4</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"7\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>5\\n%</Label><ShiftDownLabel>%</ShiftDownLabel><Text>5</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"8\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>6\\n^</Label><ShiftDownLabel>^</ShiftDownLabel><Text>6</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"9\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>7\\n&amp;</Label><ShiftDownLabel>&amp;</ShiftDownLabel><Text>7</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"10\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>8\\n*</Label><ShiftDownLabel>*</ShiftDownLabel><Text>8</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>9\\n(</Label><ShiftDownLabel>(</ShiftDownLabel><Text>9</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>Ø\\n)</Label><ShiftDownLabel>)</ShiftDownLabel><Text>0</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>-\\n_</Label><ShiftDownLabel>_</ShiftDownLabel><Text>-</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>=\\n+</Label><ShiftDownLabel>+</ShiftDownLabel><Text>=</Text></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Home</Label><Action>Home</Action></DynamicKey>\n        <DynamicKey Row=\"3\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgUp</Label><Action>PgUp</Action></DynamicKey>\n\n        <!-- ===================== Row 4 : Tab q-p [ ] \\ Del | End PgDn ===================== -->\n        <DynamicKey Row=\"4\" Col=\"1\" SharedSizeGroup=\"L3\"><Label>Tab</Label><KeyDown>TAB</KeyDown><KeyUp>TAB</KeyUp></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"2\"><Label>q</Label><ShiftDownLabel>Q</ShiftDownLabel><Text>q</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"3\"><Label>w</Label><ShiftDownLabel>W</ShiftDownLabel><Text>w</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"4\"><Label>e</Label><ShiftDownLabel>E</ShiftDownLabel><Text>e</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"5\"><Label>r</Label><ShiftDownLabel>R</ShiftDownLabel><Text>r</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"6\"><Label>t</Label><ShiftDownLabel>T</ShiftDownLabel><Text>t</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"7\"><Label>y</Label><ShiftDownLabel>Y</ShiftDownLabel><Text>y</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"8\"><Label>u</Label><ShiftDownLabel>U</ShiftDownLabel><Text>u</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"9\"><Label>i</Label><ShiftDownLabel>I</ShiftDownLabel><Text>i</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"10\"><Label>o</Label><ShiftDownLabel>O</ShiftDownLabel><Text>o</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"11\"><Label>p</Label><ShiftDownLabel>P</ShiftDownLabel><Text>p</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>[\\n{</Label><ShiftDownLabel>{</ShiftDownLabel><Text>[</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"13\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>]\\n}</Label><ShiftDownLabel>}</ShiftDownLabel><Text>]</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"14\" Width=\"2\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>\\\\n|</Label><ShiftDownLabel>|</ShiftDownLabel><Text>\\</Text></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>End</Label><Action>End</Action></DynamicKey>\n        <DynamicKey Row=\"4\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>PgDn</Label><Action>PgDn</Action></DynamicKey>\n\n        <!-- ===================== Row 5 : Caps a-l ; ' Enter | Insert Pause ===================== -->\n        <DynamicKey Row=\"5\" Col=\"1\" SharedSizeGroup=\"L4\"><KeyGroup>Dim</KeyGroup><Label>Caps</Label><KeyToggle>CAPITAL</KeyToggle></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"2\"><Label>a</Label><ShiftDownLabel>A</ShiftDownLabel><Text>a</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"3\"><Label>s</Label><ShiftDownLabel>S</ShiftDownLabel><Text>s</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"4\"><Label>d</Label><ShiftDownLabel>D</ShiftDownLabel><Text>d</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"5\"><Label>f</Label><ShiftDownLabel>F</ShiftDownLabel><Text>f</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"6\"><Label>g</Label><ShiftDownLabel>G</ShiftDownLabel><Text>g</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"7\"><Label>h</Label><ShiftDownLabel>H</ShiftDownLabel><Text>h</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"8\"><Label>j</Label><ShiftDownLabel>J</ShiftDownLabel><Text>j</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"9\"><Label>k</Label><ShiftDownLabel>K</ShiftDownLabel><Text>k</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"10\"><Label>l</Label><ShiftDownLabel>L</ShiftDownLabel><Text>l</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"11\" SharedSizeGroup=\"Semi\"><KeyGroup>Dual</KeyGroup><Label>●\\n❟</Label><ShiftDownLabel>:</ShiftDownLabel><Text>;</Text></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>'\\n\"</Label><ShiftDownLabel>\"</ShiftDownLabel><Text>'</Text></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"13\" Width=\"3\" SharedSizeGroup=\"EnterKey\"><Label>Enter</Label><KeyDown>RETURN</KeyDown><KeyUp>RETURN</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Esc</Label><Action>Escape</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"18\" Width=\"2\"><KeyGroup>NavIcon</KeyGroup><Label>🎤</Label><KeyDown>LWIN</KeyDown><KeyDown>VK_H</KeyDown><KeyUp>VK_H</KeyUp><KeyUp>LWIN</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 6 : Shift z-m , . / Up Shift | PrtScn ScrLk ===================== -->\n        <DynamicKey Row=\"6\" Col=\"1\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"3\"><Label>z</Label><ShiftDownLabel>Z</ShiftDownLabel><Text>z</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"4\"><Label>x</Label><ShiftDownLabel>X</ShiftDownLabel><Text>x</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"5\"><Label>c</Label><ShiftDownLabel>C</ShiftDownLabel><Text>c</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"6\"><Label>v</Label><ShiftDownLabel>V</ShiftDownLabel><Text>v</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"7\"><Label>b</Label><ShiftDownLabel>B</ShiftDownLabel><Text>b</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"8\"><Label>n</Label><ShiftDownLabel>N</ShiftDownLabel><Text>n</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"9\"><Label>m</Label><ShiftDownLabel>M</ShiftDownLabel><Text>m</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"10\" SharedSizeGroup=\"Comma\"><KeyGroup>Dual</KeyGroup><Label>❟\\n&lt;</Label><ShiftDownLabel>&lt;</ShiftDownLabel><Text>,</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"11\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>●\\n&gt;</Label><ShiftDownLabel>&gt;</ShiftDownLabel><Text>.</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"12\" SharedSizeGroup=\"Sym\"><KeyGroup>Dual</KeyGroup><Label>/\\n?</Label><ShiftDownLabel>?</ShiftDownLabel><Text>/</Text></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>UpArrowKeyIcon</Symbol><Action>ArrowUp</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"14\" Width=\"2\"><KeyGroup>ShiftKey</KeyGroup><Label>SHIFT</Label><Action>LeftShift</Action></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Copy</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_C</KeyDown><KeyUp>VK_C</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n        <DynamicKey Row=\"6\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Paste</Label><KeyDown>LCONTROL</KeyDown><KeyDown>VK_V</KeyDown><KeyUp>VK_V</KeyUp><KeyUp>LCONTROL</KeyUp></DynamicKey>\n\n        <!-- ===================== Row 7 : Ctrl Win Alt Space Alt Ctrl Left Down Right | Speak Clear ===================== -->\n        <DynamicKey Row=\"7\" Col=\"1\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Ctrl</Label><Action>LeftCtrl</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"3\" Width=\"2\"><KeyGroup>Dim</KeyGroup><Symbol>WinIcon</Symbol><Action>LeftWin</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"5\" Width=\"2\" SharedSizeGroup=\"Mods\"><KeyGroup>Dim</KeyGroup><Label>Alt</Label><Action>LeftAlt</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"7\" Width=\"6\"><KeyGroup>SpaceBar</KeyGroup><Label>SPACE</Label><KeyDown>SPACE</KeyDown><KeyUp>SPACE</KeyUp></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"13\"><KeyGroup>ArrowKey</KeyGroup><Symbol>LeftArrowKeyIcon</Symbol><Action>ArrowLeft</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"14\"><KeyGroup>ArrowKey</KeyGroup><Symbol>DownArrowKeyIcon</Symbol><Action>ArrowDown</Action></DynamicKey>\n        <DynamicKey Row=\"5\" Col=\"15\"><KeyGroup>ArrowKey</KeyGroup><Symbol>RightArrowKeyIcon</Symbol><Action>ArrowRight</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"16\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Bksp</Label><Action>BackOne</Action></DynamicKey>\n        <DynamicKey Row=\"7\" Col=\"18\" Width=\"2\"><KeyGroup>NavKey</KeyGroup><Label>Del</Label><Action>Delete</Action></DynamicKey>\n\n    </Content>\n</Keyboard>\n"}, "Dave_Mouse": {"layout": {"rows": 1, "cols": 14, "keys": [{"r": 0, "c": 12, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 0, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 2, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 4, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 6, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 8, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 10, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>14</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"12\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"2\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"4\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"6\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"8\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"10\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}, "Dave_Mini": {"layout": {"rows": 1, "cols": 16, "keys": [{"r": 0, "c": 0, "w": 1, "h": 1, "t": "◤", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 13, "w": 1, "h": 1, "t": "◥", "bg": "#5A5A5A", "fg": "White"}, {"r": 0, "c": 14, "w": 2, "h": 1, "t": "⌨", "bg": "#5A65A2", "fg": "White"}, {"r": 0, "c": 1, "w": 2, "h": 1, "t": "Left\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 3, "w": 2, "h": 1, "t": "Right\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 5, "w": 2, "h": 1, "t": "Double\nclick", "bg": "#2f6b4f"}, {"r": 0, "c": 7, "w": 2, "h": 1, "t": "Drag", "bg": "#2f6b4f"}, {"r": 0, "c": 9, "w": 2, "h": 1, "t": "Scroll\nup", "bg": "#2f6b4f"}, {"r": 0, "c": 11, "w": 2, "h": 1, "t": "Scroll\ndown", "bg": "#2f6b4f"}]}, "xml": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\n  Dave_Mouse.xml  -  mouse-only strip: just the green mouse keys.\n  The blue \"Full kbd\" key returns to Dave_Keyboard2.xml.\n  Keep this file in the same folder as Dave_Keyboard2.xml, with these exact names.\n-->\n<Keyboard>\n    <Name>Dave_Mouse</Name>\n    <HideFromKeyboardMenu>False</HideFromKeyboardMenu>\n    <PersistNewState>True</PersistNewState>\n    <WindowState>Floating</WindowState>\n    <Position>Top</Position>\n    <Width>45%</Width>\n    <Height>5%</Height>\n    <HorizontalOffset>0</HorizontalOffset>\n    <VerticalOffset>0</VerticalOffset>\n    <BackgroundColor>Black</BackgroundColor>\n    <BorderColor>Gray</BorderColor>\n    <BorderThickness>1,1,1,1</BorderThickness>\n    <SymbolMargin>6</SymbolMargin>\n\n    <Grid>\n        <Rows>1</Rows>\n        <Cols>16</Cols>\n    </Grid>\n\n    <KeyGroup Name=\"Utility\"  BackgroundColor=\"#5A65A2\" ForegroundColor=\"White\" KeyDownBackground=\"#7A85C2\" SharedSizeGroup=\"Top\" />\n    <KeyGroup Name=\"Nudge\"    BackgroundColor=\"#5A5A5A\" ForegroundColor=\"White\" KeyDownBackground=\"#8A8A8A\" />\n    <KeyGroup Name=\"MouseKey\" SharedSizeGroup=\"Top\" />\n\n    <Content>\n        <DynamicKey Row=\"0\" Col=\"0\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◤</Label>\n            <Action>MoveToTopAndLeftBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"13\" Width=\"1\">\n            <KeyGroup>Nudge</KeyGroup>\n            <Label>◥</Label>\n            <Action>MoveToTopAndRightBoundaries</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"14\" Width=\"2\">\n            <KeyGroup>Utility</KeyGroup>\n            <Symbol>KeyboardIcon</Symbol>\n            <ChangeKeyboard>Dave_Keyboard2.xml</ChangeKeyboard>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"1\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Left\\nclick</Label>\n            <Action>MouseMoveAndLeftClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"3\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Right\\nclick</Label>\n            <Action>MouseMoveAndRightClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"5\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Double\\nclick</Label>\n            <Action>MouseMoveAndLeftDoubleClick</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"7\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Drag</Label>\n            <Action>MouseDrag</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"9\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\nup</Label>\n            <Action>MouseMoveAndScrollToTop</Action>\n        </DynamicKey>\n        <DynamicKey Row=\"0\" Col=\"11\" Width=\"2\">\n            <KeyGroup>MouseKey</KeyGroup>\n            <Label>Scroll\\ndown</Label>\n            <Action>MouseMoveAndScrollToBottom</Action>\n        </DynamicKey>\n    </Content>\n</Keyboard>\n"}};
@@ -6442,7 +6761,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research', 'care'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';

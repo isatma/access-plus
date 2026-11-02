@@ -140,11 +140,12 @@
 <main>
   <div class="wrap rs-wrap">
     <header class="rs-hero">
-      <span class="rs-k">Research and science · Data dashboard <span class="rs-proto">Prototype · draft for discussion</span></span>
+      <span class="rs-k">Research workspace · for scientists <span class="rs-proto">Prototype · draft for discussion</span></span>
       <h1>Abilities, technologies and <span>change over time</span></h1>
       <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
     </header>
     <div class="rs-sim" role="note"><b>Prototype · simulated data</b><span>A draft for discussion, with generic, illustrative data: 60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rsMethodLink">how the data was made</a>.</span></div>
+    <div class="rolebar" data-rolebar="researcher" data-ok="You see coded, de-identified data from people who opted in. No names, and no way to change anyone's settings." data-preview="Shown to everyone in this draft. In the finished site this workspace needs a researcher sign-in, and real data comes only from people who turn on sharing in their profile."></div>
 
     <section class="rs-board" aria-label="Research dashboard">
       <div class="rs-filters" role="group" aria-label="Filters">
@@ -367,7 +368,7 @@
   function rows(k, extra) { return R.filter(function (r) { return r.activity === ST.act && r.method === k && (ST.stage === 'all' || r.stage === ST.stage) && (!extra || extra(r)); }); }
   function fin(k) { return rows(k, function (r) { return r.session === 12 && r.position === 'up'; }); }
   function mine(k, pos) { return ST.act !== 'point' ? [] : MINE.filter(function (m) { return m.method === k && (!pos || m.pos === pos); }); }
-  function key(ks, you) { return '<div class="st-key">' + ks.map(function (k) { return '<span style="--k:' + MS[k][1] + '">' + MS[k][0] + '</span>'; }).join('') + (you ? '<span class="you">Your sessions</span>' : '') + '</div>'; }
+  function key(ks, you) { return '<div class="st-key">' + ks.map(function (k) { return '<span style="--k:' + MS[k][1] + '">' + MS[k][0] + '</span>'; }).join('') + (you ? '<span class="you">Your sessions (only you see these)</span>' : '') + '</div>'; }
   function dia(x, y) { return '<path d="M' + x + ' ' + (y - 7) + 'l7 7l-7 7l-7 -7z" fill="#0b1220" stroke="#fff" stroke-width="1.5"/>'; }
   function axisY(x0, y0, w, h, mx, lbl) { var g = '', st = mx > 40 ? 20 : mx > 16 ? 5 : mx > 8 ? 2 : 1; for (var v = 0; v <= mx + 0.001; v += st) { var y = y0 + h - h * v / mx; g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e8ee"/><text x="' + (x0 - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#4b5a6b">' + v + '</text>'; } return g + '<text x="' + x0 + '" y="' + (y0 - 6) + '" font-size="11" fill="#4b5a6b">' + lbl + '</text>'; }
   function nice(v) { return v <= 10 ? Math.ceil(v / 2) * 2 : v <= 40 ? Math.ceil(v / 5) * 5 : Math.ceil(v / 20) * 20; }

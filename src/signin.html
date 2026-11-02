@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ sign in (demo)</title>
+<style>
+.si-back { position: fixed; inset: 0; z-index: 60; background: rgba(3,8,16,0.72); display: grid; place-items: center; padding: 16px; }
+.si-back[hidden] { display: none; }
+.si-box { width: min(880px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: #fff; color: #0b1220; border: 1px solid #b7c3cf; padding: 24px; display: grid; gap: 16px; }
+.si-box h2 { margin: 0; font: 700 1.6em var(--body); letter-spacing: 0; text-transform: none; color: #0b1220; }
+.si-box p { margin: 0; color: #24344a; }
+.si-tag { font: 500 0.7em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 2px 8px; margin-left: 8px; vertical-align: middle; }
+.si-roles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .si-roles { grid-template-columns: minmax(0, 1fr); } }
+.si-role { display: grid; gap: 8px; align-content: start; text-align: left; min-height: 150px; padding: 16px; border: 2px solid #b7c3cf; border-top: 6px solid var(--rc); background: #fff; color: #0b1220; font: inherit; cursor: pointer; }
+.si-role:hover, .si-role:focus-visible { border-color: var(--rc); background: color-mix(in srgb, var(--rc) 8%, #fff); outline: none; }
+.si-role[aria-pressed="true"] { border-color: var(--rc); box-shadow: inset 0 0 0 2px var(--rc); }
+.si-role b { font: 700 1.2em var(--body); }
+.si-role span { color: #24344a; font-size: 0.95em; line-height: 1.4; }
+.si-role small { font: 500 0.72em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #4b5a6b; }
+.si-foot { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.si-foot .btn { min-height: 52px; }
+.si-box .btn { color: #0b1220; border-color: #4b5a6b; background: #fff; }
+.nav .navsign .navrole { margin-left: 8px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; background: var(--rc, #5fe0a8); color: #04201a; }
+.rolebar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border: 1px solid var(--rc, #7cc4ff); background: color-mix(in srgb, var(--rc, #7cc4ff) 10%, transparent); color: var(--ink); font-size: 0.95em; }
+.rolebar b { font: 600 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--rc, #7cc4ff); }
+.rolebar button { min-height: 44px; padding: 0 14px; border: 1px solid var(--rc, #7cc4ff); background: transparent; color: var(--ink); font: 600 0.9em var(--body); cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+<div class="si-back" id="siBack" hidden>
+  <div class="si-box" role="dialog" aria-modal="true" aria-labelledby="siT">
+    <div><h2 id="siT">Sign in <span class="si-tag">Demo</span></h2></div>
+    <p>One account, with a role for each way you use Access+. No real accounts exist in this draft: pick a role to see what that person would see.</p>
+    <div class="si-roles" role="group" aria-label="Choose a role">
+      <button type="button" class="si-role" data-role="participant" style="--rc:#5fe0a8"><small>For you</small><b>Participant</b><span>Your own profile, settings, test sessions and trends. You decide what, if anything, to share.</span></button>
+      <button type="button" class="si-role" data-role="care" style="--rc:#ffc670"><small>Clinicians and therapists</small><b>Care team</b><span>See the people who invited you. Follow their progress and suggest setting changes they approve.</span></button>
+      <button type="button" class="si-role" data-role="researcher" style="--rc:#7cc4ff"><small>Scientists</small><b>Researcher</b><span>Design studies and analyze coded, de-identified data from people who opted in. No names, no setting changes.</span></button>
+    </div>
+    <div class="si-foot"><p>One person can hold more than one role, for example a participant who is also a researcher.</p><div><button class="btn" type="button" id="siOut" hidden>Sign out</button> <button class="btn" type="button" id="siClose">Close</button></div></div>
+  </div>
+</div>
+</main>
+<script>
+(function () {
+  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#research'] };
+  var back = document.getElementById('siBack'), lastFocus = null;
+  var role = ''; try { role = localStorage.getItem('accessplus-role') || ''; } catch (e) {}
+  if (!ROLES[role]) role = '';
+  window.accessRole = function () { return role; };
+  function paint() {
+    document.documentElement.setAttribute('data-role', role || 'none');
+    Array.prototype.forEach.call(document.querySelectorAll('.navsign'), function (a) {
+      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in<span class="navdemo">Demo</span>';
+      a.setAttribute('aria-label', role ? 'Signed in as ' + ROLES[role][0] + ' (demo). Change role' : 'Sign in (demo)');
+    });
+    Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-role') === role ? 'true' : 'false'); });
+    document.getElementById('siOut').hidden = !role;
+    Array.prototype.forEach.call(document.querySelectorAll('[data-rolebar]'), function (bar) {
+      var need = bar.getAttribute('data-rolebar'), ok = role === need, R = ROLES[need];
+      bar.style.setProperty('--rc', R[1]);
+      bar.innerHTML = ok ? '<b>Signed in as ' + R[0].toLowerCase() + ' · demo</b><span>' + bar.getAttribute('data-ok') + '</span>' : '<b>Preview</b><span>' + bar.getAttribute('data-preview') + '</span><button type="button" data-signas="' + need + '">Sign in as ' + R[0].toLowerCase() + ' (demo)</button>';
+    });
+    window.dispatchEvent(new CustomEvent('accessrole', { detail: role }));
+  }
+  function open() { lastFocus = document.activeElement; back.hidden = false; var b = back.querySelector('.si-role[aria-pressed="true"]') || back.querySelector('.si-role'); b.focus(); }
+  function close() { back.hidden = true; if (lastFocus && lastFocus.focus) lastFocus.focus(); }
+  function setRole(r, go) { role = r; try { if (r) localStorage.setItem('accessplus-role', r); else localStorage.removeItem('accessplus-role'); } catch (e) {} paint(); if (go && r) { location.hash = ROLES[r][2]; window.scrollTo(0, 0); } }
+  window.accessSignIn = open;
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target.closest('.navsign, .signin, [data-signin], [data-signas]') : null;
+    if (t) { e.preventDefault(); if (t.hasAttribute('data-signas')) setRole(t.getAttribute('data-signas'), false); else open(); return; }
+    if (e.target === back) close();
+  });
+  Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.addEventListener('click', function () { setRole(b.getAttribute('data-role'), true); close(); }); });
+  document.getElementById('siClose').addEventListener('click', close);
+  document.getElementById('siOut').addEventListener('click', function () { setRole('', false); close(); });
+  document.addEventListener('keydown', function (e) {
+    if (back.hidden) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); }
+    if (e.key === 'Tab') { var f = back.querySelectorAll('button:not([hidden])'), a = f[0], z = f[f.length - 1]; if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); } else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); } }
+  }, true);
+  window.addEventListener('hashchange', function () { if (location.hash === '#signin') { history.replaceState(null, '', '#home'); window.dispatchEvent(new HashChangeEvent('hashchange')); open(); } });
+  paint();
+})();
+</script>
+</body>
+</html>

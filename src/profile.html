@@ -211,6 +211,24 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
 .card.hl .pf-title { font: 700 1.9em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); border-left: 6px solid var(--signal); padding-left: 12px; line-height: 1.1; }
 .card.hl { padding-top: 22px; }
 .rare-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: #7a5200; background: #fff3d6; border: 1px solid #e0b553; white-space: nowrap; }
+.md-block { display: grid; gap: 8px; padding-top: 12px; border-top: 1px solid #d7dee6; }
+.md-block h3 { margin: 0; font: 600 1.02em var(--body); color: #0b1220; letter-spacing: 0; text-transform: none; }
+.md-sub { margin: 0; color: #24344a; font-size: 0.93em; }
+.md-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.md .btn { min-height: 52px; }
+.col .md .btn:not(.primary) { color: #0b1220; border-color: #4b5a6b; background: #fff; }
+.md-sw, .md-sugg { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.md-sw li, .md-sugg li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; align-items: center; padding: 10px 12px; border: 1px solid #d7dee6; background: #fbfcfd; color: #0b1220; }
+.md-sw li small, .md-sugg li small { grid-column: 1 / 2; color: #4b5a6b; font-size: 0.85em; }
+.md-tog { min-height: 48px; min-width: 96px; padding: 0 14px; border: 2px solid #4b5a6b; background: #fff; color: #0b1220; font: 700 0.9em var(--body); cursor: pointer; grid-row: span 2; }
+.md-tog[aria-pressed="true"] { background: #08734b; border-color: #08734b; color: #fff; }
+.md-sugg .act { display: flex; gap: 6px; grid-row: span 2; }
+.md-sugg .act button { min-height: 48px; padding: 0 14px; border: 2px solid #4b5a6b; background: #fff; color: #0b1220; font: 700 0.9em var(--body); cursor: pointer; }
+.md-sugg .act button.ok { background: #08734b; border-color: #08734b; color: #fff; }
+.md-st { font: 600 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 8px; border: 1px solid currentColor; grid-row: span 2; }
+.md-st.approved { color: #08734b; } .md-st.declined { color: #a33a1a; }
+.md-log { margin: 0; font: 500 0.78em var(--mono); color: #4b5a6b; }
+.md svg { width: 100%; max-width: 420px; height: 70px; display: block; }
 </style>
 </head>
 <body>
@@ -305,6 +323,32 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
         <ul class="plain" id="next"></ul>
       </section>
 
+      <section class="card md" id="c-data" aria-labelledby="dataT">
+        <h2 id="dataT">My data and sharing <small>you decide</small></h2>
+        <div class="md-block">
+          <h3>Suggestions from my care team</h3>
+          <ul class="md-sugg" id="mdSugg"></ul>
+        </div>
+        <div class="md-block">
+          <h3>My test sessions</h3>
+          <p class="md-sub" id="mdTests"></p>
+          <div id="mdSpark"></div>
+          <div class="md-btns"><button class="btn primary" type="button" id="mdRun">Run a test session</button><button class="btn" type="button" id="mdDl">Download all my data</button></div>
+        </div>
+        <div class="md-block">
+          <h3>Share with research</h3>
+          <p class="md-sub">Off unless you turn it on. Researchers would see a coded ID (like <b id="mdCode">P-7K2Q</b>), your measures and dates. Never your name, contact details or anything you type to the AI agent. You can stop at any time.</p>
+          <ul class="md-sw" id="mdShare"></ul>
+          <button class="btn" type="button" id="mdWithdraw">Stop sharing with all research</button>
+        </div>
+        <div class="md-block">
+          <h3>Care team access</h3>
+          <ul class="md-sw" id="mdCare"></ul>
+          <p class="md-sub">Invite a clinician or therapist by email in the finished site. They can only suggest changes; you approve every one.</p>
+        </div>
+        <p class="md-log" id="mdLog"></p>
+      </section>
+
       <p class="note">Your profile is yours. This pilot doesn't collect your data: in the finished site you save your profile and results as files on your own computer, load them again to track progress over time, and choose whether to share them with a research study.</p>
     </div>
 
@@ -332,7 +376,7 @@ ul.plain li small { color: var(--muted); display: block; font-size: 0.85em; }
   </div>
 </main>
 
-<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:09 UTC</span></div></footer>
+<footer class="ver"><div class="wrap"><span>Access+ · AI-assisted skill building for assistive technology</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:37 UTC</span></div></footer>
 
 <script>
 /* Access+ AI agent: an abstract, amorphous cloud of drifting specks on a canvas.
@@ -752,6 +796,46 @@ function AgentCloud(canvas, opts) {
     });
     renderActs(); renderGrid();
   })();
+
+/* My data and sharing: test sessions, research consent, care team access and suggestions (stored in this browser only) */
+(function () {
+  function el(id) { return document.getElementById(id); }
+  if (!el('mdShare')) return;
+  function get(k, d) { try { var v = JSON.parse(localStorage.getItem(k)); return v === null || v === undefined ? d : v; } catch (e) { return d; } }
+  function put(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  var STUDIES = [['activity', 'Activity studies', 'Your test sessions: speed, accuracy, effort, position'], ['cohort', 'Year-long progression study', 'Check-ins every two weeks, all measures'], ['equipment', 'Equipment use', 'How often you use what you own']];
+  var C = get('accessplus-consent', { share: {}, care: { view: true, suggest: true }, log: '' });
+  var code = get('accessplus-code', ''); if (!code) { code = 'P-' + Math.random().toString(36).slice(2, 6).toUpperCase(); put('accessplus-code', code); }
+  el('mdCode').textContent = code;
+  function stamp(what) { C.log = new Date().toISOString().slice(0, 16).replace('T', ' ') + ' · ' + what; put('accessplus-consent', C); }
+  function tog(on, label) { return '<button type="button" class="md-tog" aria-pressed="' + !!on + '" aria-label="' + esc(label) + '">' + (on ? 'On' : 'Off') + '</button>'; }
+  function draw() {
+    var T = get('accessplus-tests', []);
+    if (T.length) {
+      var last = T[T.length - 1], v = T.map(function (t) { return t.useful; }), mx = Math.max.apply(null, v.concat([1]));
+      el('mdTests').innerHTML = T.length + ' session' + (T.length > 1 ? 's' : '') + ' so far. Latest: <b>' + last.useful + '</b> useful selections a minute, ' + last.acc + '% accuracy.';
+      el('mdSpark').innerHTML = v.length > 1 ? '<svg viewBox="0 0 420 70" preserveAspectRatio="none" role="img" aria-label="Useful selections a minute, session by session"><polyline fill="none" stroke="#08734b" stroke-width="3" points="' + v.map(function (y, i) { return (10 + i * 400 / (v.length - 1)).toFixed(1) + ',' + (62 - 54 * y / mx).toFixed(1); }).join(' ') + '"/></svg>' : '';
+    } else { el('mdTests').textContent = 'No test sessions yet. A test takes about a minute and works with a mouse, head mouse, eye tracker, touch or a switch.'; el('mdSpark').innerHTML = ''; }
+    el('mdShare').innerHTML = STUDIES.map(function (st) { var on = !!C.share[st[0]]; return '<li data-k="' + st[0] + '"><b>' + st[1] + '</b>' + tog(on, 'Share with ' + st[1]) + '<small>' + st[2] + (on ? ' · shared as ' + code : '') + '</small></li>'; }).join('');
+    Array.prototype.forEach.call(el('mdShare').querySelectorAll('li'), function (li) { li.querySelector('button').addEventListener('click', function () { var k = li.getAttribute('data-k'); C.share[k] = !C.share[k]; stamp((C.share[k] ? 'Started' : 'Stopped') + ' sharing: ' + STUDIES.filter(function (x) { return x[0] === k; })[0][1]); draw(); }); });
+    el('mdCare').innerHTML = '<li data-k="view"><b>Example therapist · can view progress</b>' + tog(C.care.view, 'Example therapist can view progress') + '<small>Occupational therapist, invited by you</small></li><li data-k="suggest"><b>Example therapist · can suggest changes</b>' + tog(C.care.suggest && C.care.view, 'Example therapist can suggest changes') + '<small>Suggestions wait for your approval</small></li>';
+    Array.prototype.forEach.call(el('mdCare').querySelectorAll('li'), function (li) { li.querySelector('button').addEventListener('click', function () { var k = li.getAttribute('data-k'); C.care[k] = !(k === 'suggest' ? C.care.suggest && C.care.view : C.care[k]); if (k === 'suggest' && C.care.suggest) C.care.view = true; stamp('Care team access changed'); draw(); }); });
+    var S = get('accessplus-suggestions', []).filter(function (x) { return x.person === 'sample'; });
+    el('mdSugg').innerHTML = !C.care.suggest || !C.care.view ? '<li>Suggestions are turned off for your care team.</li>' : S.length ? S.slice().reverse().map(function (x) { return '<li data-id="' + x.id + '"><span><b>' + esc(x.setting) + '</b> for ' + esc(x.method.toLowerCase()) + ': ' + esc(x.value) + '</span>' + (x.status === 'pending' ? '<span class="act"><button type="button" class="ok">Approve</button><button type="button" class="no">Decline</button></span>' : '<span class="md-st ' + x.status + '">' + (x.status === 'approved' ? 'Approved' : 'Declined') + '</span>') + '<small>From ' + esc(x.from) + ', ' + esc(x.date) + ': ' + esc(x.why) + '</small></li>'; }).join('') : '<li>No suggestions right now. When your care team suggests a change, it appears here for you to approve or decline.</li>';
+    Array.prototype.forEach.call(el('mdSugg').querySelectorAll('li[data-id]'), function (li) { Array.prototype.forEach.call(li.querySelectorAll('.act button'), function (b) { b.addEventListener('click', function () { var all = get('accessplus-suggestions', []), id = +li.getAttribute('data-id'); all.forEach(function (x) { if (x.id === id) x.status = b.classList.contains('ok') ? 'approved' : 'declined'; }); put('accessplus-suggestions', all); stamp('Answered a care team suggestion'); draw(); }); }); });
+    el('mdLog').textContent = C.log ? 'Last change: ' + C.log : 'Nothing shared. Stored only in this browser in this draft.';
+  }
+  el('mdWithdraw').addEventListener('click', function () { C.share = {}; stamp('Stopped sharing with all research'); draw(); });
+  el('mdRun').addEventListener('click', function () { location.hash = '#research'; setTimeout(function () { var t = document.getElementById('rs-stTest'); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 150); });
+  el('mdDl').addEventListener('click', function () {
+    var data = JSON.stringify({ code: code, consent: C, tests: get('accessplus-tests', []), suggestions: get('accessplus-suggestions', []) }, null, 2), name = 'my_access_plus_data.json';
+    function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+    if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+  });
+  window.addEventListener('hashchange', function () { if (location.hash === '#profile') draw(); });
+  draw();
+})();
 </script>
 </body>
 </html>
