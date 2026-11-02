@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Studio — Dance Board (Build 23)</title>
+<meta name="build" content="23">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #060810;
+    --panel: #0d1117;
+    --ink: #e0f0ff;
+    --ink-dim: rgba(224,240,255,0.65);
+    --ink-faint: rgba(224,240,255,0.40);
+    --cyan: #00ffcc;
+    --gold: #ffcc00;
+    --pink: #ff66bb;
+    --green: #66ff99;
+    --orange: #ff9966;
+    --purple: #b388ff;
+    --bdr: rgba(0,255,204,0.20);
+  }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+  }
+  body { min-height: 100vh; padding-bottom: 40px; }
+
+  /* Build stamp */
+  #versionStamp {
+    position: fixed; bottom: 14px; left: 14px; z-index: 9999;
+    font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900;
+    letter-spacing: 0.14em; color: #1a1404;
+    background: linear-gradient(180deg, #ffe680 0%, #ffcc00 70%, #f4a300 100%);
+    padding: 8px 16px; border-radius: 999px; border: 2.5px solid #b87800;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.55), 0 0 0 2px rgba(255,255,255,0.55) inset, 0 0 24px rgba(255,204,0,0.45);
+    pointer-events: none; user-select: none; text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  }
+  #versionStamp .vs-num {
+    display: inline-block; margin-left: 4px; padding: 2px 8px;
+    background: #1a1404; color: #ffe680; border-radius: 6px;
+    font-size: 18px; letter-spacing: 0.06em;
+  }
+
+  /* Header */
+  #header {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    background: var(--panel);
+    border-bottom: 2px solid var(--pink);
+    flex-wrap: wrap;
+  }
+  #header .back {
+    color: var(--pink); text-decoration: none;
+    font-size: 11px; letter-spacing: 0.1em;
+    padding: 6px 12px; border: 1px solid rgba(255,102,187,0.5);
+    border-radius: 6px; text-transform: uppercase;
+  }
+  #header .back:hover { background: rgba(255,102,187,0.15); }
+  #header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(14px, 1.7vw, 19px);
+    color: var(--pink); letter-spacing: 2px;
+    text-shadow: 0 0 16px rgba(255,102,187,0.5);
+  }
+  #header .sub { font-size: 10px; color: #556; letter-spacing: 3px; margin-top: 2px; }
+  #header .spacer { flex: 1; }
+  .pill-btn {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.22);
+    color: #fff; padding: 8px 14px;
+    border-radius: 10px;
+    font-family: 'Exo 2', sans-serif; font-weight: 700; font-size: 13px;
+    cursor: pointer; min-height: 40px;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.10s ease;
+  }
+  .pill-btn:hover { background: rgba(255,255,255,0.20); border-color: rgba(255,102,187,0.55); }
+  .pill-btn:active { transform: scale(0.97); }
+  .pill-btn.active { background: var(--pink); color: #2b0a1c; border-color: var(--pink); box-shadow: 0 0 14px rgba(255,102,187,0.55); }
+  .pill-btn.primary { background: linear-gradient(180deg, var(--pink), #cc3380); color: #fff; border-color: var(--pink); }
+  select.pill-btn { appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23fff' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>"); background-repeat: no-repeat; background-position: right 10px center; background-size: 10px 6px; padding-right: 30px; }
+  select.pill-btn option { background: #1a1a2e; color: #fff; }
+
+  /* Stage = the dance floor — canvas + overlay scenery */
+  #stage {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+  }
+  /* Theme backgrounds match the Songboards / Speaking Boards palette */
+  #stage.theme-studio  { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); }
+  #stage.theme-ocean   { background: linear-gradient(180deg, #003366 0%, #006699 50%, #00b4d8 100%); }
+  #stage.theme-sunset  { background: linear-gradient(180deg, #2c1810 0%, #6e2c2c 25%, #ff6b6b 55%, #ffb366 80%, #ffd93d 100%); }
+  #stage.theme-night   { background: linear-gradient(180deg, #0a0a23 0%, #1a1a4e 60%, #0a0a23 100%); }
+  #stage.theme-cosmic  { background: radial-gradient(ellipse at 30% 30%, #4a1a8a 0%, #1a0a3e 50%, #050516 100%); }
+  #stage.theme-aurora  { background: linear-gradient(170deg, #0a1a3e 0%, #1a1450 35%, #2a0a4e 65%, #08101e 100%); }
+
+  /* The visual canvas — where motion trails / blooms / waves are drawn */
+  #fxCanvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* The webcam preview — small, in a corner, dimmable */
+  #camWrap {
+    position: absolute;
+    bottom: 110px; right: 12px;
+    width: 200px; height: 150px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid rgba(255,102,187,0.6);
+    background: #000;
+    z-index: 5;
+    opacity: var(--cam-opacity, 0.55);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.6);
+  }
+  #camVideo { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+  #camHint {
+    position: absolute; left: 0; right: 0; top: 0; bottom: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.7);
+    color: #fff; font-size: 12px; padding: 14px;
+    text-align: center;
+  }
+  body.cam-on #camHint { display: none; }
+
+  /* Energy dashboard — bottom-left widgets */
+  #dash {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    z-index: 6;
+    display: flex; gap: 10px; flex-wrap: wrap;
+    align-items: stretch;
+    max-width: calc(100% - 24px);
+  }
+  .gauge {
+    background: rgba(13,17,23,0.78);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,102,187,0.40);
+    border-radius: 14px;
+    padding: 10px 14px;
+    min-width: 110px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.5);
+  }
+  .gauge .label {
+    font-size: 9.5px; letter-spacing: 0.20em;
+    color: var(--ink-dim); text-transform: uppercase;
+    font-weight: 700;
+  }
+  .gauge .val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px; font-weight: 900;
+    color: var(--pink);
+    line-height: 1.1;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .gauge .sub {
+    font-size: 10px;
+    color: var(--ink-faint);
+    margin-top: 2px;
+  }
+  .gauge.now    { border-color: rgba(102,255,153,0.55); }
+  .gauge.now    .val { color: var(--green); }
+  .gauge.peak   { border-color: rgba(255,204,0,0.55); }
+  .gauge.peak   .val { color: var(--gold); }
+  .gauge.total  { border-color: rgba(179,136,255,0.55); }
+  .gauge.total  .val { color: var(--purple); }
+  .gauge.time   { border-color: rgba(0,255,204,0.55); }
+  .gauge.time   .val { color: var(--cyan); }
+  .gauge.score  { border-color: rgba(255,102,187,0.65); }
+  .gauge.score  .val { color: var(--pink); }
+
+  /* Effect-mode + theme dropdowns + start/stop buttons */
+  #controls {
+    position: absolute;
+    top: 12px; left: 50%; transform: translateX(-50%);
+    z-index: 7;
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    background: rgba(13,17,23,0.78);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid var(--bdr);
+    border-radius: 14px;
+    padding: 8px 12px;
+    box-shadow: 0 6px 22px rgba(0,0,0,0.6);
+    max-width: calc(100% - 24px);
+  }
+  #controls label {
+    font-size: 10px; letter-spacing: 0.18em;
+    color: var(--ink-dim); text-transform: uppercase;
+    align-self: center; font-weight: 700;
+  }
+
+  /* Sensitivity + cam-opacity sliders — under the controls */
+  #tuning {
+    position: absolute;
+    top: 70px; left: 50%; transform: translateX(-50%);
+    z-index: 6;
+    display: none;
+    gap: 14px; flex-wrap: wrap; justify-content: center;
+    background: rgba(13,17,23,0.78);
+    backdrop-filter: blur(8px);
+    border: 1.5px solid var(--bdr);
+    border-radius: 14px;
+    padding: 10px 14px;
+    max-width: calc(100% - 24px);
+  }
+  #tuning.show { display: flex; }
+  #tuning .tu-row { display: flex; align-items: center; gap: 8px; }
+  #tuning .tu-row label { font-size: 11px; color: var(--ink-dim); letter-spacing: 0.08em; }
+  #tuning input[type="range"] { width: 130px; accent-color: var(--pink); }
+  #tuning .tu-row .val { font-family: 'Orbitron', sans-serif; font-size: 12px; color: var(--pink); min-width: 28px; text-align: right; }
+
+  /* Toast banner */
+  #toast {
+    position: absolute;
+    top: 130px; left: 50%; transform: translate(-50%, -10px);
+    z-index: 8;
+    background: rgba(255,102,187,0.95);
+    color: #2b0a1c;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    padding: 10px 22px;
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* Welcome overlay until camera is on */
+  #welcome {
+    position: absolute; inset: 0;
+    z-index: 10;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px 20px;
+    background: rgba(0,0,0,0.78);
+    backdrop-filter: blur(6px);
+    text-align: center;
+    overflow-y: auto;
+  }
+  body.cam-on #welcome { display: none; }
+  #welcome h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(22px, 4vw, 36px);
+    color: var(--pink);
+    margin-bottom: 14px;
+    text-shadow: 0 0 24px rgba(255,102,187,0.6);
+  }
+  #welcome p { color: var(--ink); font-size: 15px; max-width: 580px; line-height: 1.6; margin-bottom: 22px; }
+  #welcome ul { color: var(--ink-dim); font-size: 14px; max-width: 560px; line-height: 1.8; text-align: left; margin-bottom: 24px; padding-left: 22px; }
+  #welcome ul strong { color: var(--ink); }
+  #welcome .start-btn {
+    background: linear-gradient(180deg, var(--pink), #cc3380);
+    color: #fff;
+    border: 2px solid var(--pink);
+    padding: 16px 38px;
+    border-radius: 999px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    box-shadow: 0 8px 28px rgba(255,102,187,0.5);
+    transition: transform 0.12s ease;
+  }
+  #welcome .start-btn:hover { transform: scale(1.04); }
+  #welcome .privacy { color: var(--ink-faint); font-size: 11px; margin-top: 20px; max-width: 480px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div id="versionStamp" title="Dance Board build version">⚡ BUILD <span class="vs-num">23</span></div>
+
+<div id="header">
+  <a href="accessibility-studio.html" class="back">‹ STUDIO</a>
+  <div>
+    <h1>💃 DANCE BOARD</h1>
+    <div class="sub">isatma.org &nbsp;|&nbsp; motion → color · energy expression · accessible movement</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="pill-btn" id="tuningBtn" title="Open sensitivity &amp; camera tuning">⚙ Tune</button>
+  <button class="pill-btn" id="resetScoreBtn" title="Reset the dance score &amp; total energy">↻ Reset</button>
+  <button class="pill-btn primary" id="camBtn">📷 Start dancing</button>
+</div>
+
+<div id="stage" class="theme-cosmic">
+  <canvas id="fxCanvas"></canvas>
+
+  <div id="controls">
+    <label for="effectSel">Effect</label>
+    <select class="pill-btn" id="effectSel" title="Visual effect produced by your motion">
+      <option value="paint">🎨 Paint trails</option>
+      <option value="bloom">🌸 Bloom rings</option>
+      <option value="wave">🌊 Color waves</option>
+      <option value="constellation">✨ Constellation</option>
+      <option value="confetti">🎉 Confetti burst</option>
+      <option value="aurora">🌌 Aurora wash</option>
+      <option value="ribbons">🎗️ Ribbons</option>
+      <option value="fireworks">🎆 Fireworks</option>
+    </select>
+    <label for="paletteSel">Palette</label>
+    <select class="pill-btn" id="paletteSel" title="Color palette for the visual effect">
+      <option value="rainbow">🌈 Rainbow</option>
+      <option value="sunset">🌅 Sunset</option>
+      <option value="ocean">🌊 Ocean</option>
+      <option value="aurora">✨ Aurora</option>
+      <option value="hot">🔥 Hot</option>
+      <option value="cool">❄️ Cool</option>
+      <option value="pastel">🍭 Pastel</option>
+      <option value="mono">⚪ Mono white</option>
+    </select>
+    <label for="themeSel">Scene</label>
+    <select class="pill-btn" id="themeSel" title="Background scene">
+      <option value="cosmic">🪐 Cosmic</option>
+      <option value="studio">🎛 Studio</option>
+      <option value="ocean">🌊 Ocean</option>
+      <option value="sunset">🌅 Sunset</option>
+      <option value="night">🌙 Night</option>
+      <option value="aurora">🌌 Aurora</option>
+    </select>
+    <label for="paintWithSel">Paint with</label>
+    <select class="pill-btn" id="paintWithSel" title="Which body part drives the paint">
+      <option value="body">💃 Whole body</option>
+      <option value="head">🤓 Head / nose</option>
+      <option value="leftHand">🖐️ Left hand</option>
+      <option value="rightHand">✋ Right hand</option>
+      <option value="twoHands">🙌 Two hands</option>
+      <option value="mouth">👄 Mouth (open/close)</option>
+    </select>
+    <button class="pill-btn active" id="bodyToggleBtn" title="Show your image on screen so you see yourself dancing">👤 Show me</button>
+  </div>
+
+  <div id="tuning">
+    <div class="tu-row">
+      <label for="sensInput">Sensitivity</label>
+      <input type="range" id="sensInput" min="1" max="100" value="50">
+      <span class="val" id="sensVal">50</span>
+    </div>
+    <div class="tu-row">
+      <label for="camOpInput">Camera view</label>
+      <input type="range" id="camOpInput" min="0" max="100" value="55">
+      <span class="val" id="camOpVal">55</span>
+    </div>
+    <div class="tu-row">
+      <label for="trailInput">Trail length</label>
+      <input type="range" id="trailInput" min="1" max="100" value="60">
+      <span class="val" id="trailVal">60</span>
+    </div>
+    <div class="tu-row">
+      <label for="brushInput">Brush size</label>
+      <input type="range" id="brushInput" min="5" max="80" value="32">
+      <span class="val" id="brushVal">32</span>
+    </div>
+    <div class="tu-row">
+      <label for="bodyOpInput">You visible</label>
+      <input type="range" id="bodyOpInput" min="0" max="100" value="22">
+      <span class="val" id="bodyOpVal">22</span>
+    </div>
+    <div class="tu-row" style="gap:6px">
+      <label style="display:flex; align-items:center; gap:6px">
+        <input type="checkbox" id="showRegionChk" checked>
+        Outline the active body region
+      </label>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <div id="camWrap">
+    <video id="camVideo" autoplay playsinline muted></video>
+    <div id="camHint">Tap "Start dancing" to share your camera</div>
+  </div>
+
+  <div id="dash">
+    <div class="gauge now">
+      <div class="label">Right now</div>
+      <div class="val" id="gNow">0</div>
+      <div class="sub">motion units</div>
+    </div>
+    <div class="gauge peak">
+      <div class="label">Session peak</div>
+      <div class="val" id="gPeak">0</div>
+      <div class="sub">strongest burst</div>
+    </div>
+    <div class="gauge total">
+      <div class="label">Total energy</div>
+      <div class="val" id="gTotal">0</div>
+      <div class="sub">accumulated</div>
+    </div>
+    <div class="gauge time">
+      <div class="label">Session</div>
+      <div class="val" id="gTime">0:00</div>
+      <div class="sub">min : sec</div>
+    </div>
+    <div class="gauge score">
+      <div class="label">Dance score</div>
+      <div class="val" id="gScore">0</div>
+      <div class="sub">peak × duration × consistency</div>
+    </div>
+  </div>
+
+  <div id="welcome">
+    <h2>💃 Dance Board</h2>
+    <p><strong>Move and paint with your motion.</strong> Your webcam watches how much you're moving — arms, head, shoulders, whatever you've got — and turns it into colorful visual effects on screen. The more you move, the more vivid the canvas becomes.</p>
+    <ul>
+      <li><strong>🎨 Paint trails</strong> — motion leaves brush strokes of color that fade gradually</li>
+      <li><strong>🌸 Bloom rings</strong> — each big movement opens a glowing ring outward</li>
+      <li><strong>🌊 Color waves</strong> — gentle horizontal sweeps that track your activity</li>
+      <li><strong>✨ Constellation</strong> — your motions place stars that connect with thin lines</li>
+      <li><strong>🎉 Confetti burst</strong> — every motion peak shoots colored particles</li>
+      <li><strong>🌌 Aurora wash</strong> — slow, ambient color drifts that respond to motion</li>
+      <li><strong>🎗️ Ribbons</strong> — fluid streamers that follow the rhythm of your moves</li>
+      <li><strong>🎆 Fireworks</strong> — celebratory bursts on big motion peaks</li>
+    </ul>
+    <p style="font-size:13px; color:var(--ink-dim)">A real-time <strong>energy meter</strong> tracks how much you've moved. A <strong>dance score</strong> rewards both peak intensity and sustained activity — a measurable, expressive way to capture movement.</p>
+    <button class="start-btn" id="welcomeStartBtn">📷 Start dancing</button>
+    <div class="privacy">Your camera feed is processed locally in your browser. Nothing is recorded or uploaded. Stop at any time.</div>
+  </div>
+</div>
+
+<script>
+// ═════════════════════════════════════════════════════════════════
+// DANCE BOARD — motion → visuals + energy score
+//
+// Pipeline:
+//   1. getUserMedia → <video> → small offscreen 256×144 canvas (motion only)
+//   2. Background-subtraction: each frame is compared to a baseline snapshot
+//      captured at startup, giving per-pixel "presence" intensity.
+//   3. The intensity buffer is downsampled into a small grid; the grid's
+//      center-of-mass + total intensity drives the visual effect.
+//   4. The visual effect renders to #fxCanvas (full-stage).
+//   5. Energy stats (now / peak / total / score) update every frame.
+// ═════════════════════════════════════════════════════════════════
+
+const $ = id => document.getElementById(id);
+const stage   = $('stage');
+const fxCanvas = $('fxCanvas');
+const fx       = fxCanvas.getContext('2d');
+const camWrap  = $('camWrap');
+const camVideo = $('camVideo');
+const camHint  = $('camHint');
+const toast    = $('toast');
+const dash = {
+  now:   $('gNow'),
+  peak:  $('gPeak'),
+  total: $('gTotal'),
+  time:  $('gTime'),
+  score: $('gScore')
+};
+
+// State
+const state = {
+  active: false,
+  stream: null,
+  // Small offscreen sampling canvas (cheap to process every frame).
+  sampleW: 256,
+  sampleH: 144,
+  sampleCanvas: null,
+  sampleCtx: null,
+  baseline: null,      // Uint8 baseline luminance map (captured at startup)
+  warmupUntil: 0,
+  calibratedAt: 0,
+  // Motion data
+  nowIntensity: 0,
+  smoothNow: 0,
+  peakIntensity: 0,
+  totalEnergy: 0,
+  startedAt: 0,
+  sustainedFrames: 0,
+  motionGridLast: { cx: 0.5, cy: 0.5 },
+  // Tunable
+  sensitivity: 50,
+  trailLength: 60,
+  brush: 32,
+  effect: 'paint',
+  palette: 'rainbow',
+  // Body silhouette + paint-with selector
+  showBody: true,           // draw the dancer over the paint, lighter-blended
+  bodyOpacity: 0.22,        // how visible the silhouette is (0..1)
+  showRegion: true,         // outline the active sample region (head, hand, …)
+  paintWith: 'body',        // 'body' | 'head' | 'leftHand' | 'rightHand' | 'twoHands' | 'mouth'
+  // RAF
+  rafId: 0,
+  lastFrameAt: 0
+};
+
+// ── Stage canvas sizing ────────────────────────────────────────
+function resizeFxCanvas() {
+  const r = stage.getBoundingClientRect();
+  fxCanvas.width  = Math.floor(r.width);
+  fxCanvas.height = Math.floor(r.height);
+}
+window.addEventListener('resize', resizeFxCanvas);
+resizeFxCanvas();
+
+// ── Palettes ───────────────────────────────────────────────────
+const PALETTES = {
+  rainbow: ['#ff4d6d','#ff9d3a','#ffd93d','#66ff99','#4da6ff','#a06bff','#ff66e0'],
+  sunset:  ['#ffd93d','#ff9d3a','#ff6b6b','#ff66e0','#a06bff','#6e2c2c'],
+  ocean:   ['#003366','#0066aa','#00b4d8','#00ffe1','#66ff99','#caf0f8'],
+  aurora:  ['#66ffaa','#88ffe1','#b388ff','#7ea8ff','#48f0c6','#c2eaff'],
+  hot:     ['#ffe680','#ffcc00','#ff6b35','#ff003c','#ff66bb','#ff9d3a'],
+  cool:    ['#0096c7','#48cae4','#b388ff','#9d4edd','#7ea8ff','#caf0f8'],
+  pastel:  ['#ffd6e0','#ffefc1','#caffbf','#bdb2ff','#a0c4ff','#ffc6ff'],
+  mono:    ['#ffffff','#e0e0ff','#c0c0ff','#a0a0ff']
+};
+function colorAt(t) {
+  const pal = PALETTES[state.palette] || PALETTES.rainbow;
+  const i = Math.floor(t * pal.length) % pal.length;
+  return pal[Math.abs(i)];
+}
+function randColor() {
+  const pal = PALETTES[state.palette] || PALETTES.rainbow;
+  return pal[Math.floor(Math.random() * pal.length)];
+}
+
+// ── Camera + motion ────────────────────────────────────────────
+async function startCamera() {
+  if (state.active) return;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showToast('No camera support in this browser', 3000); return;
+  }
+  try {
+    state.stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 360 } },
+      audio: false
+    });
+  } catch (e) {
+    showToast('Camera permission denied', 3000);
+    return;
+  }
+  camVideo.srcObject = state.stream;
+  try { await camVideo.play(); } catch(_) {}
+  state.active = true;
+  document.body.classList.add('cam-on');
+  $('camBtn').textContent = '⏸ Stop';
+  $('camBtn').classList.add('active');
+  // Offscreen sample canvas
+  if (!state.sampleCanvas) {
+    state.sampleCanvas = document.createElement('canvas');
+    state.sampleCanvas.width  = state.sampleW;
+    state.sampleCanvas.height = state.sampleH;
+    state.sampleCtx = state.sampleCanvas.getContext('2d', { willReadFrequently: true });
+  }
+  // Warmup + capture baseline a moment after camera starts.
+  state.warmupUntil  = performance.now() + 1800;
+  state.calibratedAt = 0;
+  state.baseline = null;
+  state.startedAt = performance.now();
+  state.peakIntensity = 0;
+  state.totalEnergy = 0;
+  showToast('Hold still for 2 seconds — capturing baseline', 2200);
+  state.lastFrameAt = performance.now();
+  state.rafId = requestAnimationFrame(loop);
+}
+function stopCamera() {
+  if (!state.active) return;
+  state.active = false;
+  cancelAnimationFrame(state.rafId);
+  if (state.stream) state.stream.getTracks().forEach(t => t.stop());
+  state.stream = null;
+  document.body.classList.remove('cam-on');
+  $('camBtn').textContent = '📷 Start dancing';
+  $('camBtn').classList.remove('active');
+}
+window.addEventListener('pagehide', stopCamera);
+
+function grabFrame() {
+  state.sampleCtx.save();
+  state.sampleCtx.scale(-1, 1);
+  state.sampleCtx.drawImage(camVideo, -state.sampleW, 0, state.sampleW, state.sampleH);
+  state.sampleCtx.restore();
+  return state.sampleCtx.getImageData(0, 0, state.sampleW, state.sampleH);
+}
+
+function captureBaseline(imageData) {
+  const data = imageData.data;
+  const n = state.sampleW * state.sampleH;
+  const base = new Uint8Array(n);
+  for (let i = 0; i < n; i++) {
+    const o = i * 4;
+    base[i] = (data[o] + data[o+1] + data[o+2]) / 3;
+  }
+  state.baseline = base;
+}
+
+// Compute per-pixel motion vs baseline within a region rect (0..1 coords),
+// return { intensity 0–100, cx, cy 0–1 in full-frame coords }. Sampling
+// only a region lets the user "paint with their head" or "paint with their
+// hand" by limiting motion detection to a slice of the frame.
+function measureMotionRegion(imageData, rect) {
+  if (!state.baseline) return { intensity: 0, cx: 0.5, cy: 0.5, raw: 0 };
+  const data = imageData.data;
+  const sw = state.sampleW, sh = state.sampleH;
+  const r = rect || { x: 0, y: 0, w: 1, h: 1 };
+  const x0 = Math.max(0, Math.floor(r.x * sw));
+  const x1 = Math.min(sw, Math.ceil((r.x + r.w) * sw));
+  const y0 = Math.max(0, Math.floor(r.y * sh));
+  const y1 = Math.min(sh, Math.ceil((r.y + r.h) * sh));
+  let sum = 0;
+  let cxSum = 0, cySum = 0, wSum = 0;
+  for (let y = y0; y < y1; y += 2) {
+    for (let x = x0; x < x1; x += 2) {
+      const i = y * sw + x;
+      const o = i * 4;
+      const lum = (data[o] + data[o+1] + data[o+2]) / 3;
+      const diff = Math.abs(lum - state.baseline[i]);
+      if (diff > 14) {
+        sum += diff;
+        cxSum += x * diff;
+        cySum += y * diff;
+        wSum  += diff;
+      }
+    }
+  }
+  const sens = state.sensitivity;
+  // Scale up the intensity when sampling a small region so a head-only
+  // motion can reach full visual response — otherwise tiny regions feel dead.
+  const regionArea = (x1 - x0) * (y1 - y0);
+  const fullArea   = sw * sh;
+  const areaBoost  = Math.max(1, Math.sqrt(fullArea / Math.max(1, regionArea)));
+  const intensity = Math.max(0, Math.min(100, sum * (0.00018 + (sens / 100) * 0.0004) * areaBoost));
+  const cx = wSum > 0 ? (cxSum / wSum) / sw : (r.x + r.w / 2);
+  const cy = wSum > 0 ? (cySum / wSum) / sh : (r.y + r.h / 2);
+  return { intensity, cx, cy, raw: sum };
+}
+
+// Dispatcher — picks one or more regions based on state.paintWith.
+function measureMotion(imageData) {
+  const mode = state.paintWith || 'body';
+  if (mode === 'twoHands') {
+    const L = measureMotionRegion(imageData, regionRectFor('leftHand'));
+    const R = measureMotionRegion(imageData, regionRectFor('rightHand'));
+    // Combined intensity; pick whichever hand has more motion as the
+    // current center, so paint follows the active hand.
+    const intensity = Math.max(L.intensity, R.intensity);
+    if (L.raw > R.raw) return { intensity, cx: L.cx, cy: L.cy };
+    return { intensity, cx: R.cx, cy: R.cy };
+  }
+  if (mode === 'mouth') {
+    // Mouth open/close detection (rough): look at motion in a small face
+    // box. Quick changes register; baseline-relative motion captures the
+    // open-shut delta. Same scaling as other regions.
+    return measureMotionRegion(imageData, regionRectFor('mouth'));
+  }
+  if (mode === 'head' || mode === 'leftHand' || mode === 'rightHand') {
+    return measureMotionRegion(imageData, regionRectFor(mode));
+  }
+  // 'body' (default) — whole frame.
+  return measureMotionRegion(imageData, null);
+}
+
+function loop(now) {
+  state.rafId = requestAnimationFrame(loop);
+  if (!state.active || camVideo.readyState < 2) return;
+  // Warmup
+  if (now < state.warmupUntil) return;
+  // Capture baseline once
+  if (!state.baseline) {
+    captureBaseline(grabFrame());
+    state.calibratedAt = now;
+    state.startedAt = now;          // session timer starts when calibrated
+    showToast('Move! Your motion becomes color ✨', 2000);
+    return;
+  }
+  // Measure + apply effect
+  const frame = grabFrame();
+  const m = measureMotion(frame);
+  // Smooth the displayed "now" value a bit
+  state.nowIntensity = m.intensity;
+  state.smoothNow = state.smoothNow * 0.78 + m.intensity * 0.22;
+  if (m.intensity > state.peakIntensity) state.peakIntensity = m.intensity;
+  state.motionGridLast.cx = state.motionGridLast.cx * 0.7 + m.cx * 0.3;
+  state.motionGridLast.cy = state.motionGridLast.cy * 0.7 + m.cy * 0.3;
+
+  // Energy accumulation: motion_intensity × Δt (seconds). 100-unit sustained
+  // motion for 1 second adds 100 to total energy.
+  const dt = Math.min(0.1, (now - state.lastFrameAt) / 1000);
+  state.lastFrameAt = now;
+  state.totalEnergy += state.smoothNow * dt;
+  // Sustained activity bonus: count consecutive frames over 12% intensity.
+  if (state.smoothNow > 12) state.sustainedFrames++;
+  else state.sustainedFrames = Math.max(0, state.sustainedFrames - 1);
+
+  // Trail fade — uses 'destination-out' so previous paint becomes more
+  // TRANSPARENT each frame instead of being painted over with black. This
+  // lets the stage's theme background show through where there's no paint.
+  // Higher trailLength = lower fade alpha = longer-lasting strokes.
+  const fadeAlpha = (101 - state.trailLength) / 600; // 0.0017–0.166
+  fx.save();
+  fx.globalCompositeOperation = 'destination-out';
+  fx.fillStyle = `rgba(0,0,0,${fadeAlpha.toFixed(3)})`;
+  fx.fillRect(0, 0, fxCanvas.width, fxCanvas.height);
+  fx.restore();
+
+  renderEffect(m);
+  updateDashboard(now);
+  // Person draws ON TOP of the paint — they're the dancer, the colorful
+  // effects are their aura/expression flowing behind them. Empowering.
+  if (state.showBody) drawBodySilhouette();
+  // Optional region indicator — a soft outline of where motion is being
+  // sampled (e.g. "head" region) so the user knows what's driving the paint.
+  if (state.showRegion && state.paintWith !== 'body') drawRegionHint();
+}
+
+// Person silhouette on top — mirrored to match natural motion. Drawn via
+// a "screen" blend so darker parts of the silhouette let the paint bleed
+// through, giving the dancer a glowing aura look.
+function drawBodySilhouette() {
+  if (!camVideo.videoWidth) return;
+  fx.save();
+  fx.globalAlpha = state.bodyOpacity;
+  fx.globalCompositeOperation = 'lighter';
+  fx.translate(fxCanvas.width, 0);
+  fx.scale(-1, 1);
+  const vw = camVideo.videoWidth  || 640;
+  const vh = camVideo.videoHeight || 360;
+  const ar = vw / vh;
+  const cw = fxCanvas.width, ch = fxCanvas.height;
+  let dw = cw, dh = cw / ar;
+  if (dh < ch) { dh = ch; dw = ch * ar; }
+  const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+  fx.drawImage(camVideo, dx, dy, dw, dh);
+  fx.restore();
+  fx.globalAlpha = 1;
+}
+
+// Faint outline of the active sample region — so users can see "I'm painting
+// with my head right now" and frame themselves into it.
+function drawRegionHint() {
+  const r = regionRectFor(state.paintWith);
+  if (!r) return;
+  // Mirror coordinates so the rectangle lines up with the mirrored silhouette.
+  const x = (1 - r.x - r.w) * fxCanvas.width;
+  const y = r.y * fxCanvas.height;
+  const w = r.w * fxCanvas.width;
+  const h = r.h * fxCanvas.height;
+  fx.save();
+  fx.strokeStyle = 'rgba(255,102,187,0.55)';
+  fx.lineWidth = 2;
+  fx.setLineDash([8, 8]);
+  fx.strokeRect(x, y, w, h);
+  fx.restore();
+}
+
+// Normalized rectangles (0..1) defining where in the camera frame each
+// body part typically lives. The user frames themselves so their head /
+// hand fills the box; motion inside that box drives the paint.
+function regionRectFor(mode) {
+  switch (mode) {
+    case 'head':      return { x: 0.30, y: 0.05, w: 0.40, h: 0.40 };   // upper-center
+    case 'mouth':     return { x: 0.35, y: 0.25, w: 0.30, h: 0.20 };   // tight face zone
+    case 'leftHand':  return { x: 0.00, y: 0.25, w: 0.35, h: 0.60 };   // dancer's left → camera's right
+    case 'rightHand': return { x: 0.65, y: 0.25, w: 0.35, h: 0.60 };   // dancer's right → camera's left
+    case 'twoHands':  return null;                                      // two boxes, handled inline
+    case 'body':
+    default:          return null;
+  }
+}
+
+// ── Effects ───────────────────────────────────────────────────
+function renderEffect(m) {
+  const W = fxCanvas.width, H = fxCanvas.height;
+  const cx = state.motionGridLast.cx * W;
+  const cy = state.motionGridLast.cy * H;
+  const intensity = state.smoothNow;
+  const brush = state.brush + intensity * 0.6;
+  switch (state.effect) {
+    case 'paint':   fxPaint(cx, cy, intensity, brush); break;
+    case 'bloom':   fxBloom(cx, cy, intensity); break;
+    case 'wave':    fxWave(intensity); break;
+    case 'constellation': fxConstellation(cx, cy, intensity); break;
+    case 'confetti': fxConfetti(cx, cy, intensity); break;
+    case 'aurora':  fxAurora(intensity); break;
+    case 'ribbons': fxRibbons(cx, cy, intensity); break;
+    case 'fireworks': fxFireworks(intensity); break;
+  }
+}
+
+// 🎨 Paint — fat brush stroke following the motion center
+function fxPaint(cx, cy, intensity, brush) {
+  if (intensity < 4) return;
+  const c = colorAt((cx + cy) / (fxCanvas.width + fxCanvas.height));
+  fx.beginPath();
+  fx.fillStyle = c;
+  fx.globalAlpha = Math.min(1, 0.3 + intensity / 100);
+  fx.shadowBlur = 18;
+  fx.shadowColor = c;
+  fx.arc(cx + (Math.random() - 0.5) * 12, cy + (Math.random() - 0.5) * 12, brush * 0.5, 0, Math.PI * 2);
+  fx.fill();
+  fx.shadowBlur = 0;
+  fx.globalAlpha = 1;
+}
+
+// 🌸 Bloom — concentric expanding rings on motion peaks
+let _blooms = [];
+function fxBloom(cx, cy, intensity) {
+  if (intensity > 18 && Math.random() < 0.25) {
+    _blooms.push({ x: cx, y: cy, r: 8, life: 1, color: randColor() });
+  }
+  _blooms.forEach(b => { b.r += 6 + intensity * 0.05; b.life -= 0.025; });
+  _blooms = _blooms.filter(b => b.life > 0);
+  _blooms.forEach(b => {
+    fx.beginPath();
+    fx.strokeStyle = b.color;
+    fx.globalAlpha = b.life;
+    fx.lineWidth = 4;
+    fx.shadowBlur = 22;
+    fx.shadowColor = b.color;
+    fx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+    fx.stroke();
+  });
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// 🌊 Wave — color bands sweep horizontally tracking activity
+let _waveOffset = 0;
+function fxWave(intensity) {
+  const W = fxCanvas.width, H = fxCanvas.height;
+  _waveOffset += 0.5 + intensity * 0.06;
+  const bands = 14;
+  for (let b = 0; b < bands; b++) {
+    const y = (b / bands) * H;
+    const amp = 18 + intensity * 1.4;
+    const c = colorAt(b / bands);
+    fx.beginPath();
+    fx.strokeStyle = c;
+    fx.globalAlpha = 0.45;
+    fx.lineWidth = 2 + intensity * 0.04;
+    fx.shadowBlur = 14;
+    fx.shadowColor = c;
+    for (let x = 0; x <= W; x += 6) {
+      const yy = y + Math.sin((x + _waveOffset * (1 + b * 0.1)) * 0.012) * amp;
+      if (x === 0) fx.moveTo(x, yy);
+      else fx.lineTo(x, yy);
+    }
+    fx.stroke();
+  }
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// ✨ Constellation — drop stars on motion peaks + draw connecting lines
+let _stars = [];
+function fxConstellation(cx, cy, intensity) {
+  if (intensity > 10 && Math.random() < 0.4) {
+    _stars.push({ x: cx + (Math.random() - 0.5) * 60, y: cy + (Math.random() - 0.5) * 60, life: 1, c: randColor() });
+    if (_stars.length > 80) _stars.shift();
+  }
+  _stars.forEach(s => s.life -= 0.004);
+  _stars = _stars.filter(s => s.life > 0);
+  // Lines between nearby stars
+  fx.lineWidth = 1;
+  for (let i = 0; i < _stars.length; i++) {
+    for (let j = i + 1; j < _stars.length; j++) {
+      const a = _stars[i], b = _stars[j];
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const d2 = dx * dx + dy * dy;
+      if (d2 < 17000) {
+        fx.strokeStyle = a.c;
+        fx.globalAlpha = Math.min(a.life, b.life) * (1 - d2 / 17000) * 0.5;
+        fx.beginPath(); fx.moveTo(a.x, a.y); fx.lineTo(b.x, b.y); fx.stroke();
+      }
+    }
+  }
+  // Stars
+  _stars.forEach(s => {
+    fx.beginPath();
+    fx.fillStyle = s.c;
+    fx.globalAlpha = s.life;
+    fx.shadowBlur = 16;
+    fx.shadowColor = s.c;
+    fx.arc(s.x, s.y, 3 + intensity * 0.05, 0, Math.PI * 2);
+    fx.fill();
+  });
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// 🎉 Confetti — particles shoot outward from motion peaks
+let _confetti = [];
+function fxConfetti(cx, cy, intensity) {
+  if (intensity > 15) {
+    const n = Math.min(40, Math.floor(intensity * 0.5));
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const v = 2 + Math.random() * (4 + intensity * 0.08);
+      _confetti.push({
+        x: cx, y: cy,
+        vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5,
+        life: 1, c: randColor(), size: 3 + Math.random() * 4
+      });
+    }
+  }
+  _confetti.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.10;
+    p.life -= 0.018;
+  });
+  _confetti = _confetti.filter(p => p.life > 0 && p.y < fxCanvas.height + 30);
+  _confetti.forEach(p => {
+    fx.fillStyle = p.c;
+    fx.globalAlpha = p.life;
+    fx.shadowBlur = 8; fx.shadowColor = p.c;
+    fx.fillRect(p.x - p.size/2, p.y - p.size/2, p.size, p.size);
+  });
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// 🌌 Aurora — slow drifting color washes
+let _auroraPhase = 0;
+function fxAurora(intensity) {
+  const W = fxCanvas.width, H = fxCanvas.height;
+  _auroraPhase += 0.003 + intensity * 0.0006;
+  const bands = 4;
+  for (let b = 0; b < bands; b++) {
+    const c = colorAt(b / bands);
+    const yC = H * (0.2 + 0.2 * b) + Math.sin(_auroraPhase + b) * 60;
+    const grad = fx.createLinearGradient(0, yC - 80, 0, yC + 80);
+    grad.addColorStop(0, 'rgba(0,0,0,0)');
+    grad.addColorStop(0.5, c);
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    fx.fillStyle = grad;
+    fx.globalAlpha = 0.18 + intensity * 0.005;
+    fx.fillRect(0, yC - 80, W, 160);
+  }
+  fx.globalAlpha = 1;
+}
+
+// 🎗️ Ribbons — fluid streamers following a moving point
+let _ribbonPts = [];
+function fxRibbons(cx, cy, intensity) {
+  _ribbonPts.push({ x: cx, y: cy, c: colorAt(intensity / 100), life: 1 });
+  if (_ribbonPts.length > 100) _ribbonPts.shift();
+  _ribbonPts.forEach(p => p.life -= 0.012);
+  _ribbonPts = _ribbonPts.filter(p => p.life > 0);
+  fx.lineWidth = 6 + intensity * 0.15;
+  fx.lineCap = 'round'; fx.lineJoin = 'round';
+  for (let i = 1; i < _ribbonPts.length; i++) {
+    const a = _ribbonPts[i - 1], b = _ribbonPts[i];
+    fx.beginPath();
+    fx.strokeStyle = b.c;
+    fx.globalAlpha = b.life * 0.85;
+    fx.shadowBlur = 14;
+    fx.shadowColor = b.c;
+    fx.moveTo(a.x, a.y);
+    fx.lineTo(b.x, b.y);
+    fx.stroke();
+  }
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// 🎆 Fireworks — large bursts on motion peaks
+let _fwParticles = [];
+function fxFireworks(intensity) {
+  if (intensity > 30 && Math.random() < 0.18) {
+    const W = fxCanvas.width, H = fxCanvas.height;
+    const burstX = Math.random() * W;
+    const burstY = Math.random() * H * 0.6;
+    const n = 30 + Math.floor(intensity * 0.5);
+    const c = randColor();
+    for (let i = 0; i < n; i++) {
+      const a = (i / n) * Math.PI * 2;
+      const v = 2 + Math.random() * 5;
+      _fwParticles.push({ x: burstX, y: burstY, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: 1, c });
+    }
+  }
+  _fwParticles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.03; p.life -= 0.018;
+  });
+  _fwParticles = _fwParticles.filter(p => p.life > 0);
+  _fwParticles.forEach(p => {
+    fx.beginPath();
+    fx.fillStyle = p.c;
+    fx.globalAlpha = p.life;
+    fx.shadowBlur = 10; fx.shadowColor = p.c;
+    fx.arc(p.x, p.y, 2 + p.life * 2, 0, Math.PI * 2);
+    fx.fill();
+  });
+  fx.shadowBlur = 0; fx.globalAlpha = 1;
+}
+
+// ── Dashboard ─────────────────────────────────────────────────
+function updateDashboard(now) {
+  const sessSec = Math.max(0, (now - state.startedAt) / 1000);
+  dash.now.textContent   = Math.round(state.smoothNow);
+  dash.peak.textContent  = Math.round(state.peakIntensity);
+  dash.total.textContent = Math.round(state.totalEnergy);
+  const m = Math.floor(sessSec / 60), s = Math.floor(sessSec % 60);
+  dash.time.textContent  = m + ':' + (s < 10 ? '0' : '') + s;
+  // Dance score formula: a blend of peak intensity, accumulated energy, and
+  // consistency. Tuned so 1-minute moderate dance ≈ 1000–4000.
+  const consistency = Math.min(1, state.sustainedFrames / 600);   // ~10 s sustained
+  const score = Math.round(
+    (state.totalEnergy * 1.0) +
+    (state.peakIntensity * 30) +
+    (consistency * state.totalEnergy * 0.5)
+  );
+  dash.score.textContent = score.toLocaleString();
+}
+
+function resetScore() {
+  state.totalEnergy = 0;
+  state.peakIntensity = 0;
+  state.sustainedFrames = 0;
+  state.startedAt = performance.now();
+  fx.fillStyle = 'rgba(0,0,0,1)';
+  fx.fillRect(0, 0, fxCanvas.width, fxCanvas.height);
+  showToast('Score reset · canvas cleared', 1600);
+}
+
+// ── Toast ─────────────────────────────────────────────────────
+let _toastT;
+function showToast(msg, ms) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(_toastT);
+  _toastT = setTimeout(() => toast.classList.remove('show'), ms || 2200);
+}
+
+// ── Wiring ────────────────────────────────────────────────────
+$('camBtn').addEventListener('click', () => state.active ? stopCamera() : startCamera());
+$('welcomeStartBtn').addEventListener('click', startCamera);
+$('resetScoreBtn').addEventListener('click', resetScore);
+$('tuningBtn').addEventListener('click', () => $('tuning').classList.toggle('show'));
+
+$('effectSel').addEventListener('change', () => { state.effect = $('effectSel').value; showToast('Effect: ' + $('effectSel').selectedOptions[0].textContent, 1400); });
+$('paletteSel').addEventListener('change', () => { state.palette = $('paletteSel').value; showToast('Palette: ' + $('paletteSel').selectedOptions[0].textContent, 1400); });
+$('themeSel').addEventListener('change', () => {
+  ['theme-cosmic','theme-studio','theme-ocean','theme-sunset','theme-night','theme-aurora'].forEach(c => stage.classList.remove(c));
+  stage.classList.add('theme-' + $('themeSel').value);
+});
+
+$('sensInput').addEventListener('input', () => {
+  state.sensitivity = parseInt($('sensInput').value, 10);
+  $('sensVal').textContent = state.sensitivity;
+});
+$('camOpInput').addEventListener('input', () => {
+  const v = parseInt($('camOpInput').value, 10);
+  $('camOpVal').textContent = v;
+  camWrap.style.setProperty('--cam-opacity', (v / 100).toFixed(2));
+});
+$('trailInput').addEventListener('input', () => {
+  state.trailLength = parseInt($('trailInput').value, 10);
+  $('trailVal').textContent = state.trailLength;
+});
+$('brushInput').addEventListener('input', () => {
+  state.brush = parseInt($('brushInput').value, 10);
+  $('brushVal').textContent = state.brush;
+});
+$('bodyOpInput').addEventListener('input', () => {
+  const v = parseInt($('bodyOpInput').value, 10);
+  $('bodyOpVal').textContent = v;
+  state.bodyOpacity = v / 100;
+});
+$('showRegionChk').addEventListener('change', () => {
+  state.showRegion = $('showRegionChk').checked;
+});
+$('paintWithSel').addEventListener('change', () => {
+  state.paintWith = $('paintWithSel').value;
+  showToast('Painting with: ' + $('paintWithSel').selectedOptions[0].textContent, 1600);
+});
+$('bodyToggleBtn').addEventListener('click', () => {
+  state.showBody = !state.showBody;
+  $('bodyToggleBtn').classList.toggle('active', state.showBody);
+  $('bodyToggleBtn').textContent = state.showBody ? '👤 Show me' : '🙈 Hide me';
+});
+
+// Default theme + initial dashboard render
+updateDashboard(performance.now());
+</script>
+</body>
+</html>

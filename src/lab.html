@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ recreation lab</title>
+<style>
+.lb-wrap { gap: 22px !important; }
+.lb-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
+.lb-hero h1 { font-size: clamp(2em, 5vw, 3.2em); line-height: 1.06; margin: 0; }
+.lb-hero h1 span { color: #ff8fd0; }
+.lb-hero p { margin: 0; color: var(--desc); max-width: 56em; font-size: 1.06em; }
+.lb-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #ff8fd0; }
+.lb-tag { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; }
+.lb-asis { display: grid; gap: 6px; padding: 14px 16px; border: 2px dashed #ffc670; background: rgba(255,198,112,0.07); color: var(--ink); font-size: 0.95em; }
+.lb-asis b { font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+.lb-asis p { margin: 0; color: var(--desc); }
+.lb-asis a { color: #ffc670; }
+.lb-find { display: grid; gap: 12px; }
+.lb-search { display: grid; gap: 4px; font: 500 0.7em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); max-width: 560px; }
+.lb-search input { min-height: 52px; padding: 0 14px; font: 500 1.5em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); }
+.lb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.lb-chips button { min-height: 48px; padding: 0 16px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 600 0.92em var(--body); cursor: pointer; }
+.lb-chips button[aria-pressed="true"] { background: #ff8fd0; border-color: #ff8fd0; color: #2b0a1c; }
+.lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+.lb-card { display: grid; gap: 10px; align-content: start; padding: 18px; border: 1px solid var(--line-hi); border-top: 4px solid var(--ac); background: color-mix(in srgb, var(--ac) 5%, var(--panel)); min-width: 0; }
+.lb-card h2 { margin: 0; font: 600 1.25em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+.lb-card .cat { font: 500 0.7em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ac); }
+.lb-card p { margin: 0; color: var(--desc); font-size: 0.95em; line-height: 1.5; }
+.lb-ins { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.lb-ins li { padding: 3px 8px; border: 1px solid var(--line-hi); font-size: 0.78em; color: var(--ink); }
+.lb-meta { font: 500 0.72em var(--mono); color: var(--muted); letter-spacing: 0.04em; }
+.lb-card .btn { justify-self: start; min-height: 52px; }
+.lb-none { color: var(--desc); }
+.lb-dev { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--line-hi); color: var(--desc); font-size: 0.92em; }
+.lb-dev b { color: var(--ink); }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap lb-wrap">
+    <header class="lb-hero">
+      <span class="lb-k">Recreation lab · experimental zone <span class="lb-tag">Prototype · demo only</span></span>
+      <h1>Music, art and movement, <span>hands-free</span></h1>
+      <p>Experimental apps prepared for ISATMA, the International Symposium on Assistive Technology, Music and Art. Each one uses colorful on-screen targets you can trigger with eye tracking, a head pointer, a switch, touch, or movement picked up by a webcam. Some respond to whole-body motion.</p>
+    </header>
+    <div class="lb-asis" role="note"><b>As-is prototype software</b><p>Provided as is, without warranty of any kind, for demonstration and discussion. Each app carries its own license notice: source-available under the PolyForm Noncommercial License 1.0.0. Camera processing happens in your browser; the apps state that nothing is recorded or uploaded. Camera features may not work inside this private preview, which can block webcam access; touch, mouse, switch and dwell still work.</p></div>
+
+    <section class="lb-find" aria-label="Find an app">
+      <label class="lb-search">Search the lab<input type="search" id="lbQ" placeholder="Try music, eye tracking, exercise, camera"></label>
+      <div class="lb-chips" role="group" aria-label="Filter by category" id="lbCats"></div>
+      <div class="lb-chips" role="group" aria-label="Filter by input" id="lbIns"></div>
+    </section>
+
+    <div class="lb-grid" id="lbGrid" aria-live="polite"></div>
+
+    <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for one hosting fix: the hand-tracking ergometer now loads fixed versions of its hand-tracking library. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
+  </div>
+</main>
+<script>
+(function () {
+  function el(id) { return document.getElementById(id); }
+  var CATS = { music: ['Make music', '#ffc670'], talk: ['Communicate', '#ff8fd0'], move: ['Move and exercise', '#5fe0a8'], art: ['Art and dance', '#b9a4ff'], tools: ['Research tools', '#7cc4ff'] };
+  var INS = { eyes: 'Eye tracking (dwell)', head: 'Head pointer', sw: 'Switch', cam: 'Camera motion', hand: 'Hand tracking', touch: 'Touch or mouse' };
+  var APPS = [
+    { f: 'index.html', name: 'Songboards', cat: 'music', ins: ['touch', 'eyes', 'head', 'sw', 'cam'], d: 'Build colorful keyboards out of musical targets: notes, chords, drums and backing tracks. Arrange targets where you can reach them, then play by tap, dwell, switch or a wave at the camera.', meta: 'Uses Tone.js for sound' },
+    { f: 'songboards-2target-test.html', name: 'Songboards camera test', cat: 'music', ins: ['cam'], d: 'Two large targets that play a note when you wave over them. Shows the live motion signal and a heatmap, for tuning the camera before a performance.', meta: 'Diagnostic' },
+    { f: 'speaking-boards.html', name: 'Speaking Boards', cat: 'talk', ins: ['touch', 'eyes', 'head', 'sw', 'cam'], d: 'Expressive communication: phrase targets in many categories, from everyday needs to humor, poetry and quotes. Your browser speaks each phrase, with an optional sing mode.', meta: 'Uses the browser voice' },
+    { f: 'ergometer-2target.html', name: 'Wheelchair ergometer', cat: 'move', ins: ['cam'], d: 'Push your arms toward left and right targets in turn; each stroke drives a virtual wheelchair along a road. One or both arms, with draggable targets placed where you can reach.', meta: 'Webcam, no hardware' },
+    { f: 'isatma_ergometer_v4.html', name: 'Hand-crank ergometer', cat: 'move', ins: ['hand'], d: 'Make a cranking motion and the on-screen arm crank turns, powering a scrolling road with speed, distance and RPM. Calibrates to where your hand rests.', meta: 'Loads a hand-tracking model (MediaPipe)' },
+    { f: 'dance-board.html', name: 'Dance Board', cat: 'art', ins: ['cam'], d: 'Move and paint with light: trails, blooms, waves, confetti and fireworks follow your motion. Paint with your whole body, head, one hand or your mouth, with an energy meter and dance score.', meta: 'Webcam' },
+    { f: 'motion-test.html', name: 'Motion Lab', cat: 'tools', ins: ['cam'], d: 'A motion-detection instrument with a heatmap, live chart, timestamped log at 10 samples a second and CSV export. Useful for range of motion, biofeedback and tuning thresholds.', meta: 'Exports CSV' }
+  ];
+  var F = { q: '', cat: '', ins: '' };
+  function chips(id, map, key, all) {
+    var box = el(id);
+    box.innerHTML = '<button type="button" data-v="" aria-pressed="' + (F[key] === '') + '">' + all + '</button>' + Object.keys(map).map(function (k) { return '<button type="button" data-v="' + k + '" aria-pressed="' + (F[key] === k) + '">' + (Array.isArray(map[k]) ? map[k][0] : map[k]) + '</button>'; }).join('');
+    Array.prototype.forEach.call(box.children, function (b) { b.addEventListener('click', function () { F[key] = b.getAttribute('data-v'); chips(id, map, key, all); draw(); }); });
+  }
+  function draw() {
+    var q = F.q.trim().toLowerCase();
+    var list = APPS.filter(function (a) {
+      var text = (a.name + ' ' + a.d + ' ' + CATS[a.cat][0] + ' ' + a.ins.map(function (i) { return INS[i]; }).join(' ') + ' ' + a.meta).toLowerCase();
+      return (!F.cat || a.cat === F.cat) && (!F.ins || a.ins.indexOf(F.ins) >= 0) && (!q || q.split(/\s+/).every(function (w) { return text.indexOf(w) >= 0; }));
+    });
+    el('lbGrid').innerHTML = list.length ? list.map(function (a) { var c = CATS[a.cat]; return '<article class="lb-card" style="--ac:' + c[1] + '"><span class="cat">' + c[0] + '</span><h2>' + a.name + '</h2><p>' + a.d + '</p><ul class="lb-ins" aria-label="Works with">' + a.ins.map(function (i) { return '<li>' + INS[i] + '</li>'; }).join('') + '</ul><span class="lb-meta">' + a.meta + ' · as is · PolyForm Noncommercial 1.0.0</span><a class="btn primary" href="lab/' + a.f + '" target="_blank" rel="noopener">Open ' + a.name + ' <span aria-hidden="true">&#8599;</span></a></article>'; }).join('') : '<p class="lb-none">Nothing matches. Try another word or clear the filters.</p>';
+  }
+  el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
+  chips('lbCats', CATS, 'cat', 'All categories'); chips('lbIns', INS, 'ins', 'Any input'); draw();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,3861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Studio — Speaking Boards (Build 22)</title>
+<meta name="build" content="22">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #060810;
+    --panel:     #0d1117;
+    --ink:       #e0f0ff;
+    --ink-dim:   rgba(224,240,255,0.65);
+    --ink-faint: rgba(224,240,255,0.40);
+    --cyan:      #00ffcc;
+    --gold:      #ffcc00;
+    --pink:      #ff66bb;
+    --bdr:       rgba(0,255,204,0.20);
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Exo 2', sans-serif;
+    min-height: 100vh;
+  }
+  body {
+    background:
+      radial-gradient(900px 500px at 50% -5%, rgba(0,255,204,0.10) 0%, transparent 60%),
+      radial-gradient(700px 400px at 90% 100%, rgba(255,102,187,0.08) 0%, transparent 60%),
+      var(--bg);
+  }
+
+  /* ── Header ── */
+  #header {
+    position: sticky; top: 0; z-index: 30;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 18px;
+    background: var(--panel);
+    border-bottom: 2px solid var(--cyan);
+    flex-wrap: wrap;
+  }
+  #header .back {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    border: 1px solid rgba(0,255,204,0.4);
+    border-radius: 6px;
+    text-transform: uppercase;
+    flex: 0 0 auto;
+  }
+  #header .back:hover { background: rgba(0,255,204,0.15); }
+  #header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(13px, 1.7vw, 18px);
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-shadow: 0 0 16px rgba(0,255,204,0.4);
+  }
+  #header .sub { font-size: 9.5px; color: #556; letter-spacing: 3px; margin-top: 2px; }
+  #header .spacer { flex: 1; }
+
+  .ctrl-group { display: flex; align-items: center; gap: 6px; flex: 0 0 auto; }
+  .ctrl-group label { font-size: 10.5px; color: var(--ink-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  .ctrl-group select, .ctrl-group input {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.30);
+    color: #ffffff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .ctrl-group select { min-width: 160px; max-width: 240px; }
+  /* Options inherit the system OS dropdown styling by default — force a
+     dark background and white text so they're readable when the menu
+     is open. */
+  .ctrl-group select option {
+    background: #1a1a2e;
+    color: #ffffff;
+    padding: 6px 8px;
+  }
+  .ctrl-group select option:hover,
+  .ctrl-group select option:checked {
+    background: #003366;
+    color: #ffffff;
+  }
+
+  /* ── Board picker — same pill family as the toolbar, slightly wider ── */
+  #boardPickerBtn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    min-height: 44px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #boardPickerBtn:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.32);
+  }
+  #boardPickerBtn .bp-icon { font-size: 20px; line-height: 1; }
+  #boardPickerBtn .bp-arrow { opacity: 0.55; font-size: 11px; }
+  #boardPickerBtn .bp-name { letter-spacing: 0.02em; }
+
+  /* Breadcrumb (now minimal — shows just current board, click to open picker) */
+  #crumb {
+    padding: 12px 22px 4px;
+    font-size: 12px;
+    color: var(--ink-faint);
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  }
+  #crumb .label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; }
+  #crumb .step {
+    color: var(--cyan);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  #crumb .step:hover { text-decoration: underline; }
+  #crumb .sep { opacity: 0.4; }
+  #crumb .current { color: var(--ink-dim); font-weight: 600; }
+
+  /* Board picker modal — full overlay listing all categories + subcategories */
+  #boardPickerOverlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: 100;
+    display: none;
+    align-items: flex-start; justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  #boardPickerOverlay.show { display: flex; }
+  #boardPickerPanel {
+    width: 100%; max-width: 1100px;
+    background: linear-gradient(180deg, var(--panel), #08090f);
+    border: 1px solid var(--bdr);
+    border-radius: 18px;
+    padding: 24px 26px 28px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+  }
+  #boardPickerPanel h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    color: var(--cyan);
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #boardPickerPanel h2 .close {
+    background: rgba(255,255,255,0.08);
+    color: var(--ink);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: 'Exo 2', sans-serif;
+    font-size: 12px;
+  }
+  #boardPickerPanel h2 .close:hover { background: var(--cyan); color: #022; border-color: var(--cyan); }
+  #boardPickerPanel .intro {
+    font-size: 13px;
+    color: var(--ink-dim);
+    margin-bottom: 18px;
+  }
+  .bp-cat {
+    margin-bottom: 18px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--accent, var(--cyan)) 8%, transparent),
+      transparent);
+    border: 1px solid color-mix(in srgb, var(--accent, var(--cyan)) 28%, transparent);
+  }
+  .bp-cat .bp-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bp-cat .bp-head .ic { font-size: 26px; }
+  .bp-cat .bp-head .nm {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+  }
+  .bp-subs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+  .bp-sub {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 8px;
+    color: var(--ink-dim);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.12s ease;
+  }
+  .bp-sub:hover {
+    background: var(--accent, var(--cyan));
+    color: #022;
+    border-color: var(--accent, var(--cyan));
+    transform: translateX(3px);
+  }
+  .bp-sub .si { font-size: 16px; flex: 0 0 auto; }
+  .bp-sub .sct { flex: 0 0 auto; font-size: 10px; opacity: 0.55; margin-left: auto; }
+  .bp-sub.current {
+    background: color-mix(in srgb, var(--accent, var(--cyan)) 28%, transparent);
+    border-color: var(--accent, var(--cyan));
+    color: var(--ink);
+  }
+
+  /* ── Speech bubble — shows the last-spoken phrase, big ── */
+  #speechBar {
+    position: sticky; top: 64px; z-index: 25;
+    margin: 8px 22px 0;
+    background: linear-gradient(180deg, rgba(0,255,204,0.10), rgba(0,255,204,0.04));
+    border: 1px solid var(--bdr);
+    border-radius: 14px;
+    padding: 14px 22px;
+    min-height: 56px;
+    display: flex; align-items: center; gap: 14px;
+    transition: background 0.25s ease, border-color 0.25s ease;
+  }
+  #speechBar.firing {
+    background: linear-gradient(180deg, rgba(0,255,204,0.30), rgba(0,255,204,0.12));
+    border-color: var(--cyan);
+    box-shadow: 0 0 30px rgba(0,255,204,0.25);
+  }
+  #speechBar .icon { font-size: 28px; opacity: 0.6; }
+  #speechBar.firing .icon { opacity: 1; }
+  #speechBar .phrase {
+    font-size: clamp(16px, 2vw, 24px);
+    color: var(--ink);
+    font-weight: 700;
+    flex: 1;
+    line-height: 1.3;
+  }
+  #speechBar .phrase.empty { color: var(--ink-faint); font-weight: 400; font-style: italic; }
+  #speechBar .replay {
+    background: rgba(0,255,204,0.18);
+    color: var(--cyan);
+    border: 1px solid var(--cyan);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+  }
+  #speechBar .replay:hover { background: var(--cyan); color: #000; }
+  #speechBar .replay[disabled] { opacity: 0.3; cursor: not-allowed; }
+
+  /* ── Recent phrases (chat-like history) ── */
+  #recent {
+    margin: 10px 22px 0;
+    padding: 8px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--ink-dim);
+    display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+    min-height: 36px;
+  }
+  #recent .label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); margin-right: 4px; }
+  #recent .pill {
+    padding: 4px 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 999px;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 12px;
+    max-width: 280px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #recent .pill:hover { background: rgba(0,255,204,0.18); border-color: var(--cyan); color: var(--cyan); }
+  #recent .empty { font-style: italic; color: var(--ink-faint); }
+
+  /* ── Content grid ── */
+  #content { padding: 18px 22px 60px; max-width: 1400px; margin: 0 auto; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 14px;
+  }
+  .grid.phrases {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+  .grid.sub {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  /* ── Tile (category / subcategory / phrase) ── */
+  .tile {
+    position: relative;
+    background: linear-gradient(180deg, var(--panel), #08090f);
+    border: 2px solid var(--accent, var(--cyan));
+    border-radius: 16px;
+    padding: 18px 16px;
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    min-height: 132px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    user-select: none;
+    overflow: hidden;
+  }
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent, var(--cyan));
+  }
+  .tile::after {
+    content: '';
+    position: absolute;
+    top: -36px; right: -36px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent, var(--cyan)) 0%, transparent 60%);
+    opacity: 0.10;
+    pointer-events: none;
+  }
+  .tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(0,0,0,0.5),
+                0 0 0 3px var(--accent, var(--cyan)) inset,
+                0 0 24px var(--accent, var(--cyan));
+  }
+  .tile .ic { font-size: 36px; line-height: 1; margin-bottom: 8px; }
+  .tile .nm {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .tile .ct {
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  /* Phrase tiles are wider/text-heavy */
+  .grid.phrases .tile {
+    min-height: 96px;
+    padding: 16px 18px;
+  }
+  .grid.phrases .tile .nm {
+    font-family: 'Exo 2', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+  .grid.phrases .tile .ic { font-size: 26px; margin-bottom: 6px; }
+  .tile.fired {
+    animation: tileFired 0.65s ease-out;
+  }
+  @keyframes tileFired {
+    0%   { box-shadow: 0 0 0 6px var(--accent), 0 0 60px 18px var(--accent), 0 0 0 3px var(--accent) inset; transform: scale(1.04); }
+    100% { box-shadow: 0 0 0 0 transparent, 0 0 8px 0 var(--accent), 0 0 0 0 inset; transform: scale(1); }
+  }
+
+  /* ── Hover subcategory popup on the home grid ── */
+  .tile.cat .popup {
+    position: absolute;
+    top: 100%; left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background: var(--panel);
+    border: 1.5px solid var(--accent, var(--cyan));
+    border-radius: 10px;
+    padding: 10px 12px;
+    z-index: 50;
+    width: max-content;
+    max-width: 280px;
+    text-align: left;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+  }
+  .tile.cat:hover .popup { opacity: 1; }
+  .tile.cat .popup .ptitle {
+    font-size: 10px; letter-spacing: 0.16em;
+    color: var(--accent, var(--cyan));
+    text-transform: uppercase;
+    margin-bottom: 6px; opacity: 0.85;
+  }
+  .tile.cat .popup .prow {
+    display: block;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+    padding: 3px 0;
+  }
+
+  /* ── Empty state ── */
+  .empty-msg {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--ink-dim);
+  }
+
+  /* ── Settings drawer (collapsible) ── */
+  #settings {
+    margin: 0 22px;
+    background: var(--panel);
+    border: 1px solid var(--bdr);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: none;
+    flex-wrap: wrap; gap: 14px; align-items: center;
+  }
+  #settings.show { display: flex; }
+  #settings .row { display: flex; gap: 8px; align-items: center; }
+  #settings label { font-size: 11px; color: var(--ink-dim); letter-spacing: 0.1em; text-transform: uppercase; }
+  #settings input[type="range"] { width: 140px; accent-color: var(--cyan); }
+  #settings .val { font-family: 'Orbitron', sans-serif; font-size: 12px; min-width: 38px; text-align: right; color: var(--cyan); }
+
+  /* ── PHRASE STAGE: free-form arrangement of circular targets ──
+     Mirrors the Songboards stage: same dimensions, same theme gradients,
+     same scenery layer (animated stars / sun / waves / bubbles via real
+     DOM elements rather than static radial-gradients). */
+  #phraseStage {
+    position: relative;
+    width: 100%;
+    height: min(72vh, 800px);
+    /* Default ('studio') backdrop matches Songboards' studio theme exactly. */
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid var(--bdr);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  /* ── Stage themes — EXACT Songboards gradients ── */
+  #phraseStage.theme-studio  { background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%); }
+  #phraseStage.theme-ocean   { background: linear-gradient(180deg, #003366 0%, #006699 50%, #00b4d8 100%); }
+  #phraseStage.theme-sunset  { background: linear-gradient(180deg, #2c1810 0%, #6e2c2c 25%, #ff6b6b 55%, #ffb366 80%, #ffd93d 100%); }
+  #phraseStage.theme-night   { background: linear-gradient(180deg, #0a0a23 0%, #1a1a4e 60%, #0a0a23 100%); }
+
+  /* Scenery layer holds the per-theme animated DOM elements. */
+  #phraseStage .scenery {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* ── Night sky stars (Songboards) ── */
+  #phraseStage.theme-night .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: sbStarpulse 3s ease-in-out infinite;
+  }
+  @keyframes sbStarpulse {
+    0%, 100% { opacity: 0.3; }
+    50%      { opacity: 1; }
+  }
+
+  /* ── Sunset sun + silhouette (Songboards) ── */
+  #phraseStage.theme-sunset .sun {
+    position: absolute;
+    top: 38%; left: 50%;
+    transform: translateX(-50%);
+    width: 110px; height: 110px;
+    background: radial-gradient(circle, #fff3a8, #ff9800);
+    border-radius: 50%;
+    box-shadow: 0 0 80px rgba(255,200,0,0.55);
+  }
+  #phraseStage.theme-sunset .silhouette {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 22%;
+    background: #1a0a05;
+    clip-path: polygon(0% 100%, 0% 65%, 8% 40%, 18% 55%, 28% 25%, 42% 50%, 55% 30%, 68% 55%, 82% 35%, 100% 60%, 100% 100%);
+  }
+
+  /* ── Ocean waves + bubbles (Songboards) ── */
+  #phraseStage.theme-ocean .wave {
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    height: 50px;
+    opacity: 0.25;
+    background: radial-gradient(ellipse at center bottom, white, transparent);
+    animation: sbWave 4s ease-in-out infinite;
+  }
+  @keyframes sbWave {
+    0%, 100% { transform: translateX(0); }
+    50%      { transform: translateX(25px); }
+  }
+  #phraseStage.theme-ocean .bubble {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    animation: sbBubble 6s linear infinite;
+  }
+  @keyframes sbBubble {
+    0%   { transform: translateY(0); opacity: 0; }
+    20%  { opacity: 1; }
+    100% { transform: translateY(-100vh); opacity: 0; }
+  }
+
+  #phraseStage.theme-aurora {
+    background:
+      linear-gradient(170deg, #0a1a3e 0%, #1a1450 35%, #2a0a4e 65%, #08101e 100%);
+  }
+  #phraseStage.theme-aurora::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 700px 110px at 25% 28%, rgba(102,255,170,0.25), transparent 70%),
+      radial-gradient(ellipse 800px 130px at 70% 18%, rgba(180,140,255,0.22), transparent 70%),
+      radial-gradient(ellipse 600px 100px at 50% 45%, rgba(120,220,255,0.18), transparent 70%);
+    pointer-events: none;
+    animation: auroraFlow 18s ease-in-out infinite;
+  }
+  @keyframes auroraFlow {
+    0%, 100% { transform: translateX(0); opacity: 0.85; }
+    50%      { transform: translateX(20px); opacity: 1; }
+  }
+
+  #phraseStage.theme-forest {
+    background:
+      radial-gradient(800px 300px at 50% -10%, rgba(180,255,200,0.18) 0%, transparent 55%),
+      linear-gradient(180deg, #1a3a22 0%, #0a2812 60%, #051508 100%);
+  }
+  #phraseStage.theme-forest::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(4px 6px at 10% 86%, rgba(80,180,90,0.35), transparent 60%),
+      radial-gradient(6px 8px at 22% 82%, rgba(60,150,70,0.45), transparent 60%),
+      radial-gradient(5px 7px at 38% 88%, rgba(80,180,90,0.40), transparent 60%),
+      radial-gradient(5px 8px at 64% 84%, rgba(70,160,80,0.42), transparent 60%),
+      radial-gradient(4px 6px at 82% 88%, rgba(80,180,90,0.38), transparent 60%),
+      radial-gradient(5px 7px at 92% 80%, rgba(70,160,80,0.42), transparent 60%);
+    pointer-events: none;
+  }
+
+  #phraseStage.theme-cosmic {
+    background:
+      radial-gradient(ellipse 600px 300px at 30% 30%, rgba(180,80,255,0.35) 0%, transparent 60%),
+      radial-gradient(ellipse 500px 250px at 75% 70%, rgba(80,140,255,0.30) 0%, transparent 60%),
+      linear-gradient(180deg, #08081e 0%, #0a0a3a 50%, #050516 100%);
+  }
+  #phraseStage.theme-cosmic::after {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(2px 2px at 15% 25%, rgba(255,255,255,0.9), transparent 70%),
+      radial-gradient(1.5px 1.5px at 40% 60%, rgba(255,200,255,0.8), transparent 70%),
+      radial-gradient(2.5px 2.5px at 65% 30%, rgba(200,220,255,0.9), transparent 70%),
+      radial-gradient(1.5px 1.5px at 85% 55%, rgba(255,255,255,0.75), transparent 70%),
+      radial-gradient(2px 2px at 25% 80%, rgba(255,255,255,0.7), transparent 70%);
+    pointer-events: none;
+    animation: twinkle 5s ease-in-out infinite;
+  }
+
+  /* ── Scene character — the friendly "moon" sphere borrowed from Songboards'
+     reward target. Big, glowing white sphere with a smiley face etched into it,
+     floating in the upper-right corner of every theme. ── */
+  #sceneChar {
+    position: absolute;
+    top: 6%; right: 4%;
+    width: clamp(120px, 14vw, 200px);
+    aspect-ratio: 1;
+    pointer-events: none;
+    z-index: 3;
+    animation: charFloat 5.5s ease-in-out infinite;
+    /* Big warm glow + soft drop shadow — matches Songboards' reward-moon halo */
+    filter:
+      drop-shadow(0 0 60px rgba(255,255,240,0.55))
+      drop-shadow(0 0 24px rgba(255,245,180,0.65))
+      drop-shadow(0 6px 16px rgba(0,0,0,0.45));
+    transition: transform 0.25s ease;
+  }
+  @keyframes charFloat {
+    0%, 100% { transform: translateY(0) rotate(-1.5deg); }
+    50%      { transform: translateY(-10px) rotate(1.5deg); }
+  }
+  #sceneChar svg { width: 100%; height: 100%; overflow: visible; }
+  #sceneChar .face {
+    /* Use the SAME warm radial palette as Songboards' reward "moon" target
+       so the character reads as a small glowing satellite of that. */
+    fill: url(#moonGradient);
+    stroke: rgba(255,255,255,0.55);
+    stroke-width: 1.5;
+    transition: filter 0.4s ease;
+  }
+  #sceneChar .eye {
+    fill: #1a1010;
+    transform-origin: center;
+    transform-box: fill-box;
+    animation: charBlink 5s infinite;
+  }
+  #sceneChar .eye.right { animation-delay: 0.04s; }
+  @keyframes charBlink {
+    0%, 93%, 100% { transform: scaleY(1); }
+    95%           { transform: scaleY(0.08); }
+    96%           { transform: scaleY(1); }
+  }
+  #sceneChar .eye-sparkle { fill: #ffffff; opacity: 0.9; }
+  #sceneChar .mouth {
+    stroke: #1a1010;
+    stroke-width: 5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  #sceneChar .blush { fill: #ff9bb8; opacity: 0.55; }
+  /* React when a phrase fires — character pops bigger and smiles wider briefly */
+  #sceneChar.reacting {
+    animation: charReact 0.7s ease-out;
+  }
+  @keyframes charReact {
+    0%   { transform: scale(1); }
+    35%  { transform: scale(1.28); }
+    100% { transform: scale(1); }
+  }
+  #sceneChar.reacting .mouth { animation: mouthBig 0.7s ease-out; }
+  @keyframes mouthBig {
+    0%, 100% { d: path("M 28 62 Q 50 82 72 62"); }
+    50%      { d: path("M 24 58 Q 50 92 76 58"); }
+  }
+  /* A subtle slow pulse so the moon feels alive even when nothing fires. */
+  #sceneChar svg { animation: moonPulse 4s ease-in-out infinite; }
+  @keyframes moonPulse {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.08); }
+  }
+  /* Hide character if user has 'no character' set */
+  body.hide-character #sceneChar { display: none; }
+  /* Arrange-mode visual cue: dashed outline + grab cursor so the user knows
+     the moon is a movable, resizable target like any phrase target. */
+  body.arrange-mode #sceneChar {
+    cursor: grab;
+    outline: 3px dashed rgba(255, 230, 130, 0.85);
+    outline-offset: 10px;
+    border-radius: 50%;
+  }
+  body.arrange-mode #sceneChar:active { cursor: grabbing; }
+
+  /* Header theme picker — matches Songboards' .btn pill style */
+  #themeSelect {
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.20);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    min-height: 44px;
+  }
+  #themeSelect:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.32); }
+  #themeSelect option { background: #1a1a2e; color: #fff; }
+  /* ── Quick-switch strip — pill buttons that jump to other boards directly ── */
+  .quick-switch-strip {
+    position: absolute;
+    top: 10px; left: 12px; right: 12px;
+    display: flex; gap: 8px;
+    z-index: 8;
+    flex-wrap: wrap;
+    justify-content: center;
+    pointer-events: none;
+  }
+  .quick-switch-target {
+    position: relative;
+    pointer-events: auto;
+    display: inline-flex; align-items: center; gap: 9px;
+    padding: 11px 18px 11px 15px;
+    border-radius: 999px;
+    background: linear-gradient(180deg,
+      color-mix(in srgb, var(--qs-acc, var(--cyan)) 30%, rgba(0,0,0,0.55)),
+      color-mix(in srgb, var(--qs-acc, var(--cyan)) 12%, rgba(0,0,0,0.65)));
+    border: 3px solid var(--qs-acc, var(--cyan));
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.12s ease;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    box-shadow: 0 2px 10px color-mix(in srgb, var(--qs-acc, var(--cyan)) 35%, transparent);
+  }
+  .quick-switch-target:hover {
+    background: var(--qs-acc, var(--cyan));
+    color: #042;
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 6px 22px color-mix(in srgb, var(--qs-acc, var(--cyan)) 60%, transparent);
+  }
+  .quick-switch-target .qs-ic { font-size: 22px; line-height: 1; filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6)); }
+  .quick-switch-target .qs-lbl { letter-spacing: 0.04em; }
+
+  /* Arrange-mode treatment for quick-switch pills */
+  body.arrange-mode .quick-switch-target {
+    outline: 3px dashed rgba(255,255,255,0.55);
+    outline-offset: 4px;
+  }
+  .quick-switch-target .qs-x {
+    display: none;
+    position: absolute;
+    top: -8px; right: -8px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: #ff3366;
+    color: #fff;
+    border: 2px solid #fff;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 20px;
+    text-align: center;
+    cursor: pointer;
+    z-index: 2;
+  }
+  body.arrange-mode .quick-switch-target .qs-x { display: block; }
+  /* Add-button pill at end of quick-switch strip in arrange mode */
+  .qs-add-btn {
+    pointer-events: auto;
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 11px 18px;
+    border-radius: 999px;
+    background: rgba(0,255,204,0.12);
+    border: 3px dashed var(--cyan);
+    color: var(--cyan);
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  .qs-add-btn:hover { background: var(--cyan); color: #022; }
+  body.arrange-mode .qs-add-btn { display: inline-flex; }
+
+  /* ── Backing-track toolbar — floating bottom-right ── */
+  #backingTrayBtn {
+    position: absolute;
+    bottom: 12px; right: 12px;
+    z-index: 9;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgba(196,166,255,0.30), rgba(196,166,255,0.10));
+    border: 2px solid #c4a6ff;
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    box-shadow: 0 4px 14px rgba(196,166,255,0.25);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  #backingTrayBtn:hover { background: #c4a6ff; color: #2a1a5a; }
+  body.backing-playing #backingTrayBtn {
+    background: linear-gradient(180deg, #c4a6ff, #9a7ee0);
+    color: #2a1a5a;
+    animation: bkPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes bkPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(196,166,255,0.7), 0 4px 14px rgba(196,166,255,0.25); }
+    50%      { box-shadow: 0 0 0 10px rgba(196,166,255,0), 0 4px 14px rgba(196,166,255,0.40); }
+  }
+  #backingTray {
+    position: absolute;
+    bottom: 56px; right: 12px;
+    z-index: 9;
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    background: rgba(13,17,23,0.92);
+    border: 1.5px solid #c4a6ff;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+    min-width: 180px;
+  }
+  #backingTray.show { display: flex; }
+  #backingTray button {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(196,166,255,0.10);
+    border: 1px solid rgba(196,166,255,0.30);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    letter-spacing: 0.02em;
+  }
+  #backingTray button:hover {
+    background: #c4a6ff;
+    color: #2a1a5a;
+    border-color: #c4a6ff;
+  }
+  #backingTray button.playing {
+    background: #c4a6ff;
+    color: #2a1a5a;
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #c4a6ff;
+  }
+  #backingTray .bt-stop {
+    background: rgba(255,107,107,0.16);
+    border-color: rgba(255,107,107,0.45);
+    color: #ff9999;
+    justify-content: center;
+    margin-top: 4px;
+  }
+  #backingTray .bt-stop:hover { background: #ff6b6b; color: #fff; }
+
+  /* Stars / specks in the stage background for a bit of mood */
+  #phraseStage::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(1.5px 1.5px at 18% 22%, rgba(255,255,255,0.30), transparent),
+      radial-gradient(1px 1px at 72% 18%, rgba(255,255,255,0.25), transparent),
+      radial-gradient(1.2px 1.2px at 50% 78%, rgba(255,255,255,0.30), transparent),
+      radial-gradient(1px 1px at 90% 65%, rgba(255,255,255,0.20), transparent),
+      radial-gradient(1.5px 1.5px at 8% 65%, rgba(255,255,255,0.25), transparent);
+    pointer-events: none;
+  }
+
+  .phrase-target {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: var(--size, 20%);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    /* container-type makes the children size relative to the sphere's own
+       width via cqw units below — so emoji and text scale with the target
+       instead of forcing it into an oval. */
+    container-type: inline-size;
+    /* 3D glass sphere — exact same gradient stop ratios Songboards uses for
+       its note/instrument targets: bright highlight at top-left, full accent
+       through the middle, deep shadow at the bottom-right. */
+    background: radial-gradient(circle at 32% 26%,
+      #ffffff 0%,
+      var(--accent, #00ffcc) 38%,
+      var(--accent, #00ffcc) 60%,
+      rgba(0,0,0,0.55) 100%);
+    /* Layered shadows: outer drop, inner bottom shade (curvature),
+       inner top sheen (highlight), and outer accent halo whose intensity
+       scales with --prox (pointer proximity). */
+    box-shadow:
+      0 8px 22px rgba(0,0,0,0.55),
+      inset 0 -10px 18px rgba(0,0,0,0.28),
+      inset 0 6px 14px rgba(255,255,255,0.40),
+      inset 0 0 18px rgba(255,255,255, calc(0.10 + var(--prox, 0) * 0.25)),
+      0 0 calc(8px + var(--prox, 0) * 36px) calc(var(--prox, 0) * 6px) var(--accent, #00ffcc),
+      0 0 0 2px rgba(255,255,255,0.18);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 6% 5%;
+    cursor: pointer;
+    color: #fff;
+    transition: box-shadow 0.10s ease, transform 0.12s ease;
+    /* Smaller min-width so very small sizes don't force a floor that
+       distorts the aspect-ratio when content overflows. */
+    min-width: 32px;
+    user-select: none;
+    z-index: 5;
+    animation: pFloat 4.5s ease-in-out infinite;
+  }
+  /* Each target floats with a slightly different phase so they're not synced */
+  .phrase-target:nth-child(3n)   { animation-delay: -0.7s; animation-duration: 5.1s; }
+  .phrase-target:nth-child(3n+1) { animation-delay: -1.4s; animation-duration: 4.7s; }
+  .phrase-target:nth-child(3n+2) { animation-delay: -2.1s; animation-duration: 5.3s; }
+  @keyframes pFloat {
+    0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+    50%      { transform: translate(-50%, -50%) translateY(-6px); }
+  }
+  .phrase-target:hover {
+    animation-play-state: paused;
+    transform: translate(-50%, -50%) scale(1.06);
+    z-index: 6;
+  }
+  .phrase-target .ic {
+    /* cqw = % of CONTAINER width (the sphere itself). Emoji is always 55%
+       of the sphere's width — so it shrinks proportionally and never
+       stretches the box into an oval. Floors at 14px for tiny targets,
+       ceilings at 56px for huge ones. */
+    font-size: clamp(14px, 55cqw, 56px);
+    line-height: 1;
+    margin-bottom: 0;
+    filter:
+      drop-shadow(0 3px 6px rgba(0,0,0,0.75))
+      drop-shadow(0 0 10px rgba(0,0,0,0.45))
+      drop-shadow(0 -1px 1px rgba(255,255,255,0.25));
+    position: relative;
+    z-index: 3;
+  }
+  /* Phrase text now lives BELOW the sphere as a free-floating label, no
+     longer clamped inside the circle. This lets long phrases ("I am in pain.")
+     read naturally and keeps the sphere itself uncluttered. */
+  .phrase-target .txt {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 6px);
+    font-size: clamp(12px, 1.05vw, 16px);
+    font-weight: 800;
+    line-height: 1.22;
+    color: #fff;
+    text-shadow:
+      1.5px 1.5px 0 rgba(0,0,0,0.85),
+      -1.5px -1.5px 0 rgba(0,0,0,0.85),
+       1.5px -1.5px 0 rgba(0,0,0,0.85),
+      -1.5px  1.5px 0 rgba(0,0,0,0.85),
+       0 0 8px rgba(0,0,0,0.6);
+    /* Allow the label to extend beyond the sphere's width — 220% gives
+       comfortable room for full sentences. */
+    width: max-content;
+    max-width: 220%;
+    text-align: center;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    z-index: 4;
+    white-space: normal;
+  }
+  .phrase-target.fired {
+    animation: pFired 0.7s ease-out;
+  }
+  @keyframes pFired {
+    0%   { box-shadow: 0 0 0 10px #fff, 0 0 80px 22px var(--accent),
+                       inset 0 0 30px rgba(255,255,255,0.8); }
+    100% { box-shadow: inset 0 -10px 18px rgba(0,0,0,0.20),
+                       inset 0 4px 10px rgba(255,255,255,0.30),
+                       inset 0 0 24px rgba(255,255,255,0.10),
+                       0 0 10px 0 var(--accent),
+                       0 8px 20px rgba(0,0,0,0.5); }
+  }
+  /* Switch-type targets get a small "🔀" corner badge so users can tell at
+     a glance which targets jump to another board. */
+  .phrase-target.is-switch::after {
+    content: '🔀';
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #0a0a23;
+    border: 2px solid #ffd93d;
+    color: #ffd93d;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    pointer-events: none;
+    z-index: 6;
+  }
+  /* Arrange mode: dashed outline, draggable */
+  body.arrange-mode .phrase-target {
+    outline: 3px dashed rgba(255,255,255,0.65);
+    outline-offset: 6px;
+    cursor: grab;
+    animation: arrPulse 2s ease-in-out infinite;
+  }
+  body.arrange-mode .phrase-target:active { cursor: grabbing; }
+  @keyframes arrPulse {
+    0%,100% { filter: brightness(1); }
+    50%     { filter: brightness(1.15); }
+  }
+  /* Resize handle in arrange mode */
+  .phrase-target .resize-handle {
+    display: none;
+    position: absolute;
+    bottom: -8px; right: -8px;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--accent, #00ffcc);
+    color: #000;
+    font-size: 14px;
+    line-height: 26px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    cursor: nwse-resize;
+    user-select: none;
+    z-index: 7;
+  }
+  body.arrange-mode .phrase-target .resize-handle { display: block; }
+
+  /* Header toggle buttons — matched to Songboards' .btn pill style:
+     translucent white, 10px radius, 44px touch target, white text. */
+  .mode-toggle {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.20);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    min-width: 44px; min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.10s ease;
+  }
+  .mode-toggle:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.32); }
+  .mode-toggle:active { transform: scale(0.97); background: rgba(255,255,255,0.28); }
+  .mode-toggle.active {
+    background: var(--cyan);
+    color: #022;
+    border-color: var(--cyan);
+    box-shadow: 0 0 14px rgba(0,255,204,0.5);
+  }
+  .mode-toggle.sing.active {
+    background: var(--pink);
+    color: #2b0a1c;
+    border-color: var(--pink);
+    box-shadow: 0 0 14px rgba(255,102,187,0.5);
+  }
+  /* Prominent Arrange button — bigger, gold accent, top-left */
+  .mode-toggle.arrange-big {
+    background: linear-gradient(180deg, rgba(255,204,0,0.20), rgba(255,204,0,0.06));
+    border: 2.5px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 18px;
+    font-size: 14px;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(255,204,0,0.25);
+  }
+  .mode-toggle.arrange-big:hover {
+    background: var(--gold);
+    color: #271700;
+    box-shadow: 0 0 22px rgba(255,204,0,0.6);
+  }
+  .mode-toggle.arrange-big.active {
+    background: var(--gold);
+    color: #271700;
+    border-color: var(--gold);
+    box-shadow: 0 0 22px rgba(255,204,0,0.7);
+    animation: arrAttn 1.8s ease-in-out infinite;
+  }
+  @keyframes arrAttn {
+    0%,100% { box-shadow: 0 0 22px rgba(255,204,0,0.7); }
+    50%     { box-shadow: 0 0 32px rgba(255,204,0,1); }
+  }
+
+  /* ── Target Editor modal (click a phrase in arrange mode) ── */
+  #targetEditor {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: 110;
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  #targetEditor.show { display: flex; }
+  #targetEditor .panel {
+    background: linear-gradient(180deg, var(--panel), #08090f);
+    border: 1.5px solid var(--bdr);
+    border-radius: 16px;
+    padding: 22px 24px;
+    width: 100%; max-width: 540px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+  }
+  #targetEditor h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 15px;
+    color: var(--cyan);
+    letter-spacing: 0.10em;
+    margin-bottom: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #targetEditor h3 button.close {
+    background: rgba(255,255,255,0.08);
+    color: var(--ink);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 8px;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+  #targetEditor .te-row { margin: 10px 0; }
+  #targetEditor label {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--ink-dim); display: block; margin-bottom: 4px;
+  }
+  #targetEditor input[type="text"], #targetEditor textarea {
+    width: 100%; padding: 10px 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.20);
+    border-radius: 8px;
+    color: var(--ink);
+    font-family: inherit; font-size: 15px;
+  }
+  #targetEditor textarea { min-height: 60px; resize: vertical; }
+  #targetEditor .emoji-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 6px;
+    max-height: 180px;
+    overflow-y: auto;
+    background: rgba(255,255,255,0.03);
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  #targetEditor .emoji-grid button {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid transparent;
+    border-radius: 6px;
+    font-size: 22px;
+    padding: 6px;
+    cursor: pointer;
+  }
+  #targetEditor .emoji-grid button:hover { background: rgba(0,255,204,0.18); border-color: var(--cyan); }
+  #targetEditor .emoji-grid button.selected { background: var(--cyan); color: #022; border-color: #fff; }
+  #targetEditor .actions {
+    display: flex; gap: 10px; justify-content: flex-end;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  #targetEditor .actions button {
+    background: rgba(255,255,255,0.06);
+    color: var(--ink);
+    border: 1px solid rgba(255,255,255,0.20);
+    padding: 9px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+  }
+  #targetEditor .actions button.danger { background: rgba(255,51,102,0.18); color: #ff7a99; border-color: rgba(255,51,102,0.4); }
+  #targetEditor .actions button.danger:hover { background: #ff3366; color: #fff; }
+  #targetEditor .actions button.primary { background: var(--cyan); color: #022; border-color: var(--cyan); font-weight: 800; }
+  #targetEditor .actions button.primary:hover { box-shadow: 0 0 18px rgba(0,255,204,0.6); }
+  /* Add Phrase button — only visible in arrange mode */
+  .add-phrase-btn {
+    display: none;
+    margin: 10px auto 0;
+    background: rgba(0,255,204,0.16);
+    color: var(--cyan);
+    border: 2px dashed var(--cyan);
+    padding: 10px 22px;
+    border-radius: 10px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+  }
+  .add-phrase-btn:hover { background: var(--cyan); color: #022; }
+  body.arrange-mode .add-phrase-btn { display: inline-block; }
+  .stage-bar { text-align: center; margin-top: 10px; }
+
+  /* Color-coded category palettes (also used by sub + phrase tiles when category context is present) */
+  .c-eating    { --accent: #ff9966; }
+  .c-feelings  { --accent: #ff66bb; }
+  .c-health    { --accent: #ff6b6b; }
+  .c-daily     { --accent: #4da6ff; }
+  .c-social    { --accent: #00ffcc; }
+  .c-yesno     { --accent: #66ff99; }
+  .c-requests  { --accent: #b388ff; }
+  .c-time      { --accent: #ffe066; }
+  .c-emergency { --accent: #ff3366; }
+  .c-prefs     { --accent: #ffcc00; }
+  .c-humor     { --accent: #ffd166; }
+  .c-sass      { --accent: #ff6bc1; }
+  .c-riddles   { --accent: #4dd6c5; }
+  .c-poetry    { --accent: #c4a6ff; }
+  .c-rhymes    { --accent: #88ccff; }
+  .c-quotes    { --accent: #ffcc66; }
+  .c-rap       { --accent: #cc66ff; }
+  .c-quirky    { --accent: #66ddff; }
+  .c-persona   { --accent: #ff99cc; }
+
+  footer {
+    text-align: center;
+    padding: 24px 20px 40px;
+    color: var(--ink-faint);
+    font-size: 11.5px;
+    line-height: 1.6;
+  }
+  footer a { color: var(--cyan); text-decoration: none; }
+
+  /* Build/version stamp — moved to the BOTTOM-LEFT to keep the top-right
+     toolbar (Save / Load / Theme / etc.) totally clear. Still big, gold,
+     and easy to spot. Sequential build number bumped per release. */
+  #versionStamp {
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    z-index: 9999;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    color: #1a1404;
+    background: linear-gradient(180deg, #ffe680 0%, #ffcc00 70%, #f4a300 100%);
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 2.5px solid #b87800;
+    box-shadow:
+      0 6px 22px rgba(0,0,0,0.55),
+      0 0 0 2px rgba(255,255,255,0.55) inset,
+      0 0 24px rgba(255,204,0,0.45);
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  }
+  #versionStamp .vs-num {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 2px 8px;
+    background: #1a1404;
+    color: #ffe680;
+    border-radius: 6px;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── Top-center board picker bar ──
+     Sits between the header and the stage. Two compact dropdowns side by side:
+     category, then subcategory. Replaces the full-screen overlay so the user
+     can switch boards inline without losing context. */
+  #boardPickerBar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 16px 10px;
+    background: linear-gradient(180deg, rgba(0,255,204,0.05), transparent);
+    border-bottom: 1px solid rgba(0,255,204,0.10);
+  }
+  #boardPickerBar .bp-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(0,255,204,0.40);
+  }
+  #boardPickerBar .bp-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+  #boardPickerBar select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255,255,255,0.12) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'><path d='M1 1l5 5 5-5' stroke='%23ffffff' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>") no-repeat right 10px center;
+    background-size: 10px 6px;
+    color: #fff;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    border-radius: 10px;
+    padding: 8px 32px 8px 14px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    min-height: 40px;
+    min-width: 200px;
+    max-width: 260px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  #boardPickerBar select:hover {
+    background-color: rgba(255,255,255,0.20);
+    border-color: rgba(0,255,204,0.55);
+  }
+  #boardPickerBar select:focus {
+    outline: none;
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(0,255,204,0.22);
+  }
+  #boardPickerBar select option,
+  #boardPickerBar select optgroup {
+    background: #1a1a2e;
+    color: #fff;
+  }
+  #boardPickerBar #addTargetBtn {
+    appearance: none;
+    background: linear-gradient(180deg, rgba(0,255,204,0.25), rgba(0,255,204,0.10));
+    color: #022;
+    border: 1.5px solid var(--cyan);
+    color: #fff;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    min-height: 40px;
+    transition: background 0.15s ease, transform 0.10s ease;
+  }
+  #boardPickerBar #addTargetBtn:hover {
+    background: linear-gradient(180deg, var(--cyan), rgba(0,255,204,0.55));
+    color: #022;
+  }
+  #boardPickerBar #addTargetBtn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+
+<!-- Build stamp — always visible so you can confirm which version is loaded.
+     If this doesn't match the latest build the assistant says is current,
+     your browser cached the old file: hard-refresh (Ctrl+Shift+R / Cmd+Shift+R). -->
+<div id="versionStamp" title="Speaking Boards build version">⚡ BUILD <span class="vs-num">22</span></div>
+
+<div id="header">
+  <a href="accessibility-studio.html" class="back">‹ STUDIO</a>
+  <button class="mode-toggle arrange-big" id="arrangeToggle" title="Arrange mode: drag targets, edit phrases, add quick-switches">✎ ARRANGE</button>
+  <div>
+    <h1>🗣️ SPEAKING BOARDS</h1>
+    <div class="sub">isatma.org &nbsp;|&nbsp; accessible AAC · text-to-speech · sing mode</div>
+  </div>
+  <!-- Header board-picker button hidden — the top-center dropdown shows the
+       same info, so this was a duplicate "Playful Sass · Friendly Sass" pill.
+       Kept in the DOM (display:none) so existing JS hooks don't crash. -->
+  <button id="boardPickerBtn" title="Switch to a different speaking board" style="display:none">
+    <span class="bp-icon" id="bpIcon">😏</span>
+    <span class="bp-name" id="bpName">Sassy · Friendly Sass</span>
+    <span class="bp-arrow">▾</span>
+  </button>
+  <div class="spacer"></div>
+  <button class="mode-toggle" id="testVoiceBtn" title="Speak a test phrase out loud — tap to confirm your browser's voice is working">🔊 Test voice</button>
+  <button class="mode-toggle sing" id="singToggle" title="Sing mode plays a brief mood chord with each phrase">🎶 Sing</button>
+  <!-- Auto-Speak removed — it didn't do anything visible. -->
+  <button class="mode-toggle" id="autoSpeakToggle" style="display:none">▶ Auto-Speak</button>
+  <button class="mode-toggle" id="examplesBtn" title="Open the library of pre-built speaking-board arrangements">📚 Example speaking boards</button>
+  <button class="mode-toggle" id="saveShareBtn" title="Save this board as text — copy, download, or share">💾 Save</button>
+  <button class="mode-toggle" id="loadBoardBtn" title="Paste a saved board to load it (replaces the current one)">📂 Load</button>
+  <select id="themeSelect" title="Change the background scene">
+    <option value="studio">🎛 Studio</option>
+    <option value="ocean">🌊 Ocean</option>
+    <option value="sunset">🌅 Sunset</option>
+    <option value="night">🌙 Night</option>
+    <option value="aurora">✨ Aurora</option>
+    <option value="forest">🌲 Forest</option>
+    <option value="cosmic">🪐 Cosmic</option>
+  </select>
+  <div class="ctrl-group">
+    <label for="voicePicker">Voice</label>
+    <select id="voicePicker"><option>Loading…</option></select>
+  </div>
+  <div class="ctrl-group">
+    <label for="voiceEffect">Effect</label>
+    <select id="voiceEffect" title="Apply a fun voice effect to every phrase">
+      <option value="none">🎤 Normal</option>
+      <option value="mouse">🐭 Mouse (squeaky)</option>
+      <option value="chipmunk">🐿️ Chipmunk</option>
+      <option value="kid">🧒 Kid</option>
+      <option value="giant">🦖 Giant (deep)</option>
+      <option value="reaper">💀 Reaper (slow &amp; deep)</option>
+      <option value="robot">🤖 Robot (monotone)</option>
+      <option value="whisper">🤫 Whisper</option>
+      <option value="excited">⚡ Excited (fast)</option>
+      <option value="slowmo">🐢 Slow-mo</option>
+    </select>
+  </div>
+  <button id="settingsBtn" class="back" style="cursor:pointer;border:none;background:rgba(0,255,204,0.10)">⚙ Settings</button>
+</div>
+
+<div id="settings">
+  <div class="row" style="flex:1 1 100%; align-items:flex-start; flex-direction:column; gap:6px">
+    <label style="font-weight:700">Trigger mode</label>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; width:100%">
+      <label style="display:flex; align-items:center; gap:6px; font-weight:normal"><input type="radio" name="trigMode" value="hover" id="trigHover"> ✋ Hover (dwell) — wait briefly before firing</label>
+      <label style="display:flex; align-items:center; gap:6px; font-weight:normal"><input type="radio" name="trigMode" value="mouseover" id="trigMouseover"> 🖱️ Mouse over — fire instantly on point</label>
+      <label style="display:flex; align-items:center; gap:6px; font-weight:normal"><input type="radio" name="trigMode" value="click" id="trigClick"> 👆 Tap / click — only fire on click</label>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center; width:100%" id="dwellRow">
+      <label for="dwellInput" style="font-size:11px">Hover dwell</label>
+      <input type="range" id="dwellInput" min="0" max="800" step="50" value="200" style="flex:1">
+      <span class="val" id="dwellVal">200 ms</span>
+    </div>
+  </div>
+  <div class="row">
+    <label for="rateInput">Rate</label>
+    <input type="range" id="rateInput" min="0.5" max="1.6" step="0.05" value="1.0">
+    <span class="val" id="rateVal">1.00</span>
+  </div>
+  <div class="row">
+    <label for="pitchInput">Pitch</label>
+    <input type="range" id="pitchInput" min="0.5" max="1.5" step="0.05" value="1.0">
+    <span class="val" id="pitchVal">1.00</span>
+  </div>
+  <div class="row">
+    <label for="volInput">Volume</label>
+    <input type="range" id="volInput" min="0" max="1" step="0.05" value="1.0">
+    <span class="val" id="volVal">1.00</span>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="autoSpeak" checked> Speak on trigger</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="robotVoice"> 🤖 Robotic voice (synthesized)</label>
+  </div>
+  <div class="row">
+    <label><input type="checkbox" id="showMoon" checked> 🌙 Show smiley moon character</label>
+  </div>
+  <div class="row">
+    <label for="autoSpeakIntervalIn">Auto-speak interval</label>
+    <input type="range" id="autoSpeakIntervalIn" min="1500" max="6000" step="250" value="3000">
+    <span class="val" id="autoSpeakIntervalVal">3.0s</span>
+  </div>
+</div>
+
+<!-- Target Editor modal — opens when a phrase target is clicked in arrange mode -->
+<div id="targetEditor">
+  <div class="panel">
+    <h3><span>✎ Edit Target</span><button class="close" id="teClose">✕</button></h3>
+    <!-- Target TYPE — selects whether this target speaks a phrase or
+         switches to a different speaking board. Only one is active at a
+         time; the other section is hidden by the JS that opens the editor. -->
+    <div class="te-row" style="display:flex; gap:14px; align-items:center; padding:8px 10px; background:rgba(0,255,204,0.06); border:1px solid rgba(0,255,204,0.20); border-radius:8px">
+      <label style="display:flex; align-items:center; gap:6px; font-weight:600; cursor:pointer">
+        <input type="radio" name="teType" value="speak" id="teTypeSpeak" checked> 🗣️ Speak a phrase
+      </label>
+      <label style="display:flex; align-items:center; gap:6px; font-weight:600; cursor:pointer">
+        <input type="radio" name="teType" value="switch" id="teTypeSwitch"> 🔀 Switch speaking board
+      </label>
+    </div>
+    <!-- SPEAK fields — visible when type=speak -->
+    <div id="teSpeakFields">
+      <div class="te-row">
+        <label for="teText">Phrase text</label>
+        <textarea id="teText" placeholder="What this target should say…"></textarea>
+      </div>
+    </div>
+    <!-- SWITCH fields — visible when type=switch -->
+    <div id="teSwitchFields" style="display:none">
+      <div class="te-row">
+        <label for="teSwitchBoard">Switch to this speaking board</label>
+        <select id="teSwitchBoard" style="width:100%; padding:8px 10px; background:rgba(255,255,255,0.10); color:#fff; border:1px solid rgba(255,255,255,0.25); border-radius:8px; font-size:14px; font-weight:600"></select>
+        <div style="font-size:11.5px; color:var(--ink-faint); margin-top:6px; line-height:1.4">When triggered in Play mode, this target jumps the stage to the chosen speaking board.</div>
+      </div>
+    </div>
+    <div class="te-row">
+      <label>Icon</label>
+      <div class="emoji-grid" id="teEmojiGrid"></div>
+    </div>
+    <div class="te-row">
+      <label for="teEmojiCustom">Custom icon (paste any emoji)</label>
+      <input type="text" id="teEmojiCustom" maxlength="4" placeholder="🎯">
+    </div>
+    <div class="te-row">
+      <label for="teSize">Target size <span id="teSizeVal" style="float:right;color:var(--cyan);font-family:'Orbitron',sans-serif">22%</span></label>
+      <input type="range" id="teSize" min="10" max="40" step="1" value="22" style="width:100%">
+    </div>
+    <div class="actions">
+      <button class="danger" id="teDelete">🗑 Delete</button>
+      <button id="teCancel">Cancel</button>
+      <button class="primary" id="teSave">✓ Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Save / Load / Share modal — same idea as Songboards: a JSON textarea
+     plus Copy, Download .txt, and Load buttons. The modal flips between
+     Save mode (filled with current board, read-only) and Load mode (empty,
+     waiting for a paste). -->
+<div id="shareModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:110;display:none;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px)">
+  <div style="background:linear-gradient(180deg,var(--panel),#08090f);border:1.5px solid var(--bdr);border-radius:16px;padding:22px 24px;width:100%;max-width:640px;box-shadow:0 30px 60px rgba(0,0,0,0.7)">
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:15px;color:var(--cyan);letter-spacing:0.10em;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">
+      <span id="shTitle">💾 Save &amp; Share</span>
+      <button id="shClose" style="background:rgba(255,255,255,0.08);color:var(--ink);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:6px 12px;cursor:pointer">✕</button>
+    </h3>
+    <div id="shHelp" style="color:var(--ink-dim);font-size:13px;margin-bottom:8px">Copy this text to save or share the current board. Use the Load button later to paste it back and restore your custom phrases, positions, and quick-switches.</div>
+    <textarea id="shText" spellcheck="false" autocomplete="off" style="width:100%;min-height:200px;padding:10px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.20);border-radius:8px;color:var(--ink);font-family:Menlo,Consolas,monospace;font-size:11px;line-height:1.4"></textarea>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap">
+      <button id="shCopy" style="background:var(--cyan);color:#022;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-weight:800">📋 Copy</button>
+      <button id="shDownload" style="background:rgba(255,255,255,0.06);color:var(--ink);border:1px solid rgba(255,255,255,0.20);padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-weight:700">⬇ Download .txt</button>
+      <button id="shImport" style="background:rgba(102,255,153,0.18);color:#66ff99;border:1px solid rgba(102,255,153,0.45);padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-weight:800">📥 Load this board</button>
+    </div>
+  </div>
+</div>
+
+<!-- Examples modal — a library of ready-made boards the user can load with
+     one tap. Each example is just a saved-board JSON payload (same shape as
+     the Save/Load format), so loading uses the same import path. -->
+<div id="examplesModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.78);z-index:110;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;backdrop-filter:blur(6px)">
+  <div style="background:linear-gradient(180deg,var(--panel),#08090f);border:1.5px solid var(--bdr);border-radius:16px;padding:24px 26px 28px;width:100%;max-width:760px;box-shadow:0 30px 60px rgba(0,0,0,0.7)">
+    <h3 style="font-family:'Orbitron',sans-serif;font-size:16px;color:var(--cyan);letter-spacing:0.10em;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center">
+      <span>🗂 Speaking Boards — Examples</span>
+      <button id="exClose" style="background:rgba(255,255,255,0.08);color:var(--ink);border:1px solid rgba(255,255,255,0.18);border-radius:8px;padding:6px 12px;cursor:pointer">✕</button>
+    </h3>
+    <div style="color:var(--ink-dim);font-size:13px;margin-bottom:16px">Tap an example to load it. Each one is a ready-made arrangement of phrases and target positions — a great starting point you can then customize, save, and share.</div>
+    <div id="examplesList" style="display:flex;flex-direction:column;gap:10px"></div>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);color:var(--ink-faint);font-size:12px">
+      Want your arrangement added here? Save your board, copy the text, and share it — paste-back via the Load button works the same as loading an example.
+    </div>
+  </div>
+</div>
+
+<!-- Compact, top-centered board picker — ONE dropdown using optgroups so
+     every category is a section header and each subcategory is a single
+     option inside it. The user picks a board with one selection. An
+     "＋ Add target" button sits next to it for adding new targets to the
+     current board. -->
+<div id="boardPickerBar">
+  <div class="bp-title">🗂 Choose a speaking board</div>
+  <div class="bp-controls">
+    <select id="boardSelect" title="Pick a speaking board"></select>
+    <button id="addTargetBtn" type="button" title="Add a new speaking-board target to the current board">＋ Add speaking-board target</button>
+  </div>
+</div>
+
+<div id="crumb" style="display:none"></div>
+
+<div id="speechBar">
+  <span class="icon">💬</span>
+  <span class="phrase empty" id="lastPhrase">Tap a category, then tap a phrase — I'll say it out loud.</span>
+  <button class="replay" id="replayBtn" disabled>🔊 Say again</button>
+</div>
+
+<!-- Recent bar removed per user request — was felt to be visually overwhelming.
+     A hidden stub remains so existing JS (renderRecent etc.) can keep
+     populating the array without crashing on a missing element. -->
+<div id="recent" style="display:none">
+  <span class="label">Recent</span>
+  <span class="empty" id="recentEmpty">Your spoken phrases will appear here.</span>
+</div>
+
+<div id="content"><div class="empty-msg">Loading…</div></div>
+
+<!-- Board picker modal — replaces the old category grid as the way to switch boards -->
+<div id="boardPickerOverlay" onclick="if(event.target===this)closeBoardPicker()">
+  <div id="boardPickerPanel">
+    <h2><span>🗣️ Pick a speaking board</span><button class="close" onclick="closeBoardPicker()">✕ Close</button></h2>
+    <div class="intro">Boards are grouped by category. Tap one to load it — your phrase arrangement and any custom phrases for that board are remembered. The current board is highlighted.</div>
+    <div id="boardPickerList"></div>
+  </div>
+</div>
+
+<footer>
+  Speech is generated locally by your browser's voice engine — nothing is recorded or uploaded. Part of <a href="https://isatma.org" target="_blank" rel="noopener">isatma.org</a> · Source-available under PolyForm Noncommercial License 1.0.0.
+</footer>
+
+<script>
+'use strict';
+
+// ═════════════════════════════════════════════════════════════════
+// DATA — 19 categories, ~50 subcategories, ~250 phrases.
+// ═════════════════════════════════════════════════════════════════
+const CATEGORIES = [
+  { id:'eating', cls:'c-eating', icon:'🍽️', name:'Eating & Drinking', subs:[
+    { name:'Basic Needs', icon:'🍽️', phrases:[
+      "I'm hungry.", "I'm thirsty.", "I want a drink.", "I want a snack.", "I'm full."] },
+    { name:'Food Preferences', icon:'😋', phrases:[
+      "I like this.", "I don't like this.", "More please.", "No thank you.", "Different food please."] },
+    { name:'Food Temperature', icon:'🌡️', phrases:[
+      "This is too hot.", "This is too cold.", "This is perfect.", "Warm it up.", "Cool it down."] },
+    { name:'Meal Assistance', icon:'🥄', phrases:[
+      "Take smaller bites.", "Go slower.", "Go faster.", "Help me eat.", "I'm finished."] },
+    { name:'Special Requests', icon:'🍰', phrases:[
+      "I want dessert.", "I want ice cream.", "Add salt.", "Add pepper.", "Can I have another serving?"] }
+  ]},
+
+  { id:'feelings', cls:'c-feelings', icon:'💗', name:'Feelings & Emotions', subs:[
+    { name:'Happy Feelings', icon:'😊', phrases:[
+      "I'm happy.", "I'm excited.", "I'm proud.", "I'm having fun.", "This is great."] },
+    { name:'Sad Feelings', icon:'😢', phrases:[
+      "I'm sad.", "I'm disappointed.", "I miss someone.", "I feel lonely.", "I need comfort."] },
+    { name:'Anxiety & Stress', icon:'😰', phrases:[
+      "I'm nervous.", "I'm worried.", "I'm overwhelmed.", "I need a break.", "Please stay with me."] },
+    { name:'Anger & Frustration', icon:'😠', phrases:[
+      "I'm frustrated.", "I'm angry.", "Stop that.", "I don't like this.", "Leave me alone."] },
+    { name:'Comfort Scale', icon:'📊', phrases:[
+      "I feel great.", "I feel good.", "I'm okay.", "I'm uncomfortable.", "I feel terrible."] }
+  ]},
+
+  { id:'health', cls:'c-health', icon:'❤️‍🩹', name:'Physical Comfort & Health', subs:[
+    { name:'Pain', icon:'😣', phrases:[
+      "I have pain.", "It hurts a little.", "It hurts a lot.", "The pain is getting worse.", "The pain is getting better."] },
+    { name:'Body Location', icon:'🩻', phrases:[
+      "My head hurts.", "My stomach hurts.", "My back hurts.", "My arm hurts.", "My leg hurts."] },
+    { name:'Comfort', icon:'🛌', phrases:[
+      "I'm tired.", "I'm cold.", "I'm hot.", "I need to rest.", "I feel sick."] },
+    { name:'Medical Needs', icon:'💊', phrases:[
+      "I need medication.", "I need a nurse.", "I need help now.", "I don't feel well.", "Please check on me."] }
+  ]},
+
+  { id:'daily', cls:'c-daily', icon:'📅', name:'Daily Activities', subs:[
+    { name:'Getting Around', icon:'🚶', phrases:[
+      "I want to go outside.", "Take me home.", "Let's go.", "Stop here.", "Turn around."] },
+    { name:'Entertainment', icon:'📺', phrases:[
+      "I want music.", "Turn on the TV.", "Let's play a game.", "Read to me.", "I want a movie."] },
+    { name:'Personal Care', icon:'🧼', phrases:[
+      "I need the bathroom.", "I need a shower.", "Help me get dressed.", "Brush my teeth.", "Wash my hands."] }
+  ]},
+
+  { id:'social', cls:'c-social', icon:'👋', name:'Social Communication', subs:[
+    { name:'Greetings', icon:'👋',
+      phrases:["Hello.", "Good morning.", "Good afternoon.", "Nice to see you.", "Goodbye."],
+      phraseEmojis: ['👋', '🌅', '☀️', '😊', '👋'] },
+    { name:'Conversation Starters', icon:'💬',
+      phrases:["How are you?", "What are you doing?", "Tell me more.", "That's interesting.", "Really?"],
+      phraseEmojis: ['🤔', '👀', '🗨️', '✨', '😲'] },
+    { name:'Relationships', icon:'💞',
+      phrases:["I love you.", "Thank you.", "You're welcome.", "I'm sorry.", "I appreciate your help."],
+      phraseEmojis: ['❤️', '🙏', '😊', '🙇', '🌟'] }
+  ]},
+
+  { id:'yesno', cls:'c-yesno', icon:'✅', name:'Yes / No / Maybe', subs:[
+    { name:'Confirmation', icon:'☑️',
+      phrases:["Yes.", "No.", "Maybe.", "I don't know.", "Let me think."],
+      phraseEmojis: ['✅', '❌', '🤷', '❓', '💭'] },
+    { name:'Understanding', icon:'🤔',
+      phrases:["I understand.", "I don't understand.", "Please explain.", "Say that again.", "Show me."],
+      phraseEmojis: ['💡', '😕', '🗣️', '🔁', '👁️'] }
+  ]},
+
+  { id:'requests', cls:'c-requests', icon:'🙏', name:'Requests & Assistance', subs:[
+    { name:'Help', icon:'🆘', phrases:[
+      "Help me.", "I need assistance.", "Stay with me.", "Please wait.", "I can do it myself."] },
+    { name:'Adjustments', icon:'🔧', phrases:[
+      "Move me.", "Reposition me.", "Turn the light on.", "Turn the light off.", "Open the window."] }
+  ]},
+
+  { id:'time', cls:'c-time', icon:'⏰', name:'Time & Scheduling', subs:[
+    { name:'Current Time', icon:'🕐', phrases:[
+      "What time is it?", "Is it morning?", "Is it lunchtime?", "Is it bedtime?", "What's next?"] },
+    { name:'Future Activities', icon:'📆', phrases:[
+      "What's today's schedule?", "When are we leaving?", "How much longer?", "I'm ready.", "I'm not ready."] }
+  ]},
+
+  { id:'emergency', cls:'c-emergency', icon:'🚨', name:'Emergency & Safety', subs:[
+    { name:'Urgent Needs', icon:'🚨',
+      phrases:["Help now.", "Emergency.", "Call someone.", "I can't breathe.", "Something is wrong."],
+      phraseEmojis: ['🆘', '🚨', '📞', '😮‍💨', '⚠️'] },
+    { name:'Safety', icon:'⚠️',
+      phrases:["Stop.", "Wait.", "Be careful.", "I feel unsafe.", "Stay with me."],
+      phraseEmojis: ['✋', '⏸️', '⚠️', '🛑', '🤝'] }
+  ]},
+
+  { id:'prefs', cls:'c-prefs', icon:'⭐', name:'Preferences & Choices', subs:[
+    { name:'Likes', icon:'👍', phrases:[
+      "I like that.", "That's my favorite.", "More of that.", "Keep going.", "Good choice."] },
+    { name:'Dislikes', icon:'👎', phrases:[
+      "I don't like that.", "Stop please.", "Try something else.", "Not now.", "Never mind."] }
+  ]},
+
+  { id:'humor', cls:'c-humor', icon:'😂', name:'Humor & Jokes', subs:[
+    { name:'Light Humor', icon:'😄',
+      phrases:["I came here to have fun.", "That was awkward.", "Well, that happened.", "I'm blaming the computer.", "That wasn't in my plan."],
+      phraseEmojis: ['🎉', '😬', '🤷', '💻', '📋'] },
+    { name:'One-Liners', icon:'🎤',
+      phrases:["I need more coffee.", "Is there a nap button?", "I'm thinking... please stand by.", "My lawyer advised me not to answer.", "That's above my pay grade."],
+      phraseEmojis: ['☕', '😴', '🤔', '⚖️', '💼'] },
+    { name:'Silly Responses', icon:'🤪',
+      phrases:["Beep boop.", "Error four oh four — motivation not found.", "I woke up like this.", "Insert dramatic music here.", "I'm practicing being mysterious."],
+      phraseEmojis: ['🤖', '🚫', '🛏️', '🎻', '🕵️'] }
+  ]},
+
+  { id:'sass', cls:'c-sass', icon:'😏', name:'Playful Sass', subs:[
+    { name:'Friendly Sass', icon:'😏',
+      phrases:[
+        "Nice try.", "You almost had me.", "That's a bold opinion.", "Are you sure about that?", "Let's agree to disagree."],
+      phraseEmojis: ['😏', '🎯', '🦁', '🤨', '🤝'] },
+    { name:'Smart Comebacks', icon:'🧠',
+      phrases:[
+        "Interesting theory.", "I'll think about it.", "That's one way to look at it.", "You make a compelling argument.", "The jury is still out."],
+      phraseEmojis: ['🧐', '💭', '🔍', '📜', '⚖️'] }
+  ]},
+
+  { id:'riddles', cls:'c-riddles', icon:'🧩', name:'Riddles', subs:[
+    { name:'Quick Riddles', icon:'❓', phrases:[
+      "What has keys but can't open locks? A piano.",
+      "What gets wetter as it dries? A towel.",
+      "What has hands but can't clap? A clock.",
+      "What has a neck but no head? A bottle.",
+      "What goes up but never comes down? Your age."] },
+    { name:'Riddle Conversation', icon:'💡', phrases:[
+      "Want to hear a riddle?", "I've got a good one.", "Take a guess.", "Give up?", "Here's the answer."] }
+  ]},
+
+  { id:'poetry', cls:'c-poetry', icon:'🌸', name:'Poetry & Reflection', subs:[
+    { name:'Short Poetic Lines', icon:'🌸', phrases:[
+      "Every day is a new chapter.",
+      "Small steps still move forward.",
+      "The sky looks different every day.",
+      "Even storms eventually pass.",
+      "Today's story isn't finished."] },
+    { name:'Nature-Based', icon:'🌿', phrases:[
+      "The sun came up for all of us.",
+      "The wind has somewhere to be.",
+      "The river keeps moving.",
+      "The stars are working overtime.",
+      "Spring always returns."] }
+  ]},
+
+  { id:'rhymes', cls:'c-rhymes', icon:'🎵', name:'Rhymes', subs:[
+    { name:'Fun Rhymes', icon:'🎵', phrases:[
+      "Time to shine.", "Feeling fine.", "What a day.", "Hip hooray.", "Let's play."] },
+    { name:'Encouraging Rhymes', icon:'🌟', phrases:[
+      "One more try, let's reach the sky.",
+      "Slow and steady wins the race.",
+      "Keep your pace.",
+      "Don't quit yet.",
+      "Best day yet."] }
+  ]},
+
+  { id:'quotes', cls:'c-quotes', icon:'💭', name:'Inspirational Quotes', subs:[
+    { name:'Famous Quotes', icon:'📜', phrases:[
+      "The only way out is through.",
+      "Be yourself; everyone else is already taken.",
+      "Success is not final.",
+      "Fall seven times, stand up eight.",
+      "Do what you can with what you have."] },
+    { name:'Everyday Wisdom', icon:'🌅', phrases:[
+      "One step at a time.",
+      "Progress matters.",
+      "Keep moving forward.",
+      "Every effort counts.",
+      "Tomorrow is another chance."] }
+  ]},
+
+  { id:'rap', cls:'c-rap', icon:'🎤', name:'Music & Rap-Inspired', subs:[
+    { name:'Confidence', icon:'😎', phrases:[
+      "I'm bringing good energy today.",
+      "Watch me work.",
+      "I'm in my zone.",
+      "Feeling unstoppable.",
+      "Let's make it happen."] },
+    { name:'Motivation', icon:'🔥', phrases:[
+      "Keep the beat going.",
+      "Stay on rhythm.",
+      "One verse at a time.",
+      "Keep the momentum.",
+      "Let's keep rolling."] }
+  ]},
+
+  { id:'quirky', cls:'c-quirky', icon:'🎲', name:'Random Quirky Buttons', subs:[
+    { name:'Unexpected Responses', icon:'🎲', phrases:[
+      "Plot twist.", "Fascinating.", "That's oddly specific.", "I have questions.", "Continue."] },
+    { name:'Dramatic Mode', icon:'🎭', phrases:[
+      "This changes everything.",
+      "I shall consider it.",
+      "The suspense is unbearable.",
+      "What happens next?",
+      "Tell me more."] },
+    { name:'Geeky Mode', icon:'🤖', phrases:[
+      "Calculating...",
+      "Processing...",
+      "New achievement unlocked.",
+      "Mission accepted.",
+      "Level completed."] }
+  ]},
+
+  { id:'persona', cls:'c-persona', icon:'🎭', name:'Personality Types', subs:[
+    { name:'The Optimist', icon:'🌞', phrases:[
+      "Today looks promising.",
+      "We can do this.",
+      "Let's find a way.",
+      "Good things are coming.",
+      "I'm hopeful."] },
+    { name:'The Comedian', icon:'🤡', phrases:[
+      "I've got jokes.",
+      "That deserves a laugh.",
+      "Comedy gold.",
+      "I'll be here all week.",
+      "Thank you, thank you."] },
+    { name:'The Philosopher', icon:'🦉', phrases:[
+      "That's an interesting question.",
+      "What does it really mean?",
+      "Perspective matters.",
+      "There's more to consider.",
+      "Life is complicated."] },
+    { name:'The Storyteller', icon:'📖', phrases:[
+      "Let me tell you something.",
+      "That reminds me of a story.",
+      "Once upon a time...",
+      "Here's what happened.",
+      "You'll like this one."] }
+  ]}
+];
+
+// ═════════════════════════════════════════════════════════════════
+// SPEECH
+// ═════════════════════════════════════════════════════════════════
+const synth = window.speechSynthesis;
+let voices = [];
+const PREFS_KEY = 'speakingBoardsPrefs';
+const RECENT_KEY = 'speakingBoardsRecent';
+
+const prefs = (() => {
+  try { return JSON.parse(localStorage.getItem(PREFS_KEY)) || {}; }
+  catch(_) { return {}; }
+})();
+function savePrefs() {
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); } catch(_) {}
+}
+
+let recent = (() => {
+  try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
+  catch(_) { return []; }
+})();
+function saveRecent() {
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(recent.slice(0, 12))); } catch(_) {}
+}
+
+function refreshVoices() {
+  voices = synth.getVoices() || [];
+  const sel = document.getElementById('voicePicker');
+  if (!voices.length) { sel.innerHTML = '<option>Loading voices…</option>'; return; }
+  sel.innerHTML = '';
+  // Prefer English voices, but show all
+  const sorted = voices.slice().sort((a,b) => {
+    const aE = a.lang.startsWith('en') ? 0 : 1;
+    const bE = b.lang.startsWith('en') ? 0 : 1;
+    return (aE - bE) || a.name.localeCompare(b.name);
+  });
+  sorted.forEach(v => {
+    const o = document.createElement('option');
+    o.value = v.voiceURI;
+    o.textContent = `${v.name} (${v.lang})${v.default ? ' · default' : ''}`;
+    sel.appendChild(o);
+  });
+  if (prefs.voiceURI && sorted.some(v => v.voiceURI === prefs.voiceURI)) {
+    sel.value = prefs.voiceURI;
+  }
+}
+synth.onvoiceschanged = refreshVoices;
+refreshVoices();
+
+// Some browsers (Chrome on file:// in particular) don't reliably fire
+// voiceschanged. Poll every 250 ms for the first 5 seconds so voices
+// definitely populate before the user taps anything.
+let _voicePollCount = 0;
+const _voicePoll = setInterval(() => {
+  _voicePollCount++;
+  if (voices.length || _voicePollCount > 20) { clearInterval(_voicePoll); return; }
+  refreshVoices();
+}, 250);
+
+// Voice effects: each preset overrides the base pitch/rate/volume to give
+// a character. Both pitch and rate ranges are clamped to what the Web
+// Speech API actually allows (pitch 0–2, rate 0.1–10), with sensible
+// audible upper bounds.
+const VOICE_EFFECTS = {
+  none:     { pitch: 1.0, rate: 1.0, volume: 1.0 },
+  mouse:    { pitch: 2.0, rate: 1.5, volume: 1.0 },  // very high + fast
+  chipmunk: { pitch: 1.9, rate: 1.7, volume: 1.0 },  // even faster
+  kid:      { pitch: 1.5, rate: 1.15, volume: 1.0 }, // higher + slightly fast
+  giant:    { pitch: 0.4, rate: 0.75, volume: 1.0 }, // deep + slow
+  reaper:   { pitch: 0.3, rate: 0.6,  volume: 1.0 }, // very deep + very slow
+  robot:    { pitch: 0.6, rate: 0.95, volume: 1.0 }, // mid-low monotone
+  whisper:  { pitch: 0.9, rate: 0.9,  volume: 0.35 },// quiet
+  excited:  { pitch: 1.3, rate: 1.55, volume: 1.0 }, // higher + fast
+  slowmo:   { pitch: 0.85, rate: 0.55, volume: 1.0 } // slow & a bit low
+};
+let _currentEffect = 'none';
+function setVoiceEffect(name) {
+  if (!VOICE_EFFECTS[name]) name = 'none';
+  _currentEffect = name;
+  try {
+    prefs.voiceEffect = name;
+    savePrefs();
+  } catch(_) {}
+}
+
+// speak() — same as the working Build 19, with effect support applied
+// DEFENSIVELY. If any part of the effect math returns a non-finite value,
+// we fall back to 1.0 / 1.0 / 1.0 (normal speech) so the user can't get
+// stuck in a silent state from a stale localStorage preset.
+let speak = function(text) {
+  console.log('[speak] called with:', text, '(effect:', _currentEffect, ')');
+  if (!text || !synth) { console.log('[speak] no text or no synth — aborting'); return; }
+  try { if (synth.paused) synth.resume(); } catch(_) {}
+  const u = new SpeechSynthesisUtterance(text);
+  // Pull effect — fall back to plain 1.0/1.0/1.0 if anything is off.
+  let pitch = 1.0, rate = 1.0, volume = 1.0;
+  try {
+    const fx = (VOICE_EFFECTS && VOICE_EFFECTS[_currentEffect]) || VOICE_EFFECTS.none;
+    if (fx) {
+      if (Number.isFinite(fx.pitch))  pitch  = Math.max(0.1, Math.min(2.0, fx.pitch));
+      if (Number.isFinite(fx.rate))   rate   = Math.max(0.1, Math.min(10.0, fx.rate));
+      if (Number.isFinite(fx.volume)) volume = Math.max(0.05, Math.min(1.0, fx.volume));
+    }
+  } catch(_) {}
+  u.pitch  = pitch;
+  u.rate   = rate;
+  u.volume = volume;
+  // Voice picker lookup REMOVED — Build 22 added this and broke speech for
+  // users whose saved voiceURI no longer matches a usable system voice.
+  // The browser's default voice works fine, and matches what Test voice uses.
+  u.onstart = () => console.log('[speak] started:', text);
+  u.onerror = (e) => console.warn('[speak] error:', e && e.error, 'for:', text);
+  u.onend   = () => console.log('[speak] ended:', text);
+  try {
+    if (synth.speaking || synth.pending) synth.cancel();
+    setTimeout(() => {
+      try { synth.speak(u); console.log('[speak] synth.speak() called'); }
+      catch(e) { console.warn('[speak] synth.speak() threw:', e); }
+    }, 0);
+  } catch(e) { console.warn('[speak] outer threw:', e); }
+};
+
+// Prime the speech synth. Called on every user gesture so the synth stays
+// "warm" — but the silent test utterance is queued ONLY ONCE per page load.
+// The earlier Build-14 attempt queued the silent utterance on every click
+// AND scheduled a cancel() 1 ms later. That deferred cancel was firing
+// after the real speech began (which runs at t=0 via its own setTimeout),
+// killing every utterance. The current version does only safe things on
+// repeat calls: resume the synth if paused, resume the audio context.
+let _audioPrimed = false;
+function primeAudio() {
+  try { if (synth && synth.paused) synth.resume(); } catch(_) {}
+  try { if (_backingCtx && _backingCtx.state === 'suspended') _backingCtx.resume(); } catch(_) {}
+  if (_audioPrimed) return;
+  _audioPrimed = true;
+  // One-time silent utterance to satisfy Safari / iOS's "must be triggered
+  // by a user gesture" requirement on the first ever speech. NO deferred
+  // cancel — the utterance is silent (volume 0) and completes instantly.
+  try {
+    const u = new SpeechSynthesisUtterance(' ');
+    u.volume = 0;
+    synth.speak(u);
+  } catch(_) {}
+}
+document.addEventListener('click',       primeAudio, { passive: true });
+document.addEventListener('pointerdown', primeAudio, { passive: true });
+document.addEventListener('keydown',     primeAudio, { passive: true });
+
+// Test voice button — runs an end-to-end speech test and reports the
+// result. This diagnoses the "no sound on file://" problem by separating
+// browser-level failures (no speechSynthesis, no voices) from app issues.
+setTimeout(() => {
+  const tb = document.getElementById('testVoiceBtn');
+  if (!tb) return;
+  tb.addEventListener('click', () => {
+    primeAudio();
+    if (!('speechSynthesis' in window)) {
+      alert('❌ Your browser has no Web Speech API.\n\nTry Chrome, Edge, Safari, or Firefox (Firefox needs OS speech voices installed).');
+      return;
+    }
+    // Refresh voices one more time on demand.
+    try { voices = synth.getVoices() || []; } catch(_) {}
+    const hasVoices = voices.length > 0;
+    let gotStart = false, gotEnd = false, gotError = null;
+    const u = new SpeechSynthesisUtterance('Hello! This is a test of the speaking boards voice.');
+    u.volume = 1.0;
+    u.rate   = 1.0;
+    u.pitch  = 1.0;
+    u.onstart = () => { gotStart = true; };
+    u.onend   = () => { gotEnd = true; };
+    u.onerror = (e) => { gotError = (e && e.error) || 'unknown'; };
+    try {
+      if (synth.paused) synth.resume();
+      if (synth.speaking || synth.pending) synth.cancel();
+      setTimeout(() => { try { synth.speak(u); } catch(e) { gotError = String(e); } }, 0);
+    } catch(e) { gotError = String(e); }
+    // Diagnose after a couple of seconds.
+    setTimeout(() => {
+      const lines = ['Speech test result:', ''];
+      lines.push('• Voices loaded: ' + (hasVoices ? ('YES (' + voices.length + ' available)') : 'NO'));
+      lines.push('• Utterance started: ' + (gotStart ? 'YES' : 'no'));
+      lines.push('• Utterance ended: '   + (gotEnd   ? 'YES' : 'no'));
+      if (gotError) lines.push('• Error: ' + gotError);
+      lines.push('');
+      if (gotStart && !gotError) {
+        lines.push('✅ Speech is working. If you didn\'t hear anything, check your OS volume and the page volume slider in ⚙ Settings.');
+      } else if (!hasVoices) {
+        lines.push('⚠ No voices were available. On macOS / Linux Chrome, voices sometimes need to load — wait a few seconds and try again. On Firefox, install OS speech voices.');
+      } else if (gotError === 'not-allowed' || gotError === 'audio-busy') {
+        lines.push('⚠ Browser blocked the speech. Click anywhere on the page first, then try again — some browsers require a user gesture.');
+      } else {
+        lines.push('⚠ Speech did not start. Try a different browser (Chrome / Edge), or open via http:// instead of file://.');
+      }
+      alert(lines.join('\n'));
+    }, 2200);
+  });
+}, 0);
+
+// ═════════════════════════════════════════════════════════════════
+// UI STATE
+// ═════════════════════════════════════════════════════════════════
+// Detect default trigger mode: a fine pointer (mouse) defaults to hover,
+// a coarse pointer (touch / phone) defaults to click. Cell phones get tap
+// by default because they can't hover.
+function detectDefaultTrigger() {
+  try {
+    if (window.matchMedia('(any-hover: none)').matches) return 'click';
+    if (window.matchMedia('(pointer: fine)').matches) return 'hover';
+  } catch(_) {}
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return 'click';
+  return 'hover';
+}
+
+const STATE = {
+  view: 'home',     // 'home' | 'sub' | 'phrases'
+  catIdx: -1,
+  subIdx: -1,
+  lastPhrase: '',
+  arrangeMode: false,    // when true: targets are draggable, no fire on hover/click
+  singMode: false,       // when true: a brief category-mood chord plays with each phrase
+  // Trigger model — defaults to hover on devices with a fine pointer (desktop mouse),
+  // click on touch devices. Each phrase target re-arms only after the pointer leaves.
+  triggerMode: prefs.triggerMode || detectDefaultTrigger(),
+  hoverDwellMs: typeof prefs.hoverDwellMs === 'number' ? prefs.hoverDwellMs : 200,
+  // Background scene (carried over from Songboards).
+  // Default is "ocean" — opens to a calming aquatic scene that pairs well
+  // with the rainbow target colors. Users can switch via the header theme picker.
+  theme: prefs.theme || 'ocean'
+};
+
+function showLastSpoken(text, animate) {
+  STATE.lastPhrase = text;
+  const bar = document.getElementById('speechBar');
+  const p   = document.getElementById('lastPhrase');
+  p.classList.remove('empty');
+  p.textContent = '"' + text + '"';
+  document.getElementById('replayBtn').disabled = false;
+  if (animate) {
+    bar.classList.add('firing');
+    clearTimeout(showLastSpoken._t);
+    showLastSpoken._t = setTimeout(() => bar.classList.remove('firing'), 1500);
+  }
+}
+
+function addToRecent(text) {
+  recent = recent.filter(x => x !== text);
+  recent.unshift(text);
+  if (recent.length > 12) recent.length = 12;
+  saveRecent();
+  renderRecent();
+}
+
+function renderRecent() {
+  const el = document.getElementById('recent');
+  el.innerHTML = '<span class="label">Recent</span>';
+  if (!recent.length) {
+    const e = document.createElement('span');
+    e.className = 'empty';
+    e.textContent = 'Your spoken phrases will appear here.';
+    el.appendChild(e);
+    return;
+  }
+  recent.forEach(text => {
+    const pill = document.createElement('button');
+    pill.className = 'pill';
+    pill.textContent = text;
+    pill.title = 'Tap to speak again';
+    pill.onclick = () => firePhrase(text, null);
+    el.appendChild(pill);
+  });
+}
+
+function firePhrase(text, tileEl) {
+  console.log('[firePhrase] called with:', text);
+  showLastSpoken(text, true);
+  addToRecent(text);
+  try { primeAudio(); } catch(e) { console.warn('[firePhrase] primeAudio threw:', e); }
+  speak(text);
+  // Play the category mood chord if Sing mode is on. We need to know the
+  // category context — if a tile was provided, we're in a phrase view, so
+  // STATE.catIdx is valid. Recent-pill replays also flow through here.
+  if (STATE.singMode && STATE.catIdx >= 0) {
+    playAccent(CATEGORIES[STATE.catIdx].id);
+  }
+  if (tileEl) {
+    tileEl.classList.add('fired');
+    setTimeout(() => tileEl.classList.remove('fired'), 700);
+  }
+  // Make the scene character pop with a wide smile when a phrase fires
+  const char = document.getElementById('sceneChar');
+  if (char) {
+    char.classList.remove('reacting');
+    void char.offsetWidth;   // restart animation
+    char.classList.add('reacting');
+    setTimeout(() => char.classList.remove('reacting'), 700);
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════
+// RENDER
+// ═════════════════════════════════════════════════════════════════
+function renderCrumb() {
+  // Crumb is now a single "Choose a speaking board ▾" picker — replaces the
+  // long "Playful Sass · Friendly Sass" trail that confused users. Tapping
+  // it opens the board picker modal (same as the header button).
+  const el = document.getElementById('crumb');
+  el.innerHTML = '';
+  if (STATE.catIdx < 0 || STATE.subIdx < 0) return;
+  const link = document.createElement('a');
+  link.className = 'step';
+  link.style.fontSize = '14px';
+  link.style.padding = '6px 14px';
+  link.style.border = '1px solid rgba(0,255,204,0.40)';
+  link.style.borderRadius = '999px';
+  link.style.background = 'rgba(0,255,204,0.08)';
+  link.style.fontWeight = '700';
+  link.textContent = '🗂  Choose a speaking board  ▾';
+  link.onclick = openBoardPicker;
+  el.appendChild(link);
+}
+
+function renderHome() {
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  CATEGORIES.forEach((cat, i) => {
+    const t = document.createElement('div');
+    t.className = 'tile cat ' + cat.cls;
+    t.innerHTML = `
+      <div class="ic">${cat.icon}</div>
+      <div class="nm">${cat.name}</div>
+      <div class="ct">${cat.subs.length} groups</div>
+      <div class="popup">
+        <div class="ptitle">Groups</div>
+        ${cat.subs.map(s => `<span class="prow">${s.icon} ${s.name}</span>`).join('')}
+      </div>
+    `;
+    t.onclick = () => openCategory(i);
+    grid.appendChild(t);
+  });
+  c.appendChild(grid);
+}
+
+function renderSubcategories() {
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  const cat = CATEGORIES[STATE.catIdx];
+  const grid = document.createElement('div');
+  grid.className = 'grid sub';
+  cat.subs.forEach((sub, i) => {
+    const t = document.createElement('div');
+    t.className = 'tile sub ' + cat.cls;
+    t.innerHTML = `
+      <div class="ic">${sub.icon}</div>
+      <div class="nm">${sub.name}</div>
+      <div class="ct">${sub.phrases.length} phrases</div>
+    `;
+    t.onclick = () => openSubcategory(STATE.catIdx, i);
+    grid.appendChild(t);
+  });
+  c.appendChild(grid);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHRASE TARGET POSITIONS — per-subcategory layout that the user can drag
+// ═══════════════════════════════════════════════════════════════
+const POS_KEY = 'speakingBoardsPositions';
+function loadAllPositions() {
+  try { return JSON.parse(localStorage.getItem(POS_KEY) || '{}'); }
+  catch(_) { return {}; }
+}
+function saveAllPositions(all) {
+  try { localStorage.setItem(POS_KEY, JSON.stringify(all)); } catch(_) {}
+}
+function positionKey(catId, subName) { return catId + '/' + subName; }
+
+// Default layout: a centered, slightly wave-shaped row that wraps gracefully
+// for any number of phrases. Each target is positioned by percentage so it
+// scales with the stage.
+function defaultLayout(n) {
+  // Lay phrases out in centered rows, max 4 per row by default.
+  const cols = Math.min(4, Math.max(2, Math.ceil(Math.sqrt(n))));
+  const rows = Math.ceil(n / cols);
+  const xs = [], ys = [];
+  // Default size HALVED — the old 14–22% spheres dominated the stage.
+  // Now they're smaller circles (7–11%) with text flowing below them.
+  const sizePct = Math.max(7, Math.min(11, 45 / (cols + 1)));
+  for (let i = 0; i < n; i++) {
+    const row = Math.floor(i / cols);
+    const col = i % cols;
+    const colsInThisRow = (row === rows - 1) ? (n - row * cols) : cols;
+    const x = (100 / (colsInThisRow + 1)) * (col + 1);
+    const y = (100 / (rows + 1)) * (row + 1);
+    xs.push(x); ys.push(y);
+  }
+  return xs.map((x, i) => ({ x, y: ys[i], size: sizePct }));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MUSICAL ACCENT (Sing Mode) — short chord per category mood
+// ═══════════════════════════════════════════════════════════════
+const ACCENT_CHORDS = {
+  // freq Hz triads — major, minor, suspended, etc.
+  eating:    [261.63, 329.63, 392.00],   // C major — warm, content
+  feelings:  [261.63, 311.13, 392.00],   // C minor7 — emotional
+  health:    [261.63, 311.13, 369.99],   // C minor — gentle
+  daily:     [261.63, 329.63, 392.00],   // C major — bright
+  social:    [293.66, 369.99, 440.00],   // D major — welcoming
+  yesno:     [261.63, 329.63, 392.00],   // C major — clear
+  requests:  [220.00, 277.18, 329.63],   // A minor — earnest
+  time:      [349.23, 440.00, 523.25],   // F major — open
+  emergency: [261.63, 311.13, 349.23],   // C diminished feel — urgent
+  prefs:     [329.63, 392.00, 493.88],   // E major — bright
+  humor:     [261.63, 329.63, 392.00, 466.16], // C7 — playful
+  sass:      [277.18, 349.23, 415.30],   // C# minor — sassy
+  riddles:   [261.63, 311.13, 369.99, 466.16], // Cm6 — mysterious
+  poetry:    [220.00, 277.18, 329.63, 415.30], // Am7 — contemplative
+  rhymes:    [293.66, 369.99, 440.00],   // D major — fun
+  quotes:    [196.00, 246.94, 293.66],   // G major — wise
+  rap:       [220.00, 277.18, 311.13],   // Am — confident, edgy
+  quirky:    [220.00, 311.13, 415.30],   // tritone-ish, surprising
+  persona:   [261.63, 329.63, 392.00]    // generic, varies by sub
+};
+
+let _accentCtx = null;
+function playAccent(catId) {
+  if (!STATE.singMode) return;
+  if (!_accentCtx) {
+    try { _accentCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+    catch(_) { return; }
+  }
+  if (_accentCtx.state === 'suspended') _accentCtx.resume();
+  const chord = ACCENT_CHORDS[catId] || ACCENT_CHORDS.eating;
+  const t0 = _accentCtx.currentTime;
+  chord.forEach((f, i) => {
+    const o = _accentCtx.createOscillator();
+    const g = _accentCtx.createGain();
+    o.type = 'triangle';
+    o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(0.05 / Math.sqrt(i + 1), t0 + 0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.85);
+    o.connect(g); g.connect(_accentCtx.destination);
+    o.start(t0);
+    o.stop(t0 + 0.9);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// QUICK-SWITCH — pill buttons at the top of every stage that jump to
+// commonly-needed boards without opening the picker
+// ═══════════════════════════════════════════════════════════════
+// Default quick-switch list. Three useful boards to start with.
+// Users can edit per-board in Arrange mode (× to remove, + to add).
+const DEFAULT_QUICK_SWITCH = [
+  { catId: 'yesno',     sub: 'Confirmation', icon: '✅', label: 'Yes/No', accent: '#66ff99' },
+  { catId: 'social',    sub: 'Greetings',    icon: '👋', label: 'Hi',     accent: '#00ffcc' },
+  { catId: 'emergency', sub: 'Urgent Needs', icon: '🚨', label: 'Help',   accent: '#ff3366' }
+];
+
+const QS_KEY = 'speakingBoardsQuickSwitch';
+function getQuickSwitchForBoard(catId, subName) {
+  try {
+    const all = JSON.parse(localStorage.getItem(QS_KEY) || '{}');
+    const key = catId + '/' + subName;
+    if (Array.isArray(all[key])) return all[key];
+  } catch(_) {}
+  return DEFAULT_QUICK_SWITCH;
+}
+function saveQuickSwitchForBoard(catId, subName, list) {
+  try {
+    const all = JSON.parse(localStorage.getItem(QS_KEY) || '{}');
+    all[catId + '/' + subName] = list;
+    localStorage.setItem(QS_KEY, JSON.stringify(all));
+  } catch(_) {}
+}
+
+// Build a quick-switch pill. In arrange mode it shows a × remove button.
+function buildQuickPill(q, currentCatId, currentSubName, onRemove) {
+  const ci = CATEGORIES.findIndex(c => c.id === q.catId);
+  if (ci < 0) return null;
+  const si = CATEGORIES[ci].subs.findIndex(s => s.name === q.sub);
+  if (si < 0) return null;
+  if (q.catId === currentCatId && q.sub === currentSubName) return null;
+  const btn = document.createElement('div');
+  btn.className = 'quick-switch-target';
+  btn.style.setProperty('--qs-acc', q.accent);
+  btn.innerHTML = `<span class="qs-ic">${q.icon}</span><span class="qs-lbl">${q.label}</span><span class="qs-x" title="Remove">×</span>`;
+  btn.title = 'Switch to ' + CATEGORIES[ci].name + ' › ' + q.sub;
+  btn.addEventListener('click', (e) => {
+    // × button: remove this quick-switch from the current board's list
+    if (e.target.classList.contains('qs-x')) {
+      if (onRemove) onRemove();
+      return;
+    }
+    // Don't navigate while arranging
+    if (STATE.arrangeMode) return;
+    openSubcategory(ci, si);
+  });
+  let qsTimer = null;
+  btn.addEventListener('pointerenter', (e) => {
+    if (STATE.arrangeMode) return;
+    if (STATE.triggerMode === 'click') return;
+    if (e.pointerType === 'touch') return;
+    if (STATE.triggerMode === 'mouseover') {
+      openSubcategory(ci, si);
+    } else {
+      qsTimer = setTimeout(() => openSubcategory(ci, si), STATE.hoverDwellMs);
+    }
+  });
+  btn.addEventListener('pointerleave', () => {
+    if (qsTimer) { clearTimeout(qsTimer); qsTimer = null; }
+  });
+  return btn;
+}
+
+function buildQuickSwitchStrip(currentCatId, currentSubName) {
+  const strip = document.createElement('div');
+  strip.className = 'quick-switch-strip';
+  const list = getQuickSwitchForBoard(currentCatId, currentSubName).slice();
+
+  function rerender() {
+    strip.innerHTML = '';
+    list.forEach((q, idx) => {
+      const pill = buildQuickPill(q, currentCatId, currentSubName, () => {
+        list.splice(idx, 1);
+        saveQuickSwitchForBoard(currentCatId, currentSubName, list);
+        rerender();
+      });
+      if (pill) strip.appendChild(pill);
+    });
+    // "+ Add" pill appears in arrange mode
+    const addBtn = document.createElement('div');
+    addBtn.className = 'qs-add-btn';
+    addBtn.innerHTML = '<span style="font-size:20px;line-height:1">＋</span><span>Add a quick-switch</span>';
+    addBtn.addEventListener('click', () => {
+      openQuickSwitchAddPicker((newItem) => {
+        if (!newItem) return;
+        // Avoid duplicates
+        if (list.some(l => l.catId === newItem.catId && l.sub === newItem.sub)) return;
+        list.push(newItem);
+        saveQuickSwitchForBoard(currentCatId, currentSubName, list);
+        rerender();
+      });
+    });
+    strip.appendChild(addBtn);
+  }
+  rerender();
+  return strip;
+}
+
+// Picker for adding a new quick-switch. Reuses the board picker modal but in
+// "select" mode — clicking a subcategory CALLS BACK with that selection
+// instead of navigating to it.
+function openQuickSwitchAddPicker(callback) {
+  const list = document.getElementById('boardPickerList');
+  list.innerHTML = '';
+  CATEGORIES.forEach((cat) => {
+    const block = document.createElement('div');
+    block.className = 'bp-cat ' + cat.cls;
+    const head = document.createElement('div');
+    head.className = 'bp-head';
+    head.innerHTML = `<span class="ic">${cat.icon}</span><span class="nm">${cat.name}</span>`;
+    block.appendChild(head);
+    const subs = document.createElement('div');
+    subs.className = 'bp-subs';
+    cat.subs.forEach((sub) => {
+      const item = document.createElement('div');
+      item.className = 'bp-sub';
+      item.innerHTML = `<span class="si">${sub.icon}</span><span>${sub.name}</span><span class="sct">${sub.phrases.length}</span>`;
+      item.onclick = () => {
+        closeBoardPicker();
+        // Map category palette to a quick-switch accent color
+        const accentByCat = {
+          eating:'#ff9966', feelings:'#ff66bb', health:'#ff6b6b', daily:'#4da6ff',
+          social:'#00ffcc', yesno:'#66ff99', requests:'#b388ff', time:'#ffe066',
+          emergency:'#ff3366', prefs:'#ffcc00', humor:'#ffd166', sass:'#ff66bb',
+          riddles:'#4dd6c5', poetry:'#c4a6ff', rhymes:'#88ccff', quotes:'#ffcc66',
+          rap:'#cc66ff', quirky:'#66ddff', persona:'#ff99cc'
+        };
+        // Short label = first word of subcategory name (e.g. "Friendly Sass" → "Friendly")
+        const shortLbl = sub.name.split(/[\s\/]+/)[0];
+        callback({
+          catId: cat.id,
+          sub: sub.name,
+          icon: sub.icon || cat.icon,
+          label: shortLbl,
+          accent: accentByCat[cat.id] || '#00ffcc'
+        });
+      };
+      subs.appendChild(item);
+    });
+    block.appendChild(subs);
+    list.appendChild(block);
+  });
+  // Update the modal title to indicate we're picking, not navigating
+  const h = document.querySelector('#boardPickerPanel h2 span:first-child');
+  if (h) h.textContent = '➕ Pick a board to add as a quick-switch';
+  document.getElementById('boardPickerOverlay').classList.add('show');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// BACKING TRACKS — continuous ambient loops you can play under speech
+// ═══════════════════════════════════════════════════════════════
+const BACKINGS = {
+  chill: { name: '🌙 Chill Pad',   bpm: 65,  inst: 'pad',
+    chords: [[220.00,261.63,329.63],[174.61,220.00,261.63],[196.00,246.94,293.66],[261.63,329.63,392.00]] },
+  hype:  { name: '🔥 Hype Beat',   bpm: 116, inst: 'pluck',
+    chords: [[261.63,329.63,392.00],[196.00,246.94,293.66],[220.00,261.63,329.63],[174.61,220.00,261.63]] },
+  bells: { name: '🔔 Mellow Bells',bpm: 78,  inst: 'bells',
+    chords: [[261.63,329.63,392.00],[329.63,392.00,493.88],[349.23,440.00,523.25],[392.00,493.88,587.33]] },
+  dream: { name: '☁️ Dreamy Wash', bpm: 56,  inst: 'pad',
+    chords: [[293.66,349.23,440.00],[233.08,293.66,349.23],[261.63,329.63,392.00],[220.00,261.63,329.63]] },
+  noir:  { name: '🕵️ Mystery Noir', bpm: 84,  inst: 'organ',
+    chords: [[220.00,261.63,329.63],[293.66,349.23,440.00],[277.18,329.63,415.30],[220.00,261.63,329.63]] },
+  party: { name: '🎉 Upbeat Party', bpm: 124, inst: 'pluck',
+    chords: [[261.63,329.63,392.00],[196.00,246.94,293.66],[220.00,261.63,329.63],[174.61,220.00,261.63]] }
+};
+
+let _backingCtx = null;
+let _backingTimer = null;
+let _backingActive = null;        // id of currently-playing backing track
+let _backingBeat = 0;
+let _backingActiveNotes = [];     // sustained oscillators we need to stop
+
+function ensureBackingCtx() {
+  if (_backingCtx) return _backingCtx;
+  try {
+    _backingCtx = new (window.AudioContext || window.webkitAudioContext)();
+  } catch(_) { return null; }
+  return _backingCtx;
+}
+function stopBacking() {
+  if (_backingTimer) { clearInterval(_backingTimer); _backingTimer = null; }
+  _backingActive = null;
+  _backingBeat = 0;
+  if (_backingActiveNotes.length) {
+    _backingActiveNotes.forEach(n => {
+      try { n.g.gain.cancelScheduledValues(_backingCtx.currentTime); } catch(_) {}
+      try { n.g.gain.linearRampToValueAtTime(0.0001, _backingCtx.currentTime + 0.15); } catch(_) {}
+      try { setTimeout(() => { try { n.o.stop(); } catch(_) {} }, 200); } catch(_) {}
+    });
+    _backingActiveNotes = [];
+  }
+  document.body.classList.remove('backing-playing');
+  document.querySelectorAll('#backingTray button').forEach(b => b.classList.remove('playing'));
+}
+function startBacking(id) {
+  if (_backingActive === id) { stopBacking(); return; }
+  stopBacking();
+  const ctx = ensureBackingCtx();
+  if (!ctx) return;
+  if (ctx.state === 'suspended') ctx.resume();
+  const b = BACKINGS[id];
+  if (!b) return;
+  const beatMs = 60000 / b.bpm * 2;   // 2 beats per chord change
+  _backingActive = id;
+  _backingBeat = 0;
+  function tick() {
+    const chord = b.chords[_backingBeat % b.chords.length];
+    const t0 = ctx.currentTime;
+    // Fade out previous sustained notes
+    _backingActiveNotes.forEach(n => {
+      try { n.g.gain.cancelScheduledValues(t0); } catch(_) {}
+      try { n.g.gain.linearRampToValueAtTime(0.0001, t0 + 0.4); } catch(_) {}
+      try { setTimeout(() => { try { n.o.stop(); } catch(_) {} }, 500); } catch(_) {}
+    });
+    _backingActiveNotes = [];
+    // Spawn new chord — soft pad / bell-ish, depending on inst
+    chord.forEach((f, i) => {
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      if (b.inst === 'pad' || b.inst === 'organ') {
+        o.type = 'sine';
+      } else if (b.inst === 'bells') {
+        o.type = 'triangle';
+      } else {
+        o.type = 'sawtooth';
+      }
+      o.frequency.value = f;
+      // Lower volume so it sits under speech
+      const peak = (b.inst === 'pad' ? 0.045 : b.inst === 'bells' ? 0.06 : 0.04) / Math.sqrt(i + 1);
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.linearRampToValueAtTime(peak, t0 + 0.6);
+      // Hold for the chord duration with a gentle fade
+      g.gain.linearRampToValueAtTime(peak * 0.7, t0 + beatMs/1000 - 0.2);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0);
+      _backingActiveNotes.push({ o, g });
+    });
+    _backingBeat++;
+  }
+  tick();
+  _backingTimer = setInterval(tick, beatMs);
+  document.body.classList.add('backing-playing');
+  document.querySelectorAll('#backingTray button').forEach(btn => {
+    btn.classList.toggle('playing', btn.dataset.id === id);
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHRASE STAGE — circular Songboards-style targets, draggable in arrange mode
+// ═══════════════════════════════════════════════════════════════
+function renderPhrases() {
+  const c = document.getElementById('content');
+  c.innerHTML = '';
+  const cat = CATEGORIES[STATE.catIdx];
+  const sub = cat.subs[STATE.subIdx];
+
+  // Load saved positions for this subcategory (if any)
+  const all = loadAllPositions();
+  const key = positionKey(cat.id, sub.name);
+  const saved = all[key] || null;
+  const defs = defaultLayout(sub.phrases.length);
+
+  const stage = document.createElement('div');
+  stage.id = 'phraseStage';
+  // Theme class (e.g. theme-ocean) is layered on top of category class so the
+  // accent color still drives the targets while the scene drives the back.
+  const themeName = STATE.theme || 'ocean';
+  stage.className = cat.cls + ' theme-' + themeName;
+
+  // ── Scenery layer (Songboards-style) ──
+  // Build a real DOM scenery layer with theme-appropriate elements (stars
+  // for night, sun + silhouette for sunset, waves + bubbles for ocean).
+  // Studio and the extended themes (aurora/forest/cosmic) get a bare layer.
+  const scenery = document.createElement('div');
+  scenery.className = 'scenery';
+  if (themeName === 'night') {
+    for (let i = 0; i < 60; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = (Math.random() * 100) + '%';
+      star.style.top  = (Math.random() *  80) + '%';
+      star.style.animationDelay = (Math.random() * 3) + 's';
+      const sz = 1 + Math.random() * 2;
+      star.style.width = star.style.height = sz + 'px';
+      scenery.appendChild(star);
+    }
+  } else if (themeName === 'sunset') {
+    const sun = document.createElement('div'); sun.className = 'sun'; scenery.appendChild(sun);
+    const sil = document.createElement('div'); sil.className = 'silhouette'; scenery.appendChild(sil);
+  } else if (themeName === 'ocean') {
+    for (let i = 0; i < 3; i++) {
+      const w = document.createElement('div');
+      w.className = 'wave';
+      w.style.bottom = (i * 30) + 'px';
+      w.style.animationDelay = (i * 0.6) + 's';
+      scenery.appendChild(w);
+    }
+    for (let i = 0; i < 12; i++) {
+      const b = document.createElement('div');
+      b.className = 'bubble';
+      b.style.left = (Math.random() * 100) + '%';
+      b.style.bottom = (-20 - Math.random() * 100) + 'px';
+      b.style.animationDelay = (Math.random() * 6) + 's';
+      b.style.width = b.style.height = (4 + Math.random() * 8) + 'px';
+      scenery.appendChild(b);
+    }
+  }
+  stage.appendChild(scenery);
+
+  // Smiley scene character — a floating face that lives in every theme,
+  // blinks on a slow cycle, and reacts when a phrase is fired. Drawn as
+  // inline SVG so it adapts color via CSS per theme.
+  const sceneChar = document.createElement('div');
+  sceneChar.id = 'sceneChar';
+  sceneChar.innerHTML = `
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <!-- Same warm 4-stop palette as Songboards' "reward moon" target so
+             the character feels like the same celestial body. -->
+        <radialGradient id="moonGradient" cx="32%" cy="26%" r="80%">
+          <stop offset="0%"  stop-color="#ffffff"/>
+          <stop offset="45%" stop-color="#fdfdf4"/>
+          <stop offset="82%" stop-color="#f5efbc"/>
+          <stop offset="100%" stop-color="#e8d985"/>
+        </radialGradient>
+      </defs>
+      <circle class="face" cx="50" cy="50" r="44"/>
+      <circle class="eye left"  cx="34" cy="42" r="6.5"/>
+      <circle class="eye right" cx="66" cy="42" r="6.5"/>
+      <circle class="eye-sparkle" cx="36.5" cy="39.5" r="2"/>
+      <circle class="eye-sparkle" cx="68.5" cy="39.5" r="2"/>
+      <path class="mouth" d="M 28 62 Q 50 82 72 62"/>
+      <circle class="blush" cx="22" cy="62" r="6"/>
+      <circle class="blush" cx="78" cy="62" r="6"/>
+    </svg>
+  `;
+  // The moon is now a movable, sizeable target (like Songboards' reward moon).
+  // Position + size persist in localStorage so they survive board switches.
+  // Tapping the moon triggers a smile animation (no sound).
+  const moonPrefs = (() => {
+    try { return JSON.parse(localStorage.getItem('speakingBoardsMoon')) || {}; }
+    catch(_) { return {}; }
+  })();
+  const moonSize = (typeof moonPrefs.size === 'number') ? moonPrefs.size : 14;
+  const moonX = (typeof moonPrefs.x === 'number') ? moonPrefs.x : 90;
+  const moonY = (typeof moonPrefs.y === 'number') ? moonPrefs.y : 14;
+  sceneChar.style.left = moonX + '%';
+  sceneChar.style.top  = moonY + '%';
+  sceneChar.style.width = moonSize + '%';
+  sceneChar.style.right = 'auto';
+  sceneChar.style.transform = 'translate(-50%, -50%)';
+  sceneChar.style.pointerEvents = 'auto';
+  sceneChar.style.cursor = 'pointer';
+  function saveMoonPrefs() {
+    try {
+      const pct = parseFloat(sceneChar.style.width) || moonSize;
+      localStorage.setItem('speakingBoardsMoon', JSON.stringify({
+        x: parseFloat(sceneChar.style.left),
+        y: parseFloat(sceneChar.style.top),
+        size: pct
+      }));
+    } catch(_) {}
+  }
+  // Click → smile + brief react animation (no sound).
+  sceneChar.addEventListener('click', (e) => {
+    if (STATE.arrangeMode) return; // edit/move only in arrange mode
+    e.preventDefault();
+    sceneChar.classList.remove('reacting');
+    void sceneChar.offsetWidth;
+    sceneChar.classList.add('reacting');
+    setTimeout(() => sceneChar.classList.remove('reacting'), 700);
+  });
+  // Arrange-mode dragging + corner-resizing (right-click or drag bottom-right).
+  let mDrag = null;
+  sceneChar.addEventListener('pointerdown', (e) => {
+    if (!STATE.arrangeMode) return;
+    const sr = stage.getBoundingClientRect();
+    // If the user grabs the bottom-right quadrant we treat the gesture as
+    // a resize instead of a move.
+    const r = sceneChar.getBoundingClientRect();
+    const inResize = (e.clientX > r.right - 24) && (e.clientY > r.bottom - 24);
+    mDrag = {
+      mode: inResize ? 'resize' : 'move',
+      startX: e.clientX, startY: e.clientY,
+      stageW: sr.width, stageH: sr.height,
+      startLeftPct: parseFloat(sceneChar.style.left),
+      startTopPct:  parseFloat(sceneChar.style.top),
+      startSizePct: parseFloat(sceneChar.style.width)
+    };
+    try { sceneChar.setPointerCapture(e.pointerId); } catch(_) {}
+    e.preventDefault(); e.stopPropagation();
+  });
+  sceneChar.addEventListener('pointermove', (e) => {
+    if (!mDrag) return;
+    const dx = e.clientX - mDrag.startX;
+    const dy = e.clientY - mDrag.startY;
+    if (mDrag.mode === 'move') {
+      const xp = Math.max(4, Math.min(96, mDrag.startLeftPct + (dx / mDrag.stageW) * 100));
+      const yp = Math.max(4, Math.min(96, mDrag.startTopPct  + (dy / mDrag.stageH) * 100));
+      sceneChar.style.left = xp.toFixed(1) + '%';
+      sceneChar.style.top  = yp.toFixed(1) + '%';
+    } else {
+      const change = ((dx / mDrag.stageW) + (dy / mDrag.stageH)) * 100 / 2;
+      const sz = Math.max(6, Math.min(34, mDrag.startSizePct + change));
+      sceneChar.style.width = sz.toFixed(1) + '%';
+    }
+  });
+  sceneChar.addEventListener('pointerup', (e) => {
+    if (!mDrag) return;
+    mDrag = null;
+    try { sceneChar.releasePointerCapture(e.pointerId); } catch(_) {}
+    saveMoonPrefs();
+  });
+  sceneChar.addEventListener('pointercancel', () => { mDrag = null; });
+  stage.appendChild(sceneChar);
+
+  // Quick-switch strip removed — the top-center board dropdown replaces it.
+
+  // Backing track toolbar (bottom-right of stage)
+  const btBtn = document.createElement('button');
+  btBtn.id = 'backingTrayBtn';
+  btBtn.title = 'Open backing-track tray';
+  btBtn.textContent = '🎶 Tracks';
+  btBtn.onclick = () => document.getElementById('backingTray').classList.toggle('show');
+  stage.appendChild(btBtn);
+
+  const btTray = document.createElement('div');
+  btTray.id = 'backingTray';
+  Object.keys(BACKINGS).forEach(id => {
+    const b = BACKINGS[id];
+    const item = document.createElement('button');
+    item.dataset.id = id;
+    item.textContent = b.name;
+    item.title = b.bpm + ' bpm — tap to start, tap again to stop';
+    if (_backingActive === id) item.classList.add('playing');
+    item.onclick = () => startBacking(id);
+    btTray.appendChild(item);
+  });
+  const stopBtn = document.createElement('button');
+  stopBtn.className = 'bt-stop';
+  stopBtn.textContent = '⏹ Stop track';
+  stopBtn.onclick = stopBacking;
+  btTray.appendChild(stopBtn);
+  stage.appendChild(btTray);
+
+  // Rainbow palette — each phrase target gets its own ROYGBIV color cycled by
+  // index, overriding the category accent. Brighter than the spectrum primaries
+  // for legibility on dark scene backgrounds.
+  const RAINBOW = [
+    '#ff5e5e', // red
+    '#ff9d3a', // orange
+    '#ffd93d', // yellow
+    '#66ff99', // green
+    '#4da6ff', // blue
+    '#a06bff', // indigo
+    '#ff66e0'  // violet
+  ];
+  sub.phrases.forEach((text, i) => {
+    const pos = (saved && saved[i]) || defs[i];
+    const t = document.createElement('div');
+    const isSwitchTarget = !!(sub.phraseSwitchTo && sub.phraseSwitchTo[i]);
+    t.className = 'phrase-target' + (isSwitchTarget ? ' is-switch' : '');
+    t.style.left = pos.x + '%';
+    t.style.top  = pos.y + '%';
+    t.style.setProperty('--size', pos.size + '%');
+    // Rainbow per-target accent — overrides the category color so the board
+    // reads as a vivid spectrum strip.
+    t.style.setProperty('--accent', RAINBOW[i % RAINBOW.length]);
+    // Per-phrase emoji if provided, otherwise fall back to the subcategory icon
+    const icon = (sub.phraseEmojis && sub.phraseEmojis[i]) || sub.icon;
+    t.innerHTML = `
+      <div class="ic">${icon}</div>
+      <div class="txt">${text.replace(/</g,'&lt;')}</div>
+      <div class="resize-handle" title="Drag to resize">⤡</div>
+    `;
+    // Click handler: in arrange mode → open editor; else ALWAYS fire phrase.
+    // Click works in every trigger mode now — it was wrongly being suppressed
+    // in hover mode, which left some users (especially on mixed input devices)
+    // wondering why nothing spoke when they clicked.
+    // Resolve whether this target is a "switch board" target — if so,
+    // tapping it jumps to the linked board instead of speaking.
+    const _switchTo = (sub.phraseSwitchTo && sub.phraseSwitchTo[i]) || null;
+    function _fireThisTarget() {
+      if (_switchTo) {
+        const dCi = CATEGORIES.findIndex(c => c.id === _switchTo.catId);
+        const dSi = dCi >= 0 ? CATEGORIES[dCi].subs.findIndex(s => s.name === _switchTo.subName) : -1;
+        if (dCi >= 0 && dSi >= 0) openSubcategory(dCi, dSi);
+        return;
+      }
+      firePhrase(text, t);
+    }
+    t.addEventListener('click', (e) => {
+      console.log('[target-click]', text);
+      if (e.target.classList.contains('resize-handle')) return;
+      if (STATE.arrangeMode) {
+        e.preventDefault(); e.stopPropagation();
+        openTargetEditor(cat, sub, i, t);
+        return;
+      }
+      const now = performance.now();
+      if (t._lastFireAt && (now - t._lastFireAt) < 400) return;
+      t._lastFireAt = now;
+      _fireThisTarget();
+    });
+    // Pointer-driven firing — three modes (mouseover / hover / click).
+    // Triple-layer guard against the "rapid-fire on hover" bug:
+    //   (1) PER-TARGET — _hasFired must be cleared by a real leave + 300 ms
+    //       settle before this target can fire again.
+    //   (2) PER-TARGET COOLDOWN — _lastFiredAt: ignores pointerenter for
+    //       2000 ms even if leave/enter cycles happen (e.g. the float
+    //       animation moving the target under a stationary cursor).
+    //   (3) STAGE-WIDE COOLDOWN — stage._fireUntil: blocks any target from
+    //       firing for 500 ms after any fire, so dragging the cursor across
+    //       multiple targets fires only the first one, not a machine-gun
+    //       of phrases.
+    const FIRE_COOLDOWN_MS = 2000;
+    const STAGE_COOLDOWN_MS = 500;
+    let _hoverTimer = null;
+    let _lastFiredAt = 0;
+    let _hasFired = false;
+    t.addEventListener('pointerenter', (e) => {
+      if (STATE.arrangeMode) return;
+      if (e.pointerType === 'touch') return;
+      if (STATE.triggerMode === 'click') return;
+      if (_hasFired) return;
+      const now = performance.now();
+      if ((now - _lastFiredAt) < FIRE_COOLDOWN_MS) return;
+      if (now < (stage._fireUntil || 0)) return;
+      const fireNow = () => {
+        if (_hasFired) return;
+        _hasFired = true;
+        _lastFiredAt = performance.now();
+        stage._fireUntil = _lastFiredAt + STAGE_COOLDOWN_MS;
+        _fireThisTarget();   // switches board if this is a switch target, else speaks
+      };
+      if (STATE.triggerMode === 'mouseover') {
+        fireNow();
+      } else if (STATE.triggerMode === 'hover') {
+        if (_hoverTimer) return;
+        _hoverTimer = setTimeout(() => { _hoverTimer = null; fireNow(); }, STATE.hoverDwellMs);
+      }
+    });
+    t.addEventListener('pointerleave', () => {
+      if (_hoverTimer) { clearTimeout(_hoverTimer); _hoverTimer = null; }
+      // 300 ms settle so a brief float-animation jitter doesn't re-arm.
+      setTimeout(() => { _hasFired = false; }, 300);
+    });
+    // Drag/resize logic
+    makePhraseDraggable(t, stage, i, key);
+    stage.appendChild(t);
+  });
+
+  c.appendChild(stage);
+
+  // "+ Add phrase" button visible in arrange mode
+  const bar = document.createElement('div');
+  bar.className = 'stage-bar';
+  bar.innerHTML = '<button class="add-phrase-btn" id="addPhraseBtn">＋ Add a phrase</button>';
+  c.appendChild(bar);
+  document.getElementById('addPhraseBtn').addEventListener('click', () => addPhrase(cat, sub));
+}
+
+function addPhrase(cat, sub) {
+  const text = prompt('New phrase text:', '');
+  if (!text || !text.trim()) return;
+  sub.phrases.push(text.trim());
+  // Persist USER-ADDED phrases for this subcategory.
+  saveUserPhrases();
+  renderPhrases();
+}
+
+// Persist user-added phrases (keyed by subcategory) so they survive reloads.
+// The defaults remain hardcoded; we only save phrases ABOVE the original count.
+const USER_PHRASES_KEY = 'speakingBoardsUserPhrases';
+let _baselinePhraseCounts = null;
+function captureBaseline() {
+  _baselinePhraseCounts = {};
+  CATEGORIES.forEach(cat => {
+    cat.subs.forEach(sub => {
+      _baselinePhraseCounts[cat.id + '/' + sub.name] = sub.phrases.length;
+    });
+  });
+}
+function saveUserPhrases() {
+  const data = {};
+  CATEGORIES.forEach(cat => {
+    cat.subs.forEach(sub => {
+      const key = cat.id + '/' + sub.name;
+      const base = _baselinePhraseCounts ? _baselinePhraseCounts[key] || 0 : sub.phrases.length;
+      if (sub.phrases.length > base) {
+        data[key] = sub.phrases.slice(base);
+      }
+    });
+  });
+  try { localStorage.setItem(USER_PHRASES_KEY, JSON.stringify(data)); } catch(_) {}
+}
+function restoreUserPhrases() {
+  captureBaseline();
+  try {
+    const data = JSON.parse(localStorage.getItem(USER_PHRASES_KEY) || '{}');
+    Object.keys(data).forEach(key => {
+      const [catId, subName] = key.split('/');
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (!cat) return;
+      const sub = cat.subs.find(s => s.name === subName);
+      if (!sub) return;
+      data[key].forEach(p => sub.phrases.push(p));
+    });
+  } catch(_) {}
+}
+
+// Drag + resize via pointer events
+function makePhraseDraggable(el, stage, i, key) {
+  let mode = null; // 'drag' | 'resize'
+  let startCX = 0, startCY = 0;
+  let startLeftPx = 0, startTopPx = 0;
+  let startSize = 0;
+  let movedPx = 0;          // total pointer movement during this drag (px)
+
+  el.addEventListener('pointerdown', (e) => {
+    if (!STATE.arrangeMode) return;
+    const isResize = e.target.classList.contains('resize-handle');
+    mode = isResize ? 'resize' : 'drag';
+    movedPx = 0;
+    try { el.setPointerCapture(e.pointerId); } catch(_) {}
+    const sr = stage.getBoundingClientRect();
+    startCX = e.clientX; startCY = e.clientY;
+    if (mode === 'drag') {
+      startLeftPx = parseFloat(el.style.left) / 100 * sr.width;
+      startTopPx  = parseFloat(el.style.top)  / 100 * sr.height;
+    } else {
+      startSize = parseFloat(el.style.getPropertyValue('--size')) || 18;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  el.addEventListener('pointermove', (e) => {
+    if (!mode) return;
+    const sr = stage.getBoundingClientRect();
+    const dxAbs = Math.abs(e.clientX - startCX);
+    const dyAbs = Math.abs(e.clientY - startCY);
+    movedPx = Math.max(movedPx, dxAbs + dyAbs);
+    if (mode === 'drag') {
+      const x = startLeftPx + (e.clientX - startCX);
+      const y = startTopPx  + (e.clientY - startCY);
+      const xp = Math.max(8, Math.min(92, (x / sr.width)  * 100));
+      const yp = Math.max(8, Math.min(92, (y / sr.height) * 100));
+      el.style.left = xp.toFixed(1) + '%';
+      el.style.top  = yp.toFixed(1) + '%';
+    } else {
+      const dPx = ((e.clientX - startCX) + (e.clientY - startCY)) / 2;
+      const dPct = (dPx / sr.width) * 100;
+      const newSize = Math.max(10, Math.min(40, startSize + dPct));
+      el.style.setProperty('--size', newSize.toFixed(1) + '%');
+    }
+  });
+  el.addEventListener('pointerup', (e) => {
+    if (!mode) return;
+    const didMove = movedPx > 4;
+    mode = null;
+    try { el.releasePointerCapture(e.pointerId); } catch(_) {}
+    // If the user actually dragged (vs just tapped), persist position/size
+    // AND suppress the synthetic click event that the browser would fire
+    // next — otherwise the click handler opens the target editor right
+    // after the drag, which is what made every move "ask to save".
+    if (didMove) {
+      const all = loadAllPositions();
+      if (!all[key]) all[key] = [];
+      all[key][i] = {
+        x: parseFloat(el.style.left),
+        y: parseFloat(el.style.top),
+        size: parseFloat(el.style.getPropertyValue('--size')) || 18
+      };
+      saveAllPositions(all);
+      el._suppressNextClick = true;
+    }
+  });
+  el.addEventListener('pointercancel', () => { mode = null; });
+  // Click guard — runs BEFORE the editor-open click handler because we add
+  // it in capture phase, and consumes the event when the previous pointerup
+  // flagged a drag.
+  el.addEventListener('click', (e) => {
+    if (el._suppressNextClick) {
+      el._suppressNextClick = false;
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation && e.stopImmediatePropagation();
+    }
+  }, true);
+}
+
+function goHome() {
+  // "Home" now means: open the default board (Sassy / Friendly Sass).
+  // The old multi-screen category grid is replaced by the Board Picker modal.
+  const defCat = CATEGORIES.findIndex(c => c.id === 'sass');
+  const defSub = defCat >= 0 ? CATEGORIES[defCat].subs.findIndex(s => s.name === 'Friendly Sass') : 0;
+  if (defCat >= 0 && defSub >= 0) openSubcategory(defCat, defSub);
+  else openSubcategory(0, 0);
+}
+function openCategory(i) {
+  // No more category screen — open the first subcategory of this category.
+  openSubcategory(i, 0);
+}
+function openSubcategory(catI, subI) {
+  STATE.view = 'phrases';
+  STATE.catIdx = catI;
+  STATE.subIdx = subI;
+  const cat = CATEGORIES[catI];
+  const sub = cat.subs[subI];
+  location.hash = '#' + cat.id + '/' + encodeURIComponent(sub.name);
+  renderCrumb();
+  renderPhrases();
+  updateBoardPickerButton();
+}
+
+// ── Board Picker dropdown / modal ──
+function updateBoardPickerButton() {
+  if (STATE.catIdx < 0 || STATE.subIdx < 0) return;
+  const cat = CATEGORIES[STATE.catIdx];
+  const sub = cat.subs[STATE.subIdx];
+  document.getElementById('bpIcon').textContent = sub.icon || cat.icon;
+  document.getElementById('bpName').textContent = cat.name.replace(/ &.*$/,'').trim() + ' · ' + sub.name;
+  // Keep the compact top-center dropdowns in sync with whatever board is live.
+  syncBoardPickerDropdowns();
+}
+
+// Populate the single combined board picker. Each category becomes an
+// <optgroup> header; each subcategory inside it becomes one selectable
+// <option>. Value format: "catIdx:subIdx" so we can recover both indices
+// on change. The "+ Add target" button next to it adds a new phrase
+// target to whichever board is currently loaded.
+function populateBoardPickerDropdowns() {
+  const sel = document.getElementById('boardSelect');
+  if (!sel) return;
+  sel.innerHTML = '';
+  CATEGORIES.forEach((cat, ci) => {
+    const og = document.createElement('optgroup');
+    og.label = (cat.icon ? cat.icon + ' ' : '') + cat.name;
+    cat.subs.forEach((sub, si) => {
+      const opt = document.createElement('option');
+      opt.value = ci + ':' + si;
+      opt.textContent = (sub.icon ? sub.icon + ' ' : '') + sub.name;
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+  sel.addEventListener('change', () => {
+    const v = sel.value || '';
+    const [ciStr, siStr] = v.split(':');
+    const ci = parseInt(ciStr, 10);
+    const si = parseInt(siStr, 10);
+    if (!Number.isNaN(ci) && !Number.isNaN(si)) openSubcategory(ci, si);
+  });
+  // Wire the "+ Add speaking-board target" button. New flow:
+  //   1) Append a placeholder phrase to the current sub.
+  //   2) Persist + re-render so the new circle appears at a default position.
+  //   3) Immediately open the target editor on the new target so the user
+  //      can customize the phrase text, icon, and size right away.
+  // Each speaking board can therefore grow its own custom set of targets,
+  // saved/loaded via the existing 💾 Save / 📂 Load buttons.
+  const addBtn = document.getElementById('addTargetBtn');
+  if (addBtn) addBtn.addEventListener('click', () => {
+    if (STATE.catIdx < 0 || STATE.subIdx < 0) { alert('Pick a speaking board first.'); return; }
+    const cat = CATEGORIES[STATE.catIdx];
+    const sub = cat.subs[STATE.subIdx];
+    const newIdx = sub.phrases.length;
+    sub.phrases.push('New phrase');
+    if (!sub.phraseEmojis) sub.phraseEmojis = sub.phrases.map(() => sub.icon);
+    while (sub.phraseEmojis.length < sub.phrases.length) sub.phraseEmojis.push(sub.icon);
+    sub.phraseEmojis[newIdx] = '✨';
+    saveUserPhrases();
+    saveBoardCustomization();
+    renderPhrases();
+    // After render, find the freshly-added tile and open the editor on it.
+    setTimeout(() => {
+      const tiles = document.querySelectorAll('#phraseStage .phrase-target');
+      const newTile = tiles[newIdx];
+      openTargetEditor(cat, sub, newIdx, newTile);
+    }, 30);
+  });
+}
+
+// Reflect STATE.catIdx / STATE.subIdx in the combined dropdown so the
+// shown selection always matches the live board.
+function syncBoardPickerDropdowns() {
+  const sel = document.getElementById('boardSelect');
+  if (!sel) return;
+  if (STATE.catIdx >= 0 && STATE.subIdx >= 0) {
+    const v = STATE.catIdx + ':' + STATE.subIdx;
+    if (sel.value !== v) sel.value = v;
+  }
+}
+function openBoardPicker() {
+  // Reset title in case quickSwitchAddPicker changed it
+  const h = document.querySelector('#boardPickerPanel h2 span:first-child');
+  if (h) h.textContent = '🗣️ Pick a speaking board';
+  const list = document.getElementById('boardPickerList');
+  list.innerHTML = '';
+  CATEGORIES.forEach((cat, ci) => {
+    const block = document.createElement('div');
+    block.className = 'bp-cat ' + cat.cls;
+    const head = document.createElement('div');
+    head.className = 'bp-head';
+    head.innerHTML = `<span class="ic">${cat.icon}</span><span class="nm">${cat.name}</span>`;
+    block.appendChild(head);
+    const subs = document.createElement('div');
+    subs.className = 'bp-subs';
+    cat.subs.forEach((sub, si) => {
+      const item = document.createElement('div');
+      item.className = 'bp-sub';
+      if (ci === STATE.catIdx && si === STATE.subIdx) item.classList.add('current');
+      item.innerHTML = `<span class="si">${sub.icon}</span><span>${sub.name}</span><span class="sct">${sub.phrases.length}</span>`;
+      item.onclick = () => { closeBoardPicker(); openSubcategory(ci, si); };
+      subs.appendChild(item);
+    });
+    block.appendChild(subs);
+    list.appendChild(block);
+  });
+  document.getElementById('boardPickerOverlay').classList.add('show');
+}
+function closeBoardPicker() {
+  document.getElementById('boardPickerOverlay').classList.remove('show');
+}
+window.openBoardPicker = openBoardPicker;
+window.closeBoardPicker = closeBoardPicker;
+
+// ═════════════════════════════════════════════════════════════════
+// WIRING
+// ═════════════════════════════════════════════════════════════════
+function setupTriggerControls() {
+  const hov = document.getElementById('trigHover');
+  const mov = document.getElementById('trigMouseover');
+  const clk = document.getElementById('trigClick');
+  const dwellIn = document.getElementById('dwellInput');
+  const dwellVal = document.getElementById('dwellVal');
+  const dwellRow = document.getElementById('dwellRow');
+  function applyMode(m) {
+    STATE.triggerMode = m;
+    prefs.triggerMode = m;
+    savePrefs();
+    hov.checked = (m === 'hover');
+    if (mov) mov.checked = (m === 'mouseover');
+    clk.checked = (m === 'click');
+    // The dwell time slider only applies to 'hover' mode. Dim it for the
+    // other two so users see that it's not in effect.
+    const dwellRelevant = (m === 'hover');
+    dwellRow.style.opacity = dwellRelevant ? '1' : '0.4';
+    dwellRow.style.pointerEvents = dwellRelevant ? 'auto' : 'none';
+  }
+  applyMode(STATE.triggerMode);
+  dwellIn.value = STATE.hoverDwellMs;
+  dwellVal.textContent = STATE.hoverDwellMs + ' ms';
+  hov.addEventListener('change', () => applyMode('hover'));
+  if (mov) mov.addEventListener('change', () => applyMode('mouseover'));
+  clk.addEventListener('change', () => applyMode('click'));
+  dwellIn.addEventListener('input', () => {
+    STATE.hoverDwellMs = parseInt(dwellIn.value, 10);
+    dwellVal.textContent = STATE.hoverDwellMs + ' ms';
+    prefs.hoverDwellMs = STATE.hoverDwellMs;
+    savePrefs();
+  });
+}
+setupTriggerControls();
+
+// 🎤 Voice-effect picker — restore last choice, wire to setVoiceEffect.
+(function setupVoiceEffect() {
+  const sel = document.getElementById('voiceEffect');
+  if (!sel) return;
+  const initial = prefs.voiceEffect && VOICE_EFFECTS[prefs.voiceEffect] ? prefs.voiceEffect : 'none';
+  sel.value = initial;
+  setVoiceEffect(initial);
+  sel.addEventListener('change', () => setVoiceEffect(sel.value));
+})();
+
+// 🌙 Show-moon checkbox — persists in prefs and toggles the body class
+// that hides the smiley character.
+(function setupShowMoon() {
+  const cb = document.getElementById('showMoon');
+  if (!cb) return;
+  const initial = (typeof prefs.showMoon === 'boolean') ? prefs.showMoon : true;
+  cb.checked = initial;
+  document.body.classList.toggle('hide-character', !initial);
+  cb.addEventListener('change', () => {
+    document.body.classList.toggle('hide-character', !cb.checked);
+    prefs.showMoon = cb.checked;
+    savePrefs();
+  });
+})();
+
+function setupSliders() {
+  const rate = document.getElementById('rateInput');
+  const pitch = document.getElementById('pitchInput');
+  const vol = document.getElementById('volInput');
+  if (typeof prefs.rate === 'number')  rate.value = prefs.rate;
+  if (typeof prefs.pitch === 'number') pitch.value = prefs.pitch;
+  if (typeof prefs.volume === 'number') vol.value = prefs.volume;
+  document.getElementById('rateVal').textContent = (+rate.value).toFixed(2);
+  document.getElementById('pitchVal').textContent = (+pitch.value).toFixed(2);
+  document.getElementById('volVal').textContent = (+vol.value).toFixed(2);
+  function bind(el, key, valId) {
+    el.addEventListener('input', () => {
+      document.getElementById(valId).textContent = (+el.value).toFixed(2);
+      prefs[key] = +el.value;
+      savePrefs();
+    });
+  }
+  bind(rate, 'rate', 'rateVal');
+  bind(pitch, 'pitch', 'pitchVal');
+  bind(vol, 'volume', 'volVal');
+
+  document.getElementById('voicePicker').addEventListener('change', e => {
+    prefs.voiceURI = e.target.value;
+    savePrefs();
+  });
+}
+setupSliders();
+
+document.getElementById('settingsBtn').addEventListener('click', () => {
+  document.getElementById('settings').classList.toggle('show');
+});
+document.getElementById('replayBtn').addEventListener('click', () => {
+  if (STATE.lastPhrase) speak(STATE.lastPhrase);
+});
+
+// Arrange + Sing mode toggles (persist across reloads)
+const _arrTgl = document.getElementById('arrangeToggle');
+const _singTgl = document.getElementById('singToggle');
+if (prefs.arrangeMode) {
+  STATE.arrangeMode = true;
+  _arrTgl.classList.add('active');
+  document.body.classList.add('arrange-mode');
+  _arrTgl.textContent = '✓ Arranging';
+}
+if (prefs.singMode) {
+  STATE.singMode = true;
+  _singTgl.classList.add('active');
+  _singTgl.textContent = '🎶 Singing';
+}
+_arrTgl.addEventListener('click', () => {
+  STATE.arrangeMode = !STATE.arrangeMode;
+  _arrTgl.classList.toggle('active', STATE.arrangeMode);
+  document.body.classList.toggle('arrange-mode', STATE.arrangeMode);
+  _arrTgl.textContent = STATE.arrangeMode ? '✓ Arranging' : '✎ Arrange';
+  prefs.arrangeMode = STATE.arrangeMode;
+  savePrefs();
+});
+_singTgl.addEventListener('click', () => {
+  STATE.singMode = !STATE.singMode;
+  _singTgl.classList.toggle('active', STATE.singMode);
+  _singTgl.textContent = STATE.singMode ? '🎶 Singing' : '🎶 Sing';
+  prefs.singMode = STATE.singMode;
+  savePrefs();
+});
+
+// Theme picker — applies a scenic background to the phrase stage
+const themeSelect = document.getElementById('themeSelect');
+themeSelect.value = STATE.theme;
+themeSelect.addEventListener('change', () => {
+  STATE.theme = themeSelect.value;
+  prefs.theme = STATE.theme;
+  savePrefs();
+  // Update the live stage if there is one without re-rendering everything
+  const stage = document.getElementById('phraseStage');
+  if (stage) {
+    stage.className = stage.className.replace(/\btheme-\w+\b/g, '').trim() + ' theme-' + STATE.theme;
+  }
+});
+
+// Board picker button
+document.getElementById('boardPickerBtn').addEventListener('click', openBoardPicker);
+// Press Escape to close the picker
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeBoardPicker();
+    document.getElementById('targetEditor').classList.remove('show');
+    document.getElementById('shareModal').style.display = 'none';
+    stopAutoSpeak();
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// TARGET EDITOR — click a phrase target in Arrange mode to edit it
+// ═══════════════════════════════════════════════════════════════
+const EMOJI_PALETTE = [
+  '😏','🎯','🦁','🤨','🤝','🧐','💭','🔍','📜','⚖️',
+  '✅','❌','🤷','❓','💡','😕','🗣️','🔁','👁️',
+  '👋','🌅','☀️','😊','❤️','🙏','🙇','🌟',
+  '🎉','😬','💻','📋','☕','😴','🤔','💼',
+  '🤖','🚫','🛏️','🎻','🕵️','🆘','🚨','📞','😮‍💨','⚠️',
+  '✋','⏸️','🛑','🍽️','🍰','🥄','🌡️','😋',
+  '💗','😢','😰','😠','📊','❤️‍🩹','😣','🩻','🛌','💊',
+  '📅','🚶','📺','🧼','💞','💬','🤍','🌈','⭐','🎵','🎶','🥁','🎹','🎸',
+  '🌙','🔥','🔔','☁️','🎲','🎭','🌸','🌿','📖','🎤'
+];
+let _editTarget = null;     // current target being edited
+function openTargetEditor(cat, sub, phraseIdx, tileEl) {
+  _editTarget = { cat, sub, phraseIdx, tileEl };
+  const cur = sub.phrases[phraseIdx];
+  const curEmoji = (sub.phraseEmojis && sub.phraseEmojis[phraseIdx]) || sub.icon;
+  // Pre-fill the size slider from the current target's stored size.
+  // Positions live in saveAllPositions() keyed by 'catId/subName' → array of
+  // {x,y,size}. If the user hasn't customized it yet, use the default (22%).
+  const all = loadAllPositions();
+  const key = cat.id + '/' + sub.name;
+  const saved = all[key] || [];
+  const defs = defaultLayout(sub.phrases.length);
+  const curPos = saved[phraseIdx] || defs[phraseIdx] || { x: 50, y: 50, size: 22 };
+  const sizeIn  = document.getElementById('teSize');
+  const sizeVal = document.getElementById('teSizeVal');
+  if (sizeIn)  sizeIn.value = String(curPos.size || 22);
+  if (sizeVal) sizeVal.textContent = (curPos.size || 22) + '%';
+  document.getElementById('teText').value = cur;
+  document.getElementById('teEmojiCustom').value = '';
+  // ── Populate the "Switch board" dropdown with every board in CATEGORIES,
+  //    using value "catIdx:subIdx".
+  const swSel = document.getElementById('teSwitchBoard');
+  if (swSel) {
+    swSel.innerHTML = '';
+    CATEGORIES.forEach((c2, ci) => {
+      const og = document.createElement('optgroup');
+      og.label = (c2.icon ? c2.icon + ' ' : '') + c2.name;
+      c2.subs.forEach((s2, si) => {
+        const opt = document.createElement('option');
+        opt.value = ci + ':' + si;
+        opt.textContent = (s2.icon ? s2.icon + ' ' : '') + s2.name;
+        og.appendChild(opt);
+      });
+      swSel.appendChild(og);
+    });
+  }
+  // ── Restore the target's current type + switch destination if it has one.
+  const switchTo = (sub.phraseSwitchTo && sub.phraseSwitchTo[phraseIdx]) || null;
+  const isSwitch = !!switchTo;
+  document.getElementById('teTypeSpeak').checked  = !isSwitch;
+  document.getElementById('teTypeSwitch').checked =  isSwitch;
+  document.getElementById('teSpeakFields').style.display  = isSwitch ? 'none' : '';
+  document.getElementById('teSwitchFields').style.display = isSwitch ? '' : 'none';
+  if (isSwitch && swSel) {
+    const cIdx = CATEGORIES.findIndex(c => c.id === switchTo.catId);
+    const sIdx = cIdx >= 0 ? CATEGORIES[cIdx].subs.findIndex(s => s.name === switchTo.subName) : -1;
+    if (cIdx >= 0 && sIdx >= 0) swSel.value = cIdx + ':' + sIdx;
+  }
+  // Toggle visible field set when the radio changes.
+  document.getElementById('teTypeSpeak').onchange = () => {
+    document.getElementById('teSpeakFields').style.display  = '';
+    document.getElementById('teSwitchFields').style.display = 'none';
+  };
+  document.getElementById('teTypeSwitch').onchange = () => {
+    document.getElementById('teSpeakFields').style.display  = 'none';
+    document.getElementById('teSwitchFields').style.display = '';
+  };
+  const grid = document.getElementById('teEmojiGrid');
+  grid.innerHTML = '';
+  EMOJI_PALETTE.forEach(em => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = em;
+    if (em === curEmoji) b.classList.add('selected');
+    b.onclick = () => {
+      grid.querySelectorAll('button.selected').forEach(x => x.classList.remove('selected'));
+      b.classList.add('selected');
+      document.getElementById('teEmojiCustom').value = em;
+    };
+    grid.appendChild(b);
+  });
+  document.getElementById('targetEditor').classList.add('show');
+}
+function closeTargetEditor() {
+  document.getElementById('targetEditor').classList.remove('show');
+  _editTarget = null;
+}
+document.getElementById('teClose').onclick = closeTargetEditor;
+document.getElementById('teCancel').onclick = closeTargetEditor;
+// Live label update + live preview of size while the slider is dragged.
+document.getElementById('teSize').addEventListener('input', () => {
+  const v = parseInt(document.getElementById('teSize').value, 10);
+  document.getElementById('teSizeVal').textContent = v + '%';
+  // Live-preview the size on the actual target without needing to click Save.
+  if (_editTarget && _editTarget.tileEl) {
+    _editTarget.tileEl.style.setProperty('--size', v + '%');
+  }
+});
+document.getElementById('teSave').onclick = () => {
+  if (!_editTarget) return;
+  const { cat, sub, phraseIdx } = _editTarget;
+  const isSwitch = document.getElementById('teTypeSwitch').checked;
+  // Make sure the phraseSwitchTo array exists and is long enough.
+  if (!sub.phraseSwitchTo) sub.phraseSwitchTo = sub.phrases.map(() => null);
+  while (sub.phraseSwitchTo.length < sub.phrases.length) sub.phraseSwitchTo.push(null);
+  if (isSwitch) {
+    // Save the chosen destination, label the target with the board name
+    // (used as the "phrase text" so it reads "Sad" or "Greetings" on the tile).
+    const swSel = document.getElementById('teSwitchBoard');
+    const v = swSel ? swSel.value : '';
+    const [ciS, siS] = v.split(':');
+    const ci = parseInt(ciS, 10), si = parseInt(siS, 10);
+    if (Number.isNaN(ci) || Number.isNaN(si)) {
+      alert('Pick a speaking board to switch to first.');
+      return;
+    }
+    const destSub = CATEGORIES[ci].subs[si];
+    sub.phraseSwitchTo[phraseIdx] = { catId: CATEGORIES[ci].id, subName: destSub.name };
+    sub.phrases[phraseIdx] = destSub.name;
+  } else {
+    sub.phraseSwitchTo[phraseIdx] = null;
+    const newText = document.getElementById('teText').value.trim();
+    if (newText) sub.phrases[phraseIdx] = newText;
+  }
+  let newEmoji = document.getElementById('teEmojiCustom').value.trim();
+  if (!newEmoji) {
+    const sel = document.querySelector('#teEmojiGrid button.selected');
+    if (sel) newEmoji = sel.textContent;
+  }
+  // If switching to another board, default the icon to 🔀 if the user
+  // didn't pick one explicitly.
+  if (isSwitch && !newEmoji) newEmoji = '🔀';
+  if (newEmoji) {
+    if (!sub.phraseEmojis) sub.phraseEmojis = sub.phrases.map(() => sub.icon);
+    while (sub.phraseEmojis.length < sub.phrases.length) sub.phraseEmojis.push(sub.icon);
+    sub.phraseEmojis[phraseIdx] = newEmoji;
+  }
+  // Persist the new size into the positions store so renderPhrases picks it up.
+  const newSize = parseInt(document.getElementById('teSize').value, 10);
+  if (!Number.isNaN(newSize)) {
+    const all = loadAllPositions();
+    const key = cat.id + '/' + sub.name;
+    const defs = defaultLayout(sub.phrases.length);
+    const arr = (all[key] || []).slice();
+    // Make sure the array is long enough — fill missing slots from the default layout.
+    while (arr.length < sub.phrases.length) arr.push(defs[arr.length]);
+    const prev = arr[phraseIdx] || defs[phraseIdx];
+    arr[phraseIdx] = { x: prev.x, y: prev.y, size: newSize };
+    all[key] = arr;
+    saveAllPositions(all);
+  }
+  saveUserPhrases();
+  saveBoardCustomization();
+  closeTargetEditor();
+  renderPhrases();
+};
+document.getElementById('teDelete').onclick = () => {
+  if (!_editTarget) return;
+  if (!confirm('Delete this target from the board?')) return;
+  const { cat, sub, phraseIdx } = _editTarget;
+  sub.phrases.splice(phraseIdx, 1);
+  if (sub.phraseSwitchTo) sub.phraseSwitchTo.splice(phraseIdx, 1);
+  if (sub.phraseEmojis) sub.phraseEmojis.splice(phraseIdx, 1);
+  saveUserPhrases();
+  saveBoardCustomization();
+  closeTargetEditor();
+  renderPhrases();
+};
+
+// Save user-customized emoji overrides + edits across reloads.
+const CUST_KEY = 'speakingBoardsCustom';
+function saveBoardCustomization() {
+  const data = {};
+  CATEGORIES.forEach(cat => {
+    cat.subs.forEach(sub => {
+      const k = cat.id + '/' + sub.name;
+      data[k] = {
+        phrases: sub.phrases.slice(),
+        phraseEmojis: (sub.phraseEmojis || []).slice(),
+        phraseSwitchTo: (sub.phraseSwitchTo || []).slice()
+      };
+    });
+  });
+  try { localStorage.setItem(CUST_KEY, JSON.stringify(data)); } catch(_) {}
+}
+function restoreBoardCustomization() {
+  try {
+    const data = JSON.parse(localStorage.getItem(CUST_KEY) || '{}');
+    Object.keys(data).forEach(k => {
+      const [catId, subName] = k.split('/');
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (!cat) return;
+      const sub = cat.subs.find(s => s.name === subName);
+      if (!sub) return;
+      if (data[k].phrases && Array.isArray(data[k].phrases)) sub.phrases = data[k].phrases.slice();
+      if (data[k].phraseEmojis && Array.isArray(data[k].phraseEmojis)) sub.phraseEmojis = data[k].phraseEmojis.slice();
+      if (data[k].phraseSwitchTo && Array.isArray(data[k].phraseSwitchTo)) sub.phraseSwitchTo = data[k].phraseSwitchTo.slice();
+    });
+  } catch(_) {}
+}
+restoreBoardCustomization();
+
+// ═══════════════════════════════════════════════════════════════
+// SAVE / LOAD / SHARE — same model as Songboards
+//
+//   Save mode:  modal opens pre-filled with the current board JSON.
+//               Buttons available: Copy, Download .txt, Load.
+//   Load mode:  modal opens with an empty textarea. The user pastes
+//               text they saved earlier and presses "Load this board".
+//
+// The exported JSON captures everything needed to reproduce the board on
+// another device: category, phrases (including any user-customized ones),
+// per-phrase emojis, target positions/sizes, and the quick-switch strip.
+// ═══════════════════════════════════════════════════════════════
+function _currentBoardPayload() {
+  if (STATE.catIdx < 0 || STATE.subIdx < 0) return null;
+  const cat = CATEGORIES[STATE.catIdx];
+  const sub = cat.subs[STATE.subIdx];
+  const positions = (loadAllPositions()[cat.id + '/' + sub.name]) || null;
+  const quickSwitch = getQuickSwitchForBoard(cat.id, sub.name);
+  return {
+    type: 'speaking-board',
+    version: 1,
+    category: cat.id,
+    categoryName: cat.name,
+    subcategory: sub.name,
+    icon: sub.icon,
+    phrases: sub.phrases.slice(),
+    phraseEmojis: (sub.phraseEmojis || []).slice(),
+    phraseSwitchTo: (sub.phraseSwitchTo || []).slice(),
+    positions: positions,
+    quickSwitch: quickSwitch
+  };
+}
+
+function openSaveModal() {
+  const payload = _currentBoardPayload();
+  if (!payload) { alert('Open a board first, then save it.'); return; }
+  document.getElementById('shTitle').innerHTML = '💾 Save &amp; Share';
+  document.getElementById('shHelp').textContent =
+    'Copy this text or download it as a .txt file to save or share the current board. '
+    + 'Paste it back via the Load button to restore your custom phrases, positions, and quick-switches.';
+  const ta = document.getElementById('shText');
+  ta.value = JSON.stringify(payload, null, 2);
+  ta.readOnly = true;
+  document.getElementById('shCopy').style.display = '';
+  document.getElementById('shDownload').style.display = '';
+  document.getElementById('shImport').textContent = '📥 Load this board';
+  document.getElementById('shareModal').style.display = 'flex';
+}
+
+function openLoadModal() {
+  document.getElementById('shTitle').innerHTML = '📂 Load a board';
+  document.getElementById('shHelp').textContent =
+    'Paste text you saved earlier (or that someone shared with you), then press "Load this board". '
+    + 'The current board will be replaced.';
+  const ta = document.getElementById('shText');
+  ta.value = '';
+  ta.readOnly = false;
+  document.getElementById('shCopy').style.display = 'none';
+  document.getElementById('shDownload').style.display = 'none';
+  document.getElementById('shImport').textContent = '📥 Load this board';
+  document.getElementById('shareModal').style.display = 'flex';
+  setTimeout(() => ta.focus(), 50);
+}
+
+document.getElementById('saveShareBtn').addEventListener('click', openSaveModal);
+document.getElementById('loadBoardBtn').addEventListener('click', openLoadModal);
+document.getElementById('shClose').onclick = () => document.getElementById('shareModal').style.display = 'none';
+
+document.getElementById('shCopy').onclick = async () => {
+  const t = document.getElementById('shText').value;
+  try {
+    await navigator.clipboard.writeText(t);
+    alert('Copied! Paste it into a message, email, or note to share.');
+  } catch(_) {
+    document.getElementById('shText').select();
+    alert('Press Ctrl/Cmd-C to copy the selected text.');
+  }
+};
+
+document.getElementById('shDownload').onclick = () => {
+  const txt = document.getElementById('shText').value;
+  if (!txt) return;
+  const blob = new Blob([txt], { type: 'text/plain' });
+  const a = document.createElement('a');
+  // Filename from the current board (e.g. sassy_friendly-sass.txt)
+  const cat = (STATE.catIdx >= 0) ? CATEGORIES[STATE.catIdx] : null;
+  const sub = (cat && STATE.subIdx >= 0) ? cat.subs[STATE.subIdx] : null;
+  const safe = (s) => (s || 'board').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  const name = 'speaking-board_' + safe(cat && cat.id) + '_' + safe(sub && sub.name) + '.txt';
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1500);
+};
+
+document.getElementById('shImport').onclick = () => {
+  const raw = document.getElementById('shText').value.trim();
+  if (!raw) { alert('Paste a board first.'); return; }
+  let payload;
+  try { payload = JSON.parse(raw); } catch(e) { alert('Could not parse — make sure you pasted a valid board.'); return; }
+  if (payload.type !== 'speaking-board') { alert('That doesn\'t look like a Speaking Board export.'); return; }
+  const cat = CATEGORIES.find(c => c.id === payload.category);
+  if (!cat) { alert('Category not found: ' + payload.category); return; }
+  const sub = cat.subs.find(s => s.name === payload.subcategory);
+  if (!sub) { alert('Subcategory not found: ' + payload.subcategory); return; }
+  if (Array.isArray(payload.phrases))      sub.phrases = payload.phrases.slice();
+  if (Array.isArray(payload.phraseEmojis)) sub.phraseEmojis = payload.phraseEmojis.slice();
+  if (Array.isArray(payload.phraseSwitchTo)) sub.phraseSwitchTo = payload.phraseSwitchTo.slice();
+  if (Array.isArray(payload.positions)) {
+    const all = loadAllPositions();
+    all[cat.id + '/' + sub.name] = payload.positions;
+    saveAllPositions(all);
+  }
+  if (Array.isArray(payload.quickSwitch)) {
+    saveQuickSwitchForBoard(cat.id, sub.name, payload.quickSwitch);
+  }
+  saveBoardCustomization();
+  saveUserPhrases();
+  document.getElementById('shareModal').style.display = 'none';
+  // Navigate to the imported board
+  const ci = CATEGORIES.indexOf(cat);
+  const si = cat.subs.indexOf(sub);
+  openSubcategory(ci, si);
+};
+
+// ═══════════════════════════════════════════════════════════════
+// EXAMPLES LIBRARY — ready-made boards the user can load with one tap
+//
+// Each example is a saved-board payload with the same shape that Save
+// produces and Load consumes (type:'speaking-board', version:1, ...).
+// Add more by appending to SPEAKING_EXAMPLES. Users can also paste their
+// own saved boards via the Load button — these here are just defaults.
+// ═══════════════════════════════════════════════════════════════
+const SPEAKING_EXAMPLES = [
+  {
+    name: '👋 Quick Greetings',
+    desc: 'Hello, How are you?, Nice to see you — five everyday hellos arranged in a friendly arc.',
+    payload: {
+      type: 'speaking-board', version: 1,
+      category: 'social', categoryName: 'Social', subcategory: 'Greetings', icon: '👋',
+      phrases: ['Hello!', 'Hi, how are you?', 'Nice to see you', 'Good morning', 'Good to meet you'],
+      phraseEmojis: ['👋', '🙂', '😊', '☀️', '🤝'],
+      positions: [
+        { x: 20, y: 38, size: 22 },
+        { x: 50, y: 30, size: 22 },
+        { x: 80, y: 38, size: 22 },
+        { x: 32, y: 70, size: 22 },
+        { x: 68, y: 70, size: 22 }
+      ],
+      quickSwitch: null
+    }
+  },
+  {
+    name: '🚨 Emergency essentials',
+    desc: 'Five urgent phrases sized larger and placed corner-to-corner for quick reach.',
+    payload: {
+      type: 'speaking-board', version: 1,
+      category: 'emergency', categoryName: 'Emergency & Safety', subcategory: 'Urgent Needs', icon: '🚨',
+      phrases: ['Help now.', 'Emergency!', 'Call someone.', 'I need a doctor.', 'Something is wrong.'],
+      phraseEmojis: ['🆘', '🚨', '📞', '🩺', '⚠️'],
+      positions: [
+        { x: 22, y: 32, size: 26 },
+        { x: 78, y: 32, size: 26 },
+        { x: 50, y: 55, size: 28 },
+        { x: 22, y: 78, size: 26 },
+        { x: 78, y: 78, size: 26 }
+      ],
+      quickSwitch: null
+    }
+  },
+  {
+    name: '✅ Yes / No / Maybe',
+    desc: 'Three big targets — perfect for fast switch or eye-gaze responses.',
+    payload: {
+      type: 'speaking-board', version: 1,
+      category: 'yesno', categoryName: 'Yes / No / Maybe', subcategory: 'Confirmation', icon: '✅',
+      phrases: ['Yes.', 'No.', 'Maybe.', 'I don\'t know.', 'Let me think.'],
+      phraseEmojis: ['✅', '❌', '🤷', '❓', '💭'],
+      positions: [
+        { x: 25, y: 50, size: 32 },
+        { x: 75, y: 50, size: 32 },
+        { x: 50, y: 30, size: 22 },
+        { x: 30, y: 80, size: 18 },
+        { x: 70, y: 80, size: 18 }
+      ],
+      quickSwitch: null
+    }
+  },
+  {
+    name: '😏 Friendly Sass — Dave\'s layout',
+    desc: 'Custom arrangement saved by Dave — varied target sizes scattered across the stage, with a Sad-feelings quick-switch.',
+    payload: {
+      type: 'speaking-board', version: 1,
+      category: 'sass', categoryName: 'Playful Sass', subcategory: 'Friendly Sass', icon: '😏',
+      phrases: ['Nice try.', 'You almost had me.', 'That\'s a bold opinion.', 'Are you sure about that?', 'Let\'s agree to disagree.'],
+      phraseEmojis: ['😏', '🗣️', '🦁', '🤨', '🤝'],
+      positions: [
+        { x: 53.8, y: 69.5, size: 15 },
+        { x: 30.5, y: 17.9, size: 13 },
+        { x: 70.9, y: 63.3, size: 10 },
+        { x: 35.5, y: 57.4, size: 16 },
+        { x: 70.6, y: 20.3, size: 10 }
+      ],
+      quickSwitch: [
+        { catId: 'feelings', sub: 'Sad Feelings', icon: '😢', label: 'Sad', accent: '#ff66bb' }
+      ]
+    }
+  }
+];
+
+function _applyExamplePayload(payload) {
+  if (!payload || payload.type !== 'speaking-board') return false;
+  const cat = CATEGORIES.find(c => c.id === payload.category);
+  if (!cat) return false;
+  let sub = cat.subs.find(s => s.name === payload.subcategory);
+  // If the example references a subcategory that doesn't exist on this build
+  // (e.g. category schema changed), use the first subcategory instead so the
+  // user still sees the example load.
+  if (!sub) sub = cat.subs[0];
+  if (!sub) return false;
+  if (Array.isArray(payload.phrases))      sub.phrases = payload.phrases.slice();
+  if (Array.isArray(payload.phraseEmojis)) sub.phraseEmojis = payload.phraseEmojis.slice();
+  if (Array.isArray(payload.phraseSwitchTo)) sub.phraseSwitchTo = payload.phraseSwitchTo.slice();
+  if (Array.isArray(payload.positions)) {
+    const all = loadAllPositions();
+    all[cat.id + '/' + sub.name] = payload.positions;
+    saveAllPositions(all);
+  }
+  if (Array.isArray(payload.quickSwitch)) {
+    saveQuickSwitchForBoard(cat.id, sub.name, payload.quickSwitch);
+  }
+  saveBoardCustomization();
+  saveUserPhrases();
+  const ci = CATEGORIES.indexOf(cat);
+  const si = cat.subs.indexOf(sub);
+  openSubcategory(ci, si);
+  return true;
+}
+
+function openExamplesModal() {
+  const list = document.getElementById('examplesList');
+  list.innerHTML = '';
+  SPEAKING_EXAMPLES.forEach((ex, i) => {
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:14px;padding:14px 16px;'
+      + 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);'
+      + 'border-radius:12px;cursor:pointer;transition:background 0.15s ease,border-color 0.15s ease';
+    item.onmouseenter = () => {
+      item.style.background = 'rgba(0,255,204,0.10)';
+      item.style.borderColor = 'rgba(0,255,204,0.40)';
+    };
+    item.onmouseleave = () => {
+      item.style.background = 'rgba(255,255,255,0.05)';
+      item.style.borderColor = 'rgba(255,255,255,0.12)';
+    };
+    item.innerHTML = `
+      <div style="flex:1">
+        <div style="font-weight:800;font-size:15px;color:var(--ink);margin-bottom:3px">${ex.name}</div>
+        <div style="font-size:12px;color:var(--ink-dim);line-height:1.4">${ex.desc}</div>
+        <div style="font-size:11px;color:var(--ink-faint);margin-top:4px">${ex.payload.categoryName} · ${ex.payload.phrases.length} phrases</div>
+      </div>
+      <button style="background:var(--cyan);color:#022;border:none;padding:9px 18px;border-radius:8px;cursor:pointer;font-family:'Exo 2',sans-serif;font-weight:800;flex:0 0 auto">Load</button>
+    `;
+    const fire = () => {
+      if (_applyExamplePayload(ex.payload)) {
+        document.getElementById('examplesModal').style.display = 'none';
+      } else {
+        alert('Could not load this example on this build.');
+      }
+    };
+    item.querySelector('button').addEventListener('click', (e) => { e.stopPropagation(); fire(); });
+    item.addEventListener('click', fire);
+    list.appendChild(item);
+  });
+  document.getElementById('examplesModal').style.display = 'flex';
+}
+
+document.getElementById('examplesBtn').addEventListener('click', openExamplesModal);
+document.getElementById('exClose').onclick = () => document.getElementById('examplesModal').style.display = 'none';
+document.getElementById('examplesModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('examplesModal')) {
+    document.getElementById('examplesModal').style.display = 'none';
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// AUTO-SPEAK — cycles through phrases one by one, speaking each
+// ═══════════════════════════════════════════════════════════════
+let _autoSpeakTimer = null;
+let _autoSpeakIdx = 0;
+function isAutoSpeaking() { return _autoSpeakTimer !== null; }
+function startAutoSpeak() {
+  stopAutoSpeak();
+  if (STATE.catIdx < 0 || STATE.subIdx < 0) return;
+  const sub = CATEGORIES[STATE.catIdx].subs[STATE.subIdx];
+  _autoSpeakIdx = 0;
+  document.getElementById('autoSpeakToggle').classList.add('active');
+  document.getElementById('autoSpeakToggle').textContent = '⏸ Pause';
+  function step() {
+    if (_autoSpeakIdx >= sub.phrases.length) _autoSpeakIdx = 0;
+    const text = sub.phrases[_autoSpeakIdx];
+    const tiles = document.querySelectorAll('#phraseStage .phrase-target');
+    const tile  = tiles[_autoSpeakIdx];
+    firePhrase(text, tile);
+    playAccent(CATEGORIES[STATE.catIdx].id);
+    _autoSpeakIdx++;
+  }
+  step();
+  const interval = parseInt(document.getElementById('autoSpeakIntervalIn').value, 10);
+  _autoSpeakTimer = setInterval(step, interval);
+}
+function stopAutoSpeak() {
+  if (_autoSpeakTimer) clearInterval(_autoSpeakTimer);
+  _autoSpeakTimer = null;
+  const btn = document.getElementById('autoSpeakToggle');
+  if (btn) {
+    btn.classList.remove('active');
+    btn.textContent = '▶ Auto-Speak';
+  }
+}
+document.getElementById('autoSpeakToggle').addEventListener('click', () => {
+  if (isAutoSpeaking()) stopAutoSpeak();
+  else startAutoSpeak();
+});
+document.getElementById('autoSpeakIntervalIn').addEventListener('input', () => {
+  const v = parseInt(document.getElementById('autoSpeakIntervalIn').value, 10);
+  document.getElementById('autoSpeakIntervalVal').textContent = (v / 1000).toFixed(1) + 's';
+  if (isAutoSpeaking()) { stopAutoSpeak(); startAutoSpeak(); }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// ROBOTIC VOICE — overrides the speak() function to add a vocoder-like
+// effect when enabled. Layers a synthesized triangle wave + bandpass
+// filtering on the actual speech output.
+// ═══════════════════════════════════════════════════════════════
+const robotChk = document.getElementById('robotVoice');
+if (typeof prefs.robotVoice === 'boolean') robotChk.checked = prefs.robotVoice;
+robotChk.addEventListener('change', () => {
+  prefs.robotVoice = robotChk.checked;
+  savePrefs();
+});
+const _origSpeak = speak;
+speak = function(text) {
+  _origSpeak(text);
+  // Play a brief robotic accompaniment when the toggle is on
+  if (robotChk.checked) {
+    try {
+      const ctx = _backingCtx || ensureBackingCtx();
+      if (!ctx) return;
+      if (ctx.state === 'suspended') ctx.resume();
+      const t0 = ctx.currentTime;
+      // Robotic vocoder-like chirp
+      [220, 277, 330].forEach((f, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        const bp = ctx.createBiquadFilter();
+        o.type = 'sawtooth';
+        o.frequency.setValueAtTime(f, t0);
+        o.frequency.linearRampToValueAtTime(f * 1.06, t0 + 0.5);
+        bp.type = 'bandpass';
+        bp.frequency.value = 900 + i * 200;
+        bp.Q.value = 8;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.linearRampToValueAtTime(0.03 / (i+1), t0 + 0.06);
+        g.gain.linearRampToValueAtTime(0.0001, t0 + Math.min(2.5, Math.max(0.4, text.length * 0.06)));
+        o.connect(bp); bp.connect(g); g.connect(ctx.destination);
+        o.start(t0); o.stop(t0 + 3);
+      });
+    } catch(_) {}
+  }
+};
+// Auto-speak interval label init
+{
+  const v = parseInt(document.getElementById('autoSpeakIntervalIn').value, 10);
+  document.getElementById('autoSpeakIntervalVal').textContent = (v / 1000).toFixed(1) + 's';
+}
+
+// Hash routing for deep links
+function applyHash() {
+  const h = location.hash.replace(/^#/, '');
+  if (!h) { goHome(); return; }
+  const [catId, subName] = h.split('/');
+  const catI = CATEGORIES.findIndex(c => c.id === catId);
+  if (catI < 0) { goHome(); return; }
+  if (!subName) { openCategory(catI); return; }
+  const decoded = decodeURIComponent(subName);
+  const subI = CATEGORIES[catI].subs.findIndex(s => s.name === decoded);
+  if (subI < 0) { openCategory(catI); return; }
+  openSubcategory(catI, subI);
+}
+window.addEventListener('hashchange', applyHash);
+
+restoreUserPhrases();
+renderRecent();
+populateBoardPickerDropdowns();
+applyHash();
+syncBoardPickerDropdowns();
+</script>
+</body>
+</html>

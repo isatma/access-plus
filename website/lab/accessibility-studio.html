@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accessibility Studio — isatma.org (Build 23)</title>
+<meta name="build" content="23">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg:        #060810;
+    --panel:     #0d1117;
+    --ink:       #e0f0ff;
+    --ink-dim:   rgba(224,240,255,0.65);
+    --ink-faint: rgba(224,240,255,0.40);
+    --cyan:      #00ffcc;
+    --gold:      #ffcc00;
+    --pink:      #ff66bb;
+    --green:     #66ff99;
+    --blue:      #4da6ff;
+    --orange:    #ff9966;
+    --bdr:       rgba(0,255,204,0.20);
+  }
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Exo 2', sans-serif;
+    overflow-x: hidden;
+  }
+  body {
+    background:
+      radial-gradient(1100px 600px at 50% -10%, rgba(0,255,204,0.10) 0%, transparent 60%),
+      radial-gradient(900px 500px at 90% 100%, rgba(255,102,187,0.08) 0%, transparent 60%),
+      var(--bg);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* --- Header --- */
+  header {
+    text-align: center;
+    padding: 38px 20px 26px;
+    border-bottom: 1px solid var(--bdr);
+    background: linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
+  }
+  header .brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(11px, 1.4vw, 13px);
+    letter-spacing: 0.35em;
+    color: var(--cyan);
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 5vw, 52px);
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    margin-top: 6px;
+    text-shadow: 0 0 28px rgba(0,255,204,0.25);
+  }
+  header h1 .accent { color: var(--cyan); }
+  /* Version + last-updated line — bright gold, sits right under the title
+     so it's obvious which build you're looking at. */
+  header .version-line {
+    margin: 12px auto 0;
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    color: #1a1404;
+    background: linear-gradient(180deg, #ffe680 0%, #ffcc00 70%, #f4a300 100%);
+    padding: 6px 18px;
+    border-radius: 999px;
+    border: 2px solid #b87800;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  }
+  /* Per-app status pills, smaller and below the gold version pill. Each
+     hints which app got the latest update. */
+  header .version-detail {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+  }
+  header .vd-pill {
+    background: rgba(0,255,204,0.08);
+    border: 1px solid rgba(0,255,204,0.30);
+    color: var(--ink-dim);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 4px 10px;
+    border-radius: 999px;
+  }
+  header .tagline {
+    font-size: clamp(13px, 1.7vw, 17px);
+    color: var(--ink-dim);
+    margin-top: 10px;
+    max-width: 780px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  /* --- Tile grid --- */
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 36px 20px 0; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; gap: 16px; }
+  }
+
+  .tile {
+    position: relative;
+    background: linear-gradient(180deg, var(--panel), #08090f);
+    border: 1px solid var(--bdr);
+    border-radius: 18px;
+    padding: 28px 26px 22px;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .tile.disabled { cursor: not-allowed; }
+  .tile:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent, var(--cyan));
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5),
+                0 0 0 1px var(--accent, var(--cyan)) inset;
+  }
+  .tile.disabled:hover { transform: none; }
+  .tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: var(--accent, var(--cyan));
+    opacity: 0.85;
+  }
+  .tile::after {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--accent, var(--cyan)) 0%, transparent 60%);
+    opacity: 0.10;
+    pointer-events: none;
+  }
+
+  .tile .icon {
+    font-size: 56px;
+    line-height: 1;
+    margin-bottom: 14px;
+  }
+  .tile h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .tile .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent, var(--cyan));
+    font-weight: 700;
+    margin-bottom: 12px;
+    opacity: 0.85;
+  }
+  .tile .desc {
+    color: var(--ink-dim);
+    font-size: 14.5px;
+    line-height: 1.55;
+    flex: 1;
+  }
+  .tile .actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .tile .pill {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 999px;
+  }
+  .tile .pill.available { background: rgba(102,255,153,0.15); color: var(--green); border: 1px solid rgba(102,255,153,0.4); }
+  .tile .pill.coming    { background: rgba(255,204,0,0.12);  color: var(--gold);  border: 1px solid rgba(255,204,0,0.35); }
+  .tile .go {
+    margin-left: auto;
+    color: var(--accent, var(--cyan));
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+  }
+  .tile.disabled .go { opacity: 0.5; }
+
+  /* Color-coded accents */
+  .tile.music    { --accent: var(--gold); }
+  .tile.comm     { --accent: var(--pink); }
+  .tile.exercise { --accent: var(--green); }
+  .tile.gaming   { --accent: var(--blue); }
+  .tile.motion   { --accent: var(--orange); }
+  .tile.dance    { --accent: var(--pink); }
+
+  /* --- Footer --- */
+  .studio-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 24px 20px;
+    color: var(--ink-faint);
+    font-size: 12px;
+    line-height: 1.7;
+  }
+  .studio-footer a { color: var(--cyan); text-decoration: none; }
+  .studio-footer a:hover { text-decoration: underline; }
+
+  /* --- "About this Studio" callout --- */
+  .about {
+    margin-top: 36px;
+    background: linear-gradient(180deg, rgba(0,255,204,0.05), rgba(0,255,204,0.02));
+    border: 1px solid var(--bdr);
+    border-radius: 14px;
+    padding: 22px 26px;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+  .about h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.14em;
+    color: var(--cyan);
+    margin-bottom: 8px;
+  }
+  .about strong { color: var(--ink); font-weight: 700; }
+
+  /* Build/version stamp — bottom-LEFT so it doesn't overlap any header
+     buttons. Big gold pill, sequential build number bumped per release. */
+  #versionStamp {
+    position: fixed;
+    bottom: 14px;
+    left: 14px;
+    z-index: 9999;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    color: #1a1404;
+    background: linear-gradient(180deg, #ffe680 0%, #ffcc00 70%, #f4a300 100%);
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 2.5px solid #b87800;
+    box-shadow:
+      0 6px 22px rgba(0,0,0,0.55),
+      0 0 0 2px rgba(255,255,255,0.55) inset,
+      0 0 24px rgba(255,204,0,0.45);
+    pointer-events: none;
+    user-select: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  }
+  #versionStamp .vs-num {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 2px 8px;
+    background: #1a1404;
+    color: #ffe680;
+    border-radius: 6px;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<!-- Build stamp — confirms which version is loaded; hard-refresh if stale. -->
+<div id="versionStamp" title="Accessibility Studio build version">⚡ BUILD <span class="vs-num">23</span></div>
+
+<header>
+  <div class="brand">isatma.org</div>
+  <h1>Accessibility <span class="accent">Studio</span></h1>
+  <!-- Version + last-updated stamp, prominently under the title so users can
+       tell at a glance which build they're on. Bump the number AND the date
+       whenever any Studio file gets a meaningful change. -->
+  <div class="version-line">⚡ Build 23 &nbsp;·&nbsp; Last updated May 31, 2026</div>
+  <div class="version-detail">
+    <span class="vd-pill">🎵 Songboards</span>
+    <span class="vd-pill">🗣️ Speaking Boards — Build 23 (switch-board targets, voice effects)</span>
+    <span class="vd-pill">🏋️ Wheelchair Exercise</span>
+    <span class="vd-pill">📊 Motion Lab</span>
+    <span class="vd-pill" style="background:rgba(255,102,187,0.10); border-color:rgba(255,102,187,0.40); color:#ffb8d4">💃 Dance Board — Build 23 (you in front of paint, head/hands/mouth)</span>
+  </div>
+  <p class="tagline">Hands-free, accessible interfaces for everyone — make music, communicate, exercise, and play. Designed for assistive technology: a head pointer, an eye tracker, an assistive switch, a stylus, a mouse, a finger, or a webcam picking up a wave of the hand. For experimental, educational, music-therapy, and personal use.</p>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+
+    <!-- MUSIC -->
+    <a href="index.html" class="tile music">
+      <div class="icon">🎵</div>
+      <div class="subtitle">Make Music</div>
+      <h2>Songboards</h2>
+      <p class="desc">Hands-free music for everyone. Build colorful keyboards out of musical targets and play them with a head pointer, eye gaze, an assistive switch, a stylus, a mouse, a finger, or a camera-tracked wave. Notes, chords, drums, backing tracks — all from circular targets you arrange on a stage.</p>
+      <div class="actions">
+        <span class="pill available">Available</span>
+        <span class="go">Open →</span>
+      </div>
+    </a>
+
+    <!-- COMMUNICATION -->
+    <a href="speaking-boards.html" class="tile comm">
+      <div class="icon">🗣️</div>
+      <div class="subtitle">Communicate</div>
+      <h2>Speaking Boards</h2>
+      <p class="desc">An expressive augmentative communication system. Activate colorful phrase targets — by tap, hover, switch, gaze dwell, or a camera-tracked wave — and your browser speaks for you. 19 categories from everyday needs to humor, sass, poetry, and quotes. Turn on Sing mode and each category carries a mood chord. Arrange targets where you can reach them.</p>
+      <div class="actions">
+        <span class="pill available">Available</span>
+        <span class="go">Open →</span>
+      </div>
+    </a>
+
+    <!-- EXERCISE -->
+    <a href="ergometer-2target.html" class="tile exercise">
+      <div class="icon">🏋️</div>
+      <div class="subtitle">Move &amp; Train</div>
+      <h2>Wheelchair Exercise</h2>
+      <p class="desc">A camera-based arm ergometer for wheelchair users. Push your arms toward LEFT and RIGHT targets in turn — each stroke powers a virtual wheelchair forward along a scrolling road. One-armed or both-armed; cadence drives speed. Targets are draggable so you can place them where you can comfortably reach. No hardware, no model download.</p>
+      <div class="actions">
+        <span class="pill available">Available</span>
+        <span class="go">Open →</span>
+      </div>
+    </a>
+
+    <!-- GAMING -->
+    <div class="tile gaming disabled">
+      <div class="icon">🎮</div>
+      <div class="subtitle">Play &amp; Compete</div>
+      <h2>Wheelchair Gaming</h2>
+      <p class="desc">Casual games and races that use the same accessible target system — switch presses, hover dwells, head-pointer sweeps, or camera waves become controls. A downhill race steered by alternating arm strokes, a rhythm game where you wave to the beat, a co-op music room where two players' motions blend into a live duet.</p>
+      <div class="actions">
+        <span class="pill coming">Planned</span>
+        <span class="go">Coming soon</span>
+      </div>
+    </div>
+
+    <!-- MOTION LAB — flows alongside the other tiles, no section break -->
+    <a href="motion-test.html" class="tile motion">
+      <div class="icon">📊</div>
+      <div class="subtitle">Capture · Explore · Express</div>
+      <h2>Motion Lab</h2>
+      <p class="desc">A live motion-detection instrument with data logging, charting, and CSV export. Capture motion from a webcam, see it as a waveform, and use it as a foundation for accessible exercise, biofeedback, range-of-motion measurement, dance, and artistic expression. Designed to work even when motion is subtle or imprecise — small movements still register. A research tool that informs every other Studio app.</p>
+      <div class="actions">
+        <span class="pill available">Available</span>
+        <span class="go">Open →</span>
+      </div>
+    </a>
+
+    <!-- DANCE BOARD — visual expression from motion -->
+    <a href="dance-board.html" class="tile dance">
+      <div class="icon">💃</div>
+      <div class="subtitle">Express &amp; Energize</div>
+      <h2>Dance Board</h2>
+      <p class="desc">Move your body and paint with light. The webcam watches your motion — arms, head, shoulders, any movement counts — and turns it into colorful effects on a full-screen canvas: brush trails, bloom rings, color waves, constellations, confetti bursts, ribbons, aurora washes, and fireworks. A real-time energy meter tracks how much you've moved, and a Dance Score blends peak intensity, accumulated motion, and sustained activity into one expressive number. For dance therapy, biofeedback, kinetic art, accessible exercise, and pure joyful movement.</p>
+      <div class="actions">
+        <span class="pill available">Available</span>
+        <span class="go">Open →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="about">
+    <h3>About this Studio</h3>
+    <p>Accessibility Studio is a place where one shared idea — <strong>colorful targets on a screen that anyone can activate</strong> — powers many different kinds of accessible interfaces. A target can be triggered by a tap, a hover, a click, an assistive switch press, a dwell from an eye tracker, a head-pointer sweep, or a wave in front of a webcam. The same target system lets us build music keyboards, communication phrases, exercise machines, and games. Suitable for assistive-technology users, music therapy, classrooms, research, and personal experimentation. Everything runs in your browser. Nothing is recorded. Nothing leaves the device. Source-available under a noncommercial license.</p>
+  </div>
+</div>
+
+<footer class="studio-footer">
+  Built collaboratively as part of the experimental project at <a href="https://isatma.org" target="_blank" rel="noopener">isatma.org</a> · Camera processing happens entirely on your device · Source-available under PolyForm Noncommercial License 1.0.0.
+</footer>
+
+</body>
+</html>

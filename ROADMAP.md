@@ -59,3 +59,5 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 
 - Roles: demo sign-in picker (participant, care team, researcher); Research workspace naming with role bar; Care team view (#care) with suggestions; profile "My data and sharing" (tests, research consent, care access, approve suggestions, download).
 - Wheelchair driving simulator placeholder on Simulators page (#wheelchair-sim), reusing the banner animation via window.wcSim(stage, canvas); real inputs to come.
+
+- Recreation lab (#lab): experimental ISATMA apps (Songboards, Speaking Boards, ergometers, Dance Board, Motion Lab, camera test) published as-is under website/lab/, with search and filters; MediaPipe versions pinned in isatma_ergometer_v4.

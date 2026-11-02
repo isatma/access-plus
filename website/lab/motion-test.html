@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion Detection Test + Data Log — standalone</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  h1 { font-size: 18px; margin-bottom: 4px; }
+  .sub { color: rgba(255,255,255,0.65); font-size: 12px; margin-bottom: 16px; }
+  .btn {
+    background: #4f8cff;
+    color: #fff;
+    border: 0;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-bottom: 6px;
+  }
+  .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+  .btn.secondary { background: rgba(255,255,255,0.12); }
+  .btn.danger    { background: #ef4444; }
+  .btn.amber     { background: #f59e0b; color: #271700; }
+  .panel {
+    background: #16161f;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .col-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  video, canvas.view {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 8px;
+    display: block;
+  }
+  video { transform: scaleX(-1); }
+  .readouts {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+    align-items: stretch;
+  }
+  .readout {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 10px 14px;
+    text-align: center;
+  }
+  .readout .label {
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .readout .value {
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
+    margin-top: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .readout.small .value { font-size: 36px; }
+  .verdict {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    padding: 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.55);
+    transition: background 0.1s, color 0.1s;
+    margin-top: 12px;
+  }
+  .verdict.fired {
+    background: #22c55e;
+    color: #042b13;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .row label { font-size: 13px; color: rgba(255,255,255,0.78); }
+  input[type="range"] {
+    flex: 1 1 200px;
+    accent-color: #22d3ee;
+  }
+  .mode {
+    display: inline-flex;
+    background: rgba(255,255,255,0.06);
+    border-radius: 999px;
+    padding: 3px;
+  }
+  .mode button {
+    background: transparent;
+    border: 0;
+    color: rgba(255,255,255,0.65);
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .mode button.active {
+    background: rgba(34,211,238,0.85);
+    color: #042b32;
+  }
+  canvas#chart {
+    width: 100%;
+    height: 160px;
+    background: #0d0d16;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.08);
+    display: block;
+    margin-top: 10px;
+  }
+  .log-wrap {
+    background: #0d0d16;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .log-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+  }
+  .log-head .count { font-variant-numeric: tabular-nums; }
+  .log {
+    height: 220px;
+    overflow-y: auto;
+    padding: 8px 12px;
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+    white-space: pre;
+  }
+  .log .fire { color: #4ade80; font-weight: 700; }
+  .footer {
+    color: rgba(255,255,255,0.55);
+    font-size: 12px;
+    margin-top: 18px;
+    line-height: 1.6;
+  }
+  .footer code {
+    background: rgba(255,255,255,0.10);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+  }
+</style>
+</head>
+<body>
+  <h1>📷 Motion Detection Test + Data Log</h1>
+  <div class="sub">Self-contained tool for measuring motion intensity over time. Camera + heatmap + smoothed readout + live chart + 10 Hz timestamped log + CSV export. No Songboards code.</div>
+
+  <button class="btn" id="startBtn">▶ Start camera</button>
+  <button class="btn secondary" id="snapBtn" disabled>📸 Snapshot background</button>
+  <button class="btn danger" id="stopBtn"  disabled>⏹ Stop</button>
+
+  <div class="panel">
+    <div class="row">
+      <span class="col-label" style="margin:0">Compare each new frame against</span>
+      <div class="mode">
+        <button id="modePrev" class="active">Previous frame</button>
+        <button id="modeBg">Snapshot background</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <div class="col-label">Camera (mirrored)</div>
+        <video id="feed" autoplay playsinline muted></video>
+      </div>
+      <div>
+        <div class="col-label">Motion heatmap (brighter = more motion)</div>
+        <canvas id="heat" class="view"></canvas>
+      </div>
+    </div>
+
+    <div class="readouts">
+      <div class="readout">
+        <div class="label">Smoothed motion (300 ms avg)</div>
+        <div class="value" id="numSmooth">0.0</div>
+      </div>
+      <div class="readout small">
+        <div class="label">Instant</div>
+        <div class="value" id="numInstant">0.0</div>
+      </div>
+      <div class="readout small">
+        <div class="label">Peak (last 1 s)</div>
+        <div class="value" id="numPeak">0.0</div>
+      </div>
+    </div>
+
+    <div class="verdict" id="verdict">STILL</div>
+
+    <div class="row">
+      <label for="thr">Fire threshold</label>
+      <input type="range" id="thr" min="0.3" max="30" step="0.1" value="2.0">
+      <span id="thrVal" style="font-weight:800;font-variant-numeric:tabular-nums;min-width:38px;text-align:right">2.0</span>
+      <button class="btn secondary" id="thrPresetBare" title="Threshold tuned for bare-hand subtle movement (smoothed peaks ~0.5–1.0)" style="padding:6px 10px;font-size:11px">bare-hand</button>
+      <button class="btn secondary" id="thrPresetGlove" title="Threshold for fluorescent glove / bright marker (smoothed peaks ~10–30)" style="padding:6px 10px;font-size:11px">glove</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="col-label">Motion intensity — last 30 seconds</div>
+    <canvas id="chart"></canvas>
+
+    <div class="log-wrap">
+      <div class="log-head">
+        <span>Data log — 10 samples/second · format: <code>elapsed_s | instant | smoothed | peak1s | fired</code></span>
+        <span class="count" id="logCount">0 rows</span>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="row">
+      <button class="btn secondary" id="pauseBtn" disabled>⏸ Pause log</button>
+      <button class="btn amber"     id="clearBtn">🗑 Clear log</button>
+      <button class="btn secondary" id="folderBtn" title="Pick a folder once; future CSV saves go straight there (Chrome/Edge only).">📂 Choose save folder</button>
+      <button class="btn"           id="csvBtn">⬇ Save CSV</button>
+    </div>
+    <div class="row" id="folderRow" style="margin-top:4px;display:none">
+      <span id="folderHint" style="font-size:12px;color:rgba(255,255,255,0.7)">Saves will go to folder: <b id="folderName"></b> <button class="btn secondary" id="folderClearBtn" style="padding:4px 10px;font-size:11px;margin-left:8px">✕ unset</button></span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <b>How to use this:</b> tap ▶ Start, allow camera permission, sit still for 2 seconds, then tap 📸 Snapshot background and switch to <i>Snapshot background</i> mode. Sit still — smoothed should read close to 0 and the chart line should be flat near the bottom. Wave your hand (or your fluorescent glove!) — the smoothed value will climb, the chart will show a clear peak, the log will record it, and the green FIRED indicator will light up when you cross the threshold.
+    <br><br>
+    The CSV export gives you one row per log entry: <code>elapsed_ms,instant,smoothed,peak_1s,fired</code>. Use it to plot arm-movement patterns over time, calibrate thresholds for an exercise routine, or correlate movement with music events. The smoothed reading is the most useful for tracking sustained arm activity; the instant value tells you raw frame-to-frame change; peak_1s catches brief gestures.
+    <br><br>
+    Pause stops adding new rows (camera + chart keep running). Clear empties the log. The chart auto-scales to the highest value seen recently.
+  </div>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+const feed   = $('feed');
+const heat   = $('heat');
+const numInstant = $('numInstant');
+const numSmooth  = $('numSmooth');
+const numPeak    = $('numPeak');
+const verd   = $('verdict');
+const thr    = $('thr');
+const thrVal = $('thrVal');
+const startBtn = $('startBtn');
+const snapBtn  = $('snapBtn');
+const stopBtn  = $('stopBtn');
+const modePrev = $('modePrev');
+const modeBg   = $('modeBg');
+const chart    = $('chart');
+const logEl    = $('log');
+const logCount = $('logCount');
+const pauseBtn = $('pauseBtn');
+const clearBtn = $('clearBtn');
+const csvBtn   = $('csvBtn');
+const folderBtn      = $('folderBtn');
+const folderRow      = $('folderRow');
+const folderName     = $('folderName');
+const folderClearBtn = $('folderClearBtn');
+
+const STATE = {
+  stream: null,
+  raf: 0,
+  work: null,
+  wctx: null,
+  prev: null,
+  bg:   null,
+  mode: 'prev',
+  startTime: 0,
+  // Live tracking
+  smoothBuf: [],     // {t, v} for last 300ms (for smoothed readout)
+  peakBuf:   [],     // {t, v} for last 1000ms (for peak)
+  chartBuf:  [],     // {t, v} for last 30s
+  // Log
+  logRows: [],       // {t, instant, smooth, peak, fired}
+  paused: false,
+  nextLogAt: 0,      // ms timestamp of next scheduled log entry
+  // Save destination (File System Access API). If null, fall back to regular
+  // browser download. Permission lives only for this tab/session.
+  saveDirHandle: null,
+  saveDirName: ''
+};
+
+const SAMPLE_W = 320;
+const SAMPLE_H = 180;
+const SMOOTH_MS = 300;
+const PEAK_MS   = 1000;
+const CHART_MS  = 30000;
+const LOG_INTERVAL_MS = 100;       // 10 Hz
+const LOG_CAP   = 6000;            // 10 minutes of log
+
+heat.width  = SAMPLE_W;
+heat.height = SAMPLE_H;
+const hctx = heat.getContext('2d');
+const heatImg = hctx.createImageData(SAMPLE_W, SAMPLE_H);
+
+// Chart canvas sizing — set both display CSS size and backing-store size so
+// the line is crisp on hi-dpi screens.
+const cctx = chart.getContext('2d');
+function sizeChart() {
+  const rect = chart.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  chart.width  = Math.max(100, Math.round(rect.width  * dpr));
+  chart.height = Math.max(100, Math.round(rect.height * dpr));
+  cctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+sizeChart();
+window.addEventListener('resize', sizeChart);
+
+thr.addEventListener('input', () => { thrVal.textContent = parseFloat(thr.value).toFixed(1); });
+$('thrPresetBare').addEventListener('click', () => { thr.value = '0.6'; thrVal.textContent = '0.6'; });
+$('thrPresetGlove').addEventListener('click', () => { thr.value = '8.0'; thrVal.textContent = '8.0'; });
+
+modePrev.addEventListener('click', () => setMode('prev'));
+modeBg.addEventListener('click',   () => setMode('bg'));
+function setMode(m) {
+  STATE.mode = m;
+  modePrev.classList.toggle('active', m === 'prev');
+  modeBg.classList.toggle('active',   m === 'bg');
+}
+
+startBtn.addEventListener('click', async () => {
+  startBtn.disabled = true;
+  try {
+    STATE.stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 360 }, facingMode: 'user' },
+      audio: false
+    });
+  } catch (e) {
+    alert('Camera permission denied: ' + (e && e.name ? e.name : e));
+    startBtn.disabled = false;
+    return;
+  }
+  feed.srcObject = STATE.stream;
+  await new Promise(r => feed.addEventListener('loadeddata', r, { once: true }));
+  STATE.work = document.createElement('canvas');
+  STATE.work.width = SAMPLE_W;
+  STATE.work.height = SAMPLE_H;
+  STATE.wctx = STATE.work.getContext('2d', { willReadFrequently: true });
+  STATE.startTime = performance.now();
+  STATE.nextLogAt = STATE.startTime;
+  STATE.smoothBuf = [];
+  STATE.peakBuf = [];
+  STATE.chartBuf = [];
+  STATE.prev = null;
+  STATE.bg = null;
+  snapBtn.disabled = false;
+  stopBtn.disabled = false;
+  pauseBtn.disabled = false;
+  loop();
+});
+
+snapBtn.addEventListener('click', () => {
+  if (!STATE.wctx) return;
+  STATE.bg = STATE.wctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H);
+});
+
+stopBtn.addEventListener('click', () => {
+  cancelAnimationFrame(STATE.raf);
+  STATE.raf = 0;
+  if (STATE.stream) { STATE.stream.getTracks().forEach(t => t.stop()); STATE.stream = null; }
+  feed.srcObject = null;
+  STATE.prev = null;
+  STATE.bg = null;
+  STATE.work = null;
+  STATE.wctx = null;
+  hctx.clearRect(0, 0, SAMPLE_W, SAMPLE_H);
+  numInstant.textContent = '0.0';
+  numSmooth.textContent  = '0.0';
+  numPeak.textContent    = '0.0';
+  verd.classList.remove('fired');
+  verd.textContent = 'STILL';
+  startBtn.disabled = false;
+  snapBtn.disabled = true;
+  stopBtn.disabled = true;
+  pauseBtn.disabled = true;
+});
+
+pauseBtn.addEventListener('click', () => {
+  STATE.paused = !STATE.paused;
+  pauseBtn.textContent = STATE.paused ? '▶ Resume log' : '⏸ Pause log';
+});
+
+clearBtn.addEventListener('click', () => {
+  STATE.logRows = [];
+  logEl.textContent = '';
+  logCount.textContent = '0 rows';
+});
+
+function buildCsvText() {
+  const header = 'elapsed_ms,instant,smoothed,peak_1s,fired';
+  const lines = STATE.logRows.map(r =>
+    [r.t | 0, r.instant.toFixed(2), r.smooth.toFixed(2), r.peak.toFixed(2), r.fired ? 1 : 0].join(','));
+  return header + '\n' + lines.join('\n') + '\n';
+}
+function csvFilename() {
+  const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  return 'motion-log-' + stamp + '.csv';
+}
+
+csvBtn.addEventListener('click', async () => {
+  if (!STATE.logRows.length) { alert('Log is empty. Start the camera and let it record first.'); return; }
+  const text = buildCsvText();
+  const name = csvFilename();
+
+  // Preferred path: write directly to the chosen folder via File System Access.
+  if (STATE.saveDirHandle) {
+    try {
+      const fh = await STATE.saveDirHandle.getFileHandle(name, { create: true });
+      const w  = await fh.createWritable();
+      await w.write(text);
+      await w.close();
+      flashCsvBtnSaved(name);
+      return;
+    } catch (e) {
+      alert('Could not write to chosen folder (' + (e && e.name ? e.name : 'error') + '). Falling back to regular download.');
+    }
+  }
+
+  // Fallback: regular browser download (goes to Downloads folder).
+  const blob = new Blob([text], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 500);
+  flashCsvBtnSaved(name);
+});
+
+function flashCsvBtnSaved(name) {
+  const orig = csvBtn.textContent;
+  csvBtn.textContent = '✓ Saved: ' + name;
+  csvBtn.disabled = true;
+  setTimeout(() => { csvBtn.textContent = orig; csvBtn.disabled = false; }, 2200);
+}
+
+// ----- Save folder picker (File System Access API; Chrome/Edge only) -----
+if (!window.showDirectoryPicker) {
+  folderBtn.disabled = true;
+  folderBtn.title = 'Choose save folder needs Chrome or Edge (the File System Access API). Saves will use the browser\'s standard Downloads folder.';
+}
+folderBtn.addEventListener('click', async () => {
+  if (!window.showDirectoryPicker) return;
+  try {
+    const dh = await window.showDirectoryPicker({ id: 'motionLogSave', mode: 'readwrite' });
+    STATE.saveDirHandle = dh;
+    STATE.saveDirName = dh.name || 'folder';
+    folderName.textContent = STATE.saveDirName;
+    folderRow.style.display = '';
+    folderBtn.textContent = '📂 Folder: ' + STATE.saveDirName;
+  } catch (e) {
+    // Aborted by user — just leave the state as-is.
+  }
+});
+folderClearBtn.addEventListener('click', () => {
+  STATE.saveDirHandle = null;
+  STATE.saveDirName = '';
+  folderRow.style.display = 'none';
+  folderBtn.textContent = '📂 Choose save folder';
+});
+
+function pruneBuf(buf, cutoff) {
+  while (buf.length && buf[0].t < cutoff) buf.shift();
+}
+
+function appendLogRow(row) {
+  STATE.logRows.push(row);
+  if (STATE.logRows.length > LOG_CAP) STATE.logRows.shift();
+  // Format: " 0.300s | inst  4.2 | smth  3.8 | pk1  6.5 |  -- "
+  const t = (row.t / 1000).toFixed(3).padStart(7, ' ');
+  const inst = row.instant.toFixed(1).padStart(5, ' ');
+  const smth = row.smooth.toFixed(1).padStart(5, ' ');
+  const pk   = row.peak.toFixed(1).padStart(5, ' ');
+  const fired = row.fired ? '🔥 FIRED' : '   --   ';
+  const line = `${t}s | inst ${inst} | smth ${smth} | pk1 ${pk} | ${fired}\n`;
+  const span = document.createElement('span');
+  if (row.fired) span.className = 'fire';
+  span.textContent = line;
+  logEl.appendChild(span);
+  // Keep log DOM bounded so it doesn't get too big.
+  while (logEl.childNodes.length > 800) logEl.removeChild(logEl.firstChild);
+  logEl.scrollTop = logEl.scrollHeight;
+  logCount.textContent = STATE.logRows.length + (STATE.logRows.length === 1 ? ' row' : ' rows');
+}
+
+function drawChart(threshold) {
+  const w = chart.clientWidth;
+  const h = chart.clientHeight;
+  cctx.clearRect(0, 0, w, h);
+
+  // Determine y-scale dynamically. Pick the smaller of (recent_max * 1.2) and
+  // (threshold * 1.6), so subtle bare-hand bumps in the 0–2 range are visible
+  // and don't get squashed by an arbitrary floor of 60.
+  let recentMax = 0;
+  for (let i = 0; i < STATE.chartBuf.length; i++) {
+    if (STATE.chartBuf[i].v > recentMax) recentMax = STATE.chartBuf[i].v;
+  }
+  let yMax = Math.max(threshold * 1.6, recentMax * 1.20, 1.0);
+
+  // Grid: a few horizontal lines
+  cctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  cctx.lineWidth = 1;
+  for (let g = 0; g <= 4; g++) {
+    const y = (h / 4) * g + 0.5;
+    cctx.beginPath();
+    cctx.moveTo(0, y); cctx.lineTo(w, y);
+    cctx.stroke();
+  }
+
+  // Threshold line
+  const thrY = h - (threshold / yMax) * h;
+  if (thrY > 0 && thrY < h) {
+    cctx.strokeStyle = 'rgba(34,197,94,0.6)';
+    cctx.setLineDash([4, 4]);
+    cctx.beginPath();
+    cctx.moveTo(0, thrY); cctx.lineTo(w, thrY);
+    cctx.stroke();
+    cctx.setLineDash([]);
+    cctx.fillStyle = 'rgba(34,197,94,0.85)';
+    cctx.font = '11px monospace';
+    cctx.fillText('threshold ' + threshold.toFixed(1), 6, Math.max(11, thrY - 4));
+  }
+
+  // Y-axis max label
+  cctx.fillStyle = 'rgba(255,255,255,0.45)';
+  cctx.font = '10px monospace';
+  cctx.fillText(yMax.toFixed(1), 4, 12);
+  cctx.fillText('0', 4, h - 4);
+
+  if (STATE.chartBuf.length < 2) return;
+
+  // Motion line
+  const now = performance.now();
+  const tStart = now - CHART_MS;
+  cctx.strokeStyle = '#22d3ee';
+  cctx.lineWidth = 2;
+  cctx.beginPath();
+  let started = false;
+  for (let i = 0; i < STATE.chartBuf.length; i++) {
+    const p = STATE.chartBuf[i];
+    const x = ((p.t - tStart) / CHART_MS) * w;
+    const y = h - Math.min(1, p.v / yMax) * h;
+    if (!started) { cctx.moveTo(x, y); started = true; }
+    else cctx.lineTo(x, y);
+  }
+  cctx.stroke();
+}
+
+function loop() {
+  STATE.raf = requestAnimationFrame(loop);
+  if (!feed.videoWidth) return;
+
+  STATE.wctx.save();
+  STATE.wctx.scale(-1, 1);
+  STATE.wctx.drawImage(feed, -SAMPLE_W, 0, SAMPLE_W, SAMPLE_H);
+  STATE.wctx.restore();
+  const curr = STATE.wctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H);
+  const cur = curr.data;
+
+  let ref = null;
+  if (STATE.mode === 'prev' && STATE.prev) ref = STATE.prev.data;
+  if (STATE.mode === 'bg'   && STATE.bg)   ref = STATE.bg.data;
+
+  let total = 0, count = 0;
+  const hdat = heatImg.data;
+  if (ref) {
+    for (let i = 0, j = 0; i < cur.length; i += 4, j += 4) {
+      const c = (cur[i] + cur[i+1] + cur[i+2]) / 3;
+      const r = (ref[i] + ref[i+1] + ref[i+2]) / 3;
+      const d = Math.abs(c - r);
+      total += d;
+      count++;
+      const t = Math.min(1, d / 60);
+      hdat[j]   = 30 + t * 50;
+      hdat[j+1] = 50 + t * 205;
+      hdat[j+2] = 80 + t * 175;
+      hdat[j+3] = Math.round(t * 235) + (d > 2 ? 20 : 0);
+    }
+    hctx.putImageData(heatImg, 0, 0);
+  } else {
+    hctx.clearRect(0, 0, SAMPLE_W, SAMPLE_H);
+  }
+
+  const instant = count ? (total / count) : 0;
+  const now = performance.now();
+  const elapsed = now - STATE.startTime;
+
+  // Smoothing buffer (last SMOOTH_MS)
+  STATE.smoothBuf.push({ t: now, v: instant });
+  pruneBuf(STATE.smoothBuf, now - SMOOTH_MS);
+  let sSum = 0;
+  for (let i = 0; i < STATE.smoothBuf.length; i++) sSum += STATE.smoothBuf[i].v;
+  const smoothed = STATE.smoothBuf.length ? sSum / STATE.smoothBuf.length : 0;
+
+  // Peak buffer (last PEAK_MS)
+  STATE.peakBuf.push({ t: now, v: instant });
+  pruneBuf(STATE.peakBuf, now - PEAK_MS);
+  let peak = 0;
+  for (let i = 0; i < STATE.peakBuf.length; i++) if (STATE.peakBuf[i].v > peak) peak = STATE.peakBuf[i].v;
+
+  // Chart buffer
+  STATE.chartBuf.push({ t: now, v: smoothed });
+  pruneBuf(STATE.chartBuf, now - CHART_MS);
+
+  // Update readouts
+  numInstant.textContent = instant.toFixed(1);
+  numSmooth.textContent  = smoothed.toFixed(1);
+  numPeak.textContent    = peak.toFixed(1);
+
+  const threshold = parseFloat(thr.value);
+  const fired = smoothed >= threshold;
+  if (fired) {
+    verd.classList.add('fired');
+    verd.textContent = 'MOTION (above threshold)';
+  } else {
+    verd.classList.remove('fired');
+    verd.textContent = 'STILL (below threshold)';
+  }
+
+  drawChart(threshold);
+
+  // Log at LOG_INTERVAL_MS
+  if (!STATE.paused && now >= STATE.nextLogAt) {
+    STATE.nextLogAt = now + LOG_INTERVAL_MS;
+    appendLogRow({ t: elapsed, instant: instant, smooth: smoothed, peak: peak, fired: fired });
+  }
+
+  STATE.prev = curr;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Songboards 2-target camera test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    min-height: 100vh;
+    padding: 12px;
+  }
+  h1 { font-size: 16px; margin-bottom: 4px; }
+  .sub { color: rgba(255,255,255,0.6); font-size: 11.5px; margin-bottom: 10px; }
+  .btn {
+    background: #4f8cff; color: #fff; border: 0;
+    padding: 9px 14px; border-radius: 8px;
+    font-size: 13px; font-weight: 700; cursor: pointer;
+    margin-right: 6px; margin-bottom: 4px;
+  }
+  .btn.secondary { background: rgba(255,255,255,0.12); }
+  .btn.danger    { background: #ef4444; }
+  .btn.amber     { background: #f59e0b; color: #271700; }
+  .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+
+  /* The stage holds the camera feed and the two targets. */
+  #stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.18);
+    overflow: hidden;
+    margin: 10px 0;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.5);
+  }
+  #stage video, #stage canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+  #stage video {
+    transform: scaleX(-1);
+    object-fit: cover;
+    opacity: 0.35;
+    z-index: 0;
+  }
+  #stage canvas#heatmap {
+    z-index: 1;
+    opacity: 0;
+    mix-blend-mode: screen;
+    image-rendering: pixelated;
+    transition: opacity 0.2s ease;
+  }
+  body.show-heatmap #stage canvas#heatmap { opacity: 0.7; }
+
+  /* Targets — two big circles, left and right.
+     Semi-transparent fill so the camera feed shows through; a thick colored
+     outline ring keeps the target visible; --proximity (0..1, set live by JS)
+     scales a glow ring that brightens as the signal climbs toward threshold. */
+  .target {
+    position: absolute;
+    width: 28%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 900;
+    font-size: clamp(28px, 4vw, 60px);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.85), 0 0 12px rgba(0,0,0,0.6);
+    border: 5px solid var(--ring, #fff);
+    --proximity: 0;
+    /* The base box-shadow gives a faint always-on inner glow + an outer glow
+       whose intensity is driven by --proximity (the signal-to-threshold ratio). */
+    box-shadow:
+      inset 0 0 24px rgba(255,255,255,calc(0.10 + var(--proximity) * 0.30)),
+      0 0 calc(8px + var(--proximity) * 38px) calc(var(--proximity) * 6px) var(--ring, #fff),
+      0 6px 18px rgba(0,0,0,0.5);
+    z-index: 5;
+    user-select: none;
+    pointer-events: none;
+    transition: box-shadow 0.08s ease, transform 0.08s ease;
+  }
+  /* Subtle radial wash so the letter is legible even over a busy background.
+     Alpha stays low so the camera feed and heatmap show through clearly. */
+  .target.left  {
+    left: 25%; top: 50%;
+    --ring: #ff6b6b;
+    background: radial-gradient(circle, rgba(255,107,107,0.16) 0%, rgba(255,107,107,0.30) 70%, rgba(90,26,26,0.42) 100%);
+  }
+  .target.right {
+    left: 75%; top: 50%;
+    --ring: #4dabf7;
+    background: radial-gradient(circle, rgba(77,171,247,0.16) 0%, rgba(77,171,247,0.30) 70%, rgba(26,58,90,0.42) 100%);
+  }
+  /* Fill warms slightly as you approach the threshold — a quiet "getting close" cue. */
+  .target::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,calc(var(--proximity) * 0.22)) 0%, transparent 65%);
+  }
+  .target.fired { animation: fired 0.65s ease-out; }
+  @keyframes fired {
+    0%   { box-shadow: inset 0 0 24px rgba(255,255,255,0.7),
+                       0 0 0 6px #fff,
+                       0 0 48px 14px var(--ring, #fff),
+                       0 6px 18px rgba(0,0,0,0.5); }
+    100% { box-shadow: inset 0 0 24px rgba(255,255,255,0.10),
+                       0 0 0 0 transparent,
+                       0 0 8px 0 var(--ring, #fff),
+                       0 6px 18px rgba(0,0,0,0.5); }
+  }
+  /* Live signal badge — ALWAYS visible, shows "signal/threshold" updating each frame. */
+  .target .sig {
+    position: absolute;
+    top: -10px; right: -8px;
+    background: rgba(0,0,0,0.82);
+    color: #fff;
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    border: 1.5px solid rgba(34,211,238,0.65);
+    line-height: 1.2;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .target .sig.hot { background: rgba(34,211,238,0.95); color: #042b32; border-color: #fff; }
+
+  /* Phase pill */
+  #phasePill {
+    position: absolute;
+    top: 10px; left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(245,158,11,0.92);
+    color: #fff;
+    font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+    z-index: 20; pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  #phasePill.ready { background: rgba(6,182,212,0.92); }
+
+  .panel {
+    background: #16161f;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 10px;
+  }
+  .row {
+    display: flex; align-items: center; gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .row label { font-size: 12.5px; color: rgba(255,255,255,0.78); }
+  input[type="range"] { flex: 1 1 200px; accent-color: #22d3ee; }
+  .val { font-weight: 800; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+  .footer { color: rgba(255,255,255,0.55); font-size: 11.5px; margin-top: 10px; line-height: 1.6; }
+  code { background: rgba(255,255,255,0.10); padding: 1px 5px; border-radius: 4px; font-size: 10.5px; }
+</style>
+</head>
+<body>
+<h1>🎵 Songboards 2-target camera test</h1>
+<div class="sub">Minimal Songboards-shape page. Two large targets (red C on the left, blue G on the right). Each shows its live per-target motion signal at all times. Background subtraction + 2 s warmup. Plays a note when a target fires.</div>
+
+<button class="btn" id="startBtn">▶ Start camera</button>
+<button class="btn secondary" id="recalBtn" disabled>↻ Recalibrate background</button>
+<button class="btn secondary" id="heatBtn"  disabled>📊 Show heatmap</button>
+<button class="btn secondary" id="muteBtn"  disabled>🔊 Sound: ON</button>
+<button class="btn danger"    id="stopBtn"  disabled>⏹ Stop</button>
+
+<div id="stage">
+  <video id="feed" autoplay playsinline muted></video>
+  <canvas id="heatmap"></canvas>
+  <div class="target left">
+    <span>C</span>
+    <div class="sig" id="sigL">0 / 0</div>
+  </div>
+  <div class="target right">
+    <span>G</span>
+    <div class="sig" id="sigR">0 / 0</div>
+  </div>
+  <div id="phasePill">— OFF —</div>
+</div>
+
+<div class="panel">
+  <div class="row">
+    <label for="thr">Fire threshold (per-target signal, raw 0–255)</label>
+    <input type="range" id="thr" min="2" max="80" step="1" value="16">
+    <span class="val" id="thrVal">16</span>
+    <button class="btn secondary" id="thrLow" title="Very lenient — try this first" style="padding:5px 10px;font-size:11px">lenient (6)</button>
+    <button class="btn secondary" id="thrMid" style="padding:5px 10px;font-size:11px">moderate (16)</button>
+    <button class="btn secondary" id="thrHi"  style="padding:5px 10px;font-size:11px">strict (35)</button>
+  </div>
+  <div class="row">
+    <label for="cool">Re-fire cooldown</label>
+    <input type="range" id="cool" min="300" max="2500" step="100" value="900">
+    <span class="val" id="coolVal">900 ms</span>
+  </div>
+</div>
+
+<div class="footer">
+  <b>What's happening:</b> camera feed is mirrored and shown at low opacity behind the targets. Each frame, the pixels inside each target's circular area are compared against a stored background snapshot. The number on each target is <code>current / threshold</code>. When the signal crosses the threshold and cooldown has elapsed, the target plays a note and pulses.
+  <br><br>
+  <b>How to use:</b> tap ▶ Start camera, allow permission, sit still for 2 seconds during warmup. The phase pill at the top of the stage turns cyan and says "READY." Now wave your hand (or a wristband) over the left or right target on screen. The signal number should climb; when it crosses the threshold, the target fires.
+  <br><br>
+  <b>If both targets fire constantly while you sit still</b> — that's a background-was-captured-with-you-in-it problem. Tap <code>↻ Recalibrate background</code> while holding very still. If it still misfires, the targets are positioned over a part of your body in the camera view — try a different camera angle or sit farther from the camera.
+  <br><br>
+  <b>If nothing fires when you wave</b> — drop the threshold to <code>lenient (6)</code>. Watch the signal numbers as you move. If they barely change, you may be moving outside the target's region in the camera view. The visible camera feed shows you where your hand actually is in the system's eyes.
+  <br><br>
+  Tap <code>📊 Show heatmap</code> to overlay a motion intensity map — bright cyan = motion detected. This shows EXACTLY where the system thinks motion is happening.
+</div>
+
+<script>
+'use strict';
+
+const $ = id => document.getElementById(id);
+const feed     = $('feed');
+const heatmap  = $('heatmap');
+const stage    = $('stage');
+const tgtL     = stage.querySelector('.target.left');
+const tgtR     = stage.querySelector('.target.right');
+const sigL     = $('sigL');
+const sigR     = $('sigR');
+const phase    = $('phasePill');
+const thr      = $('thr');
+const thrVal   = $('thrVal');
+const cool     = $('cool');
+const coolVal  = $('coolVal');
+const startBtn = $('startBtn');
+const stopBtn  = $('stopBtn');
+const recalBtn = $('recalBtn');
+const heatBtn  = $('heatBtn');
+const muteBtn  = $('muteBtn');
+
+const SAMPLE_W = 320;
+const SAMPLE_H = 180;
+
+heatmap.width = SAMPLE_W;
+heatmap.height = SAMPLE_H;
+const hctx = heatmap.getContext('2d');
+const heatImg = hctx.createImageData(SAMPLE_W, SAMPLE_H);
+
+const STATE = {
+  stream: null,
+  work: null,            // hidden sampling canvas
+  wctx: null,
+  background: null,
+  rafId: 0,
+  phase: 'off',          // 'off' | 'warmup' | 'ready'
+  warmupUntil: 0,
+  warmupMs: 2000,
+  cooldownMs: 900,
+  threshold: 16,
+  soundOn: true,
+  // per-target state
+  lastFire: { L: 0, R: 0 },
+  audioCtx: null,
+  // diagnostic
+  showHeatmap: false
+};
+
+// Setup audio (lazy — created on first start)
+function ensureAudio() {
+  if (STATE.audioCtx) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    STATE.audioCtx = new AC();
+  } catch(_) {}
+}
+function beep(freq) {
+  if (!STATE.soundOn || !STATE.audioCtx) return;
+  const ctx = STATE.audioCtx;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'sine';
+  o.frequency.value = freq;
+  o.connect(g); g.connect(ctx.destination);
+  const t = ctx.currentTime;
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(0.35, t + 0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.55);
+  o.start(t);
+  o.stop(t + 0.6);
+}
+
+function setPhase(p) {
+  STATE.phase = p;
+  phase.classList.toggle('ready', p === 'ready');
+  phase.textContent = p === 'off'    ? '— OFF —'
+                    : p === 'warmup' ? 'WARMING UP — HOLD STILL FOR BASELINE'
+                    :                  'READY — wave over a target';
+}
+
+thr.addEventListener('input', () => { STATE.threshold = parseInt(thr.value, 10); thrVal.textContent = thr.value; });
+cool.addEventListener('input', () => { STATE.cooldownMs = parseInt(cool.value, 10); coolVal.textContent = cool.value + ' ms'; });
+$('thrLow').addEventListener('click', () => { thr.value = '6';  thr.dispatchEvent(new Event('input')); });
+$('thrMid').addEventListener('click', () => { thr.value = '16'; thr.dispatchEvent(new Event('input')); });
+$('thrHi').addEventListener('click',  () => { thr.value = '35'; thr.dispatchEvent(new Event('input')); });
+
+heatBtn.addEventListener('click', () => {
+  STATE.showHeatmap = !STATE.showHeatmap;
+  document.body.classList.toggle('show-heatmap', STATE.showHeatmap);
+  heatBtn.textContent = STATE.showHeatmap ? '📊 Hide heatmap' : '📊 Show heatmap';
+});
+muteBtn.addEventListener('click', () => {
+  STATE.soundOn = !STATE.soundOn;
+  muteBtn.textContent = STATE.soundOn ? '🔊 Sound: ON' : '🔇 Sound: OFF';
+});
+recalBtn.addEventListener('click', () => {
+  if (STATE.phase === 'off') return;
+  STATE.background = null;
+  STATE.warmupUntil = performance.now() + STATE.warmupMs;
+  setPhase('warmup');
+});
+
+startBtn.addEventListener('click', async () => {
+  startBtn.disabled = true;
+  try {
+    STATE.stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 360 }, facingMode: 'user' },
+      audio: false
+    });
+  } catch (e) {
+    alert('Camera permission denied: ' + (e && e.name ? e.name : e));
+    startBtn.disabled = false; return;
+  }
+  ensureAudio();
+  if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') {
+    try { await STATE.audioCtx.resume(); } catch(_) {}
+  }
+  feed.srcObject = STATE.stream;
+  await new Promise(r => feed.addEventListener('loadeddata', r, { once: true }));
+  STATE.work = document.createElement('canvas');
+  STATE.work.width = SAMPLE_W;
+  STATE.work.height = SAMPLE_H;
+  STATE.wctx = STATE.work.getContext('2d', { willReadFrequently: true });
+  STATE.warmupUntil = performance.now() + STATE.warmupMs;
+  setPhase('warmup');
+  stopBtn.disabled = false;
+  recalBtn.disabled = false;
+  heatBtn.disabled = false;
+  muteBtn.disabled = false;
+  loop();
+});
+
+stopBtn.addEventListener('click', () => {
+  cancelAnimationFrame(STATE.rafId);
+  STATE.rafId = 0;
+  if (STATE.stream) { STATE.stream.getTracks().forEach(t => t.stop()); STATE.stream = null; }
+  feed.srcObject = null;
+  STATE.background = null;
+  STATE.work = null;
+  STATE.wctx = null;
+  hctx.clearRect(0, 0, SAMPLE_W, SAMPLE_H);
+  STATE.lastFire = { L: 0, R: 0 };
+  setPhase('off');
+  sigL.textContent = '0 / ' + STATE.threshold;
+  sigR.textContent = '0 / ' + STATE.threshold;
+  sigL.classList.remove('hot');
+  sigR.classList.remove('hot');
+  startBtn.disabled = false;
+  stopBtn.disabled = true;
+  recalBtn.disabled = true;
+  heatBtn.disabled = true;
+  muteBtn.disabled = true;
+});
+
+function sampleTargetSignal(el, cur, bg) {
+  // Find the target's CIRCULAR area in stage coordinates, then map to canvas coords.
+  const r = el.getBoundingClientRect();
+  const s = stage.getBoundingClientRect();
+  const cx = (r.left + r.right) / 2 - s.left;
+  const cy = (r.top + r.bottom) / 2 - s.top;
+  const radius = Math.min(r.width, r.height) / 2;
+  const sx = SAMPLE_W / s.width;
+  const sy = SAMPLE_H / s.height;
+  const cxCanvas = cx * sx;
+  const cyCanvas = cy * sy;
+  const rCanvas  = radius * Math.min(sx, sy);
+  const r2 = rCanvas * rCanvas;
+  const x0 = Math.max(0, Math.floor(cxCanvas - rCanvas));
+  const y0 = Math.max(0, Math.floor(cyCanvas - rCanvas));
+  const x1 = Math.min(SAMPLE_W, Math.ceil(cxCanvas + rCanvas));
+  const y1 = Math.min(SAMPLE_H, Math.ceil(cyCanvas + rCanvas));
+  let total = 0, count = 0;
+  for (let yy = y0; yy < y1; yy++) {
+    const dy = yy - cyCanvas;
+    for (let xx = x0; xx < x1; xx++) {
+      const dx = xx - cxCanvas;
+      if (dx * dx + dy * dy > r2) continue;
+      const i = (yy * SAMPLE_W + xx) * 4;
+      const c = (cur[i] + cur[i+1] + cur[i+2]) / 3;
+      const b = (bg[i]  + bg[i+1]  + bg[i+2]) / 3;
+      total += Math.abs(c - b);
+      count++;
+    }
+  }
+  return count ? (total / count) : 0;
+}
+
+function loop() {
+  STATE.rafId = requestAnimationFrame(loop);
+  if (!feed.videoWidth) return;
+  const wctx = STATE.wctx;
+
+  // Draw mirrored frame to sampling canvas
+  wctx.save();
+  wctx.scale(-1, 1);
+  wctx.drawImage(feed, -SAMPLE_W, 0, SAMPLE_W, SAMPLE_H);
+  wctx.restore();
+
+  const curr = wctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H);
+  const now = performance.now();
+
+  if (STATE.phase === 'warmup') {
+    if (now >= STATE.warmupUntil) {
+      STATE.background = curr;
+      setPhase('ready');
+    }
+    return;
+  }
+  if (STATE.phase !== 'ready' || !STATE.background) return;
+
+  const cur = curr.data;
+  const bg  = STATE.background.data;
+
+  // Heatmap (whole-frame)
+  if (STATE.showHeatmap) {
+    const hd = heatImg.data;
+    for (let p = 0, q = 0; p < cur.length; p += 4, q += 4) {
+      const d = (Math.abs(cur[p] - bg[p]) + Math.abs(cur[p+1] - bg[p+1]) + Math.abs(cur[p+2] - bg[p+2])) / 3;
+      const t = Math.min(1, d / 80);
+      hd[q]   = 30 + t * 220;
+      hd[q+1] = 90 + t * 165;
+      hd[q+2] = 180 + t * 75;
+      hd[q+3] = Math.round(40 + t * 215);
+    }
+    hctx.putImageData(heatImg, 0, 0);
+  }
+
+  // Per-target sampling
+  const sigLval = sampleTargetSignal(tgtL, cur, bg);
+  const sigRval = sampleTargetSignal(tgtR, cur, bg);
+
+  const thrV = STATE.threshold;
+  sigL.textContent = sigLval.toFixed(1) + ' / ' + thrV;
+  sigR.textContent = sigRval.toFixed(1) + ' / ' + thrV;
+  sigL.classList.toggle('hot', sigLval >= thrV);
+  sigR.classList.toggle('hot', sigRval >= thrV);
+  // Proximity 0..1 drives the live glow ring intensity (see .target box-shadow).
+  // We scale so signal == threshold maps to 1.0; small idle noise stays near 0.
+  tgtL.style.setProperty('--proximity', Math.max(0, Math.min(1, sigLval / thrV)).toFixed(3));
+  tgtR.style.setProperty('--proximity', Math.max(0, Math.min(1, sigRval / thrV)).toFixed(3));
+
+  // Fire logic (with cooldown)
+  if (sigLval >= thrV && (now - STATE.lastFire.L) > STATE.cooldownMs) {
+    STATE.lastFire.L = now;
+    tgtL.classList.add('fired');
+    setTimeout(() => tgtL.classList.remove('fired'), 600);
+    beep(261.63);   // C4
+  }
+  if (sigRval >= thrV && (now - STATE.lastFire.R) > STATE.cooldownMs) {
+    STATE.lastFire.R = now;
+    tgtR.classList.add('fired');
+    setTimeout(() => tgtR.classList.remove('fired'), 600);
+    beep(392.00);   // G4
+  }
+}
+
+window.addEventListener('pagehide', () => {
+  if (STATE.stream) STATE.stream.getTracks().forEach(t => t.stop());
+});
+</script>
+</body>
+</html>

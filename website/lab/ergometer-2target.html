@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Accessibility Studio — 2-target Wheelchair Ergometer</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;900&family=Exo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cyan:  #00ffcc;
+    --gold:  #ffcc00;
+    --green: #66ff99;
+    --red:   #ff6b6b;
+    --blue:  #4dabf7;
+    --dark:  #060810;
+    --panel: #0d1117;
+    --bdr:   rgba(0,255,204,0.20);
+  }
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--dark);
+    color: #e0f0ff;
+    font-family: 'Exo 2', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+
+  /* ── Stage: the entire viewport ── */
+  #stage {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    touch-action: none;
+  }
+  /* Road sits at the back */
+  #road {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+  }
+  /* Camera feed mirrored, low opacity over road */
+  #feed {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+    opacity: 0.22;
+    z-index: 1;
+    pointer-events: none;
+  }
+  #heatmap {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    mix-blend-mode: screen;
+    image-rendering: pixelated;
+    transition: opacity 0.2s ease;
+  }
+  body.show-heatmap #heatmap { opacity: 0.55; }
+
+  /* ── Top header overlay ── */
+  #header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 30;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    background: linear-gradient(180deg, rgba(13,17,23,0.95), rgba(13,17,23,0.55));
+    border-bottom: 1px solid var(--bdr);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    flex-wrap: wrap;
+  }
+  #branding { display: flex; align-items: center; gap: 12px; }
+  #branding a.back {
+    color: var(--cyan);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 10px;
+    border: 1px solid rgba(0,255,204,0.4);
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+  #branding a.back:hover { background: rgba(0,255,204,0.15); }
+  #branding h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(11px, 1.5vw, 15px);
+    color: var(--cyan);
+    letter-spacing: 2px;
+    text-shadow: 0 0 16px rgba(0,255,204,0.4);
+  }
+  #branding .sub { font-size: 9px; color: #556; letter-spacing: 3px; margin-top: 2px; }
+
+  .stats-row { display: flex; gap: 8px; align-items: center; }
+  .stat-box {
+    text-align: center;
+    background: rgba(0,255,204,0.06);
+    border: 1px solid var(--bdr);
+    border-radius: 8px;
+    padding: 4px 12px;
+    min-width: 70px;
+  }
+  .stat-box .slabel {
+    font-size: 9px; letter-spacing: 0.18em; color: #889;
+    text-transform: uppercase; display: block;
+  }
+  .stat-box .sval {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(13px, 1.6vw, 17px);
+    font-weight: 900; color: #fff; display: block; line-height: 1.2;
+  }
+  .stat-box.hl .sval { color: var(--cyan); text-shadow: 0 0 12px rgba(0,255,204,0.6); }
+
+  .spacer { flex: 1; }
+
+  #phasePill {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 5px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #aab;
+    font-weight: 800;
+  }
+  #phasePill.warmup { background: rgba(255,204,0,0.92); color: #271700; border-color: var(--gold); }
+  #phasePill.ready  { background: rgba(0,255,204,0.92); color: #022; border-color: var(--cyan); }
+  #phasePill.positioning { background: rgba(255,170,255,0.92); color: #3a1850; border-color: #ff99ff; }
+
+  /* ── Bottom controls overlay ── */
+  #controls {
+    position: fixed;
+    bottom: 12px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
+    padding: 10px 14px;
+    background: rgba(13,17,23,0.88);
+    border: 1px solid var(--bdr);
+    border-radius: 14px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    max-width: 96vw;
+  }
+  .iconbtn {
+    padding: 9px 14px;
+    background: transparent;
+    color: var(--cyan);
+    border: 2px solid var(--cyan);
+    border-radius: 8px;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .iconbtn:hover, .iconbtn.active { background: var(--cyan); color: #000; }
+  .iconbtn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .iconbtn.danger { color: var(--red); border-color: var(--red); }
+  .iconbtn.danger:hover { background: var(--red); color: #fff; }
+  .iconbtn.gold { color: var(--gold); border-color: var(--gold); }
+  .iconbtn.gold:hover, .iconbtn.gold.active { background: var(--gold); color: #271700; }
+
+  /* ── Targets — identical style to the working Songboards 2-target test ── */
+  .target {
+    position: absolute;
+    width: 30%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5.5vw, 78px);
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 18px rgba(0,0,0,0.7);
+    border: 6px solid var(--ring, #fff);
+    --proximity: 0;
+    box-shadow:
+      inset 0 0 30px rgba(255,255,255,calc(0.10 + var(--proximity) * 0.32)),
+      0 0 calc(10px + var(--proximity) * 50px) calc(var(--proximity) * 8px) var(--ring, #fff),
+      0 8px 22px rgba(0,0,0,0.55);
+    z-index: 5;
+    user-select: none;
+    pointer-events: none;
+    transition: box-shadow 0.08s ease;
+    /* Slight max-size cap so it doesn't dominate everything on huge screens */
+    max-width: 480px;
+  }
+  /* When the targets are unlocked for positioning, give them a dashed outline
+     and make them pointer-grabbable. Detection is paused during positioning,
+     so the proximity ring stays calm while you move them. */
+  body.unlocked .target {
+    pointer-events: auto;
+    cursor: grab;
+    outline: 3px dashed rgba(255,255,255,0.65);
+    outline-offset: 8px;
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  body.unlocked .target:active { cursor: grabbing; }
+  @keyframes nudge {
+    0%, 100% { filter: brightness(1); }
+    50%      { filter: brightness(1.18); }
+  }
+
+  .target.left {
+    left: 20%; top: 46%;
+    --ring: var(--red);
+    background: radial-gradient(circle, rgba(255,107,107,0.18) 0%, rgba(255,107,107,0.32) 70%, rgba(90,26,26,0.45) 100%);
+  }
+  .target.right {
+    left: 80%; top: 46%;
+    --ring: var(--blue);
+    background: radial-gradient(circle, rgba(77,171,247,0.18) 0%, rgba(77,171,247,0.32) 70%, rgba(26,58,90,0.45) 100%);
+  }
+  .target::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,calc(var(--proximity) * 0.24)) 0%, transparent 65%);
+  }
+  .target.fired { animation: fired 0.7s ease-out; }
+  @keyframes fired {
+    0%   { box-shadow: inset 0 0 30px rgba(255,255,255,0.7),
+                       0 0 0 10px #fff,
+                       0 0 80px 24px var(--ring, #fff),
+                       0 8px 22px rgba(0,0,0,0.55); }
+    100% { box-shadow: inset 0 0 30px rgba(255,255,255,0.10),
+                       0 0 0 0 transparent,
+                       0 0 10px 0 var(--ring, #fff),
+                       0 8px 22px rgba(0,0,0,0.55); }
+  }
+  /* Live signal badge */
+  .target .sig {
+    position: absolute;
+    top: -14px; right: -12px;
+    background: rgba(0,0,0,0.85);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+    border: 2px solid var(--ring, #fff);
+    pointer-events: none;
+    white-space: nowrap;
+    font-family: 'Exo 2', sans-serif;
+  }
+  .target .sig.hot { background: var(--ring, #fff); color: #000; }
+  .target-arm-label {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.20em;
+    color: var(--ring, #fff);
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    pointer-events: none;
+  }
+
+  /* Big phase status pill in the stage */
+  #stagePhase {
+    position: absolute;
+    top: 78px; left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 18px;
+    border-radius: 999px;
+    background: rgba(255,204,0,0.94);
+    color: #271700;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: 0.10em;
+    z-index: 20;
+    pointer-events: none;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.45);
+  }
+  #stagePhase.ready { background: rgba(0,255,204,0.95); color: #022; }
+  #stagePhase.positioning { background: rgba(255,170,255,0.95); color: #3a1850; }
+  #stagePhase.off { background: rgba(255,255,255,0.10); color: #aab; box-shadow: none; }
+
+  /* HUD strokes box */
+  #hud {
+    position: absolute;
+    bottom: 88px; left: 16px;
+    z-index: 8;
+    background: rgba(13,17,23,0.78);
+    border: 1px solid var(--bdr);
+    border-radius: 10px;
+    padding: 10px 14px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+  }
+  #hud .strokes {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--cyan);
+    text-transform: uppercase;
+  }
+  #hud .strokes b { color: #fff; font-size: 16px; }
+  #hud .alt {
+    font-size: 10.5px;
+    color: rgba(224,240,255,0.65);
+    margin-top: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* Settings drawer for threshold tuning */
+  #settings {
+    position: absolute;
+    bottom: 88px; right: 16px;
+    z-index: 8;
+    background: rgba(13,17,23,0.86);
+    border: 1px solid var(--bdr);
+    border-radius: 10px;
+    padding: 12px 16px;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    min-width: 240px;
+  }
+  #settings.show { display: block; }
+  #settings .row {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 11.5px;
+    color: rgba(224,240,255,0.85);
+    margin: 6px 0;
+  }
+  #settings input[type="range"] { flex: 1; accent-color: var(--cyan); }
+  #settings .val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    color: var(--cyan);
+    min-width: 40px;
+    text-align: right;
+  }
+  #settings .preset-row {
+    display: flex; gap: 4px;
+    margin-top: 8px;
+  }
+  #settings .preset-row button {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    color: var(--ink, #e0f0ff);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+  }
+  #settings .preset-row button:hover { background: var(--cyan); color: #000; border-color: var(--cyan); }
+
+  video.hidden { display: none; }
+
+  /* Tiny help tip about dragging when first unlocked */
+  #dragTip {
+    position: absolute;
+    top: 130px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    padding: 8px 14px;
+    background: rgba(255,170,255,0.18);
+    border: 1px solid rgba(255,170,255,0.4);
+    border-radius: 8px;
+    color: #ffccff;
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    display: none;
+  }
+  body.unlocked #dragTip { display: block; }
+</style>
+</head>
+<body>
+
+<div id="stage">
+  <canvas id="road"></canvas>
+  <video id="feed" autoplay playsinline muted></video>
+  <canvas id="heatmap"></canvas>
+
+  <div class="target left" id="tgtL">
+    <span>L</span>
+    <div class="sig" id="sigL">0 / 0</div>
+    <div class="target-arm-label">LEFT ARM</div>
+  </div>
+  <div class="target right" id="tgtR">
+    <span>R</span>
+    <div class="sig" id="sigR">0 / 0</div>
+    <div class="target-arm-label">RIGHT ARM</div>
+  </div>
+
+  <div id="stagePhase" class="off">— OFF —</div>
+  <div id="dragTip">✋ Drag the targets where they're comfortable, then tap 🔒 LOCK</div>
+
+  <div id="hud">
+    <div class="strokes">Strokes <b id="strokeCount">0</b></div>
+    <div class="alt"><span id="lastStroke">—</span> last · <span id="cadence">0</span> spm</div>
+  </div>
+
+  <div id="settings">
+    <div class="row">
+      <label for="thrIn">Sensitivity</label>
+      <input type="range" id="thrIn" min="4" max="50" step="1" value="16">
+      <span class="val" id="thrVal">16</span>
+    </div>
+    <div class="preset-row">
+      <button data-thr="6">LENIENT</button>
+      <button data-thr="16">NORMAL</button>
+      <button data-thr="28">STRICT</button>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <label for="powIn">Power per stroke</label>
+      <input type="range" id="powIn" min="0.1" max="1.5" step="0.05" value="0.5">
+      <span class="val" id="powVal">0.50</span>
+    </div>
+    <div class="row">
+      <label for="fricIn">Coast / friction</label>
+      <input type="range" id="fricIn" min="0.92" max="0.995" step="0.005" value="0.965">
+      <span class="val" id="fricVal">0.965</span>
+    </div>
+  </div>
+</div>
+
+<div id="header">
+  <div id="branding">
+    <a href="accessibility-studio.html" class="back">‹ STUDIO</a>
+    <div>
+      <h1>🏋️ WHEELCHAIR ERGOMETER</h1>
+      <div class="sub">2-target camera · drag to arrange</div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box hl"><span class="slabel">Velocity</span><span id="vVal" class="sval">0.0</span></div>
+    <div class="stat-box"><span class="slabel">Distance</span><span id="dVal" class="sval">0.0</span></div>
+    <div class="stat-box"><span class="slabel">RPM</span><span id="rVal" class="sval">0</span></div>
+    <div id="phasePill">— OFF —</div>
+  </div>
+</div>
+
+<div id="controls">
+  <button class="iconbtn" id="startBtn">▶ START</button>
+  <button class="iconbtn gold" id="lockBtn" disabled>🔓 UNLOCK</button>
+  <button class="iconbtn" id="recalBtn" disabled>↻ CAL</button>
+  <button class="iconbtn" id="resetPosBtn">↺ POSITIONS</button>
+  <button class="iconbtn" id="settingsBtn">⚙ TUNE</button>
+  <button class="iconbtn" id="heatBtn" disabled>📊 HEAT</button>
+  <button class="iconbtn" id="soundBtn" disabled>🔊 SOUND</button>
+</div>
+
+<script>
+'use strict';
+
+// ═══════════════════════════════════════════════════════════════
+// ELEMENTS
+// ═══════════════════════════════════════════════════════════════
+const stage    = document.getElementById('stage');
+const feed     = document.getElementById('feed');
+const heatmap  = document.getElementById('heatmap');
+const road     = document.getElementById('road');
+const tgtL     = document.getElementById('tgtL');
+const tgtR     = document.getElementById('tgtR');
+const sigL     = document.getElementById('sigL');
+const sigR     = document.getElementById('sigR');
+const phasePill = document.getElementById('phasePill');
+const stagePhase = document.getElementById('stagePhase');
+const startBtn = document.getElementById('startBtn');
+const lockBtn  = document.getElementById('lockBtn');
+const recalBtn = document.getElementById('recalBtn');
+const resetPosBtn = document.getElementById('resetPosBtn');
+const settingsBtn = document.getElementById('settingsBtn');
+const heatBtn  = document.getElementById('heatBtn');
+const soundBtn = document.getElementById('soundBtn');
+const settings = document.getElementById('settings');
+const thrIn    = document.getElementById('thrIn');
+const thrVal   = document.getElementById('thrVal');
+const powIn    = document.getElementById('powIn');
+const powVal   = document.getElementById('powVal');
+const fricIn   = document.getElementById('fricIn');
+const fricVal  = document.getElementById('fricVal');
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+const SAMPLE_W = 320;
+const SAMPLE_H = 180;
+heatmap.width = SAMPLE_W;
+heatmap.height = SAMPLE_H;
+const hctx = heatmap.getContext('2d');
+const heatImg = hctx.createImageData(SAMPLE_W, SAMPLE_H);
+
+const POS_KEY = 'ergoTargetPositions';
+const PREF_KEY = 'ergoPrefs';
+
+const STATE = {
+  stream: null,
+  rafId: 0,
+  work: null,
+  wctx: null,
+  background: null,
+  phase: 'off',          // 'off' | 'warmup' | 'ready' | 'positioning'
+  warmupUntil: 0,
+  warmupMs: 2000,
+  cooldownMs: 750,
+  threshold: 16,
+  powerPerStroke: 0.5,
+  friction: 0.965,
+  lastFire: { L: 0, R: 0 },
+  // Ergometer physics (tuned for slow / harder progress)
+  velocity: 0,
+  distance: 0,
+  // Stroke tracking
+  strokes: 0,
+  lastStrokeSide: null,
+  lastStrokeAt: 0,
+  strokeIntervals: [],
+  // UI
+  soundOn: true,
+  showHeatmap: false,
+  unlocked: false,
+  audioCtx: null
+};
+
+// Load saved prefs (threshold, power, friction)
+try {
+  const p = JSON.parse(localStorage.getItem(PREF_KEY) || 'null');
+  if (p) {
+    if (typeof p.threshold === 'number') STATE.threshold = p.threshold;
+    if (typeof p.power === 'number') STATE.powerPerStroke = p.power;
+    if (typeof p.friction === 'number') STATE.friction = p.friction;
+  }
+} catch(_) {}
+thrIn.value = STATE.threshold;
+thrVal.textContent = STATE.threshold;
+powIn.value = STATE.powerPerStroke;
+powVal.textContent = STATE.powerPerStroke.toFixed(2);
+fricIn.value = STATE.friction;
+fricVal.textContent = STATE.friction.toFixed(3);
+
+function savePrefs() {
+  try {
+    localStorage.setItem(PREF_KEY, JSON.stringify({
+      threshold: STATE.threshold,
+      power: STATE.powerPerStroke,
+      friction: STATE.friction
+    }));
+  } catch(_) {}
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TARGET POSITIONS — load, save, default, reset
+// ═══════════════════════════════════════════════════════════════
+const DEFAULT_POS = {
+  L: { left: '20%', top: '46%' },
+  R: { left: '80%', top: '46%' }
+};
+// Bump this if the default layout changes — saved positions older than this
+// will be reset to the new defaults so users see the new layout.
+const POSITIONS_LAYOUT_VERSION = 2;
+function applyPosition(el, pos) {
+  el.style.left = pos.left;
+  el.style.top  = pos.top;
+}
+function loadPositions() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(POS_KEY) || 'null');
+    if (saved && saved.L && saved.R && saved.v === POSITIONS_LAYOUT_VERSION) {
+      applyPosition(tgtL, saved.L);
+      applyPosition(tgtR, saved.R);
+      return;
+    }
+  } catch(_) {}
+  // Either no saved layout, or saved layout is from an older default scheme.
+  // Apply the current defaults so the user sees the new wider/higher layout.
+  applyPosition(tgtL, DEFAULT_POS.L);
+  applyPosition(tgtR, DEFAULT_POS.R);
+}
+function savePositions() {
+  const data = {
+    v: POSITIONS_LAYOUT_VERSION,
+    L: { left: tgtL.style.left, top: tgtL.style.top },
+    R: { left: tgtR.style.left, top: tgtR.style.top }
+  };
+  try { localStorage.setItem(POS_KEY, JSON.stringify(data)); } catch(_) {}
+}
+function resetPositions() {
+  applyPosition(tgtL, DEFAULT_POS.L);
+  applyPosition(tgtR, DEFAULT_POS.R);
+  savePositions();
+  // Force recalibration if camera is running so new bbox baselines are clean
+  if (STATE.phase === 'ready' || STATE.phase === 'positioning') {
+    STATE.background = null;
+    STATE.warmupUntil = performance.now() + STATE.warmupMs;
+    setPhase('warmup');
+  }
+}
+loadPositions();
+
+// Drag support — only active when body.unlocked
+function makeDraggable(el, key) {
+  let dragging = false;
+  let pointerId = null;
+  let startCX = 0, startCY = 0;          // pointer at drag start (page coords)
+  let startLeft = 0, startTop = 0;       // target center at drag start (percent)
+
+  el.addEventListener('pointerdown', (e) => {
+    if (!STATE.unlocked) return;
+    dragging = true;
+    pointerId = e.pointerId;
+    try { el.setPointerCapture(pointerId); } catch(_) {}
+    startCX = e.clientX;
+    startCY = e.clientY;
+    const sr = stage.getBoundingClientRect();
+    startLeft = parseFloat(el.style.left) / 100 * sr.width;
+    startTop  = parseFloat(el.style.top)  / 100 * sr.height;
+    e.preventDefault();
+  });
+  el.addEventListener('pointermove', (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    const sr = stage.getBoundingClientRect();
+    const x = startLeft + (e.clientX - startCX);
+    const y = startTop  + (e.clientY - startCY);
+    const xp = Math.max(5, Math.min(95, (x / sr.width)  * 100));
+    const yp = Math.max(10, Math.min(90, (y / sr.height) * 100));
+    el.style.left = xp.toFixed(1) + '%';
+    el.style.top  = yp.toFixed(1) + '%';
+  });
+  el.addEventListener('pointerup', (e) => {
+    if (!dragging || e.pointerId !== pointerId) return;
+    dragging = false;
+    try { el.releasePointerCapture(pointerId); } catch(_) {}
+    savePositions();
+    // Re-snapshot background since the bboxes moved
+    if (STATE.phase === 'ready') {
+      STATE.background = null;
+      STATE.warmupUntil = performance.now() + STATE.warmupMs;
+      setPhase('warmup');
+    }
+  });
+  el.addEventListener('pointercancel', () => { dragging = false; });
+}
+makeDraggable(tgtL, 'L');
+makeDraggable(tgtR, 'R');
+
+// ═══════════════════════════════════════════════════════════════
+// AUDIO
+// ═══════════════════════════════════════════════════════════════
+function ensureAudio() {
+  if (STATE.audioCtx) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    STATE.audioCtx = new AC();
+  } catch(_) {}
+}
+function playStrokeClick(side, power) {
+  if (!STATE.soundOn || !STATE.audioCtx) return;
+  const ctx = STATE.audioCtx;
+  const o = ctx.createOscillator();
+  const g = ctx.createGain();
+  o.type = 'square';
+  const f0 = side === 'L' ? 160 : 240;
+  o.frequency.setValueAtTime(f0, ctx.currentTime);
+  o.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 0.05);
+  const vol = 0.08 + Math.min(0.20, power * 0.02);
+  g.gain.setValueAtTime(vol, ctx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+  o.connect(g); g.connect(ctx.destination);
+  o.start();
+  o.stop(ctx.currentTime + 0.06);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHASE / UI
+// ═══════════════════════════════════════════════════════════════
+function setPhase(p) {
+  STATE.phase = p;
+  phasePill.classList.remove('warmup', 'ready', 'positioning');
+  stagePhase.classList.remove('warmup', 'ready', 'positioning', 'off');
+  if (p === 'off') {
+    phasePill.textContent = '— OFF —';
+    stagePhase.textContent = '— OFF —';
+    stagePhase.classList.add('off');
+  } else if (p === 'warmup') {
+    phasePill.classList.add('warmup');
+    phasePill.textContent = '⟳ WARMING UP';
+    stagePhase.textContent = 'WARMING UP — HOLD STILL';
+  } else if (p === 'ready') {
+    phasePill.classList.add('ready');
+    phasePill.textContent = '✓ READY';
+    stagePhase.classList.add('ready');
+    stagePhase.textContent = 'READY — PUSH ARMS TOWARD TARGETS';
+  } else if (p === 'positioning') {
+    phasePill.classList.add('positioning');
+    phasePill.textContent = '✋ POSITIONING';
+    stagePhase.classList.add('positioning');
+    stagePhase.textContent = 'POSITIONING — DRAG TARGETS, THEN LOCK';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CAMERA + DETECTION
+// ═══════════════════════════════════════════════════════════════
+startBtn.addEventListener('click', async () => {
+  if (STATE.phase !== 'off') { stopCamera(); return; }
+  startBtn.disabled = true;
+  try {
+    STATE.stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 640 }, height: { ideal: 360 }, facingMode: 'user' },
+      audio: false
+    });
+  } catch (e) {
+    alert('Camera permission denied: ' + (e && e.name ? e.name : e));
+    startBtn.disabled = false; return;
+  }
+  ensureAudio();
+  if (STATE.audioCtx && STATE.audioCtx.state === 'suspended') {
+    try { await STATE.audioCtx.resume(); } catch(_) {}
+  }
+  feed.srcObject = STATE.stream;
+  await new Promise(r => feed.addEventListener('loadeddata', r, { once: true }));
+  STATE.work = document.createElement('canvas');
+  STATE.work.width = SAMPLE_W;
+  STATE.work.height = SAMPLE_H;
+  STATE.wctx = STATE.work.getContext('2d', { willReadFrequently: true });
+  STATE.warmupUntil = performance.now() + STATE.warmupMs;
+  setPhase('warmup');
+  startBtn.textContent = '⏹ STOP';
+  startBtn.classList.add('danger');
+  startBtn.disabled = false;
+  lockBtn.disabled = false;
+  recalBtn.disabled = false;
+  heatBtn.disabled = false;
+  soundBtn.disabled = false;
+  ergometerLoop();
+});
+
+function stopCamera() {
+  cancelAnimationFrame(STATE.rafId);
+  STATE.rafId = 0;
+  if (STATE.stream) { STATE.stream.getTracks().forEach(t => t.stop()); STATE.stream = null; }
+  feed.srcObject = null;
+  STATE.work = null;
+  STATE.wctx = null;
+  STATE.background = null;
+  setPhase('off');
+  startBtn.textContent = '▶ START';
+  startBtn.classList.remove('danger');
+  lockBtn.disabled = true;
+  recalBtn.disabled = true;
+  heatBtn.disabled = true;
+  soundBtn.disabled = true;
+  document.body.classList.remove('unlocked');
+  lockBtn.textContent = '🔓 UNLOCK';
+  lockBtn.classList.remove('active');
+  sigL.textContent = '0 / ' + STATE.threshold;
+  sigR.textContent = '0 / ' + STATE.threshold;
+  sigL.classList.remove('hot');
+  sigR.classList.remove('hot');
+  hctx.clearRect(0, 0, SAMPLE_W, SAMPLE_H);
+}
+
+recalBtn.addEventListener('click', () => {
+  if (STATE.phase === 'off') return;
+  STATE.background = null;
+  STATE.warmupUntil = performance.now() + STATE.warmupMs;
+  setPhase('warmup');
+});
+heatBtn.addEventListener('click', () => {
+  STATE.showHeatmap = !STATE.showHeatmap;
+  document.body.classList.toggle('show-heatmap', STATE.showHeatmap);
+  heatBtn.classList.toggle('active', STATE.showHeatmap);
+  heatBtn.textContent = STATE.showHeatmap ? '📊 HIDE' : '📊 HEAT';
+});
+soundBtn.addEventListener('click', () => {
+  STATE.soundOn = !STATE.soundOn;
+  soundBtn.classList.toggle('active', STATE.soundOn);
+  soundBtn.textContent = STATE.soundOn ? '🔊 SOUND' : '🔇 MUTE';
+});
+
+// Lock toggle — when unlocked, targets are draggable and detection is paused.
+lockBtn.addEventListener('click', () => {
+  STATE.unlocked = !STATE.unlocked;
+  document.body.classList.toggle('unlocked', STATE.unlocked);
+  if (STATE.unlocked) {
+    lockBtn.textContent = '🔒 LOCK';
+    lockBtn.classList.add('active');
+    setPhase('positioning');
+  } else {
+    lockBtn.textContent = '🔓 UNLOCK';
+    lockBtn.classList.remove('active');
+    // Lock + re-snapshot the background so the new positions get a clean baseline
+    STATE.background = null;
+    STATE.warmupUntil = performance.now() + STATE.warmupMs;
+    setPhase('warmup');
+  }
+});
+
+resetPosBtn.addEventListener('click', () => {
+  if (!confirm('Reset target positions to the default centered layout?')) return;
+  resetPositions();
+});
+
+settingsBtn.addEventListener('click', () => {
+  settings.classList.toggle('show');
+  settingsBtn.classList.toggle('active');
+});
+
+thrIn.addEventListener('input', () => {
+  STATE.threshold = parseInt(thrIn.value, 10);
+  thrVal.textContent = STATE.threshold;
+  savePrefs();
+});
+powIn.addEventListener('input', () => {
+  STATE.powerPerStroke = parseFloat(powIn.value);
+  powVal.textContent = STATE.powerPerStroke.toFixed(2);
+  savePrefs();
+});
+fricIn.addEventListener('input', () => {
+  STATE.friction = parseFloat(fricIn.value);
+  fricVal.textContent = STATE.friction.toFixed(3);
+  savePrefs();
+});
+document.querySelectorAll('#settings .preset-row button').forEach(b => {
+  b.addEventListener('click', () => {
+    STATE.threshold = parseInt(b.dataset.thr, 10);
+    thrIn.value = STATE.threshold;
+    thrVal.textContent = STATE.threshold;
+    savePrefs();
+  });
+});
+
+function sampleTargetSignal(el, cur, bg) {
+  const r = el.getBoundingClientRect();
+  const s = stage.getBoundingClientRect();
+  const cx = (r.left + r.right) / 2 - s.left;
+  const cy = (r.top + r.bottom) / 2 - s.top;
+  const radius = Math.min(r.width, r.height) / 2;
+  const sx = SAMPLE_W / s.width;
+  const sy = SAMPLE_H / s.height;
+  const cxC = cx * sx;
+  const cyC = cy * sy;
+  const rC  = radius * Math.min(sx, sy);
+  const r2 = rC * rC;
+  const x0 = Math.max(0, Math.floor(cxC - rC));
+  const y0 = Math.max(0, Math.floor(cyC - rC));
+  const x1 = Math.min(SAMPLE_W, Math.ceil(cxC + rC));
+  const y1 = Math.min(SAMPLE_H, Math.ceil(cyC + rC));
+  let total = 0, count = 0;
+  for (let yy = y0; yy < y1; yy++) {
+    const dy = yy - cyC;
+    for (let xx = x0; xx < x1; xx++) {
+      const dx = xx - cxC;
+      if (dx * dx + dy * dy > r2) continue;
+      const i = (yy * SAMPLE_W + xx) * 4;
+      const c = (cur[i] + cur[i+1] + cur[i+2]) / 3;
+      const b = (bg[i]  + bg[i+1]  + bg[i+2]) / 3;
+      total += Math.abs(c - b);
+      count++;
+    }
+  }
+  return count ? (total / count) : 0;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ERGOMETER PHYSICS — strokes drive velocity, slow
+// ═══════════════════════════════════════════════════════════════
+function onStroke(side, power) {
+  STATE.strokes++;
+  const now = performance.now();
+  // Small per-stroke boost. powerPerStroke is the user-tunable base.
+  // Above-threshold "strength" contributes a small additional boost.
+  const excess = Math.max(0, power - STATE.threshold);
+  const boost = STATE.powerPerStroke + Math.min(0.6, excess * 0.04);
+  STATE.velocity += boost;
+
+  // Small alternation bonus rewards regular cranking pattern.
+  if (STATE.lastStrokeSide && STATE.lastStrokeSide !== side) {
+    STATE.velocity += STATE.powerPerStroke * 0.4;
+  }
+
+  if (STATE.lastStrokeAt) {
+    const dt = now - STATE.lastStrokeAt;
+    if (dt < 5000) {
+      STATE.strokeIntervals.push(dt);
+      if (STATE.strokeIntervals.length > 6) STATE.strokeIntervals.shift();
+    }
+  }
+  STATE.lastStrokeSide = side;
+  STATE.lastStrokeAt = now;
+
+  const tgt = side === 'L' ? tgtL : tgtR;
+  tgt.classList.add('fired');
+  setTimeout(() => tgt.classList.remove('fired'), 700);
+  playStrokeClick(side, power);
+
+  document.getElementById('strokeCount').textContent = STATE.strokes;
+  document.getElementById('lastStroke').textContent = side === 'L' ? 'LEFT' : 'RIGHT';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAIN LOOP
+// ═══════════════════════════════════════════════════════════════
+function ergometerLoop() {
+  STATE.rafId = requestAnimationFrame(ergometerLoop);
+  if (!feed.videoWidth) return;
+  const wctx = STATE.wctx;
+
+  wctx.save();
+  wctx.scale(-1, 1);
+  wctx.drawImage(feed, -SAMPLE_W, 0, SAMPLE_W, SAMPLE_H);
+  wctx.restore();
+  const curr = wctx.getImageData(0, 0, SAMPLE_W, SAMPLE_H);
+  const now = performance.now();
+
+  // Phase machine
+  if (STATE.phase === 'warmup') {
+    if (now >= STATE.warmupUntil) {
+      STATE.background = curr;
+      setPhase('ready');
+    }
+    physicsTick();
+    return;
+  }
+
+  // Positioning mode: skip detection entirely so dragging doesn't fire.
+  if (STATE.phase === 'positioning') {
+    physicsTick();
+    return;
+  }
+
+  if (STATE.phase !== 'ready' || !STATE.background) {
+    physicsTick();
+    return;
+  }
+
+  const cur = curr.data;
+  const bg  = STATE.background.data;
+  const thrV = STATE.threshold;
+
+  // Heatmap
+  if (STATE.showHeatmap) {
+    const hd = heatImg.data;
+    for (let p = 0, q = 0; p < cur.length; p += 4, q += 4) {
+      const d = (Math.abs(cur[p] - bg[p]) + Math.abs(cur[p+1] - bg[p+1]) + Math.abs(cur[p+2] - bg[p+2])) / 3;
+      const t = Math.min(1, d / 80);
+      hd[q]   = 30 + t * 220;
+      hd[q+1] = 90 + t * 165;
+      hd[q+2] = 180 + t * 75;
+      hd[q+3] = Math.round(40 + t * 215);
+    }
+    hctx.putImageData(heatImg, 0, 0);
+  }
+
+  const sL = sampleTargetSignal(tgtL, cur, bg);
+  const sR = sampleTargetSignal(tgtR, cur, bg);
+  sigL.textContent = sL.toFixed(1) + ' / ' + thrV;
+  sigR.textContent = sR.toFixed(1) + ' / ' + thrV;
+  sigL.classList.toggle('hot', sL >= thrV);
+  sigR.classList.toggle('hot', sR >= thrV);
+  tgtL.style.setProperty('--proximity', Math.max(0, Math.min(1, sL / thrV)).toFixed(3));
+  tgtR.style.setProperty('--proximity', Math.max(0, Math.min(1, sR / thrV)).toFixed(3));
+
+  if (sL >= thrV && (now - STATE.lastFire.L) > STATE.cooldownMs) {
+    STATE.lastFire.L = now;
+    onStroke('L', sL);
+  }
+  if (sR >= thrV && (now - STATE.lastFire.R) > STATE.cooldownMs) {
+    STATE.lastFire.R = now;
+    onStroke('R', sR);
+  }
+
+  physicsTick();
+}
+
+function physicsTick() {
+  // Friction decay — heavier than before so you really have to keep working.
+  STATE.velocity *= STATE.friction;
+  if (STATE.velocity < 0.03) STATE.velocity = 0;
+  // Distance accumulates SLOWLY — slow road, hard-earned progress.
+  STATE.distance += STATE.velocity * 0.012;
+
+  let cadence = 0;
+  if (STATE.strokeIntervals.length >= 2) {
+    const avgMs = STATE.strokeIntervals.reduce((a,b) => a+b, 0) / STATE.strokeIntervals.length;
+    cadence = Math.round(60000 / avgMs);
+  }
+  const rpm = Math.round(cadence / 2);
+
+  document.getElementById('vVal').textContent = STATE.velocity.toFixed(1);
+  document.getElementById('dVal').textContent = STATE.distance.toFixed(1);
+  document.getElementById('rVal').textContent = rpm;
+  document.getElementById('cadence').textContent = cadence;
+
+  drawRoad();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ROAD — full-screen background, scrolls SLOW so progress is earned
+// ═══════════════════════════════════════════════════════════════
+const rCtx = road.getContext('2d');
+let roadOffset = 0;
+let treeOffset = 0;
+let cloudX = 0;
+let sunPulse = 0;
+
+function sizeRoad() {
+  road.width = road.clientWidth;
+  road.height = road.clientHeight;
+}
+sizeRoad();
+window.addEventListener('resize', sizeRoad);
+
+// SLOW road tuning: lower scroll multipliers so velocity has to be sustained
+// to make visible progress. Compare with the original (1.2 / 0.09).
+const ROAD_SCROLL_MULT = 0.45;
+const TREE_SCROLL_MULT = 0.035;
+
+function drawRoad() {
+  const W = road.width, H = road.height, ctx = rCtx, hY = H * 0.43;
+  if (!W || !H) return;
+  ctx.clearRect(0, 0, W, H);
+
+  const sky = ctx.createLinearGradient(0, 0, 0, hY);
+  sky.addColorStop(0, '#0a1428');
+  sky.addColorStop(0.7, '#1a3058');
+  sky.addColorStop(1, '#2a5078');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, hY);
+
+  for (let s = 0; s < 40; s++) {
+    ctx.fillStyle = `rgba(255,255,255,${0.3 + (s % 3) * 0.2})`;
+    ctx.beginPath();
+    ctx.arc((s * 173 + 20) % W, (s * 89) % (hY * 0.6), 0.9, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  sunPulse += 0.018;
+  const sX = W * 0.76, sY = hY * 0.40;
+  const sg = ctx.createRadialGradient(sX, sY, 0, sX, sY, 65);
+  sg.addColorStop(0, 'rgba(255,220,100,0.45)');
+  sg.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = sg;
+  ctx.beginPath();
+  ctx.arc(sX, sY, 65, 0, Math.PI * 2);
+  ctx.fill();
+  const sb = ctx.createRadialGradient(sX-5, sY-5, 2, sX, sY, 27);
+  sb.addColorStop(0, '#fff8d0');
+  sb.addColorStop(0.5, '#ffcc44');
+  sb.addColorStop(1, '#ff8800');
+  ctx.fillStyle = sb;
+  ctx.beginPath();
+  ctx.arc(sX, sY, 27 + Math.sin(sunPulse) * 1.5, 0, Math.PI * 2);
+  ctx.fill();
+
+  cloudX = (cloudX + 0.08) % (W + 300);
+  [[cloudX % (W+200) - 100, hY*0.22, 1],
+   [(cloudX*0.6 + W*0.42) % (W+200) - 100, hY*0.40, 0.7]
+  ].forEach(([x, y, sc]) => {
+    ctx.fillStyle = 'rgba(255,255,255,0.11)';
+    [[0,0,26],[22,6,18],[44,0,22],[11,-14,16],[32,-12,15]].forEach(([dx, dy, r]) => {
+      ctx.beginPath();
+      ctx.arc(x + dx*sc, y + dy*sc, r*sc, 0, Math.PI * 2);
+      ctx.fill();
+    });
+  });
+
+  const gr = ctx.createLinearGradient(0, hY, 0, H);
+  gr.addColorStop(0, '#2a5c1a');
+  gr.addColorStop(0.5, '#1e4412');
+  gr.addColorStop(1, '#0f2208');
+  ctx.fillStyle = gr;
+  ctx.fillRect(0, hY, W, H - hY);
+
+  const vpX = W / 2, rHB = W * 0.43, rHT = 9;
+  const rg = ctx.createLinearGradient(0, hY, 0, H);
+  rg.addColorStop(0, '#1a1a1a');
+  rg.addColorStop(1, '#303030');
+  ctx.fillStyle = rg;
+  ctx.beginPath();
+  ctx.moveTo(vpX - rHT, hY);
+  ctx.lineTo(vpX + rHT, hY);
+  ctx.lineTo(vpX + rHB, H);
+  ctx.lineTo(vpX - rHB, H);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.moveTo(vpX - rHT, hY);
+  ctx.lineTo(vpX - rHB, H);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(vpX + rHT, hY);
+  ctx.lineTo(vpX + rHB, H);
+  ctx.stroke();
+
+  // SLOW dashes
+  roadOffset += Math.abs(STATE.velocity) * ROAD_SCROLL_MULT;
+  for (let d = 0; d < 10; d++) {
+    const t0 = ((d / 10) + (roadOffset * 0.013) % 1) % 1;
+    const t1 = Math.min(1, t0 + 0.044);
+    if (t0 > 0.97) continue;
+    const y0 = hY + (H - hY) * t0;
+    const y1 = hY + (H - hY) * t1;
+    const hw0 = Math.max(1, t0 * 5.5);
+    const hw1 = Math.max(1, t1 * 5.5);
+    ctx.fillStyle = '#fff';
+    ctx.beginPath();
+    ctx.moveTo(vpX - hw0, y0);
+    ctx.lineTo(vpX + hw0, y0);
+    ctx.lineTo(vpX + hw1, y1);
+    ctx.lineTo(vpX - hw1, y1);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // SLOW trees
+  treeOffset = (treeOffset + Math.abs(STATE.velocity) * TREE_SCROLL_MULT) % 1;
+  [0.1, 0.35, 0.62, 0.87].forEach((base, i) => {
+    const t = (base + treeOffset) % 1;
+    if (t < 0.03) return;
+    const y = hY + (H - hY) * t;
+    const sz = 10 + t * 68;
+    const alp = Math.min(1, t * 2);
+    const xlR = vpX - rHT - (rHB - rHT) * t;
+    const xrR = vpX + rHT + (rHB - rHT) * t;
+    [xlR - sz * 1.3, xrR + sz * 1.3].forEach((tx, ti) => {
+      ctx.globalAlpha = alp;
+      if ((i + ti) % 2 === 0) {
+        ctx.fillStyle = '#1e5c0f';
+        ctx.beginPath();
+        ctx.moveTo(tx, y - sz * 2.3);
+        ctx.lineTo(tx - sz * 0.78, y - sz * 0.7);
+        ctx.lineTo(tx + sz * 0.78, y - sz * 0.7);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#164a09';
+        ctx.beginPath();
+        ctx.moveTo(tx, y - sz * 3.0);
+        ctx.lineTo(tx - sz * 0.52, y - sz * 1.6);
+        ctx.lineTo(tx + sz * 0.52, y - sz * 1.6);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = '#6b4020';
+        ctx.fillRect(tx - sz * 0.13, y - sz * 0.72, sz * 0.26, sz * 0.75);
+      } else {
+        const rg2 = ctx.createRadialGradient(tx - sz*0.28, y - sz*1.28, sz*0.1, tx, y - sz, sz);
+        rg2.addColorStop(0, '#4a9a1a');
+        rg2.addColorStop(1, '#1e5c08');
+        ctx.fillStyle = rg2;
+        ctx.beginPath();
+        ctx.arc(tx, y - sz, sz * 0.92, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#6b4020';
+        ctx.fillRect(tx - sz * 0.13, y, sz * 0.26, sz * 0.62);
+      }
+      ctx.globalAlpha = 1;
+    });
+  });
+}
+
+// Initial paint
+drawRoad();
+
+window.addEventListener('pagehide', () => {
+  if (STATE.stream) STATE.stream.getTracks().forEach(t => t.stop());
+});
+</script>
+</body>
+</html>

@@ -847,6 +847,9 @@ footer .wrap { padding-block: 22px; }
 .si-foot .btn { min-height: 52px; }
 .si-box .btn { color: #0b1220; border-color: #4b5a6b; background: #fff; }
 .nav .navsign .navrole { margin-left: 8px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; background: var(--rc, #5fe0a8); color: #04201a; }
+.nav .navlab { gap: 8px; border: 1px solid #ff8fd0; color: #ff8fd0; padding: 0 12px; margin-right: 6px; }
+.nav .navlab:hover { background: rgba(255,143,208,0.12); color: var(--ink); }
+.nav .navlab[aria-current="page"] { background: #ff8fd0; color: #2b0a1c; }
 .rolebar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border: 1px solid var(--rc, #7cc4ff); background: color-mix(in srgb, var(--rc, #7cc4ff) 10%, transparent); color: var(--ink); font-size: 0.95em; }
 .rolebar b { font: 600 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--rc, #7cc4ff); }
 .rolebar button { min-height: 44px; padding: 0 14px; border: 1px solid var(--rc, #7cc4ff); background: transparent; color: var(--ink); font: 600 0.9em var(--body); cursor: pointer; }
@@ -1469,6 +1472,35 @@ footer .wrap { padding-block: 22px; }
 #view-care .ct-st.pending { color: #8a5a00; }
 #view-care .ct-st.approved { color: #08734b; }
 #view-care .ct-st.declined { color: #a33a1a; }
+#view-lab .lb-wrap { gap: 22px !important; }
+#view-lab .lb-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
+#view-lab .lb-hero h1 { font-size: clamp(2em, 5vw, 3.2em); line-height: 1.06; margin: 0; }
+#view-lab .lb-hero h1 span { color: #ff8fd0; }
+#view-lab .lb-hero p { margin: 0; color: var(--desc); max-width: 56em; font-size: 1.06em; }
+#view-lab .lb-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #ff8fd0; }
+#view-lab .lb-tag { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; }
+#view-lab .lb-asis { display: grid; gap: 6px; padding: 14px 16px; border: 2px dashed #ffc670; background: rgba(255,198,112,0.07); color: var(--ink); font-size: 0.95em; }
+#view-lab .lb-asis b { font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+#view-lab .lb-asis p { margin: 0; color: var(--desc); }
+#view-lab .lb-asis a { color: #ffc670; }
+#view-lab .lb-find { display: grid; gap: 12px; }
+#view-lab .lb-search { display: grid; gap: 4px; font: 500 0.7em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); max-width: 560px; }
+#view-lab .lb-search input { min-height: 52px; padding: 0 14px; font: 500 1.5em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); }
+#view-lab .lb-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-lab .lb-chips button { min-height: 48px; padding: 0 16px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 600 0.92em var(--body); cursor: pointer; }
+#view-lab .lb-chips button[aria-pressed="true"] { background: #ff8fd0; border-color: #ff8fd0; color: #2b0a1c; }
+#view-lab .lb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 16px; }
+#view-lab .lb-card { display: grid; gap: 10px; align-content: start; padding: 18px; border: 1px solid var(--line-hi); border-top: 4px solid var(--ac); background: color-mix(in srgb, var(--ac) 5%, var(--panel)); min-width: 0; }
+#view-lab .lb-card h2 { margin: 0; font: 600 1.25em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+#view-lab .lb-card .cat { font: 500 0.7em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ac); }
+#view-lab .lb-card p { margin: 0; color: var(--desc); font-size: 0.95em; line-height: 1.5; }
+#view-lab .lb-ins { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+#view-lab .lb-ins li { padding: 3px 8px; border: 1px solid var(--line-hi); font-size: 0.78em; color: var(--ink); }
+#view-lab .lb-meta { font: 500 0.72em var(--mono); color: var(--muted); letter-spacing: 0.04em; }
+#view-lab .lb-card .btn { justify-self: start; min-height: 52px; }
+#view-lab .lb-none { color: var(--desc); }
+#view-lab .lb-dev { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--line-hi); color: var(--desc); font-size: 0.92em; }
+#view-lab .lb-dev b { color: var(--ink); }
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1913,7 +1945,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a><a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navlab" href="#lab" data-route="lab">Recreation lab</a><a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a><a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -2657,6 +2689,27 @@ footer .wrap { padding-block: 22px; }
         </article>
       </div>
     </section>
+  </div>
+</main>
+<main id="view-lab" class="view" hidden>
+
+  <div class="wrap lb-wrap">
+    <header class="lb-hero">
+      <span class="lb-k">Recreation lab · experimental zone <span class="lb-tag">Prototype · demo only</span></span>
+      <h1>Music, art and movement, <span>hands-free</span></h1>
+      <p>Experimental apps prepared for ISATMA, the International Symposium on Assistive Technology, Music and Art. Each one uses colorful on-screen targets you can trigger with eye tracking, a head pointer, a switch, touch, or movement picked up by a webcam. Some respond to whole-body motion.</p>
+    </header>
+    <div class="lb-asis" role="note"><b>As-is prototype software</b><p>Provided as is, without warranty of any kind, for demonstration and discussion. Each app carries its own license notice: source-available under the PolyForm Noncommercial License 1.0.0. Camera processing happens in your browser; the apps state that nothing is recorded or uploaded. Camera features may not work inside this private preview, which can block webcam access; touch, mouse, switch and dwell still work.</p></div>
+
+    <section class="lb-find" aria-label="Find an app">
+      <label class="lb-search">Search the lab<input type="search" id="lb-lbQ" placeholder="Try music, eye tracking, exercise, camera"></label>
+      <div class="lb-chips" role="group" aria-label="Filter by category" id="lb-lbCats"></div>
+      <div class="lb-chips" role="group" aria-label="Filter by input" id="lb-lbIns"></div>
+    </section>
+
+    <div class="lb-grid" id="lb-lbGrid" aria-live="polite"></div>
+
+    <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for one hosting fix: the hand-tracking ergometer now loads fixed versions of its hand-tracking library. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
   </div>
 </main>
 <main id="view-keyboards" class="view" hidden>
@@ -3860,6 +3913,11 @@ footer .wrap { padding-block: 22px; }
             <h3>Talking board</h3>
             <p>Speak phrases out loud with one switch or your eyes.</p>
           </a>
+          <a class="sim" href="#lab">
+            <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><path d="M14 30V10l18-4v20"/><circle cx="10" cy="30" r="4"/><circle cx="28" cy="26" r="4"/></svg>
+            <h3>Recreation lab</h3>
+            <p>Experimental: music, dance, communication and exercise apps.</p>
+          </a>
           <a class="sim more" href="#" data-msg="More simulators: exercise, voice, smart home and breath-played music are planned.">
             <svg viewBox="0 0 40 40" fill="none" stroke="#5fe0a8" stroke-width="1.5" aria-hidden="true"><rect x="6" y="6" width="12" height="12"/><rect x="22" y="6" width="12" height="12"/><rect x="6" y="22" width="12" height="12"/><path d="M28 23v10M23 28h10"/></svg>
             <h3>More simulators</h3>
@@ -3907,10 +3965,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:37 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:46 UTC</span></div>
   </div>
 </footer>
 
@@ -6538,6 +6596,41 @@ var __ID = function (x) { return document.getElementById('ct-' + x) || document.
 })();
 
 })();
+(function () {
+var __ID = function (x) { return document.getElementById('lb-' + x) || document.getElementById(x); };
+
+(function () {
+  function el(id) { return __ID(id); }
+  var CATS = { music: ['Make music', '#ffc670'], talk: ['Communicate', '#ff8fd0'], move: ['Move and exercise', '#5fe0a8'], art: ['Art and dance', '#b9a4ff'], tools: ['Research tools', '#7cc4ff'] };
+  var INS = { eyes: 'Eye tracking (dwell)', head: 'Head pointer', sw: 'Switch', cam: 'Camera motion', hand: 'Hand tracking', touch: 'Touch or mouse' };
+  var APPS = [
+    { f: 'index.html', name: 'Songboards', cat: 'music', ins: ['touch', 'eyes', 'head', 'sw', 'cam'], d: 'Build colorful keyboards out of musical targets: notes, chords, drums and backing tracks. Arrange targets where you can reach them, then play by tap, dwell, switch or a wave at the camera.', meta: 'Uses Tone.js for sound' },
+    { f: 'songboards-2target-test.html', name: 'Songboards camera test', cat: 'music', ins: ['cam'], d: 'Two large targets that play a note when you wave over them. Shows the live motion signal and a heatmap, for tuning the camera before a performance.', meta: 'Diagnostic' },
+    { f: 'speaking-boards.html', name: 'Speaking Boards', cat: 'talk', ins: ['touch', 'eyes', 'head', 'sw', 'cam'], d: 'Expressive communication: phrase targets in many categories, from everyday needs to humor, poetry and quotes. Your browser speaks each phrase, with an optional sing mode.', meta: 'Uses the browser voice' },
+    { f: 'ergometer-2target.html', name: 'Wheelchair ergometer', cat: 'move', ins: ['cam'], d: 'Push your arms toward left and right targets in turn; each stroke drives a virtual wheelchair along a road. One or both arms, with draggable targets placed where you can reach.', meta: 'Webcam, no hardware' },
+    { f: 'isatma_ergometer_v4.html', name: 'Hand-crank ergometer', cat: 'move', ins: ['hand'], d: 'Make a cranking motion and the on-screen arm crank turns, powering a scrolling road with speed, distance and RPM. Calibrates to where your hand rests.', meta: 'Loads a hand-tracking model (MediaPipe)' },
+    { f: 'dance-board.html', name: 'Dance Board', cat: 'art', ins: ['cam'], d: 'Move and paint with light: trails, blooms, waves, confetti and fireworks follow your motion. Paint with your whole body, head, one hand or your mouth, with an energy meter and dance score.', meta: 'Webcam' },
+    { f: 'motion-test.html', name: 'Motion Lab', cat: 'tools', ins: ['cam'], d: 'A motion-detection instrument with a heatmap, live chart, timestamped log at 10 samples a second and CSV export. Useful for range of motion, biofeedback and tuning thresholds.', meta: 'Exports CSV' }
+  ];
+  var F = { q: '', cat: '', ins: '' };
+  function chips(id, map, key, all) {
+    var box = el(id);
+    box.innerHTML = '<button type="button" data-v="" aria-pressed="' + (F[key] === '') + '">' + all + '</button>' + Object.keys(map).map(function (k) { return '<button type="button" data-v="' + k + '" aria-pressed="' + (F[key] === k) + '">' + (Array.isArray(map[k]) ? map[k][0] : map[k]) + '</button>'; }).join('');
+    Array.prototype.forEach.call(box.children, function (b) { b.addEventListener('click', function () { F[key] = b.getAttribute('data-v'); chips(id, map, key, all); draw(); }); });
+  }
+  function draw() {
+    var q = F.q.trim().toLowerCase();
+    var list = APPS.filter(function (a) {
+      var text = (a.name + ' ' + a.d + ' ' + CATS[a.cat][0] + ' ' + a.ins.map(function (i) { return INS[i]; }).join(' ') + ' ' + a.meta).toLowerCase();
+      return (!F.cat || a.cat === F.cat) && (!F.ins || a.ins.indexOf(F.ins) >= 0) && (!q || q.split(/\s+/).every(function (w) { return text.indexOf(w) >= 0; }));
+    });
+    el('lbGrid').innerHTML = list.length ? list.map(function (a) { var c = CATS[a.cat]; return '<article class="lb-card" style="--ac:' + c[1] + '"><span class="cat">' + c[0] + '</span><h2>' + a.name + '</h2><p>' + a.d + '</p><ul class="lb-ins" aria-label="Works with">' + a.ins.map(function (i) { return '<li>' + INS[i] + '</li>'; }).join('') + '</ul><span class="lb-meta">' + a.meta + ' · as is · PolyForm Noncommercial 1.0.0</span><a class="btn primary" href="lab/' + a.f + '" target="_blank" rel="noopener">Open ' + a.name + ' <span aria-hidden="true">&#8599;</span></a></article>'; }).join('') : '<p class="lb-none">Nothing matches. Try another word or clear the filters.</p>';
+  }
+  el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
+  chips('lbCats', CATS, 'cat', 'All categories'); chips('lbIns', INS, 'ins', 'Any input'); draw();
+})();
+
+})();
 
 (function () {
   var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#research'] };
@@ -6761,7 +6854,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
 
 })();
 (function () {
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research', 'care'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research', 'care', 'lab'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
