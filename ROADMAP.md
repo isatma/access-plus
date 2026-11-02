@@ -27,6 +27,8 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 
 - Focus shift (Nov 2, 2026): home entry is now Everyday control (input methods); daily-living cards replaced by input-method cards; robotic arm moved to the Simulators page as a cutting-edge simulator holding the daily-living tasks; BCI marked potential, for discussion; dashboard tasks switched to everyday control
 
+- Home feature (Nov 2, 2026): simulated side-by-side comparison of head and gesture tracking, eye tracking and switch scanning, with ability, fatigue, tremor and position controls, animated task, score meters, best fit and crossover, continuum chart, and your-setup add-ons (switch click, facial-gesture click, tremor smoothing, larger targets, word prediction, voice)
+
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay

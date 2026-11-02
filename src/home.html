@@ -738,6 +738,55 @@ footer .wrap { padding-block: 22px; }
 .rb-viz svg { width: 100%; height: auto; display: block; }
 .rb-viz small { color: #4b5a6b; font-size: 0.78em; }
 @media (max-width: 900px) { .resband { grid-template-columns: 1fr; } .rb-viz { border-left: 0; border-top: 1px solid var(--line-hi); } .rb-text { padding: 24px 20px; } }
+.cmp { position: relative; display: grid; gap: 14px; align-content: start; padding: 20px; border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--panel) 92%, transparent); }
+.cmp::before { content: ""; position: absolute; top: -1px; left: -1px; width: 16px; height: 16px; border: solid var(--signal); border-width: 2px 0 0 2px; }
+.cmp-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 8px 14px; }
+.cmp-top h2 { font: 600 1.4em var(--body); letter-spacing: 0; text-transform: none; margin-top: 4px; }
+.cmp-tag { font: 500 0.64em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #231c05; background: #ffc670; padding: 3px 8px; }
+.cmp-lead { margin: 0; color: var(--desc); font-size: 0.95em; }
+.cmp-ctl { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 16px; padding: 12px 14px; border: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 55%, transparent); }
+.cmp-ctl label, .cmp-pos { display: grid; gap: 4px; min-width: 0; font-size: 0.82em; color: var(--muted); }
+.cmp-ctl label span, .cmp-pos > span { display: flex; justify-content: space-between; gap: 6px; font: 500 0.82em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.cmp-ctl b { color: var(--signal); font-weight: 600; }
+.cmp-ctl small { font-size: 0.82em; color: var(--muted); }
+.cmp-ctl input[type=range] { width: 100%; min-height: 32px; accent-color: #5fe0a8; }
+.cmp-pos div { display: grid; grid-template-columns: 1fr 1fr; }
+.cmp-pos button { min-height: 40px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 600 0.95em var(--body); cursor: pointer; }
+.cmp-pos button[aria-pressed="true"] { background: var(--signal); color: var(--signal-ink); border-color: var(--signal); }
+.cmp-panels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.cmp-p { display: grid; gap: 8px; align-content: start; padding: 10px; border: 1px solid var(--line-hi); background: #060c17; transition: border-color .3s, box-shadow .3s; min-width: 0; }
+.cmp-p header { display: flex; justify-content: space-between; align-items: center; gap: 6px; min-height: 26px; }
+.cmp-p header b { font-weight: 600; font-size: 0.86em; line-height: 1.2; }
+.cmp-best { font: 600 0.6em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal-ink); background: var(--signal); padding: 3px 6px; white-space: nowrap; }
+.cmp-p.best { border-color: var(--signal); box-shadow: 0 0 0 1px var(--signal), 0 0 24px rgba(95,224,168,0.18); }
+.cmp-p canvas { width: 100%; aspect-ratio: 1.2; display: block; background: radial-gradient(ellipse at 50% 40%, #0f1a2c, #050a14 75%); }
+.cmp-m { margin: 0; display: grid; grid-template-columns: auto 1fr auto; gap: 4px 8px; align-items: center; font-size: 0.74em; }
+.cmp-m dt { color: var(--muted); font-family: var(--mono); letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.9em; }
+.cmp-m dd { margin: 0; }
+.cmp-m .bar { height: 7px; background: var(--line); position: relative; overflow: hidden; }
+.cmp-m .bar i { position: absolute; inset: 0 auto 0 0; background: var(--signal); transition: width .5s ease; }
+.cmp-m .bar i.warn { background: #ffc670; } .cmp-m .bar i.bad { background: #ff8a8a; }
+.cmp-m .v { color: var(--ink); font-weight: 600; text-align: right; white-space: nowrap; }
+.cmp-cont { display: grid; gap: 6px; padding: 10px 12px; background: #f4f7fa; border: 1px solid var(--line-hi); }
+.cmp-cont svg { width: 100%; height: auto; display: block; }
+.cmp-find { margin: 0; color: #0b1220; font-size: 0.86em; }
+.cmp-find b { color: #08734b; }
+.cmp-note { margin: 0; color: var(--muted); font-size: 0.78em; }
+.cmp-note a { color: var(--signal); }
+@media (max-width: 1250px) { .cmp-ctl { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .cmp { padding: 14px; } .cmp-panels { grid-template-columns: 1fr; } .cmp-p canvas { aspect-ratio: 1.8; } .cmp-ctl { grid-template-columns: 1fr; } }
+.cmp-add { display: grid; grid-template-columns: minmax(220px, 0.8fr) minmax(0, 2fr); gap: 10px 16px; align-items: start; }
+.cmp-mine { display: grid; gap: 4px; font: 500 0.7em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cmp-mine select { width: 100%; min-width: 0; min-height: 42px; padding: 0 8px; font: 600 1.25em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: var(--panel); border: 1px solid var(--line-hi); }
+.cmp-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.cmp-chips span { flex-basis: 100%; font: 500 0.7em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.cmp-chips button { min-height: 40px; padding: 0 12px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 500 0.82em var(--body); cursor: pointer; }
+.cmp-chips button[aria-pressed="true"] { border-color: #7cc4ff; background: rgba(124,196,255,0.15); color: #7cc4ff; }
+.cmp-chips button[aria-pressed="true"]::before { content: "+ "; }
+.cmp-mine-tag { font: 600 0.6em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: #04201a; background: #7cc4ff; padding: 3px 6px; white-space: nowrap; }
+.cmp-p.mine { border-color: #7cc4ff; }
+.cmp-p .cmp-addl { margin: 0; min-height: 1.2em; font-size: 0.72em; color: #7cc4ff; }
+@media (max-width: 640px) { .cmp-add { grid-template-columns: 1fr; } }
 </style>
 
 <div class="draftbar" role="note"><b>Draft website · under construction</b><span>For review and discussion purposes only. Partners, products, data and features shown are illustrative ideas, not commitments.</span></div>
@@ -767,19 +816,33 @@ footer .wrap { padding-block: 22px; }
         </div>
       </div>
     </section>
-      <div class="ectl-hero" aria-labelledby="ectlT">
-        <div class="ectl-top"><span class="eyebrow">Everyday control</span><h2 id="ectlT">How do you want to control your technology?</h2><p>Pick a way in. Each one can run a computer, phone, speech device, smart home or wheelchair, and Access+ helps you build the skill.</p></div>
-        <div class="ectl-tiles">
-          <button class="ectl-tile" type="button" data-scrollto="ec-head"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="15" r="8"/><path d="M8 36c1-7 6-11 12-11s11 4 12 11"/><path d="M30 8l5-3M31 14h5"/></svg><b>Head and motion tracking</b><small>Computer, Phone, Games</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-face"><svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="14"/><circle cx="15" cy="17" r="1.6"/><circle cx="25" cy="17" r="1.6"/><path d="M13 24q7 6 14 0"/></svg><b>Face and gesture recognition</b><small>Computer, Phone, Call for help</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-eyes"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M3 20q17-16 34 0q-17 16-34 0z"/><circle cx="20" cy="20" r="5.5"/><circle cx="20" cy="20" r="1.8"/></svg><b>Eye tracking</b><small>Communication, Computer, Phone</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-switch"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="22" width="28" height="10" rx="3"/><ellipse cx="20" cy="20" rx="10" ry="5"/><path d="M20 6v6M14 8l2 4M26 8l-2 4"/></svg><b>Switches and alternative inputs</b><small>Phone, Call for help, Home control</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-breath"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 20h16"/><path d="M22 14v12l6-3V17z"/><path d="M30 14q4 6 0 12M34 11q6 9 0 18"/></svg><b>Breath control</b><small>Wheelchair, Phone, Switches</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-joy"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="9" y="28" width="22" height="7" rx="2"/><path d="M20 28V14"/><circle cx="20" cy="11" r="5"/></svg><b>Modified joysticks</b><small>Wheelchair, Computer, Games</small></button>
-          <button class="ectl-tile" type="button" data-scrollto="ec-voice"><svg viewBox="0 0 40 40" aria-hidden="true"><rect x="15" y="5" width="10" height="18" rx="5"/><path d="M10 19a10 10 0 0 0 20 0M20 29v6M14 35h12"/></svg><b>Voice</b><small>Communication, Home control, Computer</small></button>
-          <button class="ectl-tile pot" type="button" data-scrollto="ec-bci"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M12 28c-5 0-7-4-6-8 0-4 3-6 6-6 1-4 5-7 9-6 4-2 9 0 10 4 4 1 5 5 4 8 1 4-2 8-6 8z"/><path d="M15 20h4l2-4 3 8 2-4h3"/></svg><b>Brain-computer interface</b><small>Potential · for discussion</small></button>
+      <div class="cmp" id="cmp" aria-labelledby="cmpTitle">
+        <div class="cmp-top"><div><span class="eyebrow">Compare the core technologies</span><h2 id="cmpTitle">Which control works best, and when?</h2></div><span class="cmp-tag">Simulated demo · for discussion</span></div>
+        <p class="cmp-lead">Move the sliders to describe a person. Watch head and gesture tracking, eye tracking and switch scanning try the same task, and see which fits best as abilities change.</p>
+        <div class="cmp-ctl" role="group" aria-label="Describe the person">
+          <label><span>Ability <b id="cmpAv">Early</b></span><input type="range" id="cmpA" min="0" max="100" value="20" aria-describedby="cmpAh"><small id="cmpAh">early ← → advanced loss of movement</small></label>
+          <label><span>Fatigue <b id="cmpFv">Fresh</b></span><input type="range" id="cmpF" min="0" max="100" value="15"><small>morning ← → tired evening</small></label>
+          <label><span>Spasticity and tremor <b id="cmpTv">Mild</b></span><input type="range" id="cmpT" min="0" max="100" value="20"><small>none ← → strong</small></label>
+          <div class="cmp-pos"><span>Position</span><div role="group" aria-label="Position"><button type="button" data-pos="chair" aria-pressed="true">Chair</button><button type="button" data-pos="bed" aria-pressed="false">Bed</button></div></div>
+        </div>
+        <div class="cmp-add" role="group" aria-label="Your setup and add-ons">
+          <label class="cmp-mine"><span>Your setup now</span><select id="cmpMine"><option value="">Not chosen</option><option value="head">Head or gesture tracking</option><option value="eyes">Eye tracking</option><option value="sw">Switches</option></select></label>
+          <div class="cmp-chips"><span>Try adding</span>
+            <button type="button" data-add="click" aria-pressed="false">Switch to click</button>
+            <button type="button" data-add="face" aria-pressed="false">Facial-gesture click</button>
+            <button type="button" data-add="smooth" aria-pressed="false">Tremor smoothing</button>
+            <button type="button" data-add="big" aria-pressed="false">Larger targets</button>
+            <button type="button" data-add="pred" aria-pressed="false">Word prediction</button>
+            <button type="button" data-add="voice" aria-pressed="false">Voice commands</button>
           </div>
-        <a class="ectl-arm" href="#simulators"><span>Cutting edge</span>Try the 3D robotic arm simulator &rarr;</a>
+        </div>
+        <div class="cmp-panels">
+          <article class="cmp-p" data-k="head"><header><b>Head and gesture tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+          <article class="cmp-p" data-k="eyes"><header><b>Eye tracking</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+          <article class="cmp-p" data-k="sw"><header><b>Switch scanning</b><span class="cmp-best" hidden>Best fit now</span><span class="cmp-mine-tag" hidden>Your setup</span></header><canvas aria-hidden="true"></canvas><p class="cmp-addl"></p><dl class="cmp-m"></dl></article>
+        </div>
+        <div class="cmp-cont"><svg id="cmpChart" viewBox="0 0 720 210" role="img" aria-label="Useful selections per minute for each technology across the ability range"></svg><p class="cmp-find" id="cmpFind" aria-live="polite"></p></div>
+        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">See the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
       </div>
     </div>
 
@@ -962,7 +1025,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:34 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:42 UTC</span></div>
   </div>
 </footer>
 
@@ -2048,5 +2111,147 @@ function AgentCloud(canvas, opts) {
   document.querySelectorAll('.adl-go').forEach(function (b) {
     b.addEventListener('click', function () { window.__fdGoal = b.getAttribute('data-goal'); location.hash = 'find'; if (window.fdStartWithGoal) window.fdStartWithGoal(); });
   });
+})();
+
+/* Home feature: simulated side-by-side comparison of head tracking, eye tracking and switch scanning */
+(function () {
+  var root = document.getElementById('cmp'); if (!root) return;
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var S = { a: 0.2, f: 0.15, t: 0.2, bed: 0 }, ADD = {}, MINE = '';
+  var ADDN = { click: 'switch to click', face: 'facial-gesture click', smooth: 'tremor smoothing', big: 'larger targets', pred: 'word prediction', voice: 'voice commands' };
+  var COL = { head: '#5fe0a8', eyes: '#b9a4ff', sw: '#ffc670' }, NAME = { head: 'Head and gesture tracking', eyes: 'Eye tracking', sw: 'Switch scanning' };
+  function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  /* the model: speed in selections a minute, accuracy %, effort 0-100, stamina in minutes */
+  function model(k, a, f, t, bed) {
+    var sp, ac, ef;
+    if (k === 'head') { sp = 22 * clamp(1 - 1.15 * a, 0.04, 1) * (1 - 0.3 * f) * (bed ? 0.8 : 1); ac = 97 - 42 * a - 30 * t - 10 * f - (bed ? 4 : 0); ef = 28 + 55 * a + 22 * f + 10 * t; }
+    else if (k === 'eyes') { sp = 17 * clamp(1 - 0.42 * a, 0.2, 1) * (1 - 0.22 * f) * (bed ? 0.95 : 1); ac = 92 - 14 * a - 7 * t - 13 * f - (bed ? 2 : 0); ef = 24 + 15 * a + 28 * f; }
+    else { sp = 8.5 * clamp(1 - 0.3 * a, 0.3, 1) * (1 - 0.1 * f); ac = 98 - 10 * a - 16 * t - 5 * f; ef = 18 + 20 * a + 12 * f + 8 * t; }
+    var A = arguments.length > 5 ? arguments[5] : ADD, ptr = k !== 'sw';
+    if (A.smooth && k === 'head') { ac += 30 * t * 0.6; ef -= 4; }
+    if (A.smooth && k === 'eyes') { ac += 7 * t * 0.5; }
+    if (A.click && ptr) { sp *= 1.2; ac += 6; ef -= 3; }
+    if (A.face && ptr && !A.click) { sp *= 1.15; ac += 4 - 6 * t; ef += 4; }
+    if (A.big) { ac += 8; sp *= 0.94; ef -= 2; }
+    if (A.pred) { sp *= 1.35; ef -= 4; }
+    if (A.voice) { sp *= a < 0.45 ? 1.25 : a < 0.7 ? 1.08 : 1; }
+    ac = clamp(ac, 30, 99.5); ef = clamp(ef, 5, 100);
+    return { sp: sp, ac: ac, ef: ef, st: Math.round(clamp(60 * (1 - ef / 115), 3, 60)), use: sp * ac / 100 * (ac < 80 ? clamp(0.4 + 0.6 * (ac - 50) / 30, 0.3, 1) : 1) };
+  }
+  var KEYS = ['head', 'eyes', 'sw'];
+  var panels = {}; Array.prototype.forEach.call(root.querySelectorAll('.cmp-p'), function (p) { var k = p.getAttribute('data-k'); panels[k] = { el: p, cv: p.querySelector('canvas'), dl: p.querySelector('.cmp-m'), best: p.querySelector('.cmp-best'), st: { tgt: 4, px: 0.5, py: 0.5, phase: 'move', t: 0, flash: 0, ok: true, scan: 0, row: -1, hits: 0, tries: 0, sx: 0.5, sy: 0.5 } }; });
+  var M = {};
+  function label(v, words) { return words[Math.min(words.length - 1, Math.floor(v * words.length))]; }
+  function update() {
+    S.a = +document.getElementById('cmpA').value / 100; S.f = +document.getElementById('cmpF').value / 100; S.t = +document.getElementById('cmpT').value / 100;
+    document.getElementById('cmpAv').textContent = label(S.a, ['Early', 'Moderate', 'Advanced', 'Late']);
+    document.getElementById('cmpFv').textContent = label(S.f, ['Fresh', 'A little tired', 'Tired', 'Exhausted']);
+    document.getElementById('cmpTv').textContent = label(S.t, ['None', 'Mild', 'Moderate', 'Strong']);
+    var best = null;
+    KEYS.forEach(function (k) { M[k] = model(k, S.a, S.f, S.t, S.bed); if (!best || M[k].use > M[best].use) best = k; });
+    KEYS.forEach(function (k) {
+      var m = M[k], P = panels[k];
+      P.el.classList.toggle('best', k === best); P.best.hidden = k !== best;
+      P.el.classList.toggle('mine', k === MINE); P.el.querySelector('.cmp-mine-tag').hidden = k !== MINE;
+      var on = Object.keys(ADD).filter(function (x) { return ADD[x] && !(k === 'sw' && (x === 'click' || x === 'face')); });
+      P.el.querySelector('.cmp-addl').textContent = on.length ? '+ ' + on.map(function (x) { return ADDN[x]; }).join(', ') : '';
+      function row(lbl, frac, txt, inv) { var c = inv ? (frac > 0.7 ? 'bad' : frac > 0.45 ? 'warn' : '') : (frac < 0.35 ? 'bad' : frac < 0.6 ? 'warn' : ''); return '<dt>' + lbl + '</dt><dd><div class="bar"><i class="' + c + '" style="width:' + Math.round(clamp(frac, 0.02, 1) * 100) + '%"></i></div></dd><dd class="v">' + txt + '</dd>'; }
+      P.dl.innerHTML = row('Speed', m.sp / 30, m.sp.toFixed(1) + '/min') + row('Accuracy', (m.ac - 30) / 70, Math.round(m.ac) + '%') + row('Effort', m.ef / 100, Math.round(m.ef), true) + row('Stamina', m.st / 60, m.st + ' min');
+    });
+    chart(best);
+  }
+  function chart(best) {
+    var svg = document.getElementById('cmpChart'), W = 720, H = 210, x0 = 44, y0 = 14, w = W - x0 - 16, h = H - y0 - 44, N = 50, mx = 30;
+    var X = function (a) { return x0 + w * a; }, Y = function (v) { return y0 + h - h * clamp(v / mx, 0, 1); };
+    var g = '';
+    [0, 10, 20, 30].forEach(function (v) { g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="#d7dee6"/><text x="' + (x0 - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="11" fill="#4b5a6b">' + v + '</text>'; });
+    var series = {}, bestAt = [];
+    KEYS.forEach(function (k) { series[k] = []; for (var i = 0; i <= N; i++) { var a = i / N; series[k].push(model(k, a, S.f, S.t, S.bed).use); } });
+    for (var i = 0; i <= N; i++) { var bk = KEYS.reduce(function (b, k) { return series[k][i] > series[b][i] ? k : b; }, 'head'); bestAt.push(bk); }
+    var bands = '', start = 0;
+    for (i = 1; i <= N + 1; i++) { if (i === N + 1 || bestAt[i] !== bestAt[start]) { bands += '<rect x="' + X(start / N) + '" y="' + y0 + '" width="' + (X(Math.min(i, N) / N) - X(start / N)) + '" height="' + h + '" fill="' + COL[bestAt[start]] + '" fill-opacity="0.13"/>'; start = i; } }
+    g = bands + g;
+    KEYS.forEach(function (k) { g += '<path d="M' + series[k].map(function (v, i) { return X(i / N).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' L') + '" fill="none" stroke="' + (k === 'head' ? '#1f9d6b' : k === 'eyes' ? '#7b5cc9' : '#c28a0e') + '" stroke-width="' + (k === best ? 3.5 : 2) + '"/>'; });
+    var cross = [];
+    for (i = 1; i <= N; i++) if (bestAt[i] !== bestAt[i - 1]) cross.push([i / N, bestAt[i - 1], bestAt[i]]);
+    cross.forEach(function (c) { g += '<line x1="' + X(c[0]) + '" x2="' + X(c[0]) + '" y1="' + y0 + '" y2="' + (y0 + h) + '" stroke="#4b5a6b" stroke-dasharray="3 3"/>'; });
+    g += '<line x1="' + X(S.a) + '" x2="' + X(S.a) + '" y1="' + (y0 - 4) + '" y2="' + (y0 + h) + '" stroke="#0b1220" stroke-width="2"/><circle cx="' + X(S.a) + '" cy="' + Y(M[best].use) + '" r="6" fill="#0b1220"/><text x="' + clamp(X(S.a), x0 + 30, x0 + w - 30) + '" y="' + (y0 + h + 30) + '" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b1220">this person</text>';
+    g += '<text x="' + x0 + '" y="' + (y0 + h + 16) + '" font-size="11" fill="#4b5a6b">early</text><text x="' + (x0 + w) + '" y="' + (y0 + h + 16) + '" text-anchor="end" font-size="11" fill="#4b5a6b">advanced loss of movement</text>';
+    g += '<text x="' + (x0 + 4) + '" y="' + (y0 + 12) + '" font-size="11" fill="#4b5a6b">useful selections a minute</text>';
+    var lx = x0 + w - 330; KEYS.forEach(function (k, j) { var c = k === 'head' ? '#1f9d6b' : k === 'eyes' ? '#7b5cc9' : '#c28a0e'; g += '<rect x="' + (lx + j * 112) + '" y="' + (y0 + 2) + '" width="12" height="4" fill="' + c + '"/><text x="' + (lx + j * 112 + 16) + '" y="' + (y0 + 8) + '" font-size="10.5" fill="#24344a">' + (k === 'head' ? 'Head tracking' : k === 'eyes' ? 'Eye tracking' : 'Switch scanning') + '</text>'; });
+    svg.innerHTML = g;
+    var txt = '<b>' + NAME[best] + '</b> fits best for this person right now.';
+    var next = cross.filter(function (c) { return c[0] > S.a; })[0];
+    if (next) txt += ' If movement keeps declining, <b>' + NAME[next[2]].toLowerCase() + '</b> overtakes it at about ' + Math.round(next[0] * 100) + '% along the scale: a good time to have it practiced.';
+    else txt += ' It stays the best fit from here on, so keep a practiced backup ready.';
+    var anyAdd = Object.keys(ADD).some(function (x) { return ADD[x]; });
+    if (MINE && anyAdd) { var before = model(MINE, S.a, S.f, S.t, S.bed, {}).use, after = M[MINE].use; txt = 'With the add-ons, your <b>' + NAME[MINE].toLowerCase() + '</b> goes from ' + before.toFixed(1) + ' to ' + after.toFixed(1) + ' useful selections a minute (' + (after >= before ? '+' : '') + Math.round((after - before) / (before || 1) * 100) + '%). ' + txt; }
+    else if (MINE && MINE !== best) txt = 'Your setup is <b>' + NAME[MINE].toLowerCase() + '</b>. ' + txt + ' Try adding features to your setup to close the gap.';
+    document.getElementById('cmpFind').innerHTML = txt;
+  }
+  ['cmpA', 'cmpF', 'cmpT'].forEach(function (id) { document.getElementById(id).addEventListener('input', update); });
+  document.getElementById('cmpMine').addEventListener('change', function (e) { MINE = e.target.value; update(); });
+  Array.prototype.forEach.call(root.querySelectorAll('.cmp-chips button'), function (b) { b.addEventListener('click', function () { var k = b.getAttribute('data-add'); ADD[k] = !ADD[k]; b.setAttribute('aria-pressed', ADD[k] ? 'true' : 'false'); update(); }); });
+  Array.prototype.forEach.call(root.querySelectorAll('.cmp-pos button'), function (b) { b.addEventListener('click', function () { S.bed = b.getAttribute('data-pos') === 'bed' ? 1 : 0; Array.prototype.forEach.call(root.querySelectorAll('.cmp-pos button'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); update(); }); });
+  update();
+  /* animation: a 3 x 3 grid of targets, the same task for each technology */
+  var vis = true; try { new IntersectionObserver(function (es) { vis = es[0].isIntersecting; }).observe(root); } catch (e) {}
+  function tpos(i) { return [0.2 + 0.3 * (i % 3), 0.22 + 0.28 * Math.floor(i / 3)]; }
+  var last = performance.now();
+  function frame(now) {
+    requestAnimationFrame(frame);
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    if (!vis || root.offsetParent === null) return;
+    KEYS.forEach(function (k) {
+      var P = panels[k], cv = P.cv, ctx = cv.getContext('2d'), dpr = Math.min(2, window.devicePixelRatio || 1), r = cv.getBoundingClientRect(), W = r.width, H = r.height;
+      if (!W) return;
+      if (cv.width !== Math.round(W * dpr)) { cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, W, H);
+      var m = M[k], st = P.st, per = clamp(60 / m.sp, 1.1, 9), col = COL[k], tr = S.t, fat = S.f;
+      if (!reduce) st.t += dt;
+      st.flash = Math.max(0, st.flash - dt * 2);
+      var tp = tpos(st.tgt);
+      function pick() { st.tries++; st.ok = Math.random() * 100 < m.ac; if (st.ok) st.hits++; st.flash = 1; st.sel = st.ok ? st.tgt : (st.tgt + (Math.random() < 0.5 ? 1 : 3)) % 9; st.tgt = (st.tgt + 1 + Math.floor(Math.random() * 7)) % 9; st.t = 0; st.phase = 'move'; st.row = -1; st.scan = 0; st.sx = st.px; st.sy = st.py; }
+      if (k === 'head') {
+        var mv = per * 0.65, f = clamp(st.t / mv, 0, 1), e = f < 0.5 ? 2 * f * f : 1 - Math.pow(-2 * f + 2, 2) / 2;
+        var jit = (0.012 + 0.05 * tr + 0.02 * fat) * (1 - 0.3 * f);
+        st.px = st.sx + (tp[0] - st.sx) * e + Math.sin(now / 90) * jit + (Math.random() - 0.5) * jit; st.py = st.sy + (tp[1] - st.sy) * e + Math.cos(now / 110) * jit + (Math.random() - 0.5) * jit;
+        if (st.t > per) pick();
+      } else if (k === 'eyes') {
+        var sac = 0.12;
+        if (st.t < sac) { var ff = st.t / sac; st.px = st.sx + (tp[0] - st.sx) * ff; st.py = st.sy + (tp[1] - st.sy) * ff; }
+        else { var dr = 0.008 + (100 - m.ac) / 100 * 0.06; st.px = tp[0] + Math.sin(now / 260) * dr + (Math.random() - 0.5) * dr * 0.6; st.py = tp[1] + Math.cos(now / 300) * dr + (Math.random() - 0.5) * dr * 0.6; }
+        if (st.t > per) pick();
+      } else {
+        var step = per / 7, idx = Math.floor(st.t / step);
+        if (st.row < 0) { st.scan = idx % 3; if (idx >= Math.floor(st.tgt / 3) + 1 && st.scan === (Math.floor(st.tgt / 3) + 1) % 3) { st.row = Math.floor(st.tgt / 3); st.t = 0; } }
+        else { st.scan = idx % 3; if (idx >= st.tgt % 3 + 1) { pick(); } }
+        if (st.t > per * 2) pick();
+      }
+      /* targets */
+      for (var i = 0; i < 9; i++) {
+        var q = tpos(i), x = q[0] * W, y = q[1] * H, rr = Math.min(W, H) * 0.095, isT = i === st.tgt, lit = false;
+        if (k === 'sw') lit = st.row < 0 ? Math.floor(i / 3) === st.scan : (Math.floor(i / 3) === st.row && i % 3 === st.scan);
+        ctx.beginPath(); ctx.arc(x, y, rr, 0, 6.283);
+        ctx.fillStyle = lit ? col : isT ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.04)'; ctx.globalAlpha = lit ? 0.55 : 1; ctx.fill(); ctx.globalAlpha = 1;
+        ctx.strokeStyle = isT ? '#f0f5fa' : '#3b5476'; ctx.lineWidth = isT ? 2 : 1; ctx.stroke();
+        if (st.flash > 0 && st.sel === i) { ctx.beginPath(); ctx.arc(x, y, rr * (1 + 0.4 * (1 - st.flash)), 0, 6.283); ctx.strokeStyle = st.ok ? 'rgba(95,224,168,' + st.flash + ')' : 'rgba(255,138,138,' + st.flash + ')'; ctx.lineWidth = 3; ctx.stroke(); }
+      }
+      /* pointer, gaze or switch */
+      if (k !== 'sw') {
+        var cx = st.px * W, cy = st.py * H;
+        if (k === 'eyes') { ctx.beginPath(); ctx.arc(cx, cy, Math.min(W, H) * 0.06, 0, 6.283); ctx.fillStyle = 'rgba(185,164,255,0.25)'; ctx.fill(); }
+        ctx.beginPath(); ctx.arc(cx, cy, 4, 0, 6.283); ctx.fillStyle = col; ctx.fill();
+        var dw = clamp((st.t - (k === 'head' ? per * 0.65 : 0.12)) / (per * (k === 'head' ? 0.35 : 0.88)), 0, 1);
+        if (dw > 0) { ctx.beginPath(); ctx.arc(cx, cy, 11, -Math.PI / 2, -Math.PI / 2 + dw * 6.283); ctx.strokeStyle = col; ctx.lineWidth = 2.5; ctx.stroke(); }
+      } else {
+        var press = st.flash > 0.6; ctx.fillStyle = press ? col : '#15233a'; ctx.strokeStyle = col; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.ellipse(W * 0.5, H * 0.93, W * 0.11, H * 0.045, 0, 0, 6.283); ctx.fill(); ctx.stroke();
+      }
+      ctx.fillStyle = '#8fa3b8'; ctx.font = '500 10px "IBM Plex Mono", monospace'; ctx.textAlign = 'left';
+      ctx.fillText(st.tries ? Math.round(st.hits / st.tries * 100) + '% hits in demo' : 'starting', 6, 13);
+    });
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
