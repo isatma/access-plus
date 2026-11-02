@@ -33,15 +33,29 @@
 .lb-none { color: var(--desc); }
 .lb-dev { display: grid; gap: 6px; padding: 14px 16px; border: 1px solid var(--line-hi); color: var(--desc); font-size: 0.92em; }
 .lb-dev b { color: var(--ink); }
+.lb-shot { display: block; margin: -18px -18px 4px; border-bottom: 1px solid var(--line-hi); background: #000; aspect-ratio: 16 / 10; overflow: hidden; }
+.lb-shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .3s ease; }
+.lb-card:hover .lb-shot img { transform: scale(1.03); }
+.lb-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+.lb-wip { font: 600 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #231c05; background: #ffc670; padding: 2px 7px; }
+.lb-suite { display: grid; gap: 14px; padding: 20px; border: 2px dashed #b9a4ff; background: rgba(185,164,255,0.06); }
+.lb-suite h2 { margin: 0; font: 600 1.4em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+.lb-suite p { margin: 0; color: var(--desc); max-width: 60em; }
+.lb-suite-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 12px; }
+.lb-mod { display: grid; gap: 6px; align-content: start; padding: 14px; border: 1px solid var(--line-hi); background: var(--panel); }
+.lb-mod b { color: var(--ink); font-size: 1.05em; }
+.lb-mod ul { margin: 0; padding-left: 18px; color: var(--desc); font-size: 0.9em; line-height: 1.5; }
+.lb-soon { font: 600 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: #b9a4ff; }
+@media (prefers-reduced-motion: reduce) { .lb-shot img { transition: none; } }
 </style>
 </head>
 <body>
 <main>
   <div class="wrap lb-wrap">
     <header class="lb-hero">
-      <span class="lb-k">Recreation lab · experimental zone <span class="lb-tag">Prototype · demo only</span></span>
+      <span class="lb-k">Recreation lab · experimental zone <span class="lb-tag">Works in progress · demo only</span></span>
       <h1>Music, art and movement, <span>hands-free</span></h1>
-      <p>Experimental apps prepared for ISATMA, the International Symposium on Assistive Technology, Music and Art. Each one uses colorful on-screen targets you can trigger with eye tracking, a head pointer, a switch, touch, or movement picked up by a webcam. Some respond to whole-body motion.</p>
+      <p>Works in progress, shared as demos while they are rebuilt. Experimental apps prepared for ISATMA, the International Symposium on Assistive Technology, Music and Art. Each one uses colorful on-screen targets you can trigger with eye tracking, a head pointer, a switch, touch, or movement picked up by a webcam. Some respond to whole-body motion.</p>
     </header>
     <div class="lb-asis" role="note"><b>As-is prototype software</b><p>Provided as is, without warranty of any kind, for demonstration and discussion. Each app carries its own license notice: source-available under the PolyForm Noncommercial License 1.0.0. Camera processing happens in your browser; the apps state that nothing is recorded or uploaded. Camera features may not work inside this private preview, which can block webcam access; touch, mouse, switch and dwell still work.</p></div>
 
@@ -52,6 +66,17 @@
     </section>
 
     <div class="lb-grid" id="lbGrid" aria-live="polite"></div>
+
+    <section class="lb-suite" aria-labelledby="lbSuiteT">
+      <span class="lb-k" style="color:#b9a4ff">In development · description only for now</span>
+      <h2 id="lbSuiteT">Song Boards Suite</h2>
+      <p>The next generation of Songboards, being rebuilt as a suite of three apps that share one hands-free engine. It runs from a small local web server on your own computer, which keeps the camera and the Save As folder picker working, and a one-time setup downloads its open-source libraries so it can run fully offline.</p>
+      <div class="lb-suite-grid">
+        <div class="lb-mod"><span class="lb-soon">Coming to the lab</span><b>Song Boards: Standalone</b><ul><li>Plays sound in the browser, no DAW needed</li><li>Nose tracking with low-lag smoothing</li><li>Strumming, scoreboards you edit in place, Copy Group</li><li>Save As a self-contained board, with images embedded</li></ul></div>
+        <div class="lb-mod"><span class="lb-soon">Coming to the lab</span><b>Song Boards: MIDI Edition</b><ul><li>MIDI out to a DAW, with a channel per target</li><li>DAW clip launcher and beat generators</li><li>Multi-page scoreboards with page advance</li><li>MIDI monitor and collapsible control panel</li></ul></div>
+        <div class="lb-mod"><span class="lb-soon">Coming to the lab</span><b>Head Tracker Lab</b><ul><li>Experimental nose and head tracking research tool</li><li>Tune the engine that powers hands-free play</li><li>Learning demos: color notes, and a circle-of-fifths song board with a rhythm editor</li></ul></div>
+      </div>
+    </section>
 
     <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for two hosting fixes: the hand-tracking ergometer loads fixed versions of its hand-tracking library, the Musical Dial (v9.1) adds built-in sound, dwell on the key ring and screen fitting, Mouse Orchestra (v6.1) adds a start-sound button, tap support and a hover delay, and the Virtual Harmonica (v7.1) adds a start button, the built-in synth by default, a mouse or touch mode and screen fitting. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
   </div>
@@ -85,7 +110,7 @@
       var text = (a.name + ' ' + a.d + ' ' + CATS[a.cat][0] + ' ' + a.ins.map(function (i) { return INS[i]; }).join(' ') + ' ' + a.meta).toLowerCase();
       return (!F.cat || a.cat === F.cat) && (!F.ins || a.ins.indexOf(F.ins) >= 0) && (!q || q.split(/\s+/).every(function (w) { return text.indexOf(w) >= 0; }));
     });
-    el('lbGrid').innerHTML = list.length ? list.map(function (a) { var c = CATS[a.cat]; return '<article class="lb-card" style="--ac:' + c[1] + '"><span class="cat">' + c[0] + '</span><h2>' + a.name + '</h2><p>' + a.d + '</p><ul class="lb-ins" aria-label="Works with">' + a.ins.map(function (i) { return '<li>' + INS[i] + '</li>'; }).join('') + '</ul><span class="lb-meta">' + a.meta + ' · as is · PolyForm Noncommercial 1.0.0</span><a class="btn primary" href="lab/' + a.f + '" target="_blank" rel="noopener">Open ' + a.name + ' <span aria-hidden="true">&#8599;</span></a></article>'; }).join('') : '<p class="lb-none">Nothing matches. Try another word or clear the filters.</p>';
+    el('lbGrid').innerHTML = list.length ? list.map(function (a) { var c = CATS[a.cat]; return '<article class="lb-card" style="--ac:' + c[1] + '"><a class="lb-shot" href="lab/' + a.f + '" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="lab/shots/' + a.f.replace('.html', '.jpg') + '" alt="" loading="lazy" width="640" height="400"></a><div class="lb-row"><span class="cat">' + c[0] + '</span><span class="lb-wip">Work in progress</span></div><h2>' + a.name + '</h2><p>' + a.d + '</p><ul class="lb-ins" aria-label="Works with">' + a.ins.map(function (i) { return '<li>' + INS[i] + '</li>'; }).join('') + '</ul><span class="lb-meta">' + a.meta + ' · as is · PolyForm Noncommercial 1.0.0</span><a class="btn primary" href="lab/' + a.f + '" target="_blank" rel="noopener">Open ' + a.name + ' <span aria-hidden="true">&#8599;</span></a></article>'; }).join('') : '<p class="lb-none">Nothing matches. Try another word or clear the filters.</p>';
   }
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
   chips('lbCats', CATS, 'cat', 'All categories'); chips('lbIns', INS, 'ins', 'Any input'); draw();

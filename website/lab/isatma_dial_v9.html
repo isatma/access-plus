@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISATMA Musical Dial Controller (v9.1, web-ready)</title>
+<title>ISATMA Musical Dial Controller (v9.2, Follow the Melody)</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -420,6 +420,29 @@ input.bsw-range.thresh::-webkit-slider-thumb{background:var(--mag);box-shadow:0 
   #midi-port-sel{min-width:0;max-width:100%;}
 }
 
+/* ══ FOLLOW THE MELODY ══ */
+#fm-bar{display:none;width:min(720px,100%);margin:0 0 8px;padding:10px 12px;border:1px solid var(--yel);border-radius:6px;background:rgba(255,255,0,.04);flex-shrink:0;gap:8px;flex-direction:column}
+body.fm-on #fm-bar{display:flex}
+body.fm-on #main{justify-content:flex-start;overflow:auto}
+#fm-top{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+#fm-msg{font-family:'Orbitron',sans-serif;font-size:15px;color:var(--yel);letter-spacing:1px}
+#fm-stats{display:flex;gap:14px;font-size:11px;color:var(--txt);letter-spacing:1px}
+#fm-stats b{color:var(--grn);font-size:14px}
+#fm-ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#fm-ctl label{font-size:9px;letter-spacing:1px;color:var(--dim);text-transform:uppercase;display:flex;gap:5px;align-items:center}
+.fm-big{font-family:'Orbitron',sans-serif;font-size:12px;letter-spacing:1px;padding:10px 16px;min-height:44px;border-radius:4px;cursor:pointer;background:var(--yel);color:#1a1a00;border:0}
+.fm-sec{font-family:'Share Tech Mono',monospace;font-size:11px;padding:8px 12px;min-height:40px;border-radius:4px;cursor:pointer;background:transparent;color:var(--yel);border:1px solid var(--yel)}
+#fm-dots{display:flex;gap:6px;align-items:center;min-height:16px}
+#fm-dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--yel);display:inline-block}
+#fm-dots i.ok{background:var(--grn);border-color:var(--grn)}
+#fm-dots i.now{box-shadow:0 0 10px var(--yel)}
+.note-circle.fm-cue{background:radial-gradient(circle at 35% 30%,#ffff66,#aa9900)!important;border-color:var(--yel)!important;box-shadow:0 0 26px var(--yel)!important;transform:scale(1.2)}
+.note-circle.fm-cue .nc-name,.note-circle.fm-cue .nc-deg{color:#222!important;text-shadow:none!important}
+.note-circle.fm-wrong{border-color:var(--mag)!important;box-shadow:0 0 22px var(--mag)!important}
+body.fm-on .chord-hex-wrap{opacity:.25;pointer-events:none}
+#fm-summary{display:none;font-size:12px;color:var(--txt);line-height:1.7;border-top:1px solid var(--bdr);padding-top:8px}
+#fm-summary b{color:var(--grn)}
+
 /* ══ LEGEND ══ */
 #legend{
   display:flex;gap:18px;margin-top:8px;
@@ -496,6 +519,8 @@ input.bsw-range.thresh::-webkit-slider-thumb{background:var(--mag);box-shadow:0 
   <button class="hbtn" onclick="testNote()">♩ Test</button>
   <button class="hbtn danger" onclick="allNotesOff()">⬛ All Off</button>
   <div class="hsep"></div>
+  <button class="hbtn" id="fm-toggle" type="button" style="border-color:var(--yel);color:var(--yel);">🎯 Follow the melody</button>
+  <div class="hsep"></div>
   <div class="cg"><label style="color:var(--cyn2);">&#x2B21; Hex Mode</label><button id="hex-mode-btn" onclick="toggleHexMode()" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 11px;border-radius:3px;cursor:pointer;transition:all .15s;white-space:nowrap;border:1px solid var(--cyn2);color:var(--cyn);background:transparent;">&#x2B21; CHORD</button></div>
 </div>
 
@@ -570,6 +595,22 @@ input.bsw-range.thresh::-webkit-slider-thumb{background:var(--mag);box-shadow:0 
 
   <!-- MAIN -->
   <div id="main">
+    <div id="fm-bar" role="region" aria-label="Follow the melody game">
+      <div id="fm-top">
+        <div id="fm-msg">Follow the melody</div>
+        <div id="fm-stats"><span>Round <b id="fm-round">0</b>/8</span><span>Phrase <b id="fm-len">3</b> notes</span><span>Score <b id="fm-score">0</b></span></div>
+      </div>
+      <div id="fm-dots" aria-hidden="true"></div>
+      <div id="fm-ctl">
+        <button type="button" class="fm-big" id="fm-start">▶ Start game</button>
+        <button type="button" class="fm-sec" id="fm-replay" disabled>↻ Hear it again</button>
+        <label>Cue <select id="fm-cue"><option value="both">See and hear</option><option value="hear">Hear only</option><option value="see">See only</option></select></label>
+        <label>Settle <select id="fm-settle" title="How long to rest on a note before it counts: helps eye gaze and head pointers"><option value="0">Instant</option><option value="200" selected>0.2 s</option><option value="400">0.4 s</option><option value="700">0.7 s</option></select></label>
+        <label>Using <select id="fm-method"><option value="mouse">Mouse or touch</option><option value="head">Head tracking</option><option value="eyes">Eye tracking</option><option value="joy">Mouth joystick</option><option value="sw">Switch scanning</option><option value="breath">Breath switch</option></select></label>
+        <label>Position <select id="fm-pos"><option value="up">Sitting upright</option><option value="rec">Reclined</option><option value="bed">Lying in bed</option><option value="side">Side-lying</option></select></label>
+      </div>
+      <div id="fm-summary"></div>
+    </div>
     <div id="dial-fit"><div id="dial-wrap">
 
       <!-- Outer preset ring drawn in SVG (visual only) -->
@@ -1152,6 +1193,7 @@ function buildDial(){
       const d = NOTE_DIAM;
       el = document.createElement('div');
       el.className = 'note-circle';
+      el.dataset.deg = degIdx; el.dataset.midi = midiNote;
       el.style.width  = d+'px';
       el.style.height = d+'px';
       el.style.left   = (cx-d/2)+'px';
@@ -1445,7 +1487,8 @@ function fitDial(){
   const main=document.getElementById('main'), fit=document.getElementById('dial-fit'), wrap=document.getElementById('dial-wrap');
   const small=window.innerWidth<=820;
   const availW=main.clientWidth-12;
-  const availH=small?availW:(main.clientHeight-60);
+  const fb=document.getElementById('fm-bar'); const fbh=fb&&document.body.classList.contains('fm-on')?fb.offsetHeight+8:0;
+  const availH=small?availW:(main.clientHeight-60-fbh);
   const sc=Math.max(0.3,Math.min(1.25,availW/DIAL_SIZE,availH/DIAL_SIZE));
   wrap.style.transform='scale('+sc+')';
   fit.style.width=(DIAL_SIZE*sc)+'px'; fit.style.height=(DIAL_SIZE*sc)+'px';
@@ -1455,6 +1498,133 @@ window.addEventListener('resize',fitDial);
 buildOuterRing();
 buildDial();
 fitDial();
+</script>
+<script>
+/* ══ FOLLOW THE MELODY ══
+   The dial plays a short phrase (lit + sounded). The player repeats it by hovering the note circles.
+   Phrases grow one note each time you get one right. 8 rounds, then a summary that is saved to
+   "Your test sessions" in this browser (shared with the Access+ research workspace). */
+(function(){
+  const $=id=>document.getElementById(id);
+  const G={on:false,state:'idle',round:0,len:3,melody:[],pos:0,errors:0,phraseErr:0,score:0,correct:0,wrong:0,times:[],t0:0,lastT:0,startedAt:0,hoverEl:null,hoverT:null,longest:0,timers:[]};
+  const ROUNDS=8, NOTE_MS=520;
+  function circles(){ return Array.from(document.querySelectorAll('#dial .note-circle')); }
+  function circleFor(deg){ return circles().find(c=>+c.dataset.deg===deg); }
+  function nDeg(){ return circles().length; }
+  function later(fn,ms){ const t=setTimeout(fn,ms); G.timers.push(t); return t; }
+  function clearTimers(){ G.timers.forEach(clearTimeout); G.timers=[]; }
+  function msg(t){ $('fm-msg').textContent=t; }
+  function stats(){ $('fm-round').textContent=G.round; $('fm-len').textContent=G.len; $('fm-score').textContent=G.score; }
+  function dots(){
+    $('fm-dots').innerHTML=G.melody.map((d,i)=>'<i class="'+(i<G.pos?'ok':'')+(i===G.pos&&G.state==='play'?' now':'')+'"></i>').join('');
+  }
+  function makeMelody(len){
+    const n=nDeg(); let d=0; const m=[0];
+    while(m.length<len){
+      const steps=[-2,-1,-1,1,1,2,0,3,-3];
+      let nd=d+steps[Math.floor(Math.random()*steps.length)];
+      nd=((nd%n)+n)%n;
+      if(nd===d && Math.random()<0.6) continue;
+      m.push(nd); d=nd;
+    }
+    return m;
+  }
+  function cue(deg,dur){
+    const el=circleFor(deg); if(!el) return;
+    const mode=$('fm-cue').value, midi=+el.dataset.midi;
+    if(mode!=='hear'){ el.classList.add('fm-cue'); }
+    if(mode!=='see'){ synthOn(midi); }
+    later(()=>{ el.classList.remove('fm-cue'); if(mode!=='see') synthOff(midi); },dur);
+  }
+  function playCue(){
+    clearTimers(); G.state='listen'; G.pos=0; dots();
+    $('fm-replay').disabled=true;
+    msg('Listen…');
+    G.melody.forEach((d,i)=>later(()=>cue(d,NOTE_MS-80),300+i*NOTE_MS));
+    later(()=>{ G.state='play'; G.pos=0; G.lastT=G.t0=performance.now(); dots(); msg('Your turn: play it back'); $('fm-replay').disabled=false; },300+G.melody.length*NOTE_MS+150);
+  }
+  function newRound(){
+    if(G.round>=ROUNDS){ finish(); return; }
+    G.round++; G.phraseErr=0; G.melody=makeMelody(G.len); stats(); playCue();
+  }
+  function hit(deg,el){
+    if(G.state!=='play') return;
+    const now=performance.now();
+    if(deg===G.melody[G.pos]){
+      G.times.push(now-G.lastT); G.lastT=now; G.correct++; G.pos++; dots();
+      if(G.pos>=G.melody.length){
+        G.state='between';
+        const pts=G.melody.length*10-G.phraseErr*3; G.score+=Math.max(2,pts); G.longest=Math.max(G.longest,G.melody.length);
+        msg(G.phraseErr?'Got it! ('+G.phraseErr+' miss'+(G.phraseErr>1?'es':'')+')':'Perfect!');
+        if(G.phraseErr<=1) G.len=Math.min(9,G.len+1);
+        stats(); later(newRound,1100);
+      }
+    } else {
+      G.wrong++; G.phraseErr++;
+      el.classList.add('fm-wrong'); later(()=>el.classList.remove('fm-wrong'),400);
+      if(G.phraseErr>=3){
+        G.state='between'; msg('Let’s try a shorter one'); G.len=Math.max(2,G.len-1); stats(); later(newRound,1200);
+      } else msg('Not quite: keep going');
+    }
+  }
+  // hover input with optional settle time (for gaze and head pointers)
+  document.getElementById('dial').addEventListener('mouseover',e=>{
+    if(!G.on) return;
+    const el=e.target.closest&&e.target.closest('.note-circle'); if(!el||el===G.hoverEl) return;
+    G.hoverEl=el; clearTimeout(G.hoverT);
+    const settle=+$('fm-settle').value, deg=+el.dataset.deg;
+    if(settle>0) G.hoverT=setTimeout(()=>{ if(G.hoverEl===el) hit(deg,el); },settle); else hit(deg,el);
+  });
+  document.getElementById('dial').addEventListener('mouseout',e=>{
+    if(!G.on) return;
+    const el=e.target.closest&&e.target.closest('.note-circle');
+    if(el && !(e.relatedTarget&&el.contains(e.relatedTarget))){ if(G.hoverEl===el){ G.hoverEl=null; clearTimeout(G.hoverT); } }
+  });
+  document.getElementById('dial').addEventListener('touchstart',e=>{
+    if(!G.on) return;
+    const el=e.target.closest&&e.target.closest('.note-circle'); if(el) hit(+el.dataset.deg,el);
+  },{passive:true});
+  function finish(){
+    G.state='done'; clearTimers();
+    const mins=(performance.now()-G.startedAt)/60000;
+    const acc=Math.round(G.correct/Math.max(1,G.correct+G.wrong)*100);
+    const avg=G.times.length?G.times.reduce((a,b)=>a+b,0)/G.times.length:0;
+    const npm=Math.round(G.correct/Math.max(0.05,mins)*10)/10;
+    msg('Well played!');
+    const sum=$('fm-summary'); sum.style.display='block';
+    sum.innerHTML='Score <b>'+G.score+'</b> · longest phrase <b>'+G.longest+'</b> notes · accuracy <b>'+acc+'%</b> · average <b>'+(avg/1000).toFixed(2)+' s</b> a note · <b>'+npm+'</b> correct notes a minute.<br><span id="fm-saved"></span>';
+    // save as a test session, shared with the Access+ research workspace in this browser
+    try{
+      const T=JSON.parse(localStorage.getItem('accessplus-tests')||'[]')||[];
+      const method=$('fm-method').value, k=method==='mouse'?'head':method;
+      const n=T.filter(t=>t.method===k).length+1;
+      const useful=Math.round(npm*acc/100*(acc<80?Math.max(0.3,Math.min(1,0.4+0.6*(acc-50)/30)):1)*10)/10;
+      T.push({n:n,date:new Date().toISOString().slice(0,16).replace('T',' '),method:k,pos:$('fm-pos').value,mode:'melody'+(method==='mouse'?' (mouse)':''),size:'dial',speed:npm,acc:acc,tp:'',effort:null,useful:useful,game:'Follow the melody',score:G.score,longest:G.longest});
+      localStorage.setItem('accessplus-tests',JSON.stringify(T));
+      $('fm-saved').textContent='Saved to your test sessions in this browser.';
+    }catch(e){ $('fm-saved').textContent='Saving is not available here.'; }
+    $('fm-start').textContent='▶ Play again'; $('fm-replay').disabled=true; fitDial();
+  }
+  function start(){
+    unlockSound();
+    clearTimers();
+    Object.assign(G,{state:'idle',round:0,len:3,score:0,correct:0,wrong:0,times:[],longest:0,startedAt:performance.now()});
+    $('fm-summary').style.display='none'; fitDial();
+    $('fm-start').textContent='■ Restart';
+    stats(); newRound();
+  }
+  function toggle(){
+    G.on=!G.on; document.body.classList.toggle('fm-on',G.on);
+    $('fm-toggle').textContent=G.on?'✕ Free play':'🎯 Follow the melody';
+    if(!G.on){ clearTimers(); G.state='idle'; circles().forEach(c=>c.classList.remove('fm-cue','fm-wrong')); synthAllOff(); }
+    else { msg('Follow the melody'); $('fm-dots').innerHTML=''; }
+    fitDial();
+  }
+  $('fm-toggle').addEventListener('click',toggle);
+  $('fm-start').addEventListener('click',start);
+  $('fm-replay').addEventListener('click',()=>{ if(G.state==='play'){ G.phraseErr++; playCue(); } });
+  if(/[?&]game=melody/.test(location.search)) toggle();
+})();
 </script>
 </body>
 </html>
