@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mouse Orchestra v6.1 (web-ready)</title>
+<title>Mouse Orchestra v6.2 (slow score)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#06041a;color:#e0d0ff;font-family:'Segoe UI',sans-serif;height:100vh;overflow:hidden}
@@ -128,7 +128,8 @@ body{background:#06041a;color:#e0d0ff;font-family:'Segoe UI',sans-serif;height:1
       <div class="slrow"><span class="slabel">Attack</span><input type="range" min="5" max="120" value="35" oninput="attackMs=parseInt(this.value);document.getElementById('atV').textContent=this.value+'ms'"><span class="sv" id="atV">35ms</span></div>
       <div class="slrow"><span class="slabel">Decay</span><input type="range" min="400" max="3000" value="1600" oninput="decayMs=parseInt(this.value);document.getElementById('dcV').textContent=(this.value/1000).toFixed(1)+'s'"><span class="sv" id="dcV">1.6s</span></div>
       <div class="slrow" title="For eye gaze or head pointers: how long to rest on a mouse before it sings. 0 = instant."><span class="slabel">Hover delay</span><input type="range" min="0" max="1500" step="50" value="0" oninput="hoverDelay=parseInt(this.value);document.getElementById('hdV').textContent=this.value==='0'?'off':(this.value/1000).toFixed(2)+'s'"><span class="sv" id="hdV">off</span></div>
-      <div class="slrow"><span class="slabel">Scroll</span><input type="range" min="4" max="30" value="12" oninput="setScrollSpeed(this.value);document.getElementById('scV').textContent=this.value+'s'"><span class="sv" id="scV">12s</span></div>
+      <div class="slrow" title="How fast the music score scrolls past. Slower gives more time to catch each note."><span class="slabel">Score speed</span><input type="range" min="1" max="10" value="2" id="scIn" oninput="setScrollSpeed(this.value)"><span class="sv" id="scV">slow</span></div>
+      <button class="ib" id="scPause" type="button" onclick="toggleScore()">⏸ Pause score</button>
     </div>
     <div class="sec">
       <div class="stitle">🎼 Pad Names</div>
@@ -150,12 +151,16 @@ body{background:#06041a;color:#e0d0ff;font-family:'Segoe UI',sans-serif;height:1
       <div id="dzLabel">✦ &nbsp; MUSIC SCORE &nbsp; ✦</div>
       <div id="deadZone">
         <div id="noteScroll" style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden">
+          <div id="playhead"></div>
           <svg id="noteTrack" width="2000" height="110" xmlns="http://www.w3.org/2000/svg"
-            style="position:absolute;top:0;left:0;animation:scrollNotes 12s linear infinite">
+            style="position:absolute;top:0;left:0;animation:scrollNotes 120s linear infinite">
           </svg>
         </div>
       </div>
-      <style>@keyframes scrollNotes{from{transform:translateX(100%)}to{transform:translateX(-200%)}}</style>
+      <style>@keyframes scrollNotes{from{transform:translateX(var(--from,380px))}to{transform:translateX(var(--to,-2000px))}}
+@keyframes cuePulse{from{filter:drop-shadow(0 0 6px #ffd27a)}to{filter:drop-shadow(0 0 26px #ffd27a) brightness(1.15)}}
+.pad-wrap.cue svg{animation:cuePulse .6s ease-in-out infinite alternate}
+#playhead{position:absolute;top:6px;bottom:6px;left:50%;width:2px;background:rgba(255,220,120,.85);box-shadow:0 0 10px rgba(255,200,80,.8);z-index:3;pointer-events:none}</style>
       <!-- ═══════════════════════════════════════════════════
            PASTE YOUR TREBLE CLEF SVG CODE HERE
            Replace the placeholder below with your custom code
@@ -309,6 +314,7 @@ function buildScore(){
 
   const notes=[...padMidi].sort((a,b)=>a-b);
   const pattern=[...notes,...notes.slice().reverse(),...notes.slice(0,8)];
+  scoreNotes=[];
   let x=90;
   pattern.forEach((midi)=>{
     const y=midiToStaffY(midi);
@@ -319,6 +325,7 @@ function buildScore(){
       lg.setAttribute('stroke','rgba(180,120,255,0.6)');lg.setAttribute('stroke-width','1');
       svg.appendChild(lg);
     }
+    scoreNotes.push({x:x,midi:midi});
     const el=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
     el.setAttribute('cx',String(x));el.setAttribute('cy',String(y));
     el.setAttribute('rx','7');el.setAttribute('ry','5');
@@ -338,11 +345,43 @@ function buildScore(){
     svg.appendChild(txt);
     x+=52;
   });
+  // v6.2: size the track to its notes and scroll it at a steady, slow pace
+  svg.setAttribute('width',String(x+40));
+  applyScoreSpeed();
+}
+let scoreSpeed=2, scorePaused=false, scoreNotes=[], cueIdx=-1;
+// Cue: when a score note reaches the playhead, the matching mouse glows, so you know which one to catch
+function cueLoop(){
+  requestAnimationFrame(cueLoop);
+  const svg=document.getElementById('noteTrack'), ph=document.getElementById('playhead');
+  if(!svg||!ph||!scoreNotes.length) return;
+  const sx=svg.getBoundingClientRect().left, px=ph.getBoundingClientRect().left;
+  let idx=-1;
+  for(let i=0;i<scoreNotes.length;i++){ if(Math.abs(sx+scoreNotes[i].x-px)<26){ idx=i; break; } }
+  if(idx===cueIdx) return;
+  cueIdx=idx;
+  document.querySelectorAll('.pad-wrap.cue').forEach(w=>w.classList.remove('cue'));
+  if(idx>=0){ const w=document.querySelector('.pad-wrap[data-midi="'+scoreNotes[idx].midi+'"]'); if(w) w.classList.add('cue'); }
+}
+requestAnimationFrame(cueLoop);
+const SPEED_NAMES=['','very slow','slow','easy','steady','medium','medium','brisk','fast','faster','fastest'];
+function applyScoreSpeed(){
+  const svg=document.getElementById('noteTrack'), dz=document.getElementById('deadZone');
+  const w=parseFloat(svg.getAttribute('width'))||2000, view=(dz&&dz.offsetWidth)||380;
+  const pxps=scoreSpeed*9;                     // 9 to 90 pixels a second
+  const dist=view+w;
+  svg.style.setProperty('--from',view+'px');
+  svg.style.setProperty('--to',(-w)+'px');
+  svg.style.animationDuration=(dist/pxps).toFixed(1)+'s';
+  const lbl=document.getElementById('scV'); if(lbl) lbl.textContent=SPEED_NAMES[scoreSpeed]||scoreSpeed;
+}
+function toggleScore(){
+  scorePaused=!scorePaused;
+  document.getElementById('noteTrack').style.animationPlayState=scorePaused?'paused':'running';
+  document.getElementById('scPause').textContent=scorePaused?'▶ Resume score':'⏸ Pause score';
 }
 
-function setScrollSpeed(s){
-  document.getElementById('noteTrack').style.animationDuration=s+'s';
-}
+function setScrollSpeed(v){ scoreSpeed=parseInt(v,10)||2; applyScoreSpeed(); }
 
 // ── SPOTLIGHT ────────────────────────────────────────────
 function buildSpotlight(){
@@ -458,7 +497,7 @@ function rebuildPads(){
     const rad=pd.a*Math.PI/180,px=CX+pd.r*Math.cos(rad),py=CY+pd.r*Math.sin(rad)+pd.oy;
 
     const wrap=document.createElement('div');
-    wrap.className='pad-wrap';
+    wrap.className='pad-wrap'; wrap.dataset.midi=midi;
     wrap.style.cssText=`position:absolute;left:${px}px;top:${py}px;transform:translate(-50%,-50%);cursor:pointer;transition:transform .12s;z-index:${pd.big?10:15}`;
     wrap.innerHTML=mouseFaceSVG(pd.sz,pd.shade,pd.big,false,pd.idx);
     wrap.title='Double-click to rename';
@@ -573,7 +612,7 @@ function logMidi(type,note,vel,ch){
 // ── CONTROLS ─────────────────────────────────────────────
 function selInst(el,n){document.querySelectorAll('#instBtns .ib').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');inst=n}
 function toggleSnd(){sndOn=!sndOn;const b=document.getElementById('bSnd');b.textContent=sndOn?'🔊 Sound ON':'🔇 Sound OFF';b.className=sndOn?'cb act':'cb'}
-function setScrollSpeed(s){document.getElementById('noteTrack').style.animationDuration=s+'s'}
+
 
 // ── INIT ─────────────────────────────────────────────────
 window.addEventListener('load',()=>{
@@ -582,7 +621,7 @@ window.addEventListener('load',()=>{
   g.addEventListener('click',unlockSound);
   g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();unlockSound();}});
   ['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,unlockSound,{passive:true}));
-  window.addEventListener('resize',()=>rebuildPads());
+  window.addEventListener('resize',()=>{rebuildPads();applyScoreSpeed();});
 });
 </script>
 </body>
