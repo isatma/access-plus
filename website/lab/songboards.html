@@ -2166,7 +2166,9 @@
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<!-- Tone.js 14.8.49 (MIT) served with the site; falls back to cdnjs -->
+<script src="lib/Tone.js"></script>
+<script>window.Tone || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"><\/script>');</script>
 <script>
 "use strict";
 
@@ -2352,6 +2354,7 @@ async function ensureAudio() {
     audioReady = true;
   } catch (e) {
     console.error('Audio init failed', e);
+    try { showBanner(typeof Tone === 'undefined' ? '🔇 The sound library could not load. Check the internet connection and reload.' : '🔇 Sound could not start. Tap Start again.', 6000); } catch (_) {}
   }
 }
 
@@ -6453,7 +6456,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
   let loaded = false;
   try { loaded = loadFromLocal(); } catch(e) {}
-  if (!loaded) applyPalette(EXAMPLES[0]);
+  // Web build: open on a playable music board, not the camera test board
+  if (!loaded) applyPalette(EXAMPLES.find(e => /^Mary Had/.test(e.name)) || EXAMPLES[0]);
   // Default to Play mode so the first tap on any target fires the sound
   // instead of opening the Target Editor. Users tap '✎ Arrange' in the
   // top-left to switch into editing.
