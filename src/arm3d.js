@@ -564,9 +564,9 @@
     });
 
     // ---------- render loop ----------
-    var last = performance.now(), visible = true, t0 = last;
+    var last = performance.now(), visible = true, t0 = last, lastW = 0;
     function resize() {
-      var ar = parseFloat(getComputedStyle(host).getPropertyValue('--ar')) || 1.6, w = host.clientWidth || 400, h = Math.round(w / ar);
+      var ar = parseFloat(getComputedStyle(host).getPropertyValue('--ar')) || 1.6, w = host.clientWidth || 400, h = Math.round(w / ar); lastW = host.clientWidth;
       renderer.setSize(w, h, false); renderer.domElement.style.width = '100%'; renderer.domElement.style.height = 'auto';
       camera.aspect = w / h; camera.fov = (w / h) < 1.45 ? 40 : 38;
       if ((w / h) < 1.45) { camera.position.set(-0.1, 4.1, 6.3); camera.lookAt(-0.5, 0.35, -0.25); } else { camera.position.copy(CAM.pos); camera.lookAt(CAM.look); }
@@ -578,6 +578,7 @@
       requestAnimationFrame(frame);
       var dt = Math.max(0, Math.min(0.05, (now - last) / 1000)); last = now;
       if (!visible || host.offsetParent === null) return;
+      if (host.clientWidth && host.clientWidth !== lastW) resize();
       step(dt); apply();
       if (held) {
         var tip = tipWorld(), m = held.g || held.mesh;

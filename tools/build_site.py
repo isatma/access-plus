@@ -166,7 +166,7 @@ def build():
         <div class="ck-card"><span class="ck-st">Coming next</span><b>Breath</b><small>Sip and puff strength and control, soft and hard, for breath switches and drive controls</small></div>
         <div class="ck-card"><span class="ck-st">Coming next</span><b>Muscle signals (EMG)</b><small>Finds small muscle firings, even without visible movement, using a sensor kit</small></div>
         <div class="ck-card"><span class="ck-st">Coming next</span><b>Switch timing</b><small>How fast and reliably you can press a switch with any movement, for scanning</small></div>
-        <a class="ck-card" href="#advanced"><span class="ck-st">Specialist</span><b>Brain-computer interface</b><small>For people with no reliable movement: a referral to research programs, not a home check</small></a>
+        <a class="ck-card" href="#advanced"><span class="ck-st">Potential · for discussion</span><b>Brain-computer interface</b><small>For people with no reliable movement: a referral to research programs, not a home check</small></a>
       </div>
     </section>
     <section class="gx" id="gx" aria-labelledby="gxT">
@@ -271,6 +271,7 @@ def build():
       <h1>Practice first, then try the real thing</h1>
       <p>Build skills safely in the simulators, then borrow a sensor kit by mail to try at home, on your own, with family, or with your therapist.</p>
     </section>
+    __ARM__
     __SIMS__
     <div class="try-grid">
       <a class="try-card" href="#simulators"><span class="jn-k">Practice</span><h2>Simulators</h2><p>Robotic arm, wheelchair driving, phone, computer exercises, soundboard and talking board. Works with nose tracking, eye gaze, switches or a mouse.</p><span class="try-go">Open the simulators &rarr;</span></a>
@@ -438,7 +439,7 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + find[0] + research[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + borrow[0] + profile[0] + find[0] + research[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__ARM__', open(ROOT / 'src' / 'arm_section.html').read()).replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)

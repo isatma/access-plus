@@ -25,6 +25,8 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 
 - Research dashboard built (Nov 1, 2026): #research view on a simulated cohort (60 participants, 52 weeks) with filters, group trend, snapshot compare, early warning before a switch, technology chain, participant drill-down with pointing traces, data files browser with CSV downloads, method and sources. Next: feed real session data from the simulators; add a participant "My data" view
 
+- Focus shift (Nov 2, 2026): home entry is now Everyday control (input methods); daily-living cards replaced by input-method cards; robotic arm moved to the Simulators page as a cutting-edge simulator holding the daily-living tasks; BCI marked potential, for discussion; dashboard tasks switched to everyday control
+
 ## Website
 
 - Shelved (Nov 1, 2026): independent reviews, community reviewers and company listings, removed from the site for now; neutral technology guides stay

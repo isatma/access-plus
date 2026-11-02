@@ -425,9 +425,9 @@
     if (A.fatigue === 'high') fat.push('Switch scanning or eye gaze usually tire people less than repeated head movement');
     li(el('fdFat'), fat);
     var p = el('fdPractice'), target = METH[primary].sim;
-    if (has('goals', 'eat') && primary !== 'head' && primary !== 'eyes') target = '#home';
+    if (has('goals', 'eat') && primary !== 'head' && primary !== 'eyes') target = '#simulators';
     if (target.indexOf('#sim-') === 0 && !el(target.slice(1))) target = '#simulators';
-    p.href = target; p.textContent = target === '#home' ? 'Try the robotic arm →' : 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
+    p.href = target; p.textContent = target === '#simulators' && has('goals', 'eat') && primary !== 'head' && primary !== 'eyes' ? 'Try the robotic arm simulator →' : 'Practice ' + METH[primary].name.toLowerCase() + ' now →';
     card.hidden = true; prog.hidden = true; done.hidden = false; res.hidden = false; aiText.hidden = true;
     el('fdStepK').textContent = 'Profile complete';
     ack.textContent = goalWords && /chain/i.test(goalWords) ? 'Your profile is built, and here is your technology chain.' : 'Your profile is built.';
