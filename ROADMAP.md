@@ -52,3 +52,5 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - Confirm partner wording with each organization before sharing widely
 - Dated facts with an owner who checks them (prices, trial counts, coverage rules)
 - Written conflict-of-interest policy once the coalition is formal
+
+- Owned equipment and frequency of use: profile tools table shows how often each item is used and flags rarely used items gently; research dashboard card plus owned_equipment.csv (simulated). Escalation wording softened: changing technology is optional.

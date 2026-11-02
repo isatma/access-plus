@@ -76,6 +76,13 @@
 .rs-method ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; color: var(--desc); font-size: 0.9em; }
 .rs-method a { color: var(--signal); }
 @media (max-width: 800px) { .rs-method { grid-template-columns: 1fr; } }
+.rs-own { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 760px) { .rs-own { grid-template-columns: 1fr; } }
+.rs-h3 { margin: 0 0 8px; font: 600 0.92em var(--body); color: var(--ink); }
+.rs-why { display: grid; grid-template-columns: minmax(0, 1fr) 70px 32px; gap: 6px 8px; align-items: center; font-size: 0.86em; color: #0b1220; }
+.rs-why i { display: block; height: 10px; background: #c28a0e; }
+.rs-own-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.82em; color: var(--muted); margin-bottom: 6px; }
+.rs-own-key span::before { content: ""; display: inline-block; width: 12px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--k); }
 </style>
 </head>
 <body>
@@ -125,10 +132,17 @@
 
         <article class="rs-card wide">
           <h2>The technology chain</h2>
-          <p class="sub">One row per participant: which method they relied on, week by week. Diamonds mark a switch; a ring means the next method had been practiced before the switch.</p>
+          <p class="sub">One row per participant: which method they relied on, week by week. Diamonds mark a switch; a ring means the next method had been practiced before the switch. Switching is never required: many people stay with one method and adjust settings instead.</p>
           <div class="rs-legend" id="chainL"></div>
           <div id="chainC"></div>
           <div class="rs-scroll" style="max-height:220px"><table class="rs-tbl" id="pathT"></table></div>
+        </article>
+
+        <article class="rs-card wide" id="ownC">
+          <h2>Owned equipment and how often it's used</h2>
+          <p class="sub">What participants already own, and how often each item was used in the last four weeks of logged sessions. Rarely used isn't automatically a problem; it's a prompt to ask why.</p>
+          <div class="rs-own"><div id="ownChart"></div><div><h3 class="rs-h3">Reasons given for rarely used items</h3><div id="ownWhy"></div></div></div>
+          <p class="find" id="ownF"></p>
         </article>
 
         <article class="rs-card wide" id="drill">
@@ -261,6 +275,28 @@
     });
   }
   var byId = {}; P.forEach(function (p) { byId[p.id] = p; });
+  /* ---------- owned equipment and use (generated after the cohort so earlier data stays the same) ---------- */
+  var OWN = [
+    { k: 'eyetr', name: 'Eye tracker', kind: 'Hardware', m: 'eyes', p: 0.35 }, { k: 'headm', name: 'Head mouse or webcam tracking', kind: 'Hardware', m: 'head', p: 0.5 },
+    { k: 'btn', name: 'Button switches', kind: 'Hardware', m: 'sw', p: 0.45 }, { k: 'brs', name: 'Breath switch', kind: 'Hardware', m: 'breath', p: 0.2 },
+    { k: 'emgs', name: 'EMG muscle switch', kind: 'Hardware', m: 'emg', p: 0.12 }, { k: 'vc', name: 'Built-in voice control', kind: 'Software', m: 'voice', p: 0.8 },
+    { k: 'aac', name: 'Speech app (AAC)', kind: 'Software', m: 'any', p: 0.55 }, { k: 'osk', name: 'On-screen keyboard', kind: 'Software', m: 'any', p: 0.6 },
+    { k: 'home', name: 'Smart speaker or home control', kind: 'Hardware', m: 'voice', p: 0.6 }, { k: 'joy', name: 'Mouth or chin joystick', kind: 'Hardware', m: 'drive', p: 0.3 }
+  ];
+  var WHY = ['Not needed right now', 'Setup or calibration takes too long', 'Tiring or uncomfortable', 'Never had training', 'Not reachable in bed', 'Forgot it was available'];
+  var OW = [];
+  P.forEach(function (p) {
+    var cur = p.timeline[52], spk = p.onset === 'bulbar';
+    OWN.forEach(function (o) {
+      if (rnd() > o.p) return;
+      var fit = o.m === cur ? 1 : o.m === 'any' ? (spk || cur === 'eyes' || cur === 'sw' ? 0.8 : 0.3) : o.m === 'voice' ? (spk ? 0.04 : 0.6) : o.m === 'drive' ? (p.pos === 'bed' ? 0.04 : 0.6) : (rnd() < 0.5 ? 0.03 : 0.15);
+      var u = Math.max(0, Math.round(fit * (8 + rnd() * 20) * (rnd() < 0.2 ? 0.04 : 1) + norm(0, 1.5)));
+      var st = u >= 5 ? 'regular' : u >= 1 ? 'occasional' : 'rarely';
+      var why = '';
+      if (st === 'rarely') { var r = rnd(); why = r < (fit <= 0.15 ? 0.55 : 0.25) ? WHY[0] : WHY[1 + Math.floor(rnd() * 5)]; if (p.pos === 'bed' && o.kind === 'Hardware' && rnd() < 0.35) why = WHY[4]; }
+      OW.push({ id: p.id, product: o.name, kind: o.kind, uses_per_week: u, last_used_days: u >= 1 ? Math.round(7 / u) : Math.round(10 + rnd() * 80), status: st, reason: why });
+    });
+  });
 
   /* ---------- helpers ---------- */
   function el(id) { return document.getElementById(id); }
@@ -406,22 +442,44 @@
       '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Success rate over time" style="margin-top:12px">' + g + '</svg><div class="rs-grid" style="margin-top:12px"><div style="display:grid;gap:10px;align-content:start;justify-items:center">' + (TECH_MEAS.head.indexOf('tremor') >= 0 && (last.method === 'head' || last.method === 'eyes') ? '<svg viewBox="0 0 ' + tw + ' ' + th + '" role="img" aria-label="Pointing paths" style="max-width:360px">' + tg + '</svg>' : '<p class="sub">Pointing paths appear for participants currently using head tracking or eye gaze.</p>') + '</div><div style="overflow-x:auto;min-width:0">' +
       '<table class="rs-tbl rs-wrapt"><thead><tr><th>Everyday task</th><th>Week 0</th><th>Week 52</th></tr></thead><tbody>' + adl.map(function (a) { return '<tr><td>' + esc(a.goal) + '<br><small style="color:#4b5a6b">' + esc(a.technology) + '</small></td><td>' + a.week0_seconds + ' s, ' + a.help_week0 + ' help</td><td>' + a.week52_seconds + ' s, ' + a.help_week52 + ' help</td></tr>'; }).join('') + '</tbody></table></div></div>';
   }
-  function draw() { trend(); snap(); warn(); var cs = chain(); kpis(cs); drill(); }
+  function own() {
+    var rows = OW.filter(function (r) { return inFilter(byId[r.id]); }), W = 640, rh = 26, x0 = 210, w = W - x0 - 140;
+    var agg = OWN.map(function (o) { var rs = rows.filter(function (r) { return r.product === o.name; }); return { name: o.name, n: rs.length, reg: rs.filter(function (r) { return r.status === 'regular'; }).length, occ: rs.filter(function (r) { return r.status === 'occasional'; }).length, rare: rs.filter(function (r) { return r.status === 'rarely'; }).length }; }).filter(function (a) { return a.n; }).sort(function (a, b) { return b.n - a.n; });
+    var mx = Math.max.apply(null, agg.map(function (a) { return a.n; }).concat([1])), H = agg.length * rh + 26;
+    var g = '';
+    agg.forEach(function (a, i) {
+      var y = 4 + i * rh, sc = w / mx, xr = x0, seg = [[a.reg, '#1f9d6b'], [a.occ, '#7cc4ff'], [a.rare, '#c28a0e']];
+      g += '<text x="' + (x0 - 8) + '" y="' + (y + 14) + '" text-anchor="end" font-size="12" fill="#24344a">' + esc(a.name) + '</text>';
+      seg.forEach(function (sg) { if (!sg[0]) return; g += '<rect x="' + xr + '" y="' + (y + 3) + '" width="' + (sg[0] * sc) + '" height="16" fill="' + sg[1] + '"/>'; xr += sg[0] * sc; });
+      g += '<text x="' + (xr + 6) + '" y="' + (y + 15) + '" font-size="11.5" fill="#4b5a6b">' + a.n + ' own · ' + Math.round(a.rare / a.n * 100) + '% rarely</text>';
+    });
+    g += '<text x="' + x0 + '" y="' + (H - 4) + '" font-size="11" fill="#4b5a6b">number of participants who own it</text>';
+    el('ownChart').innerHTML = '<div class="rs-own-key"><span style="--k:#1f9d6b">Regular (5+ a week)</span><span style="--k:#7cc4ff">Occasional</span><span style="--k:#c28a0e">Rarely (under once a week)</span></div><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Owned equipment by how often it is used">' + g + '</svg>';
+    var rare = rows.filter(function (r) { return r.status === 'rarely'; }), cnt = {};
+    rare.forEach(function (r) { cnt[r.reason] = (cnt[r.reason] || 0) + 1; });
+    var ws = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }), wm = Math.max.apply(null, ws.map(function (k) { return cnt[k]; }).concat([1]));
+    el('ownWhy').innerHTML = ws.length ? '<div class="rs-why">' + ws.map(function (k) { return '<span>' + esc(k) + '</span><i style="width:' + Math.round(cnt[k] / wm * 70) + 'px"></i><b>' + cnt[k] + '</b>'; }).join('') + '</div>' : '<p class="sub">No rarely used items in this group.</p>';
+    var top = agg.filter(function (a) { return a.n >= 5; }).sort(function (a, b) { return b.rare / b.n - a.rare / a.n; })[0];
+    var fixable = rare.filter(function (r) { return r.reason && r.reason !== WHY[0]; }).length;
+    el('ownF').innerHTML = rows.length ? (top ? '<b>' + esc(top.name) + '</b> is the most often owned-but-rarely-used item here (' + top.rare + ' of ' + top.n + ' owners). ' : '') + 'Of ' + rare.length + ' rarely used items, ' + fixable + ' have a reason that training, setup help or mounting might address; the rest simply aren\u2019t needed right now.' : 'No participants match these filters.';
+  }
+  function draw() { trend(); snap(); warn(); var cs = chain(); kpis(cs); own(); drill(); }
   el('snapA').addEventListener('input', snap); el('snapB').addEventListener('input', snap);
   el('rsMethodLink').addEventListener('click', function (e) { e.preventDefault(); el('method').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
   /* ---------- data files ---------- */
   function csv(rows, cols) { return [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); })).join('\n'); }
-  var DICT = [['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
+  var DICT = [['owned_equipment.csv', 'product', 'Item the participant owns'], ['owned_equipment.csv', 'uses_per_week', 'Average uses a week over the last 4 weeks of logged sessions'], ['owned_equipment.csv', 'last_used_days', 'Days since last use'], ['owned_equipment.csv', 'status', 'regular (5+ a week), occasional, rarely (under once a week)'], ['owned_equipment.csv', 'reason', 'Reason given for rarely used items'], ['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
     ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'stamina', 'Minutes of reliable use before errors start to rise'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
     ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
     ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
-  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Owned equipment: each person owns a mix of common hardware and software; weekly use is higher when an item matches the method they rely on. Rarely used = under once a week, with a simulated reason.\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
   var FILES = [
     { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
     { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
     { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
     { name: 'everyday_tasks.csv', kind: 'CSV', desc: 'Everyday-control tasks and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
+    { name: 'owned_equipment.csv', kind: 'CSV', desc: 'Equipment each person owns and how often it is used', cols: ['id', 'product', 'kind', 'uses_per_week', 'last_used_days', 'status', 'reason'], rows: function () { return OW; } },
     { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },
     { name: 'README.txt', kind: 'TXT', desc: 'How the data was made', text: README }
   ];

@@ -928,7 +928,9 @@ footer .wrap { padding-block: 22px; }
 #view-profile table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
 #view-profile th, #view-profile td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
 #view-profile th { font: 500 0.68em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
-#view-profile td.ace { color: var(--desc); }
+#view-profile td.aisug { color: #24344a; }
+#view-profile .col td { color: #0b1220; }
+#view-profile tr.rare td { background: #fffaf0; }
 #view-profile .pf-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 #view-profile .pf-chip { padding: 6px 12px; border: 1px solid var(--line-hi); font-size: 0.9em; }
 #view-profile .pf-chip.on { border-color: var(--signal); color: var(--signal); }
@@ -1047,6 +1049,7 @@ footer .wrap { padding-block: 22px; }
 #view-profile .example { display: none !important; }
 #view-profile .card.hl .pf-title { font: 700 1.9em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); border-left: 6px solid var(--signal); padding-left: 12px; line-height: 1.1; }
 #view-profile .card.hl { padding-top: 22px; }
+#view-profile .rare-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: #7a5200; background: #fff3d6; border: 1px solid #e0b553; white-space: nowrap; }
 #view-find .fd-wrap { gap: 28px !important; }
 #view-find .fd-k { font: 500 0.7em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 #view-find .fd-hero { position: relative; display: grid; gap: 14px; padding: 46px 0 34px; text-align: center; justify-items: center; border-bottom: 1px solid var(--line-hi); overflow: hidden; }
@@ -1301,6 +1304,15 @@ footer .wrap { padding-block: 22px; }
 @media (max-width: 800px) {
 #view-research .rs-method { grid-template-columns: 1fr; }
 }
+#view-research .rs-own { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 760px) {
+#view-research .rs-own { grid-template-columns: 1fr; }
+}
+#view-research .rs-h3 { margin: 0 0 8px; font: 600 0.92em var(--body); color: var(--ink); }
+#view-research .rs-why { display: grid; grid-template-columns: minmax(0, 1fr) 70px 32px; gap: 6px 8px; align-items: center; font-size: 0.86em; color: #0b1220; }
+#view-research .rs-why i { display: block; height: 10px; background: #c28a0e; }
+#view-research .rs-own-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.82em; color: var(--muted); margin-bottom: 6px; }
+#view-research .rs-own-key span::before { content: ""; display: inline-block; width: 12px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--k); }
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1937,7 +1949,7 @@ footer .wrap { padding-block: 22px; }
       <div class="rb-text">
         <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
         <h2 id="rbT">See skills change over time, and catch problems early</h2>
-        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, watch the technology chain, and spot the early signs that a method is starting to fail.</p>
+        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
         <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
         <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
       </div>
@@ -2143,7 +2155,7 @@ footer .wrap { padding-block: 22px; }
 
       <section class="card" id="pf-c-tools" aria-labelledby="pf-toolsT">
         <h2 id="pf-toolsT">Current tools <small>with the AI agent's take</small></h2>
-        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>Works well</th><th>Problems</th><th>AI suggestion</th></tr></thead><tbody id="pf-tools"></tbody></table></div>
+        <div class="tablewrap"><table><thead><tr><th>Tool</th><th>Used for</th><th>How often</th><th>Works well</th><th>Problems</th><th>AI suggestion</th></tr></thead><tbody id="pf-tools"></tbody></table></div>
       </section>
 
       <section class="card" id="pf-c-move" aria-labelledby="pf-moveT">
@@ -2306,10 +2318,17 @@ footer .wrap { padding-block: 22px; }
 
         <article class="rs-card wide">
           <h2>The technology chain</h2>
-          <p class="sub">One row per participant: which method they relied on, week by week. Diamonds mark a switch; a ring means the next method had been practiced before the switch.</p>
+          <p class="sub">One row per participant: which method they relied on, week by week. Diamonds mark a switch; a ring means the next method had been practiced before the switch. Switching is never required: many people stay with one method and adjust settings instead.</p>
           <div class="rs-legend" id="rs-chainL"></div>
           <div id="rs-chainC"></div>
           <div class="rs-scroll" style="max-height:220px"><table class="rs-tbl" id="rs-pathT"></table></div>
+        </article>
+
+        <article class="rs-card wide" id="rs-ownC">
+          <h2>Owned equipment and how often it's used</h2>
+          <p class="sub">What participants already own, and how often each item was used in the last four weeks of logged sessions. Rarely used isn't automatically a problem; it's a prompt to ask why.</p>
+          <div class="rs-own"><div id="rs-ownChart"></div><div><h3 class="rs-h3">Reasons given for rarely used items</h3><div id="rs-ownWhy"></div></div></div>
+          <p class="find" id="rs-ownF"></p>
         </article>
 
         <article class="rs-card wide" id="rs-drill">
@@ -3596,7 +3615,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:59 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 19:54 UTC</span></div>
   </div>
 </footer>
 
@@ -4807,13 +4826,13 @@ function AgentCloud(canvas, opts) {
     svg.innerHTML = g;
     var txt = best ? '<b>' + name(best) + '</b> fits best for this person right now.' : 'Choose at least one method that is in use today.';
     var next = cross.filter(function (c) { return c[0] > S.a; })[0];
-    if (best && next) txt += ' If movement keeps declining, <b>' + name(next[2]).toLowerCase() + '</b> overtakes it at about ' + Math.round(next[0] * 100) + '% along the scale: a good time to have it practiced.';
-    else if (best) txt += ' Among these three, it stays the best fit from here on; keep a practiced backup ready.';
+    if (best && next) txt += ' Further along the scale, <b>' + name(next[2]).toLowerCase() + '</b> may also become an option, around ' + Math.round(next[0] * 100) + '%. Changing isn\u2019t required: settings and add-ons often keep a familiar setup working.';
+    else if (best) txt += ' Among these three, it stays the best fit across the scale.';
     if (SEL.indexOf('voice') >= 0 && S.sp > 0.5) txt += ' Speech is changing, so voice recognition is losing accuracy; consider voice banking.';
     var anyAdd = Object.keys(ADD).some(function (x) { return ADD[x]; });
     if (MINE && SEL.indexOf(MINE) < 0) txt = 'Your setup, ' + name(MINE).toLowerCase() + ', isn’t in the comparison: pick it in the gallery above. ' + txt;
     else if (MINE && anyAdd) { var b0 = model(MINE, S.a, S.f, S.t, S.sp, S.bed, {}).use, a1 = M[MINE].use; txt = 'With the add-ons, your <b>' + name(MINE).toLowerCase() + '</b> goes from ' + b0.toFixed(1) + ' to ' + a1.toFixed(1) + ' useful selections a minute (' + (a1 >= b0 ? '+' : '') + Math.round((a1 - b0) / (b0 || 1) * 100) + '%). ' + txt; }
-    else if (MINE && MINE !== best) txt = 'Your setup is <b>' + name(MINE).toLowerCase() + '</b>. ' + txt + ' Try adding features to close the gap.';
+    else if (MINE && MINE !== best) txt = 'Your setup is <b>' + name(MINE).toLowerCase() + '</b>. ' + txt + ' Add-ons can often close the gap without changing methods.';
     document.getElementById('cmpFind').innerHTML = txt;
   }
   ['cmpA', 'cmpF', 'cmpT', 'cmpS'].forEach(function (id) { document.getElementById(id).addEventListener('input', update); });
@@ -4928,10 +4947,11 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
       { name: 'Voice commands', level: 2, status: 'Possible', note: 'Good indoors, struggles with noise' }
     ],
     tools: [
-      { tool: 'OptiKey on-screen keyboard', use: 'Typing, mouse clicks', works: 'Fast once set up', issues: 'Keys small in bed', ace: 'Make a larger in-bed keyboard layout' },
-      { tool: 'Nose tracking webcam', use: 'Pointer control', works: 'Accurate seated', issues: 'Pillow limits movement in bed', ace: 'Re-calibrate a bed profile with more speed' },
-      { tool: 'Phone voice control', use: 'Calls and texts', works: 'Hands-free calls', issues: 'Fails in noisy rooms', ace: 'Try a headset mic from the sensor kit' },
-      { tool: 'Power chair joystick (chin)', use: 'Driving', works: 'Indoors', issues: 'Neck fatigue by evening', ace: 'Practice head-tilt driving in the simulator' }
+      { tool: 'OptiKey on-screen keyboard', use: 'Typing, mouse clicks', freq: 'Daily', works: 'Fast once set up', issues: 'Keys small in bed', ace: 'Make a larger in-bed keyboard layout' },
+      { tool: 'Nose tracking webcam', use: 'Pointer control', freq: 'Daily', works: 'Accurate seated', issues: 'Pillow limits movement in bed', ace: 'Re-calibrate a bed profile with more speed' },
+      { tool: 'Phone voice control', use: 'Calls and texts', freq: 'A few times a week', works: 'Hands-free calls', issues: 'Fails in noisy rooms', ace: 'Try a headset mic from the sensor kit' },
+      { tool: 'Power chair joystick (chin)', use: 'Driving', freq: 'Daily', works: 'Indoors', issues: 'Neck fatigue by evening', ace: 'Practice head-tilt driving in the simulator' },
+      { tool: 'Eye tracker (owned)', use: 'Typing in bed', freq: 'About once a month', rare: true, works: 'Accurate once calibrated', issues: 'Calibration takes a while, so it stays in the drawer', ace: 'Owned but rarely used. A saved bed calibration might make it quicker to reach for, or it may simply not be needed right now. Your call.' }
     ],
     movement: ['Head turn: full', 'Head tilt: partial', 'Nod: full', 'Smile: strong', 'Eyebrows: strong', 'Breath: strong', 'Shoulders: slight', 'Voice: clear'],
     moveNote: 'Gets tired by evening. Sensation is reduced below the shoulders.',
@@ -4987,11 +5007,14 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     });
 
     var tb = __ID('tools'); tb.innerHTML = '';
-    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell the AI agent what you use today: devices, apps, switches, anything.'); td.colSpan = 5; tr.appendChild(td); tb.appendChild(tr); }
+    if (!P.tools.length) { var tr = el('tr'); var td = el('td', 'empty', 'Tell the AI agent what you use today: devices, apps, switches, anything.'); td.colSpan = 6; tr.appendChild(td); tb.appendChild(tr); }
     P.tools.forEach(function (t) {
       var tr = el('tr');
-      [t.tool, t.use, t.works, t.issues].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
-      tr.appendChild(el('td', 'ace', t.ace || '–')); tb.appendChild(tr);
+      var rare = t.rare || /month|rarely|never|seldom|drawer/i.test(t.freq || '');
+      [t.tool, t.use].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
+      var fq = el('td', '', t.freq || '–'); if (rare) { fq.appendChild(el('span', 'rare-tag', 'Rarely used')); tr.className = 'rare'; } tr.appendChild(fq);
+      [t.works, t.issues].forEach(function (v) { tr.appendChild(el('td', '', v || '–')); });
+      tr.appendChild(el('td', 'aisug', t.ace || '–')); tb.appendChild(tr);
     });
 
     var mv = __ID('move'); mv.innerHTML = '';
@@ -5026,7 +5049,7 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     if (typeof up.name === 'string' && up.name.trim()) { P.name = up.name.trim(); touched.push('name'); }
     if (typeof up.headline === 'string' && up.headline.trim()) { P.headline = up.headline.trim(); touched.push('headline'); }
     if (up.facts && typeof up.facts === 'object' && !Array.isArray(up.facts)) { Object.keys(up.facts).forEach(function (k) { if (up.facts[k] != null && String(up.facts[k]).trim()) P.facts[String(k)] = String(up.facts[k]); }); touched.push('facts'); }
-    if (up.tools) { P.tools = objs(up.tools, ['tool', 'use', 'works', 'issues', 'ace']); touched.push('tools'); }
+    if (up.tools) { P.tools = objs(up.tools, ['tool', 'use', 'freq', 'works', 'issues', 'ace']); touched.push('tools'); }
     if (up.movement) { P.movement = strs(up.movement); touched.push('movement'); }
     if (typeof up.moveNote === 'string') { P.moveNote = up.moveNote; touched.push('moveNote'); }
     if (up.positions) { P.positions = objs(up.positions, ['name', 'note']); touched.push('positions'); }
@@ -5042,7 +5065,7 @@ var __ID = function (x) { return document.getElementById('pf-' + x) || document.
     'You are the Access+ AI agent, a calm, friendly guide on the Access+ website (you have no personal name). Access+ is an independent skill builder for people with quadriplegia, ALS and other conditions that limit hand use. It does not sell anything: it lends sensor kits, shares neutral technology information and offers practice simulators. People use it alone, with family, or with an occupational or physical therapist.',
     'Right now you are helping the person build their Access+ profile by conversation, so they do not have to fill in forms. Interview them warmly, ONE short question at a time, and fill in the profile from what they say. Cover, roughly in this order: what to call them; what they want to be able to do (goals); which movements and senses they have and how strong (head turn, tilt, nod, face, eyes, breath, voice, shoulders, arms, fingers; fatigue); positions they spend time in (chair, tilted, bed, outdoors); the tools they use today and how well each works; who supports them and what equipment they have. Skip anything they already told you. Never push for medical details; record only what they choose to share.',
     'Get to know the person as a whole, not just their equipment: their needs, wants and hopes, what a good day looks like, what frustrates them now, what they enjoy, who helps them, and what they would do if technology were not in the way. Reflect back briefly what you heard before your next question. They can skip any question.',
-    'When they describe current tools, assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
+    'When they describe current tools, ask how often they use each one (freq, e.g. Daily, A few times a week, About once a month). If something they own is rarely used, gently ask why, without assuming it should be used more. Assess each one briefly: what it is used for, what works, what the problems are, and one practical suggestion (a setting to change, a simulator to practice in, or a sensor to borrow). When you have enough, suggest 2 or 3 next steps. Do not invent skill levels: skills come only from assessments, so leave skills empty unless they report a result.',
     'This site is a pilot draft: never claim you saved anything to an account or started a simulator. No diagnosis or medical advice; for health, skin, breathing, swallowing or seating concerns, suggest their therapist or clinician.',
     'Reply with ONLY a JSON object: {"reply": string, "updates": object}. "reply" is what you say aloud: plain text, warm, under 70 words, ending with your next question when you have one. "updates" holds only the profile fields that changed, each given in full: name (string), headline (one-line summary string), facts (object of short label: value pairs, max 5), movement (array of short strings like "Head turn: full"), moveNote (string), positions (array of {name, note}), goals (array of {text, when}), tools (array of {tool, use, works, issues, ace}), team (array of {text, note}), next (array of {text, note}), skills (array of {name, level 1-4, status, note}). Use {} when nothing changed.'
   ].join('\n\n');
@@ -5444,8 +5467,8 @@ var __ID = function (x) { return document.getElementById('fd-' + x) || document.
       var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your voice now so a speech device can sound like you later.' : METH[key].why;
       d.innerHTML = '<span class="r"></span><b></b><p></p>'; d.querySelector('.r').textContent = role; d.querySelector('b').textContent = name; d.querySelector('p').textContent = why; top.appendChild(d);
     }
-    pick('1 · Start with', primary, 'primary'); pick('2 · Practiced backup', backup);
-    if (ahead) pick('3 · Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">3 · Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
+    pick('1 · Start with', primary, 'primary'); pick('2 · Handy as a backup', backup);
+    if (ahead) pick('3 · Good to know · optional', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">3 · Keep track</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
     el('pcRec').hidden = false;
     var CK = [];
     if (has('moves', 'eyes')) CK.push(['Eye movement', 'Gaze accuracy, dwell timing and fatigue · coming next']);
@@ -5634,6 +5657,28 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
     });
   }
   var byId = {}; P.forEach(function (p) { byId[p.id] = p; });
+  /* ---------- owned equipment and use (generated after the cohort so earlier data stays the same) ---------- */
+  var OWN = [
+    { k: 'eyetr', name: 'Eye tracker', kind: 'Hardware', m: 'eyes', p: 0.35 }, { k: 'headm', name: 'Head mouse or webcam tracking', kind: 'Hardware', m: 'head', p: 0.5 },
+    { k: 'btn', name: 'Button switches', kind: 'Hardware', m: 'sw', p: 0.45 }, { k: 'brs', name: 'Breath switch', kind: 'Hardware', m: 'breath', p: 0.2 },
+    { k: 'emgs', name: 'EMG muscle switch', kind: 'Hardware', m: 'emg', p: 0.12 }, { k: 'vc', name: 'Built-in voice control', kind: 'Software', m: 'voice', p: 0.8 },
+    { k: 'aac', name: 'Speech app (AAC)', kind: 'Software', m: 'any', p: 0.55 }, { k: 'osk', name: 'On-screen keyboard', kind: 'Software', m: 'any', p: 0.6 },
+    { k: 'home', name: 'Smart speaker or home control', kind: 'Hardware', m: 'voice', p: 0.6 }, { k: 'joy', name: 'Mouth or chin joystick', kind: 'Hardware', m: 'drive', p: 0.3 }
+  ];
+  var WHY = ['Not needed right now', 'Setup or calibration takes too long', 'Tiring or uncomfortable', 'Never had training', 'Not reachable in bed', 'Forgot it was available'];
+  var OW = [];
+  P.forEach(function (p) {
+    var cur = p.timeline[52], spk = p.onset === 'bulbar';
+    OWN.forEach(function (o) {
+      if (rnd() > o.p) return;
+      var fit = o.m === cur ? 1 : o.m === 'any' ? (spk || cur === 'eyes' || cur === 'sw' ? 0.8 : 0.3) : o.m === 'voice' ? (spk ? 0.04 : 0.6) : o.m === 'drive' ? (p.pos === 'bed' ? 0.04 : 0.6) : (rnd() < 0.5 ? 0.03 : 0.15);
+      var u = Math.max(0, Math.round(fit * (8 + rnd() * 20) * (rnd() < 0.2 ? 0.04 : 1) + norm(0, 1.5)));
+      var st = u >= 5 ? 'regular' : u >= 1 ? 'occasional' : 'rarely';
+      var why = '';
+      if (st === 'rarely') { var r = rnd(); why = r < (fit <= 0.15 ? 0.55 : 0.25) ? WHY[0] : WHY[1 + Math.floor(rnd() * 5)]; if (p.pos === 'bed' && o.kind === 'Hardware' && rnd() < 0.35) why = WHY[4]; }
+      OW.push({ id: p.id, product: o.name, kind: o.kind, uses_per_week: u, last_used_days: u >= 1 ? Math.round(7 / u) : Math.round(10 + rnd() * 80), status: st, reason: why });
+    });
+  });
 
   /* ---------- helpers ---------- */
   function el(id) { return __ID(id); }
@@ -5779,22 +5824,44 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
       '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Success rate over time" style="margin-top:12px">' + g + '</svg><div class="rs-grid" style="margin-top:12px"><div style="display:grid;gap:10px;align-content:start;justify-items:center">' + (TECH_MEAS.head.indexOf('tremor') >= 0 && (last.method === 'head' || last.method === 'eyes') ? '<svg viewBox="0 0 ' + tw + ' ' + th + '" role="img" aria-label="Pointing paths" style="max-width:360px">' + tg + '</svg>' : '<p class="sub">Pointing paths appear for participants currently using head tracking or eye gaze.</p>') + '</div><div style="overflow-x:auto;min-width:0">' +
       '<table class="rs-tbl rs-wrapt"><thead><tr><th>Everyday task</th><th>Week 0</th><th>Week 52</th></tr></thead><tbody>' + adl.map(function (a) { return '<tr><td>' + esc(a.goal) + '<br><small style="color:#4b5a6b">' + esc(a.technology) + '</small></td><td>' + a.week0_seconds + ' s, ' + a.help_week0 + ' help</td><td>' + a.week52_seconds + ' s, ' + a.help_week52 + ' help</td></tr>'; }).join('') + '</tbody></table></div></div>';
   }
-  function draw() { trend(); snap(); warn(); var cs = chain(); kpis(cs); drill(); }
+  function own() {
+    var rows = OW.filter(function (r) { return inFilter(byId[r.id]); }), W = 640, rh = 26, x0 = 210, w = W - x0 - 140;
+    var agg = OWN.map(function (o) { var rs = rows.filter(function (r) { return r.product === o.name; }); return { name: o.name, n: rs.length, reg: rs.filter(function (r) { return r.status === 'regular'; }).length, occ: rs.filter(function (r) { return r.status === 'occasional'; }).length, rare: rs.filter(function (r) { return r.status === 'rarely'; }).length }; }).filter(function (a) { return a.n; }).sort(function (a, b) { return b.n - a.n; });
+    var mx = Math.max.apply(null, agg.map(function (a) { return a.n; }).concat([1])), H = agg.length * rh + 26;
+    var g = '';
+    agg.forEach(function (a, i) {
+      var y = 4 + i * rh, sc = w / mx, xr = x0, seg = [[a.reg, '#1f9d6b'], [a.occ, '#7cc4ff'], [a.rare, '#c28a0e']];
+      g += '<text x="' + (x0 - 8) + '" y="' + (y + 14) + '" text-anchor="end" font-size="12" fill="#24344a">' + esc(a.name) + '</text>';
+      seg.forEach(function (sg) { if (!sg[0]) return; g += '<rect x="' + xr + '" y="' + (y + 3) + '" width="' + (sg[0] * sc) + '" height="16" fill="' + sg[1] + '"/>'; xr += sg[0] * sc; });
+      g += '<text x="' + (xr + 6) + '" y="' + (y + 15) + '" font-size="11.5" fill="#4b5a6b">' + a.n + ' own · ' + Math.round(a.rare / a.n * 100) + '% rarely</text>';
+    });
+    g += '<text x="' + x0 + '" y="' + (H - 4) + '" font-size="11" fill="#4b5a6b">number of participants who own it</text>';
+    el('ownChart').innerHTML = '<div class="rs-own-key"><span style="--k:#1f9d6b">Regular (5+ a week)</span><span style="--k:#7cc4ff">Occasional</span><span style="--k:#c28a0e">Rarely (under once a week)</span></div><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Owned equipment by how often it is used">' + g + '</svg>';
+    var rare = rows.filter(function (r) { return r.status === 'rarely'; }), cnt = {};
+    rare.forEach(function (r) { cnt[r.reason] = (cnt[r.reason] || 0) + 1; });
+    var ws = Object.keys(cnt).sort(function (a, b) { return cnt[b] - cnt[a]; }), wm = Math.max.apply(null, ws.map(function (k) { return cnt[k]; }).concat([1]));
+    el('ownWhy').innerHTML = ws.length ? '<div class="rs-why">' + ws.map(function (k) { return '<span>' + esc(k) + '</span><i style="width:' + Math.round(cnt[k] / wm * 70) + 'px"></i><b>' + cnt[k] + '</b>'; }).join('') + '</div>' : '<p class="sub">No rarely used items in this group.</p>';
+    var top = agg.filter(function (a) { return a.n >= 5; }).sort(function (a, b) { return b.rare / b.n - a.rare / a.n; })[0];
+    var fixable = rare.filter(function (r) { return r.reason && r.reason !== WHY[0]; }).length;
+    el('ownF').innerHTML = rows.length ? (top ? '<b>' + esc(top.name) + '</b> is the most often owned-but-rarely-used item here (' + top.rare + ' of ' + top.n + ' owners). ' : '') + 'Of ' + rare.length + ' rarely used items, ' + fixable + ' have a reason that training, setup help or mounting might address; the rest simply aren\u2019t needed right now.' : 'No participants match these filters.';
+  }
+  function draw() { trend(); snap(); warn(); var cs = chain(); kpis(cs); own(); drill(); }
   el('snapA').addEventListener('input', snap); el('snapB').addEventListener('input', snap);
   el('rsMethodLink').addEventListener('click', function (e) { e.preventDefault(); el('method').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
 
   /* ---------- data files ---------- */
   function csv(rows, cols) { return [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); })).join('\n'); }
-  var DICT = [['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
+  var DICT = [['owned_equipment.csv', 'product', 'Item the participant owns'], ['owned_equipment.csv', 'uses_per_week', 'Average uses a week over the last 4 weeks of logged sessions'], ['owned_equipment.csv', 'last_used_days', 'Days since last use'], ['owned_equipment.csv', 'status', 'regular (5+ a week), occasional, rarely (under once a week)'], ['owned_equipment.csv', 'reason', 'Reason given for rarely used items'], ['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
     ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'stamina', 'Minutes of reliable use before errors start to rise'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
     ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
     ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
-  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Owned equipment: each person owns a mix of common hardware and software; weekly use is higher when an item matches the method they rely on. Rarely used = under once a week, with a simulated reason.\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
   var FILES = [
     { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
     { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
     { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
     { name: 'everyday_tasks.csv', kind: 'CSV', desc: 'Everyday-control tasks and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
+    { name: 'owned_equipment.csv', kind: 'CSV', desc: 'Equipment each person owns and how often it is used', cols: ['id', 'product', 'kind', 'uses_per_week', 'last_used_days', 'status', 'reason'], rows: function () { return OW; } },
     { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },
     { name: 'README.txt', kind: 'TXT', desc: 'How the data was made', text: README }
   ];

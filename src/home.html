@@ -1016,7 +1016,7 @@ footer .wrap { padding-block: 22px; }
       <div class="rb-text">
         <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
         <h2 id="rbT">See skills change over time, and catch problems early</h2>
-        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, watch the technology chain, and spot the early signs that a method is starting to fail.</p>
+        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, follow the technology chain, spot early signs that settings or support may need a change, and see which equipment people own but rarely use.</p>
         <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
         <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
       </div>
@@ -1058,7 +1058,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:59 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 19:54 UTC</span></div>
   </div>
 </footer>
 
@@ -2269,13 +2269,13 @@ function AgentCloud(canvas, opts) {
     svg.innerHTML = g;
     var txt = best ? '<b>' + name(best) + '</b> fits best for this person right now.' : 'Choose at least one method that is in use today.';
     var next = cross.filter(function (c) { return c[0] > S.a; })[0];
-    if (best && next) txt += ' If movement keeps declining, <b>' + name(next[2]).toLowerCase() + '</b> overtakes it at about ' + Math.round(next[0] * 100) + '% along the scale: a good time to have it practiced.';
-    else if (best) txt += ' Among these three, it stays the best fit from here on; keep a practiced backup ready.';
+    if (best && next) txt += ' Further along the scale, <b>' + name(next[2]).toLowerCase() + '</b> may also become an option, around ' + Math.round(next[0] * 100) + '%. Changing isn\u2019t required: settings and add-ons often keep a familiar setup working.';
+    else if (best) txt += ' Among these three, it stays the best fit across the scale.';
     if (SEL.indexOf('voice') >= 0 && S.sp > 0.5) txt += ' Speech is changing, so voice recognition is losing accuracy; consider voice banking.';
     var anyAdd = Object.keys(ADD).some(function (x) { return ADD[x]; });
     if (MINE && SEL.indexOf(MINE) < 0) txt = 'Your setup, ' + name(MINE).toLowerCase() + ', isn’t in the comparison: pick it in the gallery above. ' + txt;
     else if (MINE && anyAdd) { var b0 = model(MINE, S.a, S.f, S.t, S.sp, S.bed, {}).use, a1 = M[MINE].use; txt = 'With the add-ons, your <b>' + name(MINE).toLowerCase() + '</b> goes from ' + b0.toFixed(1) + ' to ' + a1.toFixed(1) + ' useful selections a minute (' + (a1 >= b0 ? '+' : '') + Math.round((a1 - b0) / (b0 || 1) * 100) + '%). ' + txt; }
-    else if (MINE && MINE !== best) txt = 'Your setup is <b>' + name(MINE).toLowerCase() + '</b>. ' + txt + ' Try adding features to close the gap.';
+    else if (MINE && MINE !== best) txt = 'Your setup is <b>' + name(MINE).toLowerCase() + '</b>. ' + txt + ' Add-ons can often close the gap without changing methods.';
     document.getElementById('cmpFind').innerHTML = txt;
   }
   ['cmpA', 'cmpF', 'cmpT', 'cmpS'].forEach(function (id) { document.getElementById(id).addEventListener('input', update); });

@@ -387,8 +387,8 @@
       var name = key === 'voice-bank' ? 'Voice banking' : METH[key].name, why = key === 'voice-bank' ? 'Record your voice now so a speech device can sound like you later.' : METH[key].why;
       d.innerHTML = '<span class="r"></span><b></b><p></p>'; d.querySelector('.r').textContent = role; d.querySelector('b').textContent = name; d.querySelector('p').textContent = why; top.appendChild(d);
     }
-    pick('1 · Start with', primary, 'primary'); pick('2 · Practiced backup', backup);
-    if (ahead) pick('3 · Plan ahead', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">3 · Plan ahead</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
+    pick('1 · Start with', primary, 'primary'); pick('2 · Handy as a backup', backup);
+    if (ahead) pick('3 · Good to know · optional', ahead); else { var d = document.createElement('div'); d.className = 'fd-pick'; d.innerHTML = '<span class="r">3 · Keep track</span><b>Check in every few months</b><p>Save your practice scores so changes show up early.</p>'; top.appendChild(d); }
     el('pcRec').hidden = false;
     var CK = [];
     if (has('moves', 'eyes')) CK.push(['Eye movement', 'Gaze accuracy, dwell timing and fatigue · coming next']);
