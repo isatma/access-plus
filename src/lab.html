@@ -79,6 +79,10 @@
     </section>
 
     <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for a few hosting fixes: Songboards opens on a music board and reports if its sound library cannot load, the hand-tracking ergometer loads fixed versions of its hand-tracking library, the Musical Dial (v9.1) adds built-in sound, dwell on the key ring and screen fitting, Mouse Orchestra (v6.1) adds a start-sound button, tap support and a hover delay, and the Virtual Harmonica (v7.1) adds a start button, the built-in synth by default, a mouse or touch mode and screen fitting. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
+    <div class="lb-player" id="lbPlayer" hidden role="dialog" aria-modal="true" aria-labelledby="lbPTitle">
+      <div class="lb-pbar"><b id="lbPTitle">App</b><small>Work in progress · as is</small><a id="lbPNew" href="#" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="close" id="lbPClose">&times; Close</button></div>
+      <iframe id="lbPFrame" title="Lab app" allow="autoplay; camera; microphone; midi; clipboard-write; fullscreen" allowfullscreen></iframe>
+    </div>
   </div>
 </main>
 <script>
@@ -112,6 +116,34 @@
     });
     el('lbGrid').innerHTML = list.length ? list.map(function (a) { var c = CATS[a.cat]; return '<article class="lb-card" style="--ac:' + c[1] + '"><a class="lb-shot" href="lab/' + a.f + '" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true"><img src="lab/shots/' + a.f.replace('.html', '.jpg') + '" alt="" loading="lazy" width="640" height="400"></a><div class="lb-row"><span class="cat">' + c[0] + '</span><span class="lb-wip">Work in progress</span></div><h2>' + a.name + '</h2><p>' + a.d + '</p><ul class="lb-ins" aria-label="Works with">' + a.ins.map(function (i) { return '<li>' + INS[i] + '</li>'; }).join('') + '</ul><span class="lb-meta">' + a.meta + ' · as is · PolyForm Noncommercial 1.0.0</span><a class="btn primary" href="lab/' + a.f + '" target="_blank" rel="noopener">Open ' + a.name + ' <span aria-hidden="true">&#8599;</span></a></article>'; }).join('') : '<p class="lb-none">Nothing matches. Try another word or clear the filters.</p>';
   }
+
+  /* Play apps inside the site: popups to a new tab can be blocked in the private preview */
+  var player = el('lbPlayer'), frame = el('lbPFrame'), lastFocus = null;
+  document.body.appendChild(player); /* outside the view so it covers the whole page */
+  function openApp(href, title) {
+    lastFocus = document.activeElement;
+    el('lbPTitle').textContent = title || 'Lab app';
+    el('lbPNew').href = href;
+    frame.src = href;
+    player.hidden = false;
+    document.documentElement.style.overflow = 'hidden';
+    el('lbPClose').focus();
+  }
+  function closeApp() {
+    frame.src = 'about:blank';
+    player.hidden = true;
+    document.documentElement.style.overflow = '';
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  el('lbPClose').addEventListener('click', closeApp);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !player.hidden) closeApp(); });
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="lab/"]') : null;
+    if (!a || a.id === 'lbPNew' || !/\.html(\?|$)/.test(a.getAttribute('href'))) return;
+    e.preventDefault();
+    var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : (a.textContent || '').replace(/[\u2197]/g, '').trim();
+    openApp(a.getAttribute('href'), title);
+  });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
   chips('lbCats', CATS, 'cat', 'All categories'); chips('lbIns', INS, 'ins', 'Any input'); draw();
 })();

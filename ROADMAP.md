@@ -66,3 +66,4 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - Lab: Mouse Orchestra v6.1 (sound unlock, touch taps, hover delay, clipboard share, safe names, phone layout).
 - Lab: Virtual Harmonica v7.1 (start gate unlocks audio + camera, internal synth default, mouse/touch mode, no-face note release, pinned MediaPipe, responsive).
 - Lab: thumbnails on cards (website/lab/shots), Works in progress labels, Song Boards Suite description section; home Recreation lab band; Musical Dial v9.2 Follow the Melody.
+- Lab: in-site app player (iframe overlay) so apps open inside the page; new-tab link optional.
