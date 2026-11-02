@@ -1313,6 +1313,63 @@ footer .wrap { padding-block: 22px; }
 #view-research .rs-why i { display: block; height: 10px; background: #c28a0e; }
 #view-research .rs-own-key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 0.82em; color: var(--muted); margin-bottom: 6px; }
 #view-research .rs-own-key span::before { content: ""; display: inline-block; width: 12px; height: 10px; margin-right: 6px; vertical-align: -1px; background: var(--k); }
+#view-research .rs-study { gap: 16px; }
+#view-research .st-head { display: grid; gap: 6px; }
+#view-research .st-head h2 { font: 600 1.5em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); margin: 0; }
+#view-research .st-head .sub { margin: 0; color: var(--muted); max-width: 60em; }
+#view-research .st-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-research .st-tabs button, #view-research .st-meth button { min-height: 48px; padding: 0 16px; border: 1px solid var(--line-hi); background: #fff; color: var(--ink); font: 600 0.95em var(--body); cursor: pointer; }
+#view-research .st-tabs button[aria-pressed="true"] { background: #0b1220; color: #fff; border-color: #0b1220; }
+#view-research .st-ctl { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; padding: 14px; background: #fff; border: 1px solid var(--line-hi); }
+#view-research .st-ctl label, #view-research .st-tctl label, #view-research .st-meth > span { display: grid; gap: 4px; font: 500 0.66em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-research .st-ctl select, #view-research .st-tctl select { min-height: 46px; padding: 0 10px; font: 500 1.35em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: #fff; border: 1px solid var(--line-hi); max-width: 100%; }
+#view-research .st-meth { display: grid; gap: 4px; }
+#view-research .st-meth > div { display: flex; flex-wrap: wrap; gap: 6px; }
+#view-research .st-meth button { font-size: 0.88em; padding: 0 12px; border-left: 6px solid var(--mc); }
+#view-research .st-meth button[aria-pressed="true"] { background: color-mix(in srgb, var(--mc) 16%, #fff); border-color: var(--mc); }
+#view-research .st-out { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 900px) {
+#view-research .st-out { grid-template-columns: minmax(0, 1fr); }
+}
+#view-research .st-out .rs-card, #view-research .st-test { grid-template-columns: minmax(0, 1fr); }
+#view-research .st-tw { overflow-x: auto; }
+#view-research .st-tw th { white-space: normal; }
+#view-research .st-h { margin: 0; font: 600 1.02em var(--body); color: var(--ink); }
+#view-research .st-find { margin: 0; padding: 10px 14px; border-left: 3px solid var(--signal); background: #fff; color: var(--ink); font-size: 0.95em; }
+#view-research .st-key { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.8em; color: var(--desc); margin-bottom: 4px; }
+#view-research .st-key span::before { content: ""; display: inline-block; width: 12px; height: 10px; margin-right: 5px; vertical-align: -1px; background: var(--k); }
+#view-research .st-key .you::before { width: 9px; height: 9px; background: #0b1220; transform: rotate(45deg); }
+#view-research .st-tctl { display: flex; flex-wrap: wrap; gap: 12px 18px; align-items: end; }
+#view-research .st-rng { display: flex; align-items: center; gap: 8px; min-height: 46px; font: 600 1.25em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+#view-research .st-rng input { width: 150px; accent-color: #08734b; }
+#view-research .st-arena { position: relative; height: clamp(320px, 52vh, 460px); background: #0b1220; border: 1px solid #0b1220; overflow: hidden; touch-action: none; user-select: none; }
+#view-research .st-idle { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px; color: #c9d6e3; text-align: center; padding: 16px; }
+#view-research .st-go { min-height: 64px; padding: 0 28px; font-size: 1.15em; }
+#view-research .st-tgt { position: absolute; border-radius: 50%; background: #5fe0a8; box-shadow: 0 0 0 4px rgba(95,224,168,0.25), 0 0 24px rgba(95,224,168,0.55); transform: translate(-50%, -50%); cursor: pointer; }
+#view-research .st-tgt svg { position: absolute; inset: -10px; width: calc(100% + 20px); height: calc(100% + 20px); transform: rotate(-90deg); pointer-events: none; }
+#view-research .st-tgt circle { fill: none; stroke: #fff; stroke-width: 4; }
+#view-research .st-hud { position: absolute; left: 10px; top: 8px; font: 500 0.8em var(--mono); color: #c9d6e3; pointer-events: none; }
+#view-research .st-grid { position: absolute; inset: 32px 14px 84px; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr); gap: 10px; }
+#view-research .st-cell { border: 2px solid #2c4262; background: #111d31; display: grid; place-items: center; font: 700 1.4em var(--body); color: #8fa3b8; }
+#view-research .st-cell.lit { background: #ffc670; color: #231c05; border-color: #ffc670; }
+#view-research .st-cell.tgt { border-color: #5fe0a8; box-shadow: inset 0 0 0 4px #5fe0a8; color: #f0f5fa; }
+#view-research .st-cell.lit.tgt { background: #5fe0a8; color: #04201a; }
+#view-research .st-sw { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); min-height: 60px; min-width: 240px; font: 700 1.05em var(--body); background: #ffc670; color: #231c05; border: 0; cursor: pointer; }
+#view-research .st-flash { position: absolute; inset: 0; pointer-events: none; animation: stfl .35s ease-out forwards; }
+@keyframes stfl { from { background: var(--fc); opacity: 0.35; } to { opacity: 0; } }
+#view-research .st-res { display: grid; gap: 10px; padding: 14px; background: var(--signal-soft); border: 1px solid var(--line-hi); }
+#view-research .st-res .k { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) {
+#view-research .st-res .k { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+#view-research .st-eff { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 0.92em; }
+#view-research .st-eff button { min-height: 48px; min-width: 48px; padding: 0 12px; border: 1px solid var(--line-hi); background: #fff; font: 600 0.95em var(--body); color: var(--ink); cursor: pointer; }
+#view-research .st-eff button[aria-pressed="true"] { background: #0b1220; color: #fff; }
+#view-research .st-mine { display: grid; gap: 8px; }
+#view-research .st-mbtn { display: flex; flex-wrap: wrap; gap: 8px; }
+@media (prefers-reduced-motion: reduce) {
+#view-research .st-flash { animation: none; }
+}
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -1807,7 +1864,7 @@ footer .wrap { padding-block: 22px; }
         </div>
 
         <div class="cmp-cont"><svg id="cmpChart" viewBox="0 0 720 210" role="img" aria-label="Useful selections per minute for each technology across the ability range"></svg><p class="cmp-find" id="cmpFind" aria-live="polite"></p></div>
-        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">See the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
+        <p class="cmp-note">Illustrative model built from published ranges, not a clinical tool. <a href="#research">Run real tests and studies in the research dashboard</a> · <a href="#simulators">Robotic arm simulator</a></p>
         </div>
       </div>
     </div>
@@ -2338,6 +2395,51 @@ footer .wrap { padding-block: 22px; }
         </article>
       </div>
 
+      </section>
+
+    <section class="rs-board rs-study" id="rs-study" aria-labelledby="rs-stT">
+      <div class="st-head">
+        <span class="rs-k">Activity studies <span class="rs-proto">Prototype</span></span>
+        <h2 id="rs-stT">Study one activity, method by method</h2>
+        <p class="sub">Pick an activity and a kind of study: one method on its own, a comparison, learning curves, or posture and position. The charts use a separate simulated group of 40 participants. Your own test sessions, run below, appear on them as black diamonds.</p>
+      </div>
+      <div class="st-tabs" role="group" aria-label="Kind of study" id="rs-stTabs">
+        <button type="button" data-t="single" aria-pressed="false">One method</button>
+        <button type="button" data-t="compare" aria-pressed="true">Comparison</button>
+        <button type="button" data-t="learn" aria-pressed="false">Learning curve</button>
+        <button type="button" data-t="posture" aria-pressed="false">Posture and position</button>
+      </div>
+      <div class="st-ctl">
+        <label>Activity <select id="rs-stAct"></select></label>
+        <label>Stage <select id="rs-stStage"><option value="all">Everyone</option><option value="early">Early (score 36+)</option><option value="mid">Middle (24 to 35)</option><option value="late">Advanced (under 24)</option></select></label>
+        <div class="st-meth"><span id="rs-stMethL">Methods (up to four)</span><div id="rs-stMeth" role="group" aria-labelledby="rs-stMethL"></div></div>
+      </div>
+      <div class="st-out">
+        <article class="rs-card"><h3 class="st-h" id="rs-stC1T"></h3><p class="sub" id="rs-stC1S"></p><div id="rs-stC1"></div></article>
+        <article class="rs-card"><h3 class="st-h" id="rs-stC2T"></h3><p class="sub" id="rs-stC2S"></p><div id="rs-stC2"></div></article>
+      </div>
+      <p class="st-find" id="rs-stFind"></p>
+
+      <article class="rs-card wide st-test" id="rs-stTest" aria-labelledby="rs-tT">
+        <h2 id="rs-tT">Run a test session</h2>
+        <p class="sub">A working test screen for the pointing-and-clicking activity. Use whatever you control a computer with: a mouse, head mouse, eye tracker, touch, or a switch set to send Space or Enter. Results stay in this browser and show on the charts above.</p>
+        <div class="st-tctl">
+          <label>Method you're using <select id="rs-tMeth"></select></label>
+          <label>Position <select id="rs-tPos"></select></label>
+          <label>How you select <select id="rs-tMode"><option value="click">Click or tap</option><option value="dwell">Dwell (hold still on it)</option><option value="scan">Switch scanning</option></select></label>
+          <label>Target size <select id="rs-tSize"><option value="44">Small</option><option value="72" selected>Medium</option><option value="110">Large</option></select></label>
+          <label id="rs-tDwellL">Dwell time <span class="st-rng"><input type="range" id="rs-tDwell" min="400" max="2000" step="100" value="900"><b id="rs-tDwellV">0.9 s</b></span></label>
+          <label id="rs-tScanL" hidden>Scan speed <span class="st-rng"><input type="range" id="rs-tScan" min="500" max="2500" step="100" value="1200"><b id="rs-tScanV">1.2 s</b></span></label>
+        </div>
+        <div class="st-arena" id="rs-tArena">
+          <div class="st-idle" id="rs-tIdle"><button class="btn primary st-go" type="button" id="rs-tGo">Start a 12-target test</button><small>Press Escape to stop at any time.</small></div>
+        </div>
+        <div class="st-res" id="rs-tRes" hidden></div>
+        <div class="st-mine"><h3 class="st-h">Your test sessions</h3><div class="rs-scroll"><table class="rs-tbl" id="rs-tTbl"></table></div><div class="st-mbtn"><button class="btn" type="button" id="rs-tDl">Download my sessions (CSV)</button><button class="btn" type="button" id="rs-tClr">Clear my sessions</button></div></div>
+      </article>
+    </section>
+
+    <section class="rs-board" aria-label="Data files and methods">
       <article class="rs-card wide">
         <h2>Data files</h2>
         <p class="sub">The simulated dataset behind every chart. Click a file to preview it, then download it as a CSV for your own analysis.</p>
@@ -3615,7 +3717,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 19:54 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 20:09 UTC</span></div>
   </div>
 </footer>
 
@@ -5572,6 +5674,278 @@ var __ID = function (x) { return document.getElementById('fd-' + x) || document.
 (function () {
 var __ID = function (x) { return document.getElementById('rs-' + x) || document.getElementById(x); };
 
+/* ---------- Activity studies + test screen (runs before the cohort dashboard so its files can be listed) ---------- */
+(function () {
+  var root = __ID('study'); if (!root) return;
+  var seed = 9137; function rnd() { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }
+  function norm(m, sd) { var u = 1 - rnd(), v = rnd(); return m + sd * Math.sqrt(-2 * Math.log(u)) * Math.cos(6.283185 * v); }
+  function clamp(x, a, b) { return Math.max(a, Math.min(b, x)); }
+  function el(id) { return __ID(id); }
+  function q(arr, f) { if (!arr.length) return NaN; var a = arr.slice().sort(function (x, y) { return x - y; }), pos = (a.length - 1) * f, lo = Math.floor(pos), hi = Math.ceil(pos); return a[lo] + (a[hi] - a[lo]) * (pos - lo); }
+  function r1(v) { return Math.round(v * 10) / 10; }
+  var MS = { head: ['Head tracking', '#1f9d6b'], eyes: ['Eye tracking', '#7b5cc9'], sw: ['Switch scanning', '#b07a00'], breath: ['Breath switch', '#c2416b'], voice: ['Voice recognition', '#2f6fbf'], joy: ['Mouth joystick', '#4b5a6b'] };
+  var MK = Object.keys(MS);
+  var ACT = {
+    point: { name: 'Pointing and clicking', fit: { head: 1, eyes: 1, sw: 0.55, breath: 0.5, voice: 0.35, joy: 0.95 } },
+    type: { name: 'Typing a message', fit: { head: 0.85, eyes: 1, sw: 0.6, breath: 0.5, voice: 1.3, joy: 0.8 } },
+    drive: { name: 'Driving the wheelchair (simulator)', fit: { head: 0.9, eyes: 0.4, sw: 0.7, breath: 1, voice: 0.3, joy: 1.1 } },
+    home: { name: 'Smart home control', fit: { head: 0.85, eyes: 0.9, sw: 0.9, breath: 0.8, voice: 1.2, joy: 0.8 } }
+  };
+  var POS = { up: 'Sitting upright', rec: 'Reclined in chair', bed: 'Lying in bed', side: 'Side-lying' }, PK = Object.keys(POS);
+  var PEF = { rec: { head: [0.92, -3], eyes: [0.97, -2], sw: [1, 0], breath: [0.95, -1], voice: [1, 0], joy: [0.9, -4] }, bed: { head: [0.75, -8], eyes: [0.88, -6], sw: [0.95, -1], breath: [0.9, -2], voice: [0.95, -1], joy: [0.6, -12] }, side: { head: [0.6, -12], eyes: [0.7, -12], sw: [0.9, -2], breath: [0.85, -3], voice: [0.9, -2], joy: [0.5, -15] } };
+  var TAU = { head: 2.5, eyes: 3.5, sw: 2, breath: 4, voice: 1.5, joy: 3 };
+  function useful(sp, ac) { return sp * ac / 100 * (ac < 80 ? clamp(0.4 + 0.6 * (ac - 50) / 30, 0.3, 1) : 1); }
+  function perf(p, k, act, s, pos) {
+    var x = clamp((46 - p.als) / 36, 0, 1), spc = p.bulbar ? clamp(x * 1.25, 0, 1) : x * 0.45, sp, ac, ef;
+    if (k === 'head') { sp = 22 * clamp(1 - 1.15 * x, 0.05, 1); ac = 97 - 42 * x; ef = 28 + 55 * x; }
+    else if (k === 'eyes') { sp = 17 * clamp(1 - 0.42 * x, 0.2, 1); ac = 92 - 14 * x; ef = 26 + 18 * x; }
+    else if (k === 'sw') { sp = 8.5 * clamp(1 - 0.3 * x, 0.3, 1); ac = 98 - 10 * x; ef = 18 + 20 * x; }
+    else if (k === 'breath') { sp = 9 * clamp(1 - 0.5 * x, 0.15, 1); ac = 95 - 15 * x; ef = 30 + 25 * x; }
+    else if (k === 'voice') { sp = 30 * clamp(1 - spc * 1.15, 0.03, 1); ac = 96 - 60 * spc; ef = 14 + 30 * spc; }
+    else { sp = 16 * clamp(1 - x / 0.85, 0.04, 1); ac = 94 - 32 * x; ef = 26 + 40 * x; }
+    var fit = ACT[act].fit[k]; sp *= fit; if (fit < 0.7) ac -= (0.7 - fit) * 20;
+    var g = Math.exp(-(s - 1) / TAU[k]); sp *= 1 - 0.45 * g; ac -= 14 * g; ef += 15 * g;
+    if (pos !== 'up') { var e = PEF[pos][k]; sp *= e[0]; ac += e[1]; ef -= e[1] * 0.8; }
+    sp *= p.sk[k] * (1 + norm(0, 0.07)); ac = clamp(ac + norm(0, 2.5), 30, 99.5); ef = clamp(ef + norm(0, 4), 5, 100);
+    return { speed: r1(Math.max(0.2, sp)), accuracy: Math.round(ac), effort: Math.round(ef), stamina: Math.round(clamp(60 * (1 - ef / 115), 3, 60)), useful: r1(useful(sp, ac)) };
+  }
+  /* generate the study group */
+  var PP = [], R = [];
+  for (var i = 0; i < 40; i++) {
+    var pp = { id: 'S' + String(i + 1).padStart(2, '0'), als: Math.round(12 + rnd() * 32), bulbar: rnd() < 0.25, sk: {} };
+    MK.forEach(function (k) { pp.sk[k] = clamp(norm(1, 0.15), 0.6, 1.45); });
+    pp.stage = pp.als >= 36 ? 'early' : pp.als >= 24 ? 'mid' : 'late'; PP.push(pp);
+    Object.keys(ACT).forEach(function (a) { MK.forEach(function (k) {
+      for (var s = 1; s <= 12; s++) { var o = perf(pp, k, a, s, 'up'); R.push({ id: pp.id, als: pp.als, stage: pp.stage, activity: a, method: k, session: s, position: 'up', speed: o.speed, accuracy: o.accuracy, effort: o.effort, stamina: o.stamina, useful: o.useful }); }
+      ['rec', 'bed', 'side'].forEach(function (ps) { var o = perf(pp, k, a, 12, ps); R.push({ id: pp.id, als: pp.als, stage: pp.stage, activity: a, method: k, session: 12, position: ps, speed: o.speed, accuracy: o.accuracy, effort: o.effort, stamina: o.stamina, useful: o.useful }); });
+    }); });
+  }
+  /* your sessions, kept in this browser only */
+  var MINE = []; try { MINE = JSON.parse(localStorage.getItem('accessplus-tests') || '[]') || []; } catch (e) { MINE = []; }
+  function keep() { try { localStorage.setItem('accessplus-tests', JSON.stringify(MINE)); } catch (e) {} }
+  window.__rsStudy = { files: [
+    { name: 'activity_study.csv', kind: 'CSV', desc: 'Activity study: 40 participants, 6 methods, 4 activities, 12 sessions and 4 positions', cols: ['id', 'als', 'stage', 'activity', 'method', 'session', 'position', 'speed', 'accuracy', 'effort', 'stamina', 'useful'], rows: function () { return R.map(function (r) { var o = {}; for (var k in r) o[k] = r[k]; o.activity = ACT[r.activity].name; o.method = MS[r.method][0]; o.position = POS[r.position]; return o; }); } },
+    { name: 'my_test_sessions.csv', kind: 'CSV', desc: 'Your own test sessions from this browser', cols: ['n', 'date', 'method', 'position', 'mode', 'size', 'speed', 'accuracy', 'throughput', 'effort', 'useful'], rows: function () { return MINE.map(mineRow); } }
+  ], dict: [['activity_study.csv', 'speed', 'Selections a minute'], ['activity_study.csv', 'accuracy', 'Correct selections, % of attempts'], ['activity_study.csv', 'effort', 'Rated effort, 0 to 100'], ['activity_study.csv', 'stamina', 'Minutes before errors rise'], ['activity_study.csv', 'useful', 'Useful selections a minute (speed weighted by accuracy)'], ['activity_study.csv', 'session', 'Practice session number, 1 to 12'], ['activity_study.csv', 'position', 'Body position during the session'], ['my_test_sessions.csv', 'throughput', 'Pointing throughput in bits a second (Fitts)']] };
+  function mineRow(m) { return { n: m.n, date: m.date, method: MS[m.method][0], position: POS[m.pos], mode: m.mode, size: m.size, speed: m.speed, accuracy: m.acc, throughput: m.tp === '' ? '' : m.tp, effort: m.effort === null ? '' : m.effort, useful: m.useful }; }
+
+  /* ---------- study controls ---------- */
+  var ST = { t: 'compare', act: 'point', stage: 'all', m: ['head', 'eyes', 'sw'] };
+  el('stAct').innerHTML = Object.keys(ACT).map(function (a) { return '<option value="' + a + '">' + ACT[a].name + '</option>'; }).join('');
+  function chips() {
+    el('stMethL').textContent = ST.t === 'single' ? 'Method' : 'Methods (up to four)';
+    el('stMeth').innerHTML = MK.map(function (k) { return '<button type="button" data-m="' + k + '" style="--mc:' + MS[k][1] + '" aria-pressed="' + (ST.m.indexOf(k) >= 0) + '">' + MS[k][0] + '</button>'; }).join('');
+    Array.prototype.forEach.call(el('stMeth').children, function (b) { b.addEventListener('click', function () {
+      var k = b.getAttribute('data-m'), i = ST.m.indexOf(k);
+      if (ST.t === 'single') ST.m = [k];
+      else if (i >= 0) { if (ST.m.length > 1) ST.m.splice(i, 1); }
+      else { ST.m.push(k); if (ST.m.length > 4) ST.m.shift(); }
+      chips(); draw();
+    }); });
+  }
+  Array.prototype.forEach.call(el('stTabs').children, function (b) { b.addEventListener('click', function () {
+    ST.t = b.getAttribute('data-t'); Array.prototype.forEach.call(el('stTabs').children, function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    if (ST.t === 'single') ST.m = [ST.m[0]]; else if (ST.m.length < 2) ST.m = ST.m.concat(['eyes', 'sw', 'head'].filter(function (k) { return ST.m.indexOf(k) < 0; }).slice(0, 2));
+    chips(); draw();
+  }); });
+  el('stAct').addEventListener('change', function (e) { ST.act = e.target.value; draw(); });
+  el('stStage').addEventListener('change', function (e) { ST.stage = e.target.value; draw(); });
+
+  /* ---------- chart helpers ---------- */
+  function rows(k, extra) { return R.filter(function (r) { return r.activity === ST.act && r.method === k && (ST.stage === 'all' || r.stage === ST.stage) && (!extra || extra(r)); }); }
+  function fin(k) { return rows(k, function (r) { return r.session === 12 && r.position === 'up'; }); }
+  function mine(k, pos) { return ST.act !== 'point' ? [] : MINE.filter(function (m) { return m.method === k && (!pos || m.pos === pos); }); }
+  function key(ks, you) { return '<div class="st-key">' + ks.map(function (k) { return '<span style="--k:' + MS[k][1] + '">' + MS[k][0] + '</span>'; }).join('') + (you ? '<span class="you">Your sessions</span>' : '') + '</div>'; }
+  function dia(x, y) { return '<path d="M' + x + ' ' + (y - 7) + 'l7 7l-7 7l-7 -7z" fill="#0b1220" stroke="#fff" stroke-width="1.5"/>'; }
+  function axisY(x0, y0, w, h, mx, lbl) { var g = '', st = mx > 40 ? 20 : mx > 16 ? 5 : mx > 8 ? 2 : 1; for (var v = 0; v <= mx + 0.001; v += st) { var y = y0 + h - h * v / mx; g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + y + '" y2="' + y + '" stroke="#e3e8ee"/><text x="' + (x0 - 6) + '" y="' + (y + 4) + '" text-anchor="end" font-size="11" fill="#4b5a6b">' + v + '</text>'; } return g + '<text x="' + x0 + '" y="' + (y0 - 6) + '" font-size="11" fill="#4b5a6b">' + lbl + '</text>'; }
+  function nice(v) { return v <= 10 ? Math.ceil(v / 2) * 2 : v <= 40 ? Math.ceil(v / 5) * 5 : Math.ceil(v / 20) * 20; }
+  function set(t1, s1, c1, t2, s2, c2, f) { el('stC1T').textContent = t1; el('stC1S').textContent = s1; el('stC1').innerHTML = c1; el('stC2T').textContent = t2; el('stC2S').textContent = s2; el('stC2').innerHTML = c2; el('stFind').innerHTML = f; }
+  function med(a) { return q(a, 0.5); }
+  function sessTo90(k) { var by = {}; rows(k, function (r) { return r.position === 'up'; }).forEach(function (r) { (by[r.id] = by[r.id] || [])[r.session - 1] = r.useful; }); var out = []; Object.keys(by).forEach(function (id) { var a = by[id], lvl = (a[9] + a[10] + a[11]) / 3; for (var s = 0; s < 12; s++) if (a[s] >= 0.9 * lvl) { out.push(s + 1); break; } }); return out; }
+  function nm(k) { return MS[k][0].toLowerCase(); }
+  var nP = function () { return PP.filter(function (p) { return ST.stage === 'all' || p.stage === ST.stage; }).length; };
+
+  function draw() {
+    var A = ACT[ST.act].name.toLowerCase(), you = ST.act === 'point' && MINE.length;
+    if (!nP()) { set('No participants', '', '', '', '', '', 'No one in the study group matches this stage.'); return; }
+    if (ST.t === 'single') {
+      var k = ST.m[0], F = fin(k), W = 560, H = 260, x0 = 44, y0 = 20, w = W - x0 - 14, h = H - y0 - 40;
+      var mx = nice(Math.max.apply(null, F.map(function (r) { return r.useful; }).concat([4])));
+      var X = function (als) { return x0 + w * (44 - als) / 32; }, Y = function (v) { return y0 + h - h * clamp(v / mx, 0, 1); };
+      var g = axisY(x0, y0, w, h, mx, 'useful selections a minute');
+      F.forEach(function (r) { g += '<circle cx="' + X(r.als).toFixed(1) + '" cy="' + Y(r.useful).toFixed(1) + '" r="4.5" fill="' + MS[k][1] + '" fill-opacity="0.55"/>'; });
+      var line = []; for (var c = 44; c >= 12; c -= 4) { var b = F.filter(function (r) { return Math.abs(r.als - c) <= 2; }).map(function (r) { return r.useful; }); if (b.length) line.push(X(c).toFixed(1) + ' ' + Y(med(b)).toFixed(1)); }
+      if (line.length > 1) g += '<path d="M' + line.join(' L') + '" fill="none" stroke="' + MS[k][1] + '" stroke-width="3"/>';
+      var my = mine(k); if (my.length) { var lv = my[my.length - 1].useful; g += '<line x1="' + x0 + '" x2="' + (x0 + w) + '" y1="' + Y(lv) + '" y2="' + Y(lv) + '" stroke="#0b1220" stroke-dasharray="5 4" stroke-width="2"/><text x="' + (x0 + w) + '" y="' + (Y(lv) - 6) + '" text-anchor="end" font-size="11.5" font-weight="700" fill="#0b1220">your latest session</text>'; }
+      g += '<text x="' + x0 + '" y="' + (H - 8) + '" font-size="11" fill="#4b5a6b">more function (score 44)</text><text x="' + (x0 + w) + '" y="' + (H - 8) + '" text-anchor="end" font-size="11" fill="#4b5a6b">less function (score 12)</text>';
+      var mt = [['Speed', 'speed', ' a min'], ['Accuracy', 'accuracy', '%'], ['Effort (0 to 100)', 'effort', ''], ['Stamina', 'stamina', ' min'], ['Useful selections', 'useful', ' a min']];
+      var tb = '<div class="st-tw"><table class="rs-tbl"><tr><th>Measure</th><th>Median</th><th>Middle half</th>' + (my.length ? '<th>You</th>' : '') + '</tr>' + mt.map(function (m) { var v = F.map(function (r) { return r[m[1]]; }), last = my[my.length - 1], yv = last ? (m[1] === 'accuracy' ? last.acc : m[1] === 'effort' ? last.effort : m[1] === 'stamina' ? '' : last[m[1]]) : ''; return '<tr><td>' + m[0] + '</td><td><b>' + r1(med(v)) + m[2] + '</b></td><td>' + r1(q(v, 0.25)) + ' to ' + r1(q(v, 0.75)) + '</td>' + (my.length ? '<td>' + (yv === '' || yv === null ? '–' : yv + m[2]) + '</td>' : '') + '</tr>'; }).join('') + '<tr><td>Sessions to reach 90% of own level</td><td><b>' + med(sessTo90(k)) + '</b></td><td>' + q(sessTo90(k), 0.25) + ' to ' + q(sessTo90(k), 0.75) + '</td>' + (my.length ? '<td>–</td>' : '') + '</tr></table></div>';
+      var e = F.filter(function (r) { return r.als >= 36; }).map(function (r) { return r.useful; }), l = F.filter(function (r) { return r.als < 24; }).map(function (r) { return r.useful; });
+      set(MS[k][0] + ' across the group', 'Each dot is one participant after 12 practice sessions, sitting upright. The line follows the median.', key([k], my.length) + '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Scatter of participants">' + g + '</svg>',
+        'Key measures', 'After 12 sessions, sitting upright, for ' + A + '.', tb,
+        '<b>' + MS[k][0] + '</b> for ' + A + ': ' + (e.length && l.length ? 'median ' + r1(med(e)) + ' useful selections a minute in early stages and ' + r1(med(l)) + ' in advanced stages.' : 'median ' + r1(med(F.map(function (r) { return r.useful; }))) + ' useful selections a minute.') + ' Most people reach 90% of their own level by session ' + med(sessTo90(k)) + '.');
+    }
+    else if (ST.t === 'compare') {
+      var ms = ST.m, MT = [['Speed', 'speed', 'a min'], ['Accuracy', 'accuracy', '%'], ['Effort', 'effort', 'lower is easier'], ['Stamina', 'stamina', 'min']];
+      var W1 = 560, ph = 30 + ms.length * 22, H1 = MT.length * ph + 10, g1 = '', bx = 150, bw = W1 - bx - 70;
+      MT.forEach(function (m, j) {
+        var y = j * ph + 4, vals = ms.map(function (k) { return fin(k).map(function (r) { return r[m[1]]; }); }), mx = m[1] === 'accuracy' ? 100 : nice(Math.max.apply(null, vals.map(function (v) { return q(v, 0.75); }).concat([1])));
+        g1 += '<text x="0" y="' + (y + 14) + '" font-size="12.5" font-weight="700" fill="#0b1220">' + m[0] + '</text><text x="0" y="' + (y + 28) + '" font-size="10.5" fill="#4b5a6b">' + m[2] + '</text>';
+        ms.forEach(function (k, n) {
+          var v = vals[n], yy = y + 6 + n * 22, md = med(v), sc = bw / mx;
+          g1 += '<rect x="' + bx + '" y="' + yy + '" width="' + Math.max(1, md * sc) + '" height="14" fill="' + MS[k][1] + '"/><line x1="' + (bx + q(v, 0.25) * sc) + '" x2="' + (bx + q(v, 0.75) * sc) + '" y1="' + (yy + 7) + '" y2="' + (yy + 7) + '" stroke="#0b1220" stroke-width="1.5"/><text x="' + (bx + Math.max(md, q(v, 0.75)) * sc + 6) + '" y="' + (yy + 12) + '" font-size="11" fill="#24344a">' + r1(md) + '</text>';
+          var my = mine(k); if (my.length) { var last = my[my.length - 1], yv = m[1] === 'speed' ? last.speed : m[1] === 'accuracy' ? last.acc : m[1] === 'effort' ? last.effort : null; if (yv !== null && yv !== undefined) g1 += dia(bx + clamp(yv, 0, mx * 1.08) * sc, yy + 7); }
+        });
+        g1 += '<line x1="' + bx + '" x2="' + bx + '" y1="' + (y + 4) + '" y2="' + (y + ph - 4) + '" stroke="#b7c3cf"/>';
+      });
+      var W2 = 560, H2 = 260, x0 = 44, y0 = 20, w2 = W2 - x0 - 14, h2 = H2 - y0 - 40, ser = {}, cs = [];
+      for (var c = 44; c >= 12; c -= 4) cs.push(c);
+      ms.forEach(function (k) { var F = rows(k, function (r) { return r.session === 12 && r.position === 'up'; }); ser[k] = cs.map(function (c) { var b = F.filter(function (r) { return Math.abs(r.als - c) <= 2; }).map(function (r) { return r.useful; }); return b.length ? med(b) : null; }); });
+      var mx2 = nice(Math.max.apply(null, ms.map(function (k) { return Math.max.apply(null, ser[k].filter(function (v) { return v !== null; }).concat([1])); })));
+      var X2 = function (c) { return x0 + w2 * (44 - c) / 32; }, Y2 = function (v) { return y0 + h2 - h2 * v / mx2; }, g2 = axisY(x0, y0, w2, h2, mx2, 'useful selections a minute'), bestAt = [];
+      cs.forEach(function (c, i) { var b = null; ms.forEach(function (k) { if (ser[k][i] !== null && (!b || ser[k][i] > ser[b][i])) b = k; }); bestAt.push(b); if (b) g2 += '<rect x="' + (X2(c) - w2 / 16) + '" y="' + y0 + '" width="' + (w2 / 8) + '" height="' + h2 + '" fill="' + MS[b][1] + '" fill-opacity="0.1"/>'; });
+      ms.forEach(function (k) { var pts = []; cs.forEach(function (c, i) { if (ser[k][i] !== null) pts.push(X2(c).toFixed(1) + ' ' + Y2(ser[k][i]).toFixed(1)); }); if (pts.length > 1) g2 += '<path d="M' + pts.join(' L') + '" fill="none" stroke="' + MS[k][1] + '" stroke-width="2.6"/>'; });
+      g2 += '<text x="' + x0 + '" y="' + (H2 - 8) + '" font-size="11" fill="#4b5a6b">more function (score 44)</text><text x="' + (x0 + w2) + '" y="' + (H2 - 8) + '" text-anchor="end" font-size="11" fill="#4b5a6b">less function (score 12)</text>';
+      var meds = ms.map(function (k) { return [k, med(fin(k).map(function (r) { return r.useful; }))]; }).sort(function (a, b) { return b[1] - a[1]; });
+      var flips = []; for (var i2 = 1; i2 < bestAt.length; i2++) if (bestAt[i2] && bestAt[i2 - 1] && bestAt[i2] !== bestAt[i2 - 1]) flips.push([cs[i2], bestAt[i2]]);
+      set('Side by side', 'Bars show the median after 12 sessions sitting upright; the thin line is the middle half of participants.', key(ms, you) + '<svg viewBox="0 0 ' + W1 + ' ' + H1 + '" role="img" aria-label="Comparison of methods">' + g1 + '</svg>',
+        'Across the course of ALS', 'Median useful selections a minute by functional score. The shading shows which method leads at each stage.', key(ms) + '<svg viewBox="0 0 ' + W2 + ' ' + H2 + '" role="img" aria-label="Methods across functional score">' + g2 + '</svg>',
+        'For ' + A + ', <b>' + MS[meds[0][0]][0] + '</b> has the highest median overall (' + r1(meds[0][1]) + ' useful selections a minute)' + (meds[1] ? ', then ' + nm(meds[1][0]) + ' (' + r1(meds[1][1]) + ')' : '') + '.' + (flips.length ? ' The lead changes around a score of ' + flips[0][0] + ', where ' + nm(flips[0][1]) + ' comes out ahead; both stay usable, and the choice is personal.' : ''));
+    }
+    else if (ST.t === 'learn') {
+      var ms3 = ST.m, W = 560, H = 270, x0 = 44, y0 = 20, w = W - x0 - 14, h = H - y0 - 40, L = {};
+      ms3.forEach(function (k) { L[k] = []; for (var s = 1; s <= 12; s++) { var v = rows(k, function (r) { return r.session === s && r.position === 'up'; }).map(function (r) { return r.useful; }); L[k].push([q(v, 0.25), med(v), q(v, 0.75)]); } });
+      var mx = nice(Math.max.apply(null, ms3.map(function (k) { return Math.max.apply(null, L[k].map(function (t) { return t[2]; })); }).concat([2])));
+      var X = function (s) { return x0 + w * (s - 1) / 11; }, Y = function (v) { return y0 + h - h * clamp(v / mx, 0, 1); }, g = axisY(x0, y0, w, h, mx, 'useful selections a minute');
+      ms3.forEach(function (k) { var up = L[k].map(function (t, i) { return X(i + 1).toFixed(1) + ' ' + Y(t[2]).toFixed(1); }), dn = L[k].map(function (t, i) { return X(i + 1).toFixed(1) + ' ' + Y(t[0]).toFixed(1); }).reverse(); g += '<path d="M' + up.concat(dn).join(' L') + 'Z" fill="' + MS[k][1] + '" fill-opacity="0.12"/><path d="M' + L[k].map(function (t, i) { return X(i + 1).toFixed(1) + ' ' + Y(t[1]).toFixed(1); }).join(' L') + '" fill="none" stroke="' + MS[k][1] + '" stroke-width="2.6"/>'; mine(k).forEach(function (m) { if (m.n <= 12) g += dia(X(m.n), Y(m.useful)); }); });
+      for (var s2 = 1; s2 <= 12; s2++) g += '<text x="' + X(s2) + '" y="' + (y0 + h + 16) + '" text-anchor="middle" font-size="11" fill="#4b5a6b">' + s2 + '</text>';
+      g += '<text x="' + (x0 + w / 2) + '" y="' + (H - 4) + '" text-anchor="middle" font-size="11" fill="#4b5a6b">practice session</text>';
+      var W2 = 560, rh = 40, H2 = ms3.length * rh + 30, g2 = '', bx = 150, bw = W2 - bx - 150, sm = 12;
+      ms3.forEach(function (k, n) { var t = sessTo90(k), md = med(t), y = n * rh + 6, gain = Math.round((L[k][11][1] / L[k][0][1] - 1) * 100); g2 += '<text x="0" y="' + (y + 18) + '" font-size="12.5" fill="#0b1220">' + MS[k][0] + '</text><rect x="' + bx + '" y="' + (y + 6) + '" width="' + (bw * md / sm) + '" height="18" fill="' + MS[k][1] + '"/><line x1="' + (bx + bw * q(t, 0.25) / sm) + '" x2="' + (bx + bw * q(t, 0.75) / sm) + '" y1="' + (y + 15) + '" y2="' + (y + 15) + '" stroke="#0b1220" stroke-width="1.5"/><text x="' + (bx + bw * Math.max(md, q(t, 0.75)) / sm + 6) + '" y="' + (y + 19) + '" font-size="11.5" fill="#24344a">' + md + ' sessions · +' + gain + '% from session 1</text>'; });
+      g2 += '<text x="' + bx + '" y="' + (H2 - 6) + '" font-size="11" fill="#4b5a6b">median sessions to reach 90% of own level</text>';
+      var fast = ms3.slice().sort(function (a, b) { return med(sessTo90(a)) - med(sessTo90(b)); });
+      set('Learning curve', 'Median useful selections a minute at each practice session, sitting upright, with the middle half shaded.' + (ST.act === 'point' ? ' Your sessions plot by session number.' : ''), key(ms3, you) + '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Learning curves">' + g + '</svg>',
+        'How quickly people get there', 'Sessions until each person reached 90% of their own level, and the gain from the first session to the twelfth.', '<svg viewBox="0 0 ' + W2 + ' ' + H2 + '" role="img" aria-label="Sessions to plateau">' + g2 + '</svg>',
+        'For ' + A + ', <b>' + nm(fast[0]) + '</b> is quickest to learn (about ' + med(sessTo90(fast[0])) + ' sessions)' + (fast.length > 1 ? ' and <b>' + nm(fast[fast.length - 1]) + '</b> takes longest (about ' + med(sessTo90(fast[fast.length - 1])) + ')' : '') + '. A slow start isn’t a poor fit: early sessions mostly measure unfamiliarity.');
+    }
+    else {
+      var ms4 = ST.m, W = 560, gw = 120, H = 270, x0 = 44, y0 = 20, w = W - x0 - 10, h = H - y0 - 44, V = {};
+      ms4.forEach(function (k) { V[k] = PK.map(function (ps) { return med(rows(k, function (r) { return r.session === 12 && r.position === ps; }).map(function (r) { return r.useful; })); }); });
+      var mx = nice(Math.max.apply(null, ms4.map(function (k) { return Math.max.apply(null, V[k]); }).concat([2])));
+      var Y = function (v) { return y0 + h - h * clamp(v / mx, 0, 1); }, g = axisY(x0, y0, w, h, mx, 'useful selections a minute'), gs = w / 4, bw = Math.min(26, (gs - 16) / ms4.length);
+      PK.forEach(function (ps, j) { var gx = x0 + j * gs + (gs - bw * ms4.length) / 2; ms4.forEach(function (k, n) { var v = V[k][j], x = gx + n * bw; g += '<rect x="' + x + '" y="' + Y(v) + '" width="' + (bw - 3) + '" height="' + (y0 + h - Y(v)) + '" fill="' + MS[k][1] + '"/>'; var my = mine(k, ps); if (my.length) g += dia(x + (bw - 3) / 2, Y(my[my.length - 1].useful)); }); g += '<text x="' + (x0 + j * gs + gs / 2) + '" y="' + (y0 + h + 18) + '" text-anchor="middle" font-size="11.5" fill="#24344a">' + POS[ps] + '</text>'; });
+      var tb = '<div class="st-tw"><table class="rs-tbl"><tr><th>Method</th>' + PK.slice(1).map(function (ps) { return '<th>' + POS[ps] + '</th>'; }).join('') + '</tr>' + ms4.map(function (k) { return '<tr><td>' + MS[k][0] + '</td>' + V[k].slice(1).map(function (v) { var d = Math.round((v / V[k][0] - 1) * 100), bg = d <= -25 ? '#f8d4d4' : d <= -10 ? '#fdebc8' : '#e3f4ea'; return '<td style="background:' + bg + '"><b>' + (d > 0 ? '+' : '') + d + '%</b></td>'; }).join('') + '</tr>'; }).join('') + '</table></div>';
+      var worst = null; ms4.forEach(function (k) { PK.slice(1).forEach(function (ps, j) { var d = V[k][j + 1] / V[k][0] - 1; if (!worst || d < worst[2]) worst = [k, ps, d]; }); });
+      var steady = ms4.slice().sort(function (a, b) { return (V[b][2] / V[b][0]) - (V[a][2] / V[a][0]); })[0];
+      set('By position', 'Median useful selections a minute after 12 sessions, in each position.' + (ST.act === 'point' ? ' Your latest session in each position shows as a diamond.' : ''), key(ms4, you) + '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Performance by position">' + g + '</svg>',
+        'Change from sitting upright', 'Green holds steady, amber drops 10 to 25%, red drops more than 25%.', tb,
+        'The biggest drop is <b>' + nm(worst[0]) + '</b> when ' + POS[worst[1]].toLowerCase() + ' (' + Math.round(worst[2] * 100) + '%). <b>' + MS[steady][0] + '</b> holds up best in bed. A different mount or a saved position profile often recovers much of the loss.');
+    }
+  }
+
+  /* ---------- test screen ---------- */
+  el('tMeth').innerHTML = MK.map(function (k) { return '<option value="' + k + '">' + MS[k][0] + '</option>'; }).join('') ;
+  el('tPos').innerHTML = PK.map(function (k) { return '<option value="' + k + '">' + POS[k] + '</option>'; }).join('');
+  var arena = el('tArena'), idle = el('tIdle'), T = null;
+  function modeUI() { var m = el('tMode').value; el('tDwellL').hidden = m !== 'dwell'; el('tScanL').hidden = m !== 'scan'; }
+  el('tMode').addEventListener('change', modeUI); modeUI();
+  el('tDwell').addEventListener('input', function (e) { el('tDwellV').textContent = (e.target.value / 1000).toFixed(1) + ' s'; });
+  el('tScan').addEventListener('input', function (e) { el('tScanV').textContent = (e.target.value / 1000).toFixed(1) + ' s'; });
+  function flash(ok) { var f = document.createElement('div'); f.className = 'st-flash'; f.style.setProperty('--fc', ok ? '#5fe0a8' : '#ff8a8a'); arena.appendChild(f); setTimeout(function () { f.remove(); }, 400); }
+  function hud() { var h = arena.querySelector('.st-hud'); if (h) h.textContent = 'Target ' + Math.min(T.n + 1, T.N) + ' of ' + T.N + ' · misses ' + T.err + ' · Escape to stop'; }
+  function clearArena() { Array.prototype.slice.call(arena.children).forEach(function (c) { if (c !== idle) c.remove(); }); }
+  function start() {
+    var mode = el('tMode').value;
+    T = { mode: mode, size: +el('tSize').value, dwell: +el('tDwell').value, scan: +el('tScan').value, N: 12, n: 0, err: 0, ids: 0, t0: performance.now(), tt: 0, last: null, timer: 0, raf: 0 };
+    idle.hidden = true; clearArena(); var hd = document.createElement('div'); hd.className = 'st-hud'; arena.appendChild(hd); hud();
+    el('tRes').hidden = true;
+    if (mode === 'scan') scanStart(); else nextTarget();
+    arena.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  function done(stopped) {
+    if (!T) return; cancelAnimationFrame(T.raf); clearTimeout(T.timer); clearInterval(T.iv);
+    var t = T; T = null; clearArena(); idle.hidden = false;
+    if (stopped || t.n < 3) { el('tRes').hidden = false; el('tRes').innerHTML = '<b>Test stopped.</b> Nothing was saved.'; return; }
+    var mins = (performance.now() - t.t0) / 60000, sp = r1(t.n / mins), acc = Math.round(t.n / (t.n + t.err) * 100), tp = t.mode === 'scan' ? '' : Math.round(t.ids / t.tt * 1000 * 100) / 100;
+    var k = el('tMeth').value, ps = el('tPos').value, n = MINE.filter(function (m) { return m.method === k; }).length + 1;
+    var rec = { n: n, date: new Date().toISOString().slice(0, 16).replace('T', ' '), method: k, pos: ps, mode: t.mode, size: t.size, speed: sp, acc: acc, tp: tp, effort: null, useful: r1(useful(sp, acc)) };
+    MINE.push(rec); keep();
+    var lbl = { click: 'click or tap', dwell: 'dwell', scan: 'switch scanning' }[t.mode];
+    el('tRes').hidden = false;
+    el('tRes').innerHTML = '<b>Session ' + n + ' with ' + MS[k][0].toLowerCase() + ' saved</b> (' + POS[ps].toLowerCase() + ', ' + lbl + ').<div class="k">' + [['Selections a minute', sp], ['Accuracy', acc + '%'], ['Throughput', tp === '' ? '–' : tp + ' bits/s'], ['Useful selections a minute', rec.useful]].map(function (x) { return '<div class="rs-kpi"><span>' + x[0] + '</span><b>' + x[1] + '</b></div>'; }).join('') + '</div>' + (rec.useful > 30 ? '<p class="sub" style="margin:0">That\u2019s faster than anyone in the simulated group, as expected with a mouse or touch; on the charts your diamonds sit at the top edge.</p>' : '') + '<div class="st-eff" role="group" aria-label="How much effort did that take?"><span>How much effort did that take?</span>' + ['Very little', 'Some', 'Moderate', 'A lot', 'Very hard'].map(function (w, i) { return '<button type="button" data-e="' + (i * 25) + '" aria-pressed="false">' + w + '</button>'; }).join('') + '</div>';
+    Array.prototype.forEach.call(el('tRes').querySelectorAll('.st-eff button'), function (b) { b.addEventListener('click', function () { rec.effort = +b.getAttribute('data-e'); keep(); Array.prototype.forEach.call(el('tRes').querySelectorAll('.st-eff button'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); table(); draw(); }); });
+    if (ST.act !== 'point') { ST.act = 'point'; el('stAct').value = 'point'; }
+    if (ST.m.indexOf(k) < 0) { if (ST.t === 'single') ST.m = [k]; else { ST.m.push(k); if (ST.m.length > 4) ST.m.shift(); } chips(); }
+    table(); draw();
+  }
+  /* pointing: click or dwell */
+  function nextTarget() {
+    var old = arena.querySelector('.st-tgt'); if (old) old.remove();
+    if (T.n >= T.N) { done(false); return; }
+    var r = arena.getBoundingClientRect(), m = T.size / 2 + 16, x, y, tries = 0;
+    do { x = m + Math.random() * (r.width - 2 * m); y = m + 24 + Math.random() * (r.height - 2 * m - 24); tries++; } while (T.last && Math.hypot(x - T.last[0], y - T.last[1]) < Math.min(r.width, r.height) * 0.3 && tries < 30);
+    var from = T.last || [r.width / 2, r.height / 2];
+    var t = document.createElement('div'); t.className = 'st-tgt'; t.style.cssText = 'left:' + x + 'px;top:' + y + 'px;width:' + T.size + 'px;height:' + T.size + 'px';
+    if (T.mode === 'dwell') t.innerHTML = '<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" stroke-dasharray="289" stroke-dashoffset="289"/></svg>';
+    arena.appendChild(t);
+    T.cur = { x: x, y: y, D: Math.hypot(x - from[0], y - from[1]), ts: performance.now(), over: 0, el: t };
+    clearTimeout(T.timer); T.timer = setTimeout(function () { if (!T) return; T.err++; flash(false); T.last = [x, y]; T.n++; hud(); nextTarget(); }, 20000);
+  }
+  function hit() { var c = T.cur, mt = performance.now() - c.ts; T.ids += Math.log2(c.D / T.size + 1); T.tt += mt; T.last = [c.x, c.y]; T.n++; flash(true); hud(); nextTarget(); }
+  arena.addEventListener('pointerdown', function (e) {
+    if (!T) return;
+    if (T.mode === 'scan') { e.preventDefault(); press(); return; }
+    if (T.mode !== 'click') return;
+    var r = arena.getBoundingClientRect(), c = T.cur; if (!c) return;
+    if (Math.hypot(e.clientX - r.left - c.x, e.clientY - r.top - c.y) <= T.size / 2 + 4) hit(); else { T.err++; flash(false); hud(); }
+  });
+  arena.addEventListener('pointermove', function (e) {
+    if (!T || T.mode !== 'dwell' || !T.cur) return;
+    var r = arena.getBoundingClientRect(), c = T.cur, inside = Math.hypot(e.clientX - r.left - c.x, e.clientY - r.top - c.y) <= T.size / 2 + 4;
+    if (inside && !c.over) { c.over = performance.now(); loop(); } else if (!inside && c.over) { c.over = 0; var ci = c.el.querySelector('circle'); if (ci) ci.style.strokeDashoffset = 289; }
+  });
+  function loop() { cancelAnimationFrame(T.raf); (function f() { if (!T || !T.cur || !T.cur.over) return; var p = (performance.now() - T.cur.over) / T.dwell, ci = T.cur.el.querySelector('circle'); if (ci) ci.style.strokeDashoffset = 289 * (1 - Math.min(1, p)); if (p >= 1) { T.cur.over = 0; hit(); return; } T.raf = requestAnimationFrame(f); })(); }
+  /* switch scanning */
+  function scanStart() {
+    var g = document.createElement('div'); g.className = 'st-grid'; for (var i = 0; i < 9; i++) { var c = document.createElement('div'); c.className = 'st-cell'; c.textContent = i + 1; g.appendChild(c); } arena.appendChild(g);
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'st-sw'; b.textContent = 'Switch (or Space / Enter)'; arena.appendChild(b);
+    T.cells = g.children; scanNext();
+  }
+  function scanNext() {
+    if (T.n >= T.N) { done(false); return; }
+    var t; do { t = Math.floor(Math.random() * 9); } while (t === T.tgt); T.tgt = t; T.phase = 'row'; T.idx = -1; T.ts = performance.now();
+    clearInterval(T.iv); tick(); T.iv = setInterval(tick, T.scan); paint();
+  }
+  function tick() { if (!T) return; T.idx = (T.idx + 1) % 3; paint(); }
+  function paint() { for (var i = 0; i < 9; i++) { var c = T.cells[i], lit = T.phase === 'row' ? Math.floor(i / 3) === T.idx : (Math.floor(i / 3) === T.row && i % 3 === T.idx); c.className = 'st-cell' + (lit ? ' lit' : '') + (i === T.tgt ? ' tgt' : ''); } }
+  function press() {
+    if (!T || T.mode !== 'scan' || T.idx < 0) return;
+    if (T.phase === 'row') { T.row = T.idx; T.phase = 'col'; T.idx = -1; clearInterval(T.iv); tick(); T.iv = setInterval(tick, T.scan); return; }
+    var sel = T.row * 3 + T.idx;
+    if (sel === T.tgt) { T.n++; flash(true); } else { T.err++; flash(false); }
+    hud(); scanNext();
+  }
+  document.addEventListener('keydown', function (e) {
+    if (!T) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); done(true); return; }
+    if (T.mode === 'scan' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); press(); }
+  }, true);
+  el('tGo').addEventListener('click', start);
+  function table() {
+    var t = el('tTbl');
+    if (!MINE.length) { t.innerHTML = '<tr><td>No sessions yet. Run a test above; each one is numbered per method so you can watch your own learning curve.</td></tr>'; return; }
+    t.innerHTML = '<tr><th>#</th><th>Date</th><th>Method</th><th>Position</th><th>Selection</th><th>Speed</th><th>Accuracy</th><th>Throughput</th><th>Effort</th><th>Useful</th></tr>' + MINE.slice().reverse().map(function (m) { var r = mineRow(m); return '<tr><td>' + r.n + '</td><td>' + r.date + '</td><td>' + r.method + '</td><td>' + r.position + '</td><td>' + r.mode + '</td><td>' + r.speed + '</td><td>' + r.accuracy + '%</td><td>' + (r.throughput === '' ? '–' : r.throughput) + '</td><td>' + (r.effort === '' ? '–' : r.effort) + '</td><td>' + r.useful + '</td></tr>'; }).join('');
+  }
+  function csv(f) { var rs = f.rows(); return f.cols.join(',') + '\n' + rs.map(function (r) { return f.cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n'); }
+  el('tDl').addEventListener('click', function () {
+    var data = csv(window.__rsStudy.files[1]), name = 'my_test_sessions.csv';
+    function fallback() { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'text/csv' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
+    if (window.claude && window.claude.use) window.claude.use('downloads').then(function (d) { if (d) d.save({ filename: name, data: data }).catch(function () {}); else fallback(); }).catch(fallback); else fallback();
+  });
+  el('tClr').addEventListener('click', function () { MINE.length = 0; keep(); table(); draw(); el('tRes').hidden = true; });
+  chips(); table(); draw();
+})();
+
 (function () {
   /* ---------- seeded random numbers, so the dataset is the same every time ---------- */
   var seed = 20261101;
@@ -5854,17 +6228,18 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
   var DICT = [['owned_equipment.csv', 'product', 'Item the participant owns'], ['owned_equipment.csv', 'uses_per_week', 'Average uses a week over the last 4 weeks of logged sessions'], ['owned_equipment.csv', 'last_used_days', 'Days since last use'], ['owned_equipment.csv', 'status', 'regular (5+ a week), occasional, rarely (under once a week)'], ['owned_equipment.csv', 'reason', 'Reason given for rarely used items'], ['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
     ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'stamina', 'Minutes of reliable use before errors start to rise'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
     ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
-    ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
-  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Owned equipment: each person owns a mix of common hardware and software; weekly use is higher when an item matches the method they rely on. Rarely used = under once a week, with a simulated reason.\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+    ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].concat(window.__rsStudy ? window.__rsStudy.dict : []).map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Activity studies (activity_study.csv): a separate group of 40 participants, 6 methods, 4 activities, 12 practice sessions sitting upright, then reclined, in bed and side-lying at session 12. Learning follows a practice curve; position effects are illustrative.\n- Owned equipment: each person owns a mix of common hardware and software; weekly use is higher when an item matches the method they rely on. Rarely used = under once a week, with a simulated reason.\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
   var FILES = [
     { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
     { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
     { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
     { name: 'everyday_tasks.csv', kind: 'CSV', desc: 'Everyday-control tasks and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
     { name: 'owned_equipment.csv', kind: 'CSV', desc: 'Equipment each person owns and how often it is used', cols: ['id', 'product', 'kind', 'uses_per_week', 'last_used_days', 'status', 'reason'], rows: function () { return OW; } },
+    ].concat(window.__rsStudy ? window.__rsStudy.files : []).concat([
     { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },
     { name: 'README.txt', kind: 'TXT', desc: 'How the data was made', text: README }
-  ];
+  ]);
   var curFile = FILES[0];
   function fileText(f) { return f.text || csv(f.rows(), f.cols); }
   function showFile(f) {
