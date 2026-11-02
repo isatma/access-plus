@@ -9,6 +9,7 @@
 .rs-hero h1 { font-size: clamp(2em, 5vw, 3.4em); line-height: 1.06; }
 .rs-hero h1 span { color: var(--signal); }
 .rs-hero p { margin: 0; color: var(--desc); max-width: 52em; font-size: 1.08em; }
+.rs-proto { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; letter-spacing: 0.1em; }
 .rs-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 .rs-sim { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 12px 16px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.07); color: var(--ink); font-size: 0.95em; }
 .rs-sim b { color: #ffc670; font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
@@ -81,11 +82,11 @@
 <main>
   <div class="wrap rs-wrap">
     <header class="rs-hero">
-      <span class="rs-k">Research and science · Data dashboard</span>
+      <span class="rs-k">Research and science · Data dashboard <span class="rs-proto">Prototype · draft for discussion</span></span>
       <h1>Abilities, technologies and <span>change over time</span></h1>
       <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
     </header>
-    <div class="rs-sim" role="note"><b>Simulated data</b><span>60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rsMethodLink">how the data was made</a>.</span></div>
+    <div class="rs-sim" role="note"><b>Prototype · simulated data</b><span>A draft for discussion, with generic, illustrative data: 60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rsMethodLink">how the data was made</a>.</span></div>
 
     <section class="rs-board" aria-label="Research dashboard">
       <div class="rs-filters" role="group" aria-label="Filters">
@@ -155,6 +156,7 @@
               <li><b>Eye-gaze typing:</b> about 8 words per minute, with wide variation between people</li>
               <li><b>Technology tolerance:</b> each method keeps working until a set amount of function is lost; voice goes first with bulbar onset, eye gaze and EMG last</li>
               <li><b>Switching:</b> a participant moves to the next method after two check-ins below 80% success</li>
+              <li><b>Stamina:</b> minutes of reliable use before errors rise; shorter as function is lost, and in bed</li>
               <li><b>Spasticity and tremor:</b> an index from 0 to 1 that grows with loss, scaled by each person's tendency</li>
             </ul>
           </div>
@@ -190,14 +192,14 @@
     success: { name: 'Success rate', unit: '%', dec: 0, good: 'up' }, dwell: { name: 'Dwell time', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
     target: { name: 'Smallest reliable target', unit: 'px', dec: 0, good: 'down', ptr: 1 }, ttt: { name: 'Time to target', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
     tput: { name: 'Throughput', unit: 'bits/s', dec: 2, good: 'up', ptr: 1 }, tremor: { name: 'Spasticity and tremor index', unit: '', dec: 2, good: 'down' },
-    fatigue: { name: 'Accuracy drop over a session', unit: '%', dec: 0, good: 'down' }, wpm: { name: 'Typing speed', unit: 'wpm', dec: 1, good: 'up' },
+    fatigue: { name: 'Accuracy drop over a session', unit: '%', dec: 0, good: 'down' }, stamina: { name: 'Stamina (minutes before errors rise)', unit: 'min', dec: 0, good: 'up' }, wpm: { name: 'Typing speed', unit: 'wpm', dec: 1, good: 'up' },
     react: { name: 'Switch reaction time', unit: 'ms', dec: 0, good: 'down', sw: 1 }, voice: { name: 'Voice recognition accuracy', unit: '%', dec: 0, good: 'up' },
     breath: { name: 'Breath strength', unit: '% of start', dec: 0, good: 'up' }, alsfrs: { name: 'ALS functional score (ALSFRS-R)', unit: 'points', dec: 0, good: 'up' }
   };
   var TECH_MEAS = {
-    head: ['success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm'], eyes: ['success', 'dwell', 'target', 'ttt', 'tput', 'fatigue', 'wpm'],
-    sw: ['success', 'react', 'tremor', 'fatigue', 'wpm'], breath: ['success', 'breath', 'fatigue'], voice: ['success', 'voice', 'wpm'], emg: ['success', 'react', 'fatigue'],
-    all: ['alsfrs', 'voice', 'breath']
+    head: ['success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm'], eyes: ['success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'fatigue', 'wpm'],
+    sw: ['success', 'stamina', 'react', 'tremor', 'fatigue', 'wpm'], breath: ['success', 'stamina', 'breath', 'fatigue'], voice: ['success', 'stamina', 'voice', 'wpm'], emg: ['success', 'stamina', 'react', 'fatigue'],
+    all: ['alsfrs', 'stamina', 'voice', 'breath']
   };
   /* points of function lost at which each method falls to 80% success */
   function tol(m, onset) { return { voice: onset === 'bulbar' ? 5 : 18, head: onset === 'bulbar' ? 18 : 13, sw: 19, breath: onset === 'bulbar' ? 11 : 20, eyes: 32, emg: 42 }[m]; }
@@ -232,7 +234,7 @@
       var x = L / tol(m, onset);
       var row = { id: id, week: wk, method: m, success: r1(sc), alsfrs: Math.round(clamp(48 - lost0 - (48 - base) * 0 - rate * wk / 4.345 + norm(0, 0.8), 0, 48)),
         dwell: '', target: '', ttt: '', tput: '', tremor: Math.round(clamp(0.08 + 0.45 * Math.min(1.4, x) * spast + norm(0, 0.03), 0, 1) * 100) / 100,
-        fatigue: Math.round(clamp(5 + 20 * x + norm(0, 2), 2, 45)), wpm: '', react: '',
+        fatigue: Math.round(clamp(5 + 20 * x + norm(0, 2), 2, 45)), stamina: Math.round(clamp((m === 'eyes' || m === 'emg' ? 50 : 42) * (1 - 0.55 * Math.min(1.3, x)) * (pos === 'bed' ? 0.85 : 1) + norm(0, 3), 3, 75)), wpm: '', react: '',
         voice: Math.round(clamp(95 - 26 * Math.pow(L / tol('voice', onset), 1.5) + norm(0, 2), 5, 98)), breath: Math.round(clamp(100 - (onset === 'bulbar' ? 2.8 : 2.1) * L + norm(0, 3), 10, 105)),
         backup_ready: practiced ? 'yes' : 'no' };
       row.alsfrs = Math.round(clamp(base - rate * wk / 4.345 + norm(0, 0.8), 0, 48));
@@ -411,13 +413,13 @@
   /* ---------- data files ---------- */
   function csv(rows, cols) { return [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); })).join('\n'); }
   var DICT = [['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
-    ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
+    ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'stamina', 'Minutes of reliable use before errors start to rise'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
     ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
     ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
-  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
   var FILES = [
     { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
-    { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
+    { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
     { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
     { name: 'everyday_tasks.csv', kind: 'CSV', desc: 'Everyday-control tasks and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
     { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },

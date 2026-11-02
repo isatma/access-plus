@@ -718,6 +718,26 @@ footer .wrap { padding-block: 22px; }
 .arm-sec .arm-intro { margin: 0; color: var(--desc); max-width: 60em; }
 .arm-cut { font: 500 0.5em var(--mono); letter-spacing: 0.12em; color: #231c05; background: #ffc670; padding: 3px 8px; vertical-align: 4px; margin-left: 8px; }
 @media (min-width: 1100px) { .hero { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) !important; } }
+.nav .navres { gap: 8px; border: 1px solid #7cc4ff; color: #7cc4ff; padding: 0 12px; margin-right: 6px; }
+.nav .navres:hover { background: rgba(124,196,255,0.12); color: var(--ink); }
+.nav .navres[aria-current="page"] { background: #7cc4ff; color: #04201a; border-bottom-color: #7cc4ff; }
+.navproto { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 1px 6px; }
+.resband { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid #7cc4ff; background: linear-gradient(120deg, rgba(124,196,255,0.12), rgba(95,224,168,0.05) 55%, color-mix(in srgb, var(--panel) 92%, transparent)); margin-top: 8px; }
+.resband::before { content: ""; position: absolute; top: -1px; left: -1px; width: 18px; height: 18px; border: solid #7cc4ff; border-width: 3px 0 0 3px; }
+.rb-text { display: grid; gap: 14px; align-content: center; padding: 34px; }
+.rb-text h2 { font-size: clamp(1.5em, 3vw, 2.2em); line-height: 1.12; text-transform: none; letter-spacing: 0.01em; }
+.rb-text p { margin: 0; color: var(--desc); }
+.rb-text ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--ink); font-size: 0.95em; }
+.rb-k { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rb-k .eyebrow { color: #7cc4ff; }
+.rb-proto { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #231c05; background: #ffc670; padding: 3px 8px; }
+.rb-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.rb-btns .btn { min-height: 64px; padding: 0 26px; font-size: 0.85em; }
+.rb-btns .btn.primary { background: #7cc4ff; border-color: #7cc4ff; color: #04201a; }
+.rb-viz { border-left: 1px solid var(--line-hi); background: #f4f7fa; padding: 20px; display: grid; align-content: center; gap: 8px; }
+.rb-viz svg { width: 100%; height: auto; display: block; }
+.rb-viz small { color: #4b5a6b; font-size: 0.78em; }
+@media (max-width: 900px) { .resband { grid-template-columns: 1fr; } .rb-viz { border-left: 0; border-top: 1px solid var(--line-hi); } .rb-text { padding: 24px 20px; } }
 </style>
 
 <div class="draftbar" role="note"><b>Draft website · under construction</b><span>For review and discussion purposes only. Partners, products, data and features shown are illustrative ideas, not commitments.</span></div>
@@ -895,6 +915,30 @@ footer .wrap { padding-block: 22px; }
       </figure>
     </section>
 
+
+    <section class="resband" id="research-band" aria-labelledby="rbT">
+      <div class="rb-text">
+        <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
+        <h2 id="rbT">See skills change over time, and catch problems early</h2>
+        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, watch the technology chain, and spot the early signs that a method is starting to fail.</p>
+        <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
+        <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
+      </div>
+      <div class="rb-viz" aria-hidden="true">
+        <svg viewBox="0 0 420 220"><g font-family="IBM Plex Sans, sans-serif">
+          <text x="14" y="22" font-size="13" font-weight="600" fill="#0b1220">Stamina: minutes before errors rise</text>
+          <text x="14" y="40" font-size="11" fill="#4b5a6b">Head tracking · median and middle half · simulated</text>
+          <line x1="40" y1="190" x2="406" y2="190" stroke="#d7dee6"/><line x1="40" y1="140" x2="406" y2="140" stroke="#d7dee6"/><line x1="40" y1="90" x2="406" y2="90" stroke="#d7dee6"/>
+          <text x="34" y="194" text-anchor="end" font-size="10" fill="#4b5a6b">10</text><text x="34" y="144" text-anchor="end" font-size="10" fill="#4b5a6b">25</text><text x="34" y="94" text-anchor="end" font-size="10" fill="#4b5a6b">40</text>
+          <path d="M40 78 L100 82 L160 92 L220 104 L280 118 L340 134 L406 150 L406 182 L340 168 L280 152 L220 140 L160 126 L100 112 L40 104 Z" fill="#1f9d6b" fill-opacity="0.16"/>
+          <path d="M40 90 L100 96 L160 108 L220 121 L280 134 L340 150 L406 165" fill="none" stroke="#1f9d6b" stroke-width="3"/>
+          <line x1="300" y1="56" x2="300" y2="190" stroke="#b42318" stroke-dasharray="4 3"/><text x="304" y="66" font-size="10.5" font-weight="600" fill="#b42318">early warning</text>
+          <text x="40" y="208" font-size="10" fill="#4b5a6b">week 0</text><text x="406" y="208" text-anchor="end" font-size="10" fill="#4b5a6b">week 52</text>
+        </g></svg>
+        <small>Illustration from the simulated cohort</small>
+      </div>
+    </section>
+
     <section class="gi-band gi-solo" id="involved" aria-label="Get involved">
       <div class="gi-box">
         <span class="eyebrow" style="color:#7cc4ff">Get involved</span>
@@ -915,10 +959,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:22 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:34 UTC</span></div>
   </div>
 </footer>
 

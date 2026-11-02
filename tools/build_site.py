@@ -423,7 +423,7 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside" href="#research" data-route="research">Research</a>'
+           '<a class="navside navres" href="#research" data-route="research">Research dashboard<span class="navproto">Prototype</span></a>'
            '<a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if 'id="journey"' not in home:

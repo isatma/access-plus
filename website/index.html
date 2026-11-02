@@ -718,6 +718,26 @@ footer .wrap { padding-block: 22px; }
 .arm-sec .arm-intro { margin: 0; color: var(--desc); max-width: 60em; }
 .arm-cut { font: 500 0.5em var(--mono); letter-spacing: 0.12em; color: #231c05; background: #ffc670; padding: 3px 8px; vertical-align: 4px; margin-left: 8px; }
 @media (min-width: 1100px) { .hero { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr) !important; } }
+.nav .navres { gap: 8px; border: 1px solid #7cc4ff; color: #7cc4ff; padding: 0 12px; margin-right: 6px; }
+.nav .navres:hover { background: rgba(124,196,255,0.12); color: var(--ink); }
+.nav .navres[aria-current="page"] { background: #7cc4ff; color: #04201a; border-bottom-color: #7cc4ff; }
+.navproto { font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; background: #ffc670; color: #231c05; padding: 1px 6px; }
+.resband { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0; border: 1px solid #7cc4ff; background: linear-gradient(120deg, rgba(124,196,255,0.12), rgba(95,224,168,0.05) 55%, color-mix(in srgb, var(--panel) 92%, transparent)); margin-top: 8px; }
+.resband::before { content: ""; position: absolute; top: -1px; left: -1px; width: 18px; height: 18px; border: solid #7cc4ff; border-width: 3px 0 0 3px; }
+.rb-text { display: grid; gap: 14px; align-content: center; padding: 34px; }
+.rb-text h2 { font-size: clamp(1.5em, 3vw, 2.2em); line-height: 1.12; text-transform: none; letter-spacing: 0.01em; }
+.rb-text p { margin: 0; color: var(--desc); }
+.rb-text ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--ink); font-size: 0.95em; }
+.rb-k { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.rb-k .eyebrow { color: #7cc4ff; }
+.rb-proto { font: 500 0.66em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #231c05; background: #ffc670; padding: 3px 8px; }
+.rb-btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.rb-btns .btn { min-height: 64px; padding: 0 26px; font-size: 0.85em; }
+.rb-btns .btn.primary { background: #7cc4ff; border-color: #7cc4ff; color: #04201a; }
+.rb-viz { border-left: 1px solid var(--line-hi); background: #f4f7fa; padding: 20px; display: grid; align-content: center; gap: 8px; }
+.rb-viz svg { width: 100%; height: auto; display: block; }
+.rb-viz small { color: #4b5a6b; font-size: 0.78em; }
+@media (max-width: 900px) { .resband { grid-template-columns: 1fr; } .rb-viz { border-left: 0; border-top: 1px solid var(--line-hi); } .rb-text { padding: 24px 20px; } }
 /* views-css:start */
 #view-borrow .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 #view-borrow > .wrap { padding-block: 40px 80px; display: grid; gap: 48px; }
@@ -1123,6 +1143,7 @@ footer .wrap { padding-block: 22px; }
 #view-research .rs-hero h1 { font-size: clamp(2em, 5vw, 3.4em); line-height: 1.06; }
 #view-research .rs-hero h1 span { color: var(--signal); }
 #view-research .rs-hero p { margin: 0; color: var(--desc); max-width: 52em; font-size: 1.08em; }
+#view-research .rs-proto { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; letter-spacing: 0.1em; }
 #view-research .rs-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--signal); }
 #view-research .rs-sim { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 12px 16px; border: 1px dashed #ffc670; background: rgba(255,198,112,0.07); color: var(--ink); font-size: 0.95em; }
 #view-research .rs-sim b { color: #ffc670; font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; }
@@ -1644,7 +1665,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside" href="#research" data-route="research">Research</a><a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#research" data-route="research">Research dashboard<span class="navproto">Prototype</span></a><a class="navsign" href="#profile" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -1813,6 +1834,30 @@ footer .wrap { padding-block: 22px; }
         </div>
         <div class="sb-wipe" aria-hidden="true"></div>
       </figure>
+    </section>
+
+
+    <section class="resband" id="research-band" aria-labelledby="rbT">
+      <div class="rb-text">
+        <div class="rb-k"><span class="eyebrow">Research and science</span><span class="rb-proto">Prototype · draft for discussion</span></div>
+        <h2 id="rbT">See skills change over time, and catch problems early</h2>
+        <p>A research dashboard that follows every measure inside every technology: accuracy, dwell time, stamina, spasticity and tremor, voice and more. Compare snapshots, watch the technology chain, and spot the early signs that a method is starting to fail.</p>
+        <ul><li>For participants, clinicians and researchers</li><li>Filters, drill-downs and downloadable data files</li><li>Runs on generic, simulated data for discussion; not real people</li></ul>
+        <div class="rb-btns"><a class="btn primary" href="#research">Open the research dashboard</a></div>
+      </div>
+      <div class="rb-viz" aria-hidden="true">
+        <svg viewBox="0 0 420 220"><g font-family="IBM Plex Sans, sans-serif">
+          <text x="14" y="22" font-size="13" font-weight="600" fill="#0b1220">Stamina: minutes before errors rise</text>
+          <text x="14" y="40" font-size="11" fill="#4b5a6b">Head tracking · median and middle half · simulated</text>
+          <line x1="40" y1="190" x2="406" y2="190" stroke="#d7dee6"/><line x1="40" y1="140" x2="406" y2="140" stroke="#d7dee6"/><line x1="40" y1="90" x2="406" y2="90" stroke="#d7dee6"/>
+          <text x="34" y="194" text-anchor="end" font-size="10" fill="#4b5a6b">10</text><text x="34" y="144" text-anchor="end" font-size="10" fill="#4b5a6b">25</text><text x="34" y="94" text-anchor="end" font-size="10" fill="#4b5a6b">40</text>
+          <path d="M40 78 L100 82 L160 92 L220 104 L280 118 L340 134 L406 150 L406 182 L340 168 L280 152 L220 140 L160 126 L100 112 L40 104 Z" fill="#1f9d6b" fill-opacity="0.16"/>
+          <path d="M40 90 L100 96 L160 108 L220 121 L280 134 L340 150 L406 165" fill="none" stroke="#1f9d6b" stroke-width="3"/>
+          <line x1="300" y1="56" x2="300" y2="190" stroke="#b42318" stroke-dasharray="4 3"/><text x="304" y="66" font-size="10.5" font-weight="600" fill="#b42318">early warning</text>
+          <text x="40" y="208" font-size="10" fill="#4b5a6b">week 0</text><text x="406" y="208" text-anchor="end" font-size="10" fill="#4b5a6b">week 52</text>
+        </g></svg>
+        <small>Illustration from the simulated cohort</small>
+      </div>
     </section>
 
     <section class="gi-band gi-solo" id="involved" aria-label="Get involved">
@@ -2122,11 +2167,11 @@ footer .wrap { padding-block: 22px; }
 
   <div class="wrap rs-wrap">
     <header class="rs-hero">
-      <span class="rs-k">Research and science · Data dashboard</span>
+      <span class="rs-k">Research and science · Data dashboard <span class="rs-proto">Prototype · draft for discussion</span></span>
       <h1>Abilities, technologies and <span>change over time</span></h1>
       <p>Follow each measure inside each technology over a year, compare snapshots, see how people move along the technology chain, and spot the early signs that a method is starting to fail. Built for participants, clinicians and researchers.</p>
     </header>
-    <div class="rs-sim" role="note"><b>Simulated data</b><span>60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rs-rsMethodLink">how the data was made</a>.</span></div>
+    <div class="rs-sim" role="note"><b>Prototype · simulated data</b><span>A draft for discussion, with generic, illustrative data: 60 virtual participants followed for 52 weeks. Not real people. Generated from published figures on ALS progression and assistive-technology performance; see <a href="#" id="rs-rsMethodLink">how the data was made</a>.</span></div>
 
     <section class="rs-board" aria-label="Research dashboard">
       <div class="rs-filters" role="group" aria-label="Filters">
@@ -2196,6 +2241,7 @@ footer .wrap { padding-block: 22px; }
               <li><b>Eye-gaze typing:</b> about 8 words per minute, with wide variation between people</li>
               <li><b>Technology tolerance:</b> each method keeps working until a set amount of function is lost; voice goes first with bulbar onset, eye gaze and EMG last</li>
               <li><b>Switching:</b> a participant moves to the next method after two check-ins below 80% success</li>
+              <li><b>Stamina:</b> minutes of reliable use before errors rise; shorter as function is lost, and in bed</li>
               <li><b>Spasticity and tremor:</b> an index from 0 to 1 that grows with loss, scaled by each person's tendency</li>
             </ul>
           </div>
@@ -3451,10 +3497,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard (prototype)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:22 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:34 UTC</span></div>
   </div>
 </footer>
 
@@ -5235,14 +5281,14 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
     success: { name: 'Success rate', unit: '%', dec: 0, good: 'up' }, dwell: { name: 'Dwell time', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
     target: { name: 'Smallest reliable target', unit: 'px', dec: 0, good: 'down', ptr: 1 }, ttt: { name: 'Time to target', unit: 'ms', dec: 0, good: 'down', ptr: 1 },
     tput: { name: 'Throughput', unit: 'bits/s', dec: 2, good: 'up', ptr: 1 }, tremor: { name: 'Spasticity and tremor index', unit: '', dec: 2, good: 'down' },
-    fatigue: { name: 'Accuracy drop over a session', unit: '%', dec: 0, good: 'down' }, wpm: { name: 'Typing speed', unit: 'wpm', dec: 1, good: 'up' },
+    fatigue: { name: 'Accuracy drop over a session', unit: '%', dec: 0, good: 'down' }, stamina: { name: 'Stamina (minutes before errors rise)', unit: 'min', dec: 0, good: 'up' }, wpm: { name: 'Typing speed', unit: 'wpm', dec: 1, good: 'up' },
     react: { name: 'Switch reaction time', unit: 'ms', dec: 0, good: 'down', sw: 1 }, voice: { name: 'Voice recognition accuracy', unit: '%', dec: 0, good: 'up' },
     breath: { name: 'Breath strength', unit: '% of start', dec: 0, good: 'up' }, alsfrs: { name: 'ALS functional score (ALSFRS-R)', unit: 'points', dec: 0, good: 'up' }
   };
   var TECH_MEAS = {
-    head: ['success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm'], eyes: ['success', 'dwell', 'target', 'ttt', 'tput', 'fatigue', 'wpm'],
-    sw: ['success', 'react', 'tremor', 'fatigue', 'wpm'], breath: ['success', 'breath', 'fatigue'], voice: ['success', 'voice', 'wpm'], emg: ['success', 'react', 'fatigue'],
-    all: ['alsfrs', 'voice', 'breath']
+    head: ['success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm'], eyes: ['success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'fatigue', 'wpm'],
+    sw: ['success', 'stamina', 'react', 'tremor', 'fatigue', 'wpm'], breath: ['success', 'stamina', 'breath', 'fatigue'], voice: ['success', 'stamina', 'voice', 'wpm'], emg: ['success', 'stamina', 'react', 'fatigue'],
+    all: ['alsfrs', 'stamina', 'voice', 'breath']
   };
   /* points of function lost at which each method falls to 80% success */
   function tol(m, onset) { return { voice: onset === 'bulbar' ? 5 : 18, head: onset === 'bulbar' ? 18 : 13, sw: 19, breath: onset === 'bulbar' ? 11 : 20, eyes: 32, emg: 42 }[m]; }
@@ -5277,7 +5323,7 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
       var x = L / tol(m, onset);
       var row = { id: id, week: wk, method: m, success: r1(sc), alsfrs: Math.round(clamp(48 - lost0 - (48 - base) * 0 - rate * wk / 4.345 + norm(0, 0.8), 0, 48)),
         dwell: '', target: '', ttt: '', tput: '', tremor: Math.round(clamp(0.08 + 0.45 * Math.min(1.4, x) * spast + norm(0, 0.03), 0, 1) * 100) / 100,
-        fatigue: Math.round(clamp(5 + 20 * x + norm(0, 2), 2, 45)), wpm: '', react: '',
+        fatigue: Math.round(clamp(5 + 20 * x + norm(0, 2), 2, 45)), stamina: Math.round(clamp((m === 'eyes' || m === 'emg' ? 50 : 42) * (1 - 0.55 * Math.min(1.3, x)) * (pos === 'bed' ? 0.85 : 1) + norm(0, 3), 3, 75)), wpm: '', react: '',
         voice: Math.round(clamp(95 - 26 * Math.pow(L / tol('voice', onset), 1.5) + norm(0, 2), 5, 98)), breath: Math.round(clamp(100 - (onset === 'bulbar' ? 2.8 : 2.1) * L + norm(0, 3), 10, 105)),
         backup_ready: practiced ? 'yes' : 'no' };
       row.alsfrs = Math.round(clamp(base - rate * wk / 4.345 + norm(0, 0.8), 0, 48));
@@ -5456,13 +5502,13 @@ var __ID = function (x) { return document.getElementById('rs-' + x) || document.
   /* ---------- data files ---------- */
   function csv(rows, cols) { return [cols.join(',')].concat(rows.map(function (r) { return cols.map(function (c) { var v = r[c] === undefined ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); })).join('\n'); }
   var DICT = [['participants.csv', 'id', 'Participant code (simulated)'], ['participants.csv', 'onset', 'limb or bulbar onset'], ['participants.csv', 'age', 'Age in years'], ['participants.csv', 'rate', 'Functional score points lost per month'], ['participants.csv', 'prog', 'slow (under 0.6), average, fast (over 1.2)'], ['participants.csv', 'pos', 'Usual position: chair, bed or both'], ['participants.csv', 'base', 'ALSFRS-R at enrollment (0 to 48)'], ['participants.csv', 'spast', 'Tendency to spasticity and tremor (0 to 1)'], ['participants.csv', 'chain', 'Planned order of technologies'],
-    ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
+    ['sessions.csv', 'week', 'Weeks since enrollment (check-ins every 2 weeks)'], ['sessions.csv', 'method', 'Technology in use'], ['sessions.csv', 'success', 'Correct selections, % of attempts'], ['sessions.csv', 'dwell', 'Dwell time setting needed, ms (pointing methods)'], ['sessions.csv', 'target', 'Smallest reliable target, px'], ['sessions.csv', 'ttt', 'Median time to target, ms'], ['sessions.csv', 'tput', 'Pointing throughput, bits per second'], ['sessions.csv', 'tremor', 'Spasticity and tremor index, 0 to 1'], ['sessions.csv', 'fatigue', 'Drop in accuracy from start to end of a session, %'], ['sessions.csv', 'stamina', 'Minutes of reliable use before errors start to rise'], ['sessions.csv', 'wpm', 'Typing or message speed, words per minute'], ['sessions.csv', 'react', 'Switch reaction time, ms'], ['sessions.csv', 'voice', 'Voice recognition accuracy, %'], ['sessions.csv', 'breath', 'Breath strength, % of enrollment'], ['sessions.csv', 'alsfrs', 'ALSFRS-R functional score'], ['sessions.csv', 'backup_ready', 'Next method practiced yet: yes or no'],
     ['transitions.csv', 'week', 'Week of the switch'], ['transitions.csv', 'from / to', 'Technology before and after'], ['transitions.csv', 'backup', 'Next method practiced before the switch'],
     ['everyday_tasks.csv', 'goal', 'Everyday task'], ['everyday_tasks.csv', 'week0_seconds / week52_seconds', 'Time to complete the task'], ['everyday_tasks.csv', 'help_week0 / help_week52', 'Help needed: full, some or none']].map(function (d) { return { file: d[0], column: d[1], meaning: d[2] }; });
-  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
+  var README = 'ACCESS+ SIMULATED COHORT\n\n60 virtual participants, check-ins every 2 weeks for 52 weeks. NOT REAL PEOPLE.\n\nHow it was generated\n- Onset: about 25% bulbar (PRO-ACT trial database)\n- Decline: log-normal spread around 0.82 functional points a month, x1.25 for bulbar onset\n- Each technology keeps working until a set amount of function is lost (tolerance); success = 99 - 19 x (loss / tolerance)^2\n- Participants switch to the next technology after 2 check-ins below 80% success\n- Starting pointing throughput: head 2.47, gaze 2.13 bits/s (Hansen et al. 2018)\n- Eye-gaze typing near 8 words per minute (SpeakFaster Observer)\n- Stamina: minutes of reliable use before errors rise, shorter as function is lost and in bed\n- Seeded random numbers: the dataset is identical on every load\n\nUse it to try analyses and reports. Replace with real, consented data when available.\n';
   var FILES = [
     { name: 'participants.csv', kind: 'CSV', desc: 'One row per participant', cols: ['id', 'onset', 'age', 'rate', 'prog', 'pos', 'base', 'spast', 'chain'], rows: function () { return P.map(function (p) { return { id: p.id, onset: p.onset, age: p.age, rate: p.rate, prog: p.prog, pos: p.pos, base: p.base, spast: p.spast, chain: p.chain.join(' > ') }; }); } },
-    { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
+    { name: 'sessions.csv', kind: 'CSV', desc: 'Every check-in, all measures', cols: ['id', 'week', 'method', 'success', 'stamina', 'dwell', 'target', 'ttt', 'tput', 'tremor', 'fatigue', 'wpm', 'react', 'voice', 'breath', 'alsfrs', 'backup_ready'], rows: function () { return S; } },
     { name: 'transitions.csv', kind: 'CSV', desc: 'Every switch between technologies', cols: ['id', 'week', 'from', 'to', 'backup'], rows: function () { return TR.map(function (t) { return { id: t.id, week: t.week, from: TECH[t.from].name, to: TECH[t.to].name, backup: t.backup }; }); } },
     { name: 'everyday_tasks.csv', kind: 'CSV', desc: 'Everyday-control tasks and progress', cols: ['id', 'goal', 'technology', 'week0_seconds', 'week52_seconds', 'help_week0', 'help_week52'], rows: function () { return AD; } },
     { name: 'data_dictionary.csv', kind: 'CSV', desc: 'What every column means', cols: ['file', 'column', 'meaning'], rows: function () { return DICT; } },
