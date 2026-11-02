@@ -681,8 +681,11 @@ footer .wrap { padding-block: 22px; }
 .tc-step.now span { color: var(--signal); }
 @media (max-width: 900px) { .tchain { grid-template-columns: 1fr; } }
 @media (max-width: 560px) { .tchain-viz { grid-template-columns: 1fr; } .tchain-viz i { transform: rotate(90deg); } .tc-step { min-height: 0; } }
+.draftbar { position: relative; z-index: 6; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 12px; padding: 8px 16px; padding-top: calc(8px + env(safe-area-inset-top, 0px)); background: #ffc670; color: #231c05; font-size: 0.82em; text-align: center; }
+.draftbar b { font: 600 0.92em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
 </style>
 
+<div class="draftbar" role="note"><b>Draft website · under construction</b><span>For review and discussion purposes only. Partners, products, data and features shown are illustrative ideas, not commitments.</span></div>
 <header class="bar" id="top">
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
@@ -989,7 +992,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research dashboard</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Open source · Skill building and research for assistive technology · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:13 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-02 16:15 UTC</span></div>
   </div>
 </footer>
 
