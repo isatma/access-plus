@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mouse Orchestra v6.1 (web-ready)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#06041a;color:#e0d0ff;font-family:'Segoe UI',sans-serif;height:100vh;overflow:hidden}
+#hdr{background:linear-gradient(90deg,#120828,#0a1838,#120828);border-bottom:2px solid #4a2a8e;padding:7px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}
+#hdr h1{font-size:20px;font-weight:700;color:#d0a0ff;letter-spacing:2px;text-shadow:0 0 14px #8060ff}
+#hdr h1 span{color:#60d0ff}
+.hrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.cb{padding:6px 14px;border-radius:14px;border:1.5px solid #5a4a9e;background:#18183a;color:#c0b0ff;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit}
+.cb:hover{background:#2a2a5a;border-color:#9a7aee;color:#fff}
+.cb.act{background:#3a1a6a;border-color:#c080ff;color:#e0c0ff}
+#main{display:flex;height:calc(100vh - 52px);overflow:hidden}
+#controls{background:#0a0820;border-right:1px solid #2a2a5a;width:220px;flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto}
+.sec{border-bottom:1px solid #1a1a3a;padding:10px 12px}
+.stitle{font-size:12px;font-weight:700;letter-spacing:2px;color:#8070b0;margin-bottom:8px;text-transform:uppercase}
+.slrow{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.slabel{font-size:12px;color:#8070b0;width:52px;flex-shrink:0}
+.slrow input[type=range]{flex:1;accent-color:#a060ff;height:4px}
+.sv{font-size:11px;color:#9080c0;width:30px;text-align:right}
+.ib{padding:6px 8px;border:1px solid #2a2a5a;border-radius:6px;background:#0e0e28;color:#b090d0;font-size:13px;cursor:pointer;text-align:center;transition:all .15s;margin-bottom:4px;width:100%;font-family:inherit}
+.ib:hover{border-color:#6050b0;color:#d0c0ff;background:#1a1a40}
+.ib.sel{border-color:#a060ff;background:#200a60;color:#e0b0ff}
+.scale-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px}
+.scale-btn{padding:5px 4px;border:1px solid #2a2a5a;border-radius:5px;background:#0e0e28;color:#b090d0;font-size:12px;cursor:pointer;text-align:center;transition:all .15s;font-family:inherit}
+.scale-btn:hover{border-color:#7060c0;color:#d0c0ff}
+.scale-btn.sel{border-color:#ff60c0;background:#3a0a40;color:#ffb0e0}
+.key-row{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:8px}
+.key-btn{padding:4px 7px;border:1px solid #2a2a5a;border-radius:4px;background:#0e0e28;color:#b090d0;font-size:12px;cursor:pointer;transition:all .15s;font-family:inherit}
+.key-btn:hover{border-color:#7060c0;color:#d0c0ff}
+.key-btn.sel{border-color:#60d0ff;background:#0a2040;color:#80e0ff}
+#stageWrap{flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative}
+#stage{flex:1;position:relative;overflow:hidden;cursor:crosshair}
+#spotlight{position:absolute;top:0;left:0;right:0;height:44px;pointer-events:none;z-index:50;
+  background:linear-gradient(180deg,rgba(180,120,255,0.18) 0%,rgba(120,60,200,0.10) 60%,transparent 100%);
+  display:flex;align-items:center;justify-content:center;gap:60px}
+.spot{width:18px;height:18px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,220,120,0.95),rgba(255,180,60,0.4) 50%,transparent 80%);
+  box-shadow:0 0 30px 12px rgba(255,200,80,0.25),0 0 60px 20px rgba(200,140,255,0.15);
+  animation:spotPulse 2.8s ease-in-out infinite alternate}
+@keyframes spotPulse{from{opacity:0.7;transform:scale(0.9)}to{opacity:1;transform:scale(1.1)}}
+#stageBg{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 50%,rgba(80,40,160,0.22) 0%,transparent 70%),
+    radial-gradient(ellipse 90% 75% at 50% 50%,rgba(40,20,100,0.35) 0%,transparent 80%),
+    radial-gradient(ellipse 100% 100% at 50% 50%,#06041a 60%,#0a0630 100%)}
+#stars{position:absolute;inset:0;pointer-events:none;z-index:1;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 10%,rgba(200,180,255,.55) 0%,transparent 100%),
+    radial-gradient(1px 1px at 22% 72%,rgba(150,200,255,.45) 0%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 68% 6%,rgba(255,210,150,.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 85% 55%,rgba(180,255,180,.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 44% 92%,rgba(255,180,210,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 91% 22%,rgba(200,180,255,.35) 0%,transparent 100%),
+    radial-gradient(1px 1px at 15% 48%,rgba(150,220,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 76% 84%,rgba(255,200,150,.3) 0%,transparent 100%)}
+#dzGlow{position:absolute;transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(60,20,120,0.85) 0%,rgba(30,10,80,0.92) 40%,transparent 72%);
+  box-shadow:0 0 60px 20px rgba(80,40,200,0.25),inset 0 0 40px rgba(0,0,20,0.8);
+  z-index:4;pointer-events:none;transition:box-shadow .3s}
+#dzLabel{position:absolute;transform:translate(-50%,-50%);
+  color:#201838;font-size:9px;letter-spacing:3px;white-space:nowrap;z-index:3;pointer-events:none}
+#deadZone{position:absolute;transform:translate(-50%,-50%);z-index:5;pointer-events:none;overflow:hidden}
+.pad-label{position:absolute;text-align:center;pointer-events:none;line-height:1.3;z-index:25}
+#statusBar{background:#08061a;border-top:1px solid #1e1e40;padding:5px 14px;display:flex;align-items:center;gap:12px;font-size:12px;color:#6050a0;flex-shrink:0}
+#msgTxt{flex:1;color:#b090d0;font-size:13px}
+#scaleInfo{color:#9070c0;font-size:12px}
+#midiOut{color:#40c080;font-size:12px}
+#nameEditor{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#12103a;border:2px solid #8060ff;border-radius:12px;padding:20px;z-index:1000;width:280px;box-shadow:0 0 40px rgba(80,40,200,0.5)}
+#nameEditor h3{color:#c0a0ff;font-size:15px;margin-bottom:12px}
+#nameEditor input{width:100%;padding:8px 12px;background:#0a0820;border:1px solid #6040a0;border-radius:6px;color:#e0d0ff;font-size:14px;margin-bottom:10px;font-family:inherit}
+.modal-row{display:flex;gap:8px;justify-content:flex-end}
+.overlay{position:fixed;inset:0;background:rgba(0,0,10,0.75);z-index:999}
+.hidden{display:none!important}
+/* v6.1 web fixes */
+#soundGate{position:absolute;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;background:rgba(6,4,26,.6);cursor:pointer}
+#soundGate button{font-family:inherit;font-size:20px;font-weight:800;letter-spacing:2px;padding:22px 36px;border-radius:999px;border:0;cursor:pointer;background:linear-gradient(180deg,#d0a0ff,#8060ff);color:#14062e;box-shadow:0 0 34px rgba(160,96,255,.7)}
+#soundGate small{display:block;text-align:center;margin-top:10px;color:#e0d0ff;font-size:13px}
+@media (max-width:820px){
+  body{height:auto;min-height:100vh;overflow:auto}
+  #main{flex-direction:column;height:auto}
+  #controls{width:100%;border-right:0;border-top:1px solid #2a2a5a;order:2}
+  #stageWrap{order:1;height:78vh;min-height:420px}
+}
+/* MIDI embed area - ready for user's MIDI file */
+#midiPlayer{display:none;padding:8px 12px;background:#0a0820;border-top:1px solid #1a1a3a}
+</style>
+</head>
+<body>
+
+<div id="hdr">
+  <h1>🎵 Mouse <span>Orchestra</span></h1>
+  <div class="hrow">
+    <button class="cb act" id="bSnd" onclick="toggleSnd()">🔊 Sound ON</button>
+    <button class="cb" onclick="savePreset()">💾 Save</button>
+    <button class="cb" onclick="loadPreset()">📂 Load</button>
+    <button class="cb" onclick="openShare()">🔗 Share</button>
+  </div>
+</div>
+
+<div id="main">
+  <div id="controls">
+    <div class="sec">
+      <div class="stitle">🎸 Instrument</div>
+      <div id="instBtns">
+        <div class="ib sel" onclick="selInst(this,'sine')">🎵 Flute</div>
+        <div class="ib" onclick="selInst(this,'triangle')">🎹 Piano</div>
+        <div class="ib" onclick="selInst(this,'sawtooth')">🎻 Strings</div>
+        <div class="ib" onclick="selInst(this,'square')">🎺 Organ</div>
+        <div class="ib" onclick="selInst(this,'bell')">🔔 Bells</div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="stitle">🎵 Scale</div>
+      <div class="scale-grid" id="scaleBtns"></div>
+      <div class="stitle">Root Key</div>
+      <div class="key-row" id="keyBtns"></div>
+    </div>
+    <div class="sec">
+      <div class="stitle">⚙ Settings</div>
+      <div class="slrow"><span class="slabel">Volume</span><input type="range" min="0" max="100" value="80" oninput="vol=this.value/100;document.getElementById('volV').textContent=this.value+'%'"><span class="sv" id="volV">80%</span></div>
+      <div class="slrow"><span class="slabel">Reverb</span><input type="range" min="0" max="100" value="45" oninput="reverbAmt=this.value/100;document.getElementById('rvV').textContent=this.value+'%'"><span class="sv" id="rvV">45%</span></div>
+      <div class="slrow"><span class="slabel">Attack</span><input type="range" min="5" max="120" value="35" oninput="attackMs=parseInt(this.value);document.getElementById('atV').textContent=this.value+'ms'"><span class="sv" id="atV">35ms</span></div>
+      <div class="slrow"><span class="slabel">Decay</span><input type="range" min="400" max="3000" value="1600" oninput="decayMs=parseInt(this.value);document.getElementById('dcV').textContent=(this.value/1000).toFixed(1)+'s'"><span class="sv" id="dcV">1.6s</span></div>
+      <div class="slrow" title="For eye gaze or head pointers: how long to rest on a mouse before it sings. 0 = instant."><span class="slabel">Hover delay</span><input type="range" min="0" max="1500" step="50" value="0" oninput="hoverDelay=parseInt(this.value);document.getElementById('hdV').textContent=this.value==='0'?'off':(this.value/1000).toFixed(2)+'s'"><span class="sv" id="hdV">off</span></div>
+      <div class="slrow"><span class="slabel">Scroll</span><input type="range" min="4" max="30" value="12" oninput="setScrollSpeed(this.value);document.getElementById('scV').textContent=this.value+'s'"><span class="sv" id="scV">12s</span></div>
+    </div>
+    <div class="sec">
+      <div class="stitle">🎼 Pad Names</div>
+      <div style="font-size:11px;color:#6050a0;margin-bottom:6px">Double-click any mouse to rename</div>
+      <div id="nameList" style="max-height:130px;overflow-y:auto"></div>
+    </div>
+    <div class="sec">
+      <div class="stitle">📋 MIDI Log</div>
+      <div id="mlog" style="max-height:120px;overflow-y:auto;font-family:'Courier New',monospace;font-size:11px;background:#030310;border-radius:5px;padding:5px;border:1px solid #141440;color:#8080c0"></div>
+    </div>
+  </div>
+
+  <div id="stageWrap">
+    <div id="stage">
+      <div id="stageBg"></div>
+      <div id="stars"></div>
+      <div id="spotlight"></div>
+      <div id="dzGlow"></div>
+      <div id="dzLabel">✦ &nbsp; MUSIC SCORE &nbsp; ✦</div>
+      <div id="deadZone">
+        <div id="noteScroll" style="position:absolute;top:0;left:0;right:0;bottom:0;overflow:hidden">
+          <svg id="noteTrack" width="2000" height="110" xmlns="http://www.w3.org/2000/svg"
+            style="position:absolute;top:0;left:0;animation:scrollNotes 12s linear infinite">
+          </svg>
+        </div>
+      </div>
+      <style>@keyframes scrollNotes{from{transform:translateX(100%)}to{transform:translateX(-200%)}}</style>
+      <!-- ═══════════════════════════════════════════════════
+           PASTE YOUR TREBLE CLEF SVG CODE HERE
+           Replace the placeholder below with your custom code
+           ═══════════════════════════════════════════════════ -->
+      <!-- <div id="customTrebleClef"></div> -->
+
+      <div id="padsC" style="position:absolute;inset:0;z-index:10"></div>
+      <div id="soundGate" role="button" tabindex="0" aria-label="Start sound"><div><button type="button">▶ START SOUND</button><small>Browsers need one click before they can play sound</small></div></div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════
+         MIDI PLAYER — paste your MIDI embed code here
+         e.g. <midi-player src="your-file.mid"></midi-player>
+         or a custom MIDI renderer component
+         ═══════════════════════════════════════════════════ -->
+    <div id="midiPlayer">
+      <!-- YOUR MIDI PLAYER EMBED GOES HERE -->
+    </div>
+
+    <div id="statusBar">
+      <span id="msgTxt">Hover a mouse to play · Double-click to rename</span>
+      <span id="scaleInfo"></span>
+      <span id="midiOut"></span>
+    </div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="overlayName" onclick="closeNameEditor()"></div>
+<div id="nameEditor" class="hidden">
+  <h3>✏️ Rename <span id="editPadNote" style="color:#ff80c0"></span></h3>
+  <input id="nameInput" type="text" placeholder="e.g. Happy, Jump, Star..." maxlength="16">
+  <div style="font-size:11px;color:#8070b0;margin-bottom:10px" id="editPadInfo"></div>
+  <div class="modal-row">
+    <button class="cb" onclick="closeNameEditor()">Cancel</button>
+    <button class="cb act" onclick="saveName()">✓ Save</button>
+  </div>
+</div>
+
+<script>
+const SCALES={
+  'Major':     [0,2,4,5,7,9,11,12,14,16,17,19,21,23,24,26],
+  'Minor':     [0,2,3,5,7,8,10,12,14,15,17,19,20,22,24,26],
+  'Pentatonic':[0,2,4,7,9,12,14,16,19,21,24,26,28,31,33,36],
+  'Blues':     [0,3,5,6,7,10,12,15,17,18,19,22,24,27,29,30],
+  'Dorian':    [0,2,3,5,7,9,10,12,14,15,17,19,21,22,24,26],
+  'Mixolydian':[0,2,4,5,7,9,10,12,14,16,17,19,21,22,24,26],
+  'Chromatic': [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],
+  'Whole Tone':[0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30],
+};
+const SCALE_NAMES=Object.keys(SCALES);
+const KEYS=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const NOTE_NAMES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+let currentScale='Major',currentKey='C';
+let inst='sine',vol=0.8,reverbAmt=0.45,attackMs=35,decayMs=1600;
+let sndOn=true,audioCtx=null,reverbNode=null,reverbGain=null,dryGain=null,masterOut=null;
+let midiC=0,editingIdx=-1,hoverDelay=0;
+function esc(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+let padNames=Array(16).fill('');
+let padMidi=Array(16).fill(60);
+
+const BIG_SHADES=['#ff50a0','#ff88c0','#ffbcdc','#fff0f8'];
+const SML_SHADES=['#ff80c8','#ff6ab8','#ff90d0','#ff78c0'];
+
+function midiToName(m){return NOTE_NAMES[m%12]+Math.floor(m/12-1)}
+function linspace(a,b,n){const r=[];for(let i=0;i<n;i++)r.push(a+i*(b-a)/(n-1));return r}
+
+function buildScale(){
+  const root=48+KEYS.indexOf(currentKey);
+  padMidi=SCALES[currentScale].slice(0,16).map(s=>root+s);
+  refreshNameList();
+  rebuildPads();
+  buildScore();
+  document.getElementById('scaleInfo').textContent=currentKey+' '+currentScale;
+}
+
+// ── AUDIO ────────────────────────────────────────────────
+function getCtx(){
+  if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();buildReverb()}
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  return audioCtx;
+}
+function unlockSound(){
+  getCtx();
+  const g=document.getElementById('soundGate'); if(g) g.style.display='none';
+}
+function buildReverb(){
+  const c=audioCtx;
+  masterOut=c.createGain();masterOut.gain.value=0.88;masterOut.connect(c.destination);
+  reverbNode=c.createConvolver();reverbGain=c.createGain();dryGain=c.createGain();
+  reverbGain.connect(masterOut);dryGain.connect(masterOut);
+  const sr=c.sampleRate,len=Math.floor(sr*2.6),buf=c.createBuffer(2,len,sr);
+  for(let ch=0;ch<2;ch++){const d=buf.getChannelData(ch);for(let i=0;i<len;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/len,2.1)*(i<sr*0.04?1.5:1)}
+  reverbNode.buffer=buf;reverbNode.connect(reverbGain);
+}
+function playNote(midi){
+  if(!sndOn)return;
+  if(!audioCtx||audioCtx.state!=='running'){ if(audioCtx) audioCtx.resume(); return; }
+  const c=getCtx(),freq=440*Math.pow(2,(midi-69)/12);
+  reverbGain.gain.setTargetAtTime(reverbAmt*0.85,c.currentTime,0.01);
+  dryGain.gain.setTargetAtTime(1-reverbAmt*0.35,c.currentTime,0.01);
+  const osc=c.createOscillator(),gain=c.createGain(),filt=c.createBiquadFilter();
+  const atk=attackMs/1000,dec=decayMs/1000;
+  if(inst==='sine'){osc.type='sine';filt.type='bandpass';filt.frequency.value=freq*1.8;filt.Q.value=0.9}
+  else if(inst==='triangle'){osc.type='triangle';filt.type='lowpass';filt.frequency.value=4200}
+  else if(inst==='sawtooth'){osc.type='sawtooth';filt.type='lowpass';filt.frequency.value=2400;filt.Q.value=0.4}
+  else if(inst==='square'){osc.type='square';filt.type='lowpass';filt.frequency.value=1900}
+  else if(inst==='bell'){
+    osc.type='sine';filt.type='peaking';filt.frequency.value=freq*2;filt.gain.value=8;
+    const o2=c.createOscillator(),g2=c.createGain();
+    o2.type='sine';o2.frequency.value=freq*2.756;
+    g2.gain.setValueAtTime(0,c.currentTime);g2.gain.linearRampToValueAtTime(vol*0.15,c.currentTime+atk*0.5);
+    g2.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dec*0.6);
+    o2.connect(g2);g2.connect(dryGain);g2.connect(reverbNode);o2.start();o2.stop(c.currentTime+dec*0.7);
+  }
+  osc.frequency.value=freq;
+  gain.gain.setValueAtTime(0,c.currentTime);
+  gain.gain.linearRampToValueAtTime(vol*0.55,c.currentTime+atk);
+  gain.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dec);
+  osc.connect(filt);filt.connect(gain);gain.connect(dryGain);gain.connect(reverbNode);
+  osc.start();osc.stop(c.currentTime+dec+0.1);
+}
+
+// ── MUSICAL SCORE ────────────────────────────────────────
+const STAFF_TOP=25,STAFF_GAP=10,STAFF_LINES=5;
+
+function midiToStaffY(midi){
+  const E4=64,semitones=midi-E4;
+  const diaMap=[0,0.5,1,1.5,2,3,3.5,4,4.5,5,5.5,6];
+  const octave=Math.floor(semitones/12),semi=((semitones%12)+12)%12;
+  return STAFF_TOP+(4*STAFF_GAP)-(diaMap[semi]+octave*7)*(STAFF_GAP/2);
+}
+
+function buildScore(){
+  const svg=document.getElementById('noteTrack');
+  svg.innerHTML='';
+  const W=2000;
+  for(let l=0;l<STAFF_LINES;l++){
+    const y=STAFF_TOP+l*STAFF_GAP;
+    const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+    line.setAttribute('x1','0');line.setAttribute('x2',String(W));
+    line.setAttribute('y1',String(y));line.setAttribute('y2',String(y));
+    line.setAttribute('stroke','rgba(180,120,255,0.5)');line.setAttribute('stroke-width','1');
+    svg.appendChild(line);
+  }
+  const clef=document.createElementNS('http://www.w3.org/2000/svg','text');
+  clef.setAttribute('x','12');clef.setAttribute('y',String(STAFF_TOP+4*STAFF_GAP+8));
+  clef.setAttribute('font-size','72');clef.setAttribute('fill','rgba(200,150,255,0.85)');
+  clef.setAttribute('font-family','serif');clef.textContent='𝄞';
+  svg.appendChild(clef);
+
+  const notes=[...padMidi].sort((a,b)=>a-b);
+  const pattern=[...notes,...notes.slice().reverse(),...notes.slice(0,8)];
+  let x=90;
+  pattern.forEach((midi)=>{
+    const y=midiToStaffY(midi);
+    if(y>STAFF_TOP+4*STAFF_GAP+2){
+      const lg=document.createElementNS('http://www.w3.org/2000/svg','line');
+      lg.setAttribute('x1',String(x-9));lg.setAttribute('x2',String(x+9));
+      lg.setAttribute('y1',String(y));lg.setAttribute('y2',String(y));
+      lg.setAttribute('stroke','rgba(180,120,255,0.6)');lg.setAttribute('stroke-width','1');
+      svg.appendChild(lg);
+    }
+    const el=document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+    el.setAttribute('cx',String(x));el.setAttribute('cy',String(y));
+    el.setAttribute('rx','7');el.setAttribute('ry','5');
+    el.setAttribute('fill','rgba(255,200,255,0.92)');
+    el.setAttribute('stroke','rgba(200,100,220,0.7)');el.setAttribute('stroke-width','0.8');
+    svg.appendChild(el);
+    const stem=document.createElementNS('http://www.w3.org/2000/svg','line');
+    stem.setAttribute('x1',String(x+7));stem.setAttribute('x2',String(x+7));
+    stem.setAttribute('y1',String(y));stem.setAttribute('y2',String(y-28));
+    stem.setAttribute('stroke','rgba(220,180,255,0.7)');stem.setAttribute('stroke-width','1.2');
+    svg.appendChild(stem);
+    const txt=document.createElementNS('http://www.w3.org/2000/svg','text');
+    txt.setAttribute('x',String(x));txt.setAttribute('y','104');
+    txt.setAttribute('text-anchor','middle');txt.setAttribute('font-size','9');
+    txt.setAttribute('fill','rgba(200,150,255,0.7)');txt.setAttribute('font-family','sans-serif');
+    txt.textContent=midiToName(midi);
+    svg.appendChild(txt);
+    x+=52;
+  });
+}
+
+function setScrollSpeed(s){
+  document.getElementById('noteTrack').style.animationDuration=s+'s';
+}
+
+// ── SPOTLIGHT ────────────────────────────────────────────
+function buildSpotlight(){
+  const el=document.getElementById('spotlight');
+  el.innerHTML='';
+  for(let i=0;i<6;i++){
+    const s=document.createElement('div');s.className='spot';
+    s.style.animationDelay=(i*0.45)+'s';el.appendChild(s);
+  }
+  for(let i=0;i<6;i++){
+    const pct=10+i*(80/5);
+    const cone=document.createElement('div');
+    cone.style.cssText=`position:absolute;top:18px;left:${pct}%;width:1px;height:100vh;
+      background:linear-gradient(180deg,rgba(220,180,255,0.12) 0%,transparent 40%);
+      transform:translateX(-50%);pointer-events:none`;
+    el.appendChild(cone);
+  }
+}
+
+// ── MOUSE FACE SVG ───────────────────────────────────────
+function mouseFaceSVG(sz,faceShade,isBig,singing,idx){
+  const id='m'+idx+(singing?'s':'p');
+  const earOuter=isBig?'#c0b0d0':'#8040a0',earInner=isBig?'#ffd8e8':'#d070b0';
+  const earShad=isBig?'#b06888':'#602080',strokeC=isBig?'#9080b0':'#804090';
+  const eyeBg=isBig?'white':'#fff0f8',eyeStr=isBig?'#666':'#804080';
+  const whiskerC=isBig?'#a0a0c0':'#c080b0',ringC=isBig?faceShade:'#ff60c0';
+  const cheekC=isBig?'#ff9999':'#ff55bb',faceLow=isBig?'#c0b0d8':'#d060a8';
+  const pinkWash=isBig?'#ffb0cc':'#ff70c0';
+  return `<svg width="${sz}" height="${sz}" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="fg${id}" cx="42%" cy="30%"><stop offset="0%" stop-color="${faceShade}"/><stop offset="55%" stop-color="${faceShade}cc"/><stop offset="100%" stop-color="${faceLow}"/></radialGradient>
+    <radialGradient id="ei${id}" cx="50%" cy="44%"><stop offset="0%" stop-color="${earInner}"/><stop offset="100%" stop-color="${isBig?'#c070a0':'#9030a0'}"/></radialGradient>
+    <radialGradient id="ey${id}" cx="30%" cy="26%"><stop offset="0%" stop-color="#303042"/><stop offset="100%" stop-color="#06060e"/></radialGradient>
+    <radialGradient id="ck${id}" cx="50%" cy="50%"><stop offset="0%" stop-color="${cheekC}" stop-opacity="0.60"/><stop offset="100%" stop-color="${cheekC}" stop-opacity="0"/></radialGradient>
+    <radialGradient id="pk${id}" cx="50%" cy="36%"><stop offset="0%" stop-color="${pinkWash}" stop-opacity="0.65"/><stop offset="100%" stop-color="${pinkWash}" stop-opacity="0"/></radialGradient>
+  </defs>
+  <circle cx="50" cy="54" r="44" fill="${faceShade}" opacity="0.14"/>
+  <path d="M 24,44 Q 8,28 14,8 Q 21,-2 32,6 Q 41,12 38,44 Z" fill="${earOuter}" stroke="${strokeC}" stroke-width="0.9"/>
+  <path d="M 27,42 Q 14,28 19,12 Q 24,5 32,9 Q 38,16 36,42 Z" fill="url(#ei${id})"/>
+  <ellipse cx="26" cy="28" rx="3.5" ry="7" fill="${earShad}" opacity="0.30" transform="rotate(-10 26 28)"/>
+  <path d="M 76,44 Q 92,28 86,8 Q 79,-2 68,6 Q 59,12 62,44 Z" fill="${earOuter}" stroke="${strokeC}" stroke-width="0.9"/>
+  <path d="M 73,42 Q 86,28 81,12 Q 76,5 68,9 Q 62,16 64,42 Z" fill="url(#ei${id})"/>
+  <ellipse cx="74" cy="28" rx="3.5" ry="7" fill="${earShad}" opacity="0.30" transform="rotate(10 74 28)"/>
+  <path d="M 50,16 C 77,16 85,36 83,57 C 81,74 69,89 50,91 C 31,89 19,74 17,57 C 15,36 23,16 50,16 Z" fill="url(#fg${id})" stroke="${strokeC}" stroke-width="1"/>
+  <ellipse cx="50" cy="44" rx="26" ry="19" fill="url(#pk${id})"/>
+  <ellipse cx="27" cy="62" rx="10" ry="7" fill="url(#ck${id})"/>
+  <ellipse cx="73" cy="62" rx="10" ry="7" fill="url(#ck${id})"/>
+  <ellipse cx="35" cy="50" rx="10" ry="11" fill="${eyeBg}" stroke="${eyeStr}" stroke-width="0.6"/>
+  <circle cx="36" cy="52" r="7.5" fill="url(#ey${id})"/>
+  <path d="M 25,47 Q 35,41 45,47" fill="url(#fg${id})"/>
+  <circle cx="32" cy="47" r="${isBig?'3.8':'3.2'}" fill="white" opacity="0.93"/>
+  <circle cx="40" cy="55" r="1.5" fill="white" opacity="0.50"/>
+  <path d="M 26,47 Q 35,42 44,47" fill="none" stroke="#444" stroke-width="1.1" stroke-linecap="round"/>
+  <ellipse cx="65" cy="50" rx="10" ry="11" fill="${eyeBg}" stroke="${eyeStr}" stroke-width="0.6"/>
+  <circle cx="64" cy="52" r="7.5" fill="url(#ey${id})"/>
+  <path d="M 55,47 Q 65,41 75,47" fill="url(#fg${id})"/>
+  <circle cx="61" cy="47" r="${isBig?'3.8':'3.2'}" fill="white" opacity="0.93"/>
+  <circle cx="69" cy="55" r="1.5" fill="white" opacity="0.50"/>
+  <path d="M 56,47 Q 65,42 74,47" fill="none" stroke="#444" stroke-width="1.1" stroke-linecap="round"/>
+  <ellipse cx="50" cy="63" rx="5" ry="3.5" fill="#dd3355" stroke="#aa2244" stroke-width="0.6"/>
+  <ellipse cx="48" cy="62" rx="2" ry="1.3" fill="white" opacity="0.40"/>
+  ${singing?`
+    <path d="M 32,70 Q 50,63 68,70 Q 60,82 50,84 Q 40,82 32,70 Z" fill="#44101e"/>
+    <ellipse cx="50" cy="79" rx="10" ry="6.5" fill="#ee5577"/>
+    <ellipse cx="46" cy="76" rx="4" ry="2.5" fill="#ff99bb" opacity="0.58"/>
+    <path d="M 32,70 Q 41,61 50,63 Q 59,61 68,70" stroke="#cc4466" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <path d="M 32,70 Q 28,62 30,56" stroke="#d088a0" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.6"/>
+    <path d="M 68,70 Q 72,62 70,56" stroke="#d088a0" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.6"/>
+  `:`
+    <path d="M 42,70 Q 50,68 58,70 Q 50,75 42,70 Z" fill="#331022"/>
+    <path d="M 42,70 Q 50,67 58,70" stroke="#bb3355" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+  `}
+  <line x1="38" y1="63" x2="12" y2="56" stroke="${whiskerC}" stroke-width="0.7" opacity="0.65"/>
+  <line x1="38" y1="66" x2="11" y2="66" stroke="${whiskerC}" stroke-width="0.7" opacity="0.65"/>
+  <line x1="62" y1="63" x2="88" y2="56" stroke="${whiskerC}" stroke-width="0.7" opacity="0.65"/>
+  <line x1="62" y1="66" x2="89" y2="66" stroke="${whiskerC}" stroke-width="0.7" opacity="0.65"/>
+  <circle cx="50" cy="54" r="44" fill="none" stroke="${ringC}" stroke-width="2" opacity="0.42"/>
+</svg>`;
+}
+
+// ── BUILD PADS ───────────────────────────────────────────
+function rebuildPads(){
+  const c=document.getElementById('padsC');
+  c.querySelectorAll('.pad-wrap,.pad-label').forEach(e=>e.remove());
+  const stage=document.getElementById('stage');
+  const W=stage.offsetWidth||700,H=stage.offsetHeight||500;
+  const CX=W*0.50,CY=H*0.50;
+  const T_BIG=linspace(200,340,4),T_SML=T_BIG.map(a=>a+17.5);
+  const B_BIG=linspace(20,160,4),B_SML=B_BIG.map(a=>a-17.5);
+  const R_BIG=Math.min(W,H)*0.43,R_SML=Math.min(W,H)*0.285;
+  const bigSzBase=Math.round(R_BIG*(W<600?0.6:0.86));
+  const smlSzBase=Math.round(bigSzBase*0.26);
+
+  const LIST=[
+    ...T_BIG.map((a,i)=>({a,r:R_BIG,big:true, shade:BIG_SHADES[i],               oy:0,  idx:i,    sz:bigSzBase})),
+    ...T_SML.map((a,i)=>({a,r:R_SML,big:false,shade:SML_SHADES[i],               oy:8,  idx:4+i,  sz:smlSzBase})),
+    ...B_SML.map((a,i)=>({a,r:R_SML,big:false,shade:[...SML_SHADES].reverse()[i],oy:-8, idx:8+i,  sz:smlSzBase})),
+    ...B_BIG.map((a,i)=>({a,r:R_BIG,big:true, shade:[...BIG_SHADES].reverse()[i],oy:0,  idx:12+i, sz:bigSzBase})),
+  ];
+
+  const dzW=Math.min(W*0.52,380),dzH=120;
+  ['dzGlow','deadZone','dzLabel'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.style.left=CX+'px';el.style.top=CY+'px'}
+  });
+  document.getElementById('dzGlow').style.width=dzW+'px';
+  document.getElementById('dzGlow').style.height=dzH+'px';
+  document.getElementById('deadZone').style.width=dzW+'px';
+  document.getElementById('deadZone').style.height=dzH+'px';
+
+  LIST.forEach(pd=>{
+    const midi=padMidi[pd.idx],noteName=midiToName(midi),customName=padNames[pd.idx]||'';
+    const rad=pd.a*Math.PI/180,px=CX+pd.r*Math.cos(rad),py=CY+pd.r*Math.sin(rad)+pd.oy;
+
+    const wrap=document.createElement('div');
+    wrap.className='pad-wrap';
+    wrap.style.cssText=`position:absolute;left:${px}px;top:${py}px;transform:translate(-50%,-50%);cursor:pointer;transition:transform .12s;z-index:${pd.big?10:15}`;
+    wrap.innerHTML=mouseFaceSVG(pd.sz,pd.shade,pd.big,false,pd.idx);
+    wrap.title='Double-click to rename';
+
+    const lbl=document.createElement('div');
+    lbl.className='pad-label';
+    lbl.style.cssText=`left:${px}px;top:${py+pd.sz*0.54}px;transform:translateX(-50%)`;
+    lbl.innerHTML=`<div style="color:#ffffff;font-size:${pd.big?20:12}px;font-weight:800;text-shadow:0 2px 6px rgba(0,0,0,1),0 0 3px rgba(0,0,0,1)">${noteName}</div>`
+      +(customName?`<div style="color:#ffccff;font-size:${pd.big?14:9}px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,0.9)">${esc(customName)}</div>`:'');
+
+    let hvT=null;
+    const sing=()=>{
+      wrap.innerHTML=mouseFaceSVG(pd.sz,pd.shade,pd.big,true,pd.idx);
+      wrap.style.transform=`translate(-50%,-50%) scale(${pd.big?1.12:1.2})`;
+      wrap.querySelector('svg').style.filter=`drop-shadow(0 0 ${pd.big?20:10}px ${pd.shade}ee)`;
+      document.getElementById('msgTxt').textContent=`♪  ${noteName}${customName?' — '+customName:''}  ·  MIDI ${midi}`;
+      document.getElementById('midiOut').textContent=`NOTE ON ${midi}`;
+      logMidi('ON',midi,100,pd.idx%4);
+      playNote(midi);
+      flashScore();
+    };
+    wrap.addEventListener('mouseenter',()=>{ clearTimeout(hvT); if(hoverDelay>0) hvT=setTimeout(sing,hoverDelay); else sing(); });
+    wrap.addEventListener('pointerdown',e=>{ if(e.pointerType==='touch'||e.pointerType==='pen'){ unlockSound(); sing(); setTimeout(()=>wrap.dispatchEvent(new Event('mouseleave')),350); } });
+    wrap.addEventListener('mouseleave',()=>{
+      clearTimeout(hvT);
+      wrap.innerHTML=mouseFaceSVG(pd.sz,pd.shade,pd.big,false,pd.idx);
+      wrap.style.transform='translate(-50%,-50%) scale(1)';
+      wrap.querySelector('svg').style.filter='';
+      document.getElementById('msgTxt').textContent='Hover a mouse to play · Double-click to rename';
+      document.getElementById('midiOut').textContent='';
+      logMidi('OFF',midi,0,pd.idx%4);
+    });
+    wrap.addEventListener('dblclick',()=>openNameEditor(pd.idx,noteName,midi));
+    c.appendChild(wrap);c.appendChild(lbl);
+  });
+}
+
+function flashScore(){
+  const dg=document.getElementById('dzGlow');
+  dg.style.boxShadow='0 0 80px 30px rgba(255,180,100,0.5),inset 0 0 40px rgba(0,0,20,0.8)';
+  setTimeout(()=>{dg.style.boxShadow='0 0 60px 20px rgba(80,40,200,0.25),inset 0 0 40px rgba(0,0,20,0.8)'},300);
+}
+
+// ── NAME EDITOR ──────────────────────────────────────────
+function openNameEditor(idx,noteName,midi){
+  editingIdx=idx;
+  document.getElementById('editPadNote').textContent=noteName;
+  document.getElementById('editPadInfo').textContent=`MIDI ${midi} · Pad ${idx+1} of 16`;
+  document.getElementById('nameInput').value=padNames[idx]||'';
+  document.getElementById('nameEditor').classList.remove('hidden');
+  document.getElementById('overlayName').classList.remove('hidden');
+  setTimeout(()=>document.getElementById('nameInput').focus(),50);
+}
+function closeNameEditor(){
+  document.getElementById('nameEditor').classList.add('hidden');
+  document.getElementById('overlayName').classList.add('hidden');
+}
+function saveName(){
+  if(editingIdx<0)return;
+  padNames[editingIdx]=document.getElementById('nameInput').value.trim();
+  closeNameEditor();rebuildPads();refreshNameList();
+}
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')saveName()});
+
+function refreshNameList(){
+  const el=document.getElementById('nameList');el.innerHTML='';
+  padMidi.forEach((midi,i)=>{
+    const row=document.createElement('div');
+    row.style.cssText='display:flex;align-items:center;gap:4px;margin-bottom:4px';
+    row.innerHTML=`<span style="color:#7060a0;font-size:10px;width:18px">${i+1}</span>
+      <span style="color:#c080a0;font-size:11px;width:36px">${midiToName(midi)}</span>
+      <span style="flex:1;color:#c0a0ff;font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(padNames[i]||'—')}</span>
+      <button onclick="openNameEditor(${i},'${midiToName(midi)}',${midi})"
+        style="padding:2px 6px;background:#1a1040;border:1px solid #5040a0;border-radius:3px;color:#a080ff;font-size:10px;cursor:pointer;font-family:inherit">✏</button>`;
+    el.appendChild(row);
+  });
+}
+
+// ── SAVE / LOAD / SHARE ──────────────────────────────────
+function encodeState(){return btoa(encodeURIComponent(JSON.stringify({scale:currentScale,key:currentKey,inst,names:padNames})))}
+function decodeState(s){try{return JSON.parse(decodeURIComponent(atob(s)))}catch(e){return null}}
+function openShare(){
+  const url=window.location.href.split('?')[0]+'?layout='+encodeState();
+  const msg=document.getElementById('msgTxt');
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(()=>{msg.textContent='✓ Share link copied to the clipboard';},()=>{msg.textContent='Share link: '+url;});
+  } else { msg.textContent='Share link: '+url; }
+}
+function savePreset(){try{localStorage.setItem('mouseOrchestra_v6',encodeState())}catch(e){document.getElementById('msgTxt').textContent='Saving is not available here.';return}document.getElementById('msgTxt').textContent='✓ Saved!';setTimeout(()=>document.getElementById('msgTxt').textContent='Hover a mouse to play · Double-click to rename',2000)}
+function loadPreset(){let d=null;try{d=localStorage.getItem('mouseOrchestra_v6')}catch(e){}if(!d){document.getElementById('msgTxt').textContent='No saved preset.';return}applyState(decodeState(d))}
+function applyState(s){if(!s)return;currentScale=s.scale||'Major';currentKey=s.key||'C';inst=s.inst||'sine';padNames=s.names||Array(16).fill('');updateScaleUI();updateKeyUI();buildScale()}
+function checkURL(){const p=new URLSearchParams(window.location.search).get('layout');if(p)applyState(decodeState(p))}
+
+// ── SCALE / KEY UI ───────────────────────────────────────
+function buildScaleUI(){const el=document.getElementById('scaleBtns');SCALE_NAMES.forEach(s=>{const b=document.createElement('div');b.className='scale-btn'+(s===currentScale?' sel':'');b.textContent=s;b.onclick=()=>{currentScale=s;updateScaleUI();buildScale()};el.appendChild(b)})}
+function updateScaleUI(){document.querySelectorAll('.scale-btn').forEach(b=>b.classList.toggle('sel',b.textContent===currentScale))}
+function buildKeyUI(){const el=document.getElementById('keyBtns');KEYS.forEach(k=>{const b=document.createElement('div');b.className='key-btn'+(k===currentKey?' sel':'');b.textContent=k;b.onclick=()=>{currentKey=k;updateKeyUI();buildScale()};el.appendChild(b)})}
+function updateKeyUI(){document.querySelectorAll('.key-btn').forEach(b=>b.classList.toggle('sel',b.textContent===currentKey))}
+
+// ── MIDI LOG ─────────────────────────────────────────────
+function logMidi(type,note,vel,ch){
+  if(midiC>120){document.getElementById('mlog').innerHTML='';midiC=0}
+  const log=document.getElementById('mlog');
+  const now=new Date(),ts=now.toLocaleTimeString('en-US',{hour12:false})+'.'+String(now.getMilliseconds()).padStart(3,'0');
+  const n=NOTE_NAMES[note%12]+Math.floor(note/12-1);
+  const e=document.createElement('div');
+  e.style.color=type==='ON'?'#50ff90':'#ff7070';
+  e.textContent=`${ts}  ${type.padEnd(3)}  ${n}  v${vel}`;
+  log.insertBefore(e,log.firstChild);midiC++;
+}
+
+// ── CONTROLS ─────────────────────────────────────────────
+function selInst(el,n){document.querySelectorAll('#instBtns .ib').forEach(b=>b.classList.remove('sel'));el.classList.add('sel');inst=n}
+function toggleSnd(){sndOn=!sndOn;const b=document.getElementById('bSnd');b.textContent=sndOn?'🔊 Sound ON':'🔇 Sound OFF';b.className=sndOn?'cb act':'cb'}
+function setScrollSpeed(s){document.getElementById('noteTrack').style.animationDuration=s+'s'}
+
+// ── INIT ─────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  buildSpotlight();buildScaleUI();buildKeyUI();buildScale();checkURL();
+  const g=document.getElementById('soundGate');
+  g.addEventListener('click',unlockSound);
+  g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();unlockSound();}});
+  ['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,unlockSound,{passive:true}));
+  window.addEventListener('resize',()=>rebuildPads());
+});
+</script>
+</body>
+</html>
