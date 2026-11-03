@@ -1597,6 +1597,22 @@ footer .wrap { padding-block: 22px; }
 #view-vte .vt-rsrow .ck input { width: 24px; height: 24px; accent-color: #7cc4ff; }
 #view-vte .vt-rsnow { font: 500 0.8em var(--mono); color: #7cc4ff; letter-spacing: 0.04em; }
 #view-vte .vt-rs a.btn { justify-self: start; }
+#view-vte .vt-desk { padding: 26px; box-shadow: 0 0 0 1px rgba(95,224,168,0.25), 0 24px 60px rgba(0,0,0,0.45); }
+#view-vte .vt-icons { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
+#view-vte .vt-ic { justify-items: start; }
+#view-vte .vt-ic .gl { width: 92px; height: 92px; font-size: 52px; border-radius: 24px; box-shadow: 0 10px 26px color-mix(in srgb, var(--ac) 30%, transparent), inset 0 1px 0 rgba(255,255,255,0.25); transition: transform .25s ease; }
+#view-vte .vt-ic .st.pv { background: #e0e05f; color: #1d1d04; }
+#view-vte .vt-recent { display: grid; gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line-hi); }
+#view-vte .vt-recent h3 { margin: 0; font: 600 0.74em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+#view-vte .vt-rl { display: flex; flex-wrap: wrap; gap: 10px; }
+#view-vte .vt-rc { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 6px 14px 6px 8px; border: 1px solid var(--line-hi); background: rgba(14,21,38,0.85); color: var(--ink); text-decoration: none; font-size: 0.92em; }
+#view-vte .vt-rc:hover, #view-vte .vt-rc:focus-visible { border-color: #5fe0a8; outline: none; }
+#view-vte .vt-rc i { font-style: normal; font-size: 28px; }
+#view-vte .vt-rc span { display: grid; line-height: 1.25; }
+#view-vte .vt-rc small { color: var(--muted); font-size: 0.85em; }
+@media (prefers-reduced-motion: reduce) {
+#view-vte .vt-ic .gl, #view-vte a.vt-ic { transition: none; }
+}
 #view-dashboard .ds-wrap { gap: 22px !important; grid-template-columns: minmax(0, 1fr); }
 #view-dashboard .ds-wrap > *, #view-dashboard .ds-two > * { min-width: 0; }
 #view-dashboard .ds-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
@@ -2906,10 +2922,25 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap vt-wrap">
     <header class="vt-hero">
       <span class="vt-k">Access+ Virtual Training Environment <span class="vt-tag">Prototype · for review</span></span>
-      <h1>Practice, play and measure, <span>hands-free</span></h1>
-      <p>A virtual desktop of short, game-like environments for trying computer access methods: eye tracking, head and face tracking, switches and more. Each environment turns a real computer skill into a colorful challenge with music, records how it went, and gives a plain-language rundown. People use it to find what works for them; researchers use it to build and run their own experiments.</p>
+      <h1>Practice, play and <span>measure</span></h1>
+      <p>Build and share virtual desktops for training and assessing adaptive controls. Each game on the desktop turns a real computer skill into a short, colorful challenge with music, works with the control you already use (an eye tracker, a head mouse, switches, a joystick or an ordinary mouse), and gives a plain-language rundown. Every game can also run as a research study.</p>
     </header>
-    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results are stored only in your browser unless you choose to download or share them. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
+    <section class="vt-desk" aria-labelledby="vt-vtDeskT">
+      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>2 ready · 1 preview · 5 coming</span></div>
+      <div class="vt-icons">
+        <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Play</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
+        <a class="vt-ic" href="lab/songboards.html" data-title="VTE · Environment Editor (Songboards engine)" style="--ac:#e0e05f"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">🛠️</span><b>Environment Editor</b><small>Build your own desktop: place targets, sounds and rewards, then save it to share. Runs on the Songboards engine.</small></a>
+        <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: the Musical Dial, Mouse Orchestra, the Virtual Harmonica and more.</small></a>
+        <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator is on the Try page.</small></a>
+        <div class="vt-ic soon" style="--ac:#7cc4ff"><span class="st soon">Coming</span><span class="gl" aria-hidden="true">📜</span><b>Scrolling</b><small>Scroll a story to find highlighted words, with dwell or switch scroll zones.</small></div>
+        <div class="vt-ic soon" style="--ac:#b9a4ff"><span class="st soon">Coming</span><span class="gl" aria-hidden="true">🧩</span><b>Drag and drop</b><small>Move puzzle pieces into place, with drag lock and dwell-to-drop.</small></div>
+        <div class="vt-ic soon" style="--ac:#ffc670"><span class="st soon">Coming</span><span class="gl" aria-hidden="true">⌨️</span><b>Typing</b><small>On-screen keyboards and word prediction: type short phrases and compare layouts.</small></div>
+        <div class="vt-ic soon" style="--ac:#ff9a3d"><span class="st soon">Later</span><span class="gl" aria-hidden="true">📱</span><b>Phone</b><small>Tap, swipe and scan on a virtual phone, for switch control and voice access.</small></div>
+      </div>
+      <div class="vt-recent" id="vt-vtRecentWrap" hidden><h3>Recently played</h3><div class="vt-rl" id="vt-vtRecent"></div></div>
+    </section>
+
+    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
 
 
     <section class="vt-rs" aria-labelledby="vt-vtRsT">
@@ -2925,19 +2956,6 @@ footer .wrap { padding-block: 22px; }
       <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the research dashboard</a><a class="btn" href="#dashboard" id="vt-vtNewStudy">Set up a new study</a></div>
     </section>
 
-    <section class="vt-desk" aria-labelledby="vt-vtDeskT">
-      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>VTE desktop</b> · environments</span><span>1 ready · 6 planned</span></div>
-      <div class="vt-icons">
-        <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Try it</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
-        <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: Songboards, the Musical Dial, Mouse Orchestra and more. Works in progress.</small></a>
-        <div class="vt-ic soon" style="--ac:#7cc4ff"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">📜</span><b>Scrolling</b><small>Read and follow along: scroll a story or page to find highlighted words, with dwell or switch scroll zones.</small></div>
-        <div class="vt-ic soon" style="--ac:#b9a4ff"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">🧩</span><b>Drag and drop</b><small>Move puzzle pieces and files into place, with drag lock and dwell-to-drop.</small></div>
-        <div class="vt-ic soon" style="--ac:#ffc670"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">⌨️</span><b>Typing</b><small>On-screen keyboards and word prediction: type short phrases and compare layouts.</small></div>
-        <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st soon">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator preview is on the Try page.</small></a>
-        <div class="vt-ic soon" style="--ac:#ff9a3d"><span class="st soon">Later</span><span class="gl" aria-hidden="true">📱</span><b>Phone</b><small>Tap, swipe and scan on a virtual phone screen, for switch control and voice access.</small></div>
-        <div class="vt-ic soon" style="--ac:#e0e05f"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">🛠️</span><b>Build your own</b><small>For researchers: assemble an experiment from components, set the conditions, and save it to share.</small></div>
-      </div>
-    </section>
 
     <section class="vt-feat" aria-labelledby="vt-vtFeatT">
       <a href="vte/pointing.html" data-title="VTE · Pointing Environment" tabindex="-1" aria-hidden="true"><img src="lab/shots/vte-pointing.jpg" alt="" width="640" height="400" loading="lazy"></a>
@@ -2977,7 +2995,7 @@ footer .wrap { padding-block: 22px; }
 
     <section class="vt-sec" aria-labelledby="vt-vtReT">
       <h2 id="vt-vtReT">For researchers: environments, components and experiments</h2>
-      <p>The VTE is built in layers so researchers can create and store their own studies. The engine underneath grew out of Songboards, the hands-free music board.</p>
+      <p>The VTE is built in layers so researchers can create and store their own studies. The Environment Editor lets anyone build a desktop of their own and share it; it runs on the Songboards engine, the Access+ music board.</p>
       <div class="vt-layers">
         <div class="vt-layer" style="--ac:#5fe0a8"><b>Components</b><span>Building blocks: targets, timers, scanners, sounds, rating questions and measures.</span></div>
         <div class="vt-layer" style="--ac:#7cc4ff"><b>Challenges</b><span>Short tasks assembled from components, such as one level of the Pointing Environment.</span></div>
@@ -4293,7 +4311,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:01 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:03 UTC</span></div>
   </div>
 </footer>
 
@@ -7296,6 +7314,24 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
     el('vtPractice').checked = !!c.practice;
     note();
   });
+  /* recently played, newest first */
+  function recent() {
+    var list = Object.keys(AP.sessions).map(function (k) { return AP.sessions[k]; }).filter(function (x) { return x && x.startedAt; });
+    list.sort(function (a, b) { return String(b.startedAt).localeCompare(String(a.startedAt)); });
+    var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'] };
+    list = list.slice(0, 4);
+    el('vtRecentWrap').hidden = !list.length;
+    el('vtRecent').innerHTML = list.map(function (x) {
+      var g = G[x.game] || ['🎮', x.game || 'Game', 'vte/pointing.html'], d = new Date(x.startedAt), sm = x.summary || {};
+      var when = isNaN(d) ? '' : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+      var a = document.createElement('a'); a.className = 'vt-rc'; a.href = g[2]; a.setAttribute('data-title', 'VTE · ' + g[1]);
+      a.innerHTML = '<i aria-hidden="true">' + g[0] + '</i><span><b></b><small></small></span>';
+      a.querySelector('b').textContent = g[1] + ' · ' + (x.input || '');
+      a.querySelector('small').textContent = when + (sm.acc != null ? ' · ' + sm.acc + '% accuracy' : '') + (x.participant ? ' · ' + x.participant : '');
+      return a.outerHTML;
+    }).join('');
+  }
+  AP.onChange(recent);
   el('vtStudy').addEventListener('change', save);
   el('vtPart').addEventListener('input', save);
   el('vtPractice').addEventListener('change', save);
