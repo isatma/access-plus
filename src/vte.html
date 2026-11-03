@@ -115,20 +115,20 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
       <div class="vt-recent" id="vtRecentWrap" hidden><h3>Recently played</h3><div class="vt-rl" id="vtRecent"></div></div>
     </section>
 
-    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
+    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
 
 
     <section class="vt-rs" aria-labelledby="vtRsT">
       <span class="vt-k" style="color:#7cc4ff">Research session · optional</span>
       <h2 id="vtRsT">Record your play to a study</h2>
-      <p>Choose a study and a participant code before you play. Every game you finish is saved to the research dashboard; without a study it is saved as free play.</p>
+      <p>Choose a study and a participant code before you play. Every game you finish is saved to the dashboard; without a study it is saved as free play.</p>
       <div class="vt-rsrow">
         <label>Study<select id="vtStudy"><option value="">Free play (no study)</option></select></label>
         <label>Participant code<input type="text" id="vtPart" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false"></label>
         <label class="ck"><input type="checkbox" id="vtPractice"> Practice run</label>
       </div>
       <span class="vt-rsnow" id="vtRsNow" aria-live="polite"></span>
-      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the research dashboard</a><a class="btn" href="#dashboard" id="vtNewStudy">Set up a new study</a></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the dashboard</a><a class="btn" href="#dashboard" id="vtNewStudy">Set up a new study</a></div>
     </section>
 
 
@@ -175,7 +175,7 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
         <div class="vt-layer" style="--ac:#5fe0a8"><b>Components</b><span>Building blocks: targets, timers, scanners, sounds, rating questions and measures.</span></div>
         <div class="vt-layer" style="--ac:#7cc4ff"><b>Challenges</b><span>Short tasks assembled from components, such as one level of the Pointing Environment.</span></div>
         <div class="vt-layer" style="--ac:#b9a4ff"><b>Environments</b><span>A themed set of challenges for one computer skill: pointing, scrolling, typing, driving.</span></div>
-        <div class="vt-layer" style="--ac:#ffc670"><b>Studies</b><span>A study groups sessions under participant codes so they can be compared over time. Set one up on the <a href="#dashboard">research dashboard</a>; the experiment builder for custom conditions comes next.</span></div>
+        <div class="vt-layer" style="--ac:#ffc670"><b>Studies</b><span>A study groups sessions under participant codes so they can be compared over time. Set one up on the <a href="#dashboard">dashboard</a>; the experiment builder for custom conditions comes next.</span></div>
       </div>
     </section>
   </div>

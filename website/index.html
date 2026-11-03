@@ -1748,6 +1748,14 @@ footer .wrap { padding-block: 22px; }
 #view-dashboard .ds-grid td.c b { display: inline-grid; place-items: center; width: 34px; height: 30px; border-radius: 6px; color: #fff; font-weight: 700; }
 #view-dashboard .ds-grid th.c { text-align: center; }
 #view-dashboard .ds-grid td.c i { color: var(--muted); font-style: normal; }
+#view-dashboard .ds-tabs { display: flex; flex-wrap: wrap; gap: 0; border-bottom: 2px solid var(--line-hi); }
+#view-dashboard .ds-tabs button { min-height: 56px; padding: 0 22px; border: 0; border-bottom: 4px solid transparent; margin-bottom: -2px; background: transparent; color: var(--desc); font: 700 1.05em var(--body); cursor: pointer; }
+#view-dashboard .ds-tabs button[aria-pressed="true"] { color: var(--ink); border-bottom-color: #7cc4ff; }
+#view-dashboard .ds-tabs button:hover { color: var(--ink); }
+#view-dashboard #dsStudiesP[hidden] { display: none !important; }
+#view-dashboard .ds-mine { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; color: var(--desc); font-size: .95em; }
+#view-dashboard .ds-mine input { min-height: 44px; width: 120px; padding: 0 10px; background: #0b1222; color: var(--ink); border: 1px solid var(--line-hi); font: 600 1.1em var(--body); text-transform: uppercase; }
+#view-dashboard .ds-prog { padding: 14px 16px; border-left: 4px solid #5fe0a8; background: rgba(95,224,168,0.07); color: var(--ink); line-height: 1.5; }
 #view-keyboards .kb-wrap { gap: 36px !important; }
 #view-keyboards .kb-intro { display: grid; gap: 12px; max-width: 52em; }
 #view-keyboards .kb-intro h1 { font-size: 1.8em; line-height: 1.25; }
@@ -2192,7 +2200,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a><a class="navsign" href="#signin" data-route="signin">Sign in</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">Dashboard</a><a class="navsign" href="#signin" data-route="signin">Sign in</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -2253,7 +2261,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fp-3">
         <a class="fp-card fp-link" href="#vte" style="--ac:#5fe0a8"><span class="fp-n" aria-hidden="true">🙂</span><b>People</b><p>Find the control that works for you today, and build skill and confidence with it.</p><span class="fp-go">Play the games →</span></a>
         <a class="fp-card fp-link" href="#vte" style="--ac:#ffc670"><span class="fp-n" aria-hidden="true">🩺</span><b>Therapists</b><p>Run quick, fun assessments and compare options side by side with the people you work with.</p><span class="fp-go">Try an assessment →</span></a>
-        <a class="fp-card fp-link" href="#dashboard" style="--ac:#7cc4ff"><span class="fp-n" aria-hidden="true">🔬</span><b>Researchers</b><p>Set up studies, follow participants and compare technologies on the research dashboard.</p><span class="fp-go">Open the dashboard →</span></a>
+        <a class="fp-card fp-link" href="#dashboard" style="--ac:#7cc4ff"><span class="fp-n" aria-hidden="true">🔬</span><b>Researchers</b><p>Set up studies, follow participants and compare technologies on the dashboard.</p><span class="fp-go">Open the dashboard →</span></a>
       </div>
     </section>
 
@@ -3089,20 +3097,20 @@ footer .wrap { padding-block: 22px; }
       <div class="vt-recent" id="vt-vtRecentWrap" hidden><h3>Recently played</h3><div class="vt-rl" id="vt-vtRecent"></div></div>
     </section>
 
-    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
+    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
 
 
     <section class="vt-rs" aria-labelledby="vt-vtRsT">
       <span class="vt-k" style="color:#7cc4ff">Research session · optional</span>
       <h2 id="vt-vtRsT">Record your play to a study</h2>
-      <p>Choose a study and a participant code before you play. Every game you finish is saved to the research dashboard; without a study it is saved as free play.</p>
+      <p>Choose a study and a participant code before you play. Every game you finish is saved to the dashboard; without a study it is saved as free play.</p>
       <div class="vt-rsrow">
         <label>Study<select id="vt-vtStudy"><option value="">Free play (no study)</option></select></label>
         <label>Participant code<input type="text" id="vt-vtPart" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false"></label>
         <label class="ck"><input type="checkbox" id="vt-vtPractice"> Practice run</label>
       </div>
       <span class="vt-rsnow" id="vt-vtRsNow" aria-live="polite"></span>
-      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the research dashboard</a><a class="btn" href="#dashboard" id="vt-vtNewStudy">Set up a new study</a></div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the dashboard</a><a class="btn" href="#dashboard" id="vt-vtNewStudy">Set up a new study</a></div>
     </section>
 
 
@@ -3149,7 +3157,7 @@ footer .wrap { padding-block: 22px; }
         <div class="vt-layer" style="--ac:#5fe0a8"><b>Components</b><span>Building blocks: targets, timers, scanners, sounds, rating questions and measures.</span></div>
         <div class="vt-layer" style="--ac:#7cc4ff"><b>Challenges</b><span>Short tasks assembled from components, such as one level of the Pointing Environment.</span></div>
         <div class="vt-layer" style="--ac:#b9a4ff"><b>Environments</b><span>A themed set of challenges for one computer skill: pointing, scrolling, typing, driving.</span></div>
-        <div class="vt-layer" style="--ac:#ffc670"><b>Studies</b><span>A study groups sessions under participant codes so they can be compared over time. Set one up on the <a href="#dashboard">research dashboard</a>; the experiment builder for custom conditions comes next.</span></div>
+        <div class="vt-layer" style="--ac:#ffc670"><b>Studies</b><span>A study groups sessions under participant codes so they can be compared over time. Set one up on the <a href="#dashboard">dashboard</a>; the experiment builder for custom conditions comes next.</span></div>
       </div>
     </section>
   </div>
@@ -3158,14 +3166,15 @@ footer .wrap { padding-block: 22px; }
 
   <div class="wrap ds-wrap">
     <header class="ds-hero">
-      <span class="ds-k">Access+ research dashboard <span class="ds-tag">Prototype store · for review</span></span>
-      <h1>Studies and results from the <span>Training Environment</span></h1>
-      <p>Set up a study, play the Training Environment games under a participant code, and every session lands here automatically: speed, accuracy, throughput, fatigue and how each input felt. Compare inputs, follow progress across visits, and download the data.</p>
+      <span class="ds-k">Access+ dashboard <span class="ds-tag">Prototype · for review</span></span>
+      <h1>Your progress, <span>your data</span></h1>
+      <p>Every game you play in the Training Environment saves a record of how it went. See your own improvements over time and compare the controls you use. Researchers can also set up studies and follow participants here.</p>
       <span class="ds-status" id="ds-dsStatus"><i></i><span id="ds-dsStatusT">Connecting to the shared store…</span></span>
     </header>
     <div class="ds-note" role="note"><b>Prototype data store</b><p>For trying out the games with colleagues and pilot data only. Use participant codes such as P01, never names. Everyone this page is shared with can see the sessions. Before collecting data from participants, the study needs consent and proper research hosting.</p></div>
 
-    <section class="ds-panel" aria-labelledby="ds-dsStudiesT">
+    <div class="ds-tabs" role="group" aria-label="Dashboard view"><button type="button" id="ds-dsTabMine" aria-pressed="true">📈 My progress</button><button type="button" id="ds-dsTabRes" aria-pressed="false">🔬 Research studies</button></div>
+    <section class="ds-panel" aria-labelledby="ds-dsStudiesT" id="ds-dsStudiesP" hidden>
       <div class="ds-bar" style="justify-content:space-between"><h2 id="ds-dsStudiesT">Studies</h2><button type="button" class="ds-btn pri" id="ds-dsNewBtn">+ New study</button></div>
       <div class="ds-bar" role="group" aria-label="Choose a study" id="ds-dsStudyChips"></div>
       <div class="ds-tw" id="ds-dsOver"></div>
@@ -4458,10 +4467,10 @@ footer .wrap { padding-block: 22px; }
     <div class="fcols">
       <div class="fcol"><h2>Explore</h2><a href="#simulators">Simulators</a><a href="#borrow">Borrow a kit</a><a href="#how">How it works</a></div>
       <div class="fcol"><h2>Get involved</h2><a href="#join-participants">Become a participant</a><a href="#join-clinicians">Therapists and clinicians</a><a href="#join-families">Families and caregivers</a><a href="#join-supporters">Partners and supporters</a></div>
-      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
+      <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Dashboard: my progress and studies (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:51 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:54 UTC</span></div>
   </div>
 </footer>
 
@@ -7063,6 +7072,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
   AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
+    AP.uid = 'local';
     var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.mode = 'local'; readyRes(); emit();
   }
   function snapMap(snap) { var m = {}; snap.docs.forEach(function (d) { if (d.exists) m[d.id] = d.data(); }); return m; }
@@ -7073,7 +7083,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
       var db = await c.use('db');
       if (!db) return goLocal();
       AP.db = db; AP.mode = 'shared';
-      try { var u = await c.use('user'); AP.user = u; if (u && u.can) { var w = await u.can('data.write'); if (w === false) AP.canWrite = false; } } catch (e) {}
+      try { var u = await c.use('user'); AP.user = u; if (u && u.id) { try { AP.uid = await u.id(); } catch (e2) {} } if (u && u.can) { var w = await u.can('data.write'); if (w === false) AP.canWrite = false; } } catch (e) {}
       var first = 0, timer = setTimeout(function () { if (first < 2) { AP.slow = true; readyRes(); emit(); } }, 10000);
       function done() { first++; if (first === 2) { clearTimeout(timer); AP.slow = false; readyRes(); } emit(); }
       var once1 = false, once2 = false;
@@ -7124,6 +7134,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     var m = e.data; if (!m || typeof m !== 'object') return;
     if (m.type === 'accessplus-session' && m.session && SAFE.test(m.session.id || '')) {
       var s = m.session;
+      s.by = AP.uid || (AP.mode === 'local' ? 'local' : '');
       if (s.studyId && !SAFE.test(s.studyId)) s.studyId = '';
       AP.saveSession(s.id, s).then(function (mode) {
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: mode }, e.origin);
@@ -7158,7 +7169,13 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
   var EXTRA = ['#e66767', '#9085e9', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300'], XCOL = {};
   function col(k) { if (ICOL[k]) return ICOL[k]; if (!XCOL[k]) XCOL[k] = EXTRA[Object.keys(XCOL).length % EXTRA.length]; return XCOL[k]; }
-  var sel = '__all', editing = null;
+  var sel = '__mine', editing = null, tab = 'mine';
+  function myCode() { try { return localStorage.getItem('accessplus-mycode') || ''; } catch (e) { return ''; } }
+  function isMine(x) { return (AP.uid && x.by === AP.uid) || (myCode() && x.participant === myCode()); }
+  function setTab(t) {
+    tab = t; el('dsTabMine').setAttribute('aria-pressed', t === 'mine'); el('dsTabRes').setAttribute('aria-pressed', t === 'res');
+    el('dsStudiesP').hidden = t === 'mine'; sel = t === 'mine' ? '__mine' : (sel === '__mine' ? '__all' : sel); el('dsPart').value = ''; render();
+  }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function fmtS(ms) { return ms ? (ms / 1000).toFixed(2) + ' s' : '–'; }
   function day(t) { var d = new Date(t); return isNaN(d) ? '' : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + ' ' + d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }); }
@@ -7169,7 +7186,8 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 
   function sessionsFor() {
     var all = Object.keys(AP.sessions).map(function (k) { var o = Object.assign({ _id: k }, AP.sessions[k]); o.mode = o.input; if (o.device) o.input = o.device; return o; });
-    if (sel === '__free') all = all.filter(function (s) { return !s.studyId || !AP.studies[s.studyId]; });
+    if (sel === '__mine') all = all.filter(isMine);
+    else if (sel === '__free') all = all.filter(function (s) { return !s.studyId || !AP.studies[s.studyId]; });
     else if (sel !== '__all') all = all.filter(function (s) { return s.studyId === sel; });
     return all.sort(function (a, b) { return String(a.startedAt).localeCompare(String(b.startedAt)); });
   }
@@ -7180,7 +7198,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 
   function drawChips() {
     var ids = Object.keys(AP.studies).sort(function (a, b) { return String(AP.studies[b].created || '').localeCompare(String(AP.studies[a].created || '')); });
-    if (sel !== '__all' && sel !== '__free' && !AP.studies[sel]) sel = '__all';
+    if (sel !== '__all' && sel !== '__free' && sel !== '__mine' && !AP.studies[sel]) sel = '__all';
     var items = [['__all', 'All sessions'], ['__free', 'Free play (no study)']].concat(ids.map(function (i) { return [i, AP.studies[i].name + (AP.studies[i].status === 'closed' ? ' (closed)' : '')]; }));
     el('dsStudyChips').innerHTML = items.map(function (x) { return '<button type="button" data-v="' + esc(x[0]) + '" aria-pressed="' + (sel === x[0]) + '">' + esc(x[1]) + '</button>'; }).join('');
     Array.prototype.forEach.call(el('dsStudyChips').children, function (b) { b.addEventListener('click', function () { sel = b.getAttribute('data-v'); el('dsPart').value = ''; render(); }); });
@@ -7193,8 +7211,9 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     drawChips();
     overview();
     var study = AP.studies[sel];
-    el('dsViewT').textContent = study ? study.name : sel === '__free' ? 'Free play (no study)' : 'All sessions';
+    el('dsViewT').textContent = sel === '__mine' ? 'My progress' : study ? study.name : sel === '__free' ? 'Free play (no study)' : 'All sessions';
     el('dsViewD').textContent = study ? (study.desc || '') + (study.inputs && study.inputs.length ? (study.desc ? ' · ' : '') + 'Comparing: ' + study.inputs.join(', ') : '') : sel === '__free' ? 'Sessions played without choosing a study.' : 'Every session saved from the Training Environment.';
+    if (sel === '__mine') el('dsViewD').innerHTML = '<span class="ds-mine">Sessions you played while signed in on this page' + (AP.mode === 'local' ? ' (this browser)' : '') + '. Also include my participant code <input id="dsMyCode" maxlength="12" placeholder="P01" value="' + esc(myCode()) + '"></span>';
     el('dsEdit').hidden = el('dsDel').hidden = !study || !AP.canWrite;
     // participants
     var parts = {}; sessionsFor().forEach(function (s) { parts[s.participant || ''] = 1; });
@@ -7207,7 +7226,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     var hits = sm.reduce(function (a, x) { return a + (x.hits || 0); }, 0);
     el('dsKpis').innerHTML = [['Participants', Object.keys(nP).length], ['Sessions', S.length], ['Targets reached', hits], ['Accuracy', S.length ? Math.round(mean(sm.map(function (x) { return x.acc; }))) + '%' : '–'], ['Avg time', S.length ? fmtS(mean(sm.map(function (x) { return x.avgMs; }))) : '–']].map(function (k) { return '<div class="ds-kpi"><span>' + k[0] + '</span><b>' + k[1] + '</b></div>'; }).join('');
     if (!S.length) {
-      el('dsBody').innerHTML = '<div class="ds-empty">' + (AP.mode === 'connecting' ? 'Loading…' : 'No sessions here yet. Open the <a href="#vte">Training Environment</a>, choose this study in the research session panel, and play the Pointing Environment.') + '</div>';
+      el('dsBody').innerHTML = '<div class="ds-empty">' + (AP.mode === 'connecting' ? 'Loading…' : sel === '__mine' ? 'No games of yours here yet. Play one in the <a href="#vte">Training Environment</a> and your progress will appear here. Played earlier? Open Research studies and press "Mine" on your sessions.' : 'No sessions here yet. Open the <a href="#vte">Training Environment</a>, choose this study in the research session panel, and play the Pointing Environment.') + '</div>';
       return;
     }
     // by input
@@ -7222,16 +7241,17 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     }).join('');
     var sess = S.slice().reverse().map(function (s) {
       var x = s.summary || {}, done = (s.levels || []).filter(function (l) { return l.done; }).length;
-      return '<tr><td>' + esc(day(s.startedAt)) + '</td><td>' + (s.participant ? esc(s.participant) : '–') + '</td><td><span class="sw" style="background:' + col(s.input) + '"></span>' + esc(s.input) + '</td><td>' + esc(s.posLabel || s.pos || '') + '</td><td class="num">' + done + ' / ' + (s.levels || []).length + '</td><td class="num">' + (x.acc == null ? '–' : x.acc + '%') + '</td><td class="num">' + fmtS(x.avgMs) + '</td><td class="num">' + (x.fat == null ? '–' : (x.fat > 0 ? '+' : '') + x.fat + '%') + '</td><td>' + (s.practice ? '<span class="ds-pill pr">Practice</span>' : '<span class="ds-pill">Study</span>') + (sel === '__all' && s.studyId && AP.studies[s.studyId] ? ' <small style="color:var(--muted)">' + esc(AP.studies[s.studyId].name) + '</small>' : '') + '</td><td>' + (AP.canWrite ? '<button type="button" data-act="pr" data-id="' + esc(s._id) + '">' + (s.practice ? 'Mark study' : 'Mark practice') + '</button> <button type="button" data-act="del" data-id="' + esc(s._id) + '" aria-label="Delete session">Delete</button>' : '') + '</td></tr>';
+      return '<tr><td>' + esc(day(s.startedAt)) + '</td><td>' + (s.participant ? esc(s.participant) : '–') + '</td><td><span class="sw" style="background:' + col(s.input) + '"></span>' + esc(s.input) + '</td><td>' + esc(s.posLabel || s.pos || '') + '</td><td class="num">' + done + ' / ' + (s.levels || []).length + '</td><td class="num">' + (x.acc == null ? '–' : x.acc + '%') + '</td><td class="num">' + fmtS(x.avgMs) + '</td><td class="num">' + (x.fat == null ? '–' : (x.fat > 0 ? '+' : '') + x.fat + '%') + '</td><td>' + (s.practice ? '<span class="ds-pill pr">Practice</span>' : '<span class="ds-pill">Study</span>') + (sel === '__all' && s.studyId && AP.studies[s.studyId] ? ' <small style="color:var(--muted)">' + esc(AP.studies[s.studyId].name) + '</small>' : '') + '</td><td>' + (AP.canWrite && !s.by && AP.uid && sel !== '__mine' ? '<button type="button" data-act="mine" data-id="' + esc(s._id) + '" title="Add this session to My progress">Mine</button> ' : '') + (AP.canWrite ? '<button type="button" data-act="pr" data-id="' + esc(s._id) + '">' + (s.practice ? 'Mark study' : 'Mark practice') + '</button> <button type="button" data-act="del" data-id="' + esc(s._id) + '" aria-label="Delete session">Delete</button>' : '') + '</td></tr>';
     }).join('');
-    el('dsBody').innerHTML =
+    el('dsBody').innerHTML = (sel === '__mine' ? progress(S) : '') +
       '<div class="ds-two"><div style="display:grid;gap:10px"><h3>Average time per target, session by session</h3><div class="ds-chart" id="dsChart"></div><div class="ds-legend" id="dsLegend"></div></div>' +
       '<div style="display:grid;gap:10px;align-content:start"><h3>By input</h3><div class="ds-tw"><table class="ds-table"><tr><th>Input</th><th>Sessions</th><th>Avg time</th><th>Accuracy</th><th>Throughput</th><th>Fatigue</th><th>Usually felt</th><th>Preferred</th></tr>' + rows + '</table></div><p style="font-size:.88em">Fatigue compares the Return Lap with Target Garden (positive = slower by the end). Preferred counts sessions where that input was chosen after trying more than one.</p></div></div>' +
-      grid(S) + '<h3 style="margin-top:6px">Sessions</h3><div class="ds-tw"><table class="ds-table"><tr><th>When</th><th>Participant</th><th>Input</th><th>Position</th><th>Levels done</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th><th>Type</th><th></th></tr>' + sess + '</table></div>';
+      (sel === '__mine' ? '' : grid(S)) + '<h3 style="margin-top:6px">' + (sel === '__mine' ? 'Your sessions' : 'Sessions') + '</h3><div class="ds-tw"><table class="ds-table"><tr><th>When</th><th>Participant</th><th>Input</th><th>Position</th><th>Levels done</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th><th>Type</th><th></th></tr>' + sess + '</table></div>';
     Array.prototype.forEach.call(el('dsBody').querySelectorAll('button[data-act]'), function (b) {
       b.addEventListener('click', function () {
         var id = b.getAttribute('data-id'), s = AP.sessions[id]; if (!s) return;
-        if (b.getAttribute('data-act') === 'pr') AP.patchSession(id, { practice: !s.practice }).catch(oops);
+        if (b.getAttribute('data-act') === 'mine') AP.patchSession(id, { by: AP.uid }).catch(oops);
+        else if (b.getAttribute('data-act') === 'pr') AP.patchSession(id, { practice: !s.practice }).catch(oops);
         else if (b.getAttribute('data-confirm') === '1') AP.deleteSession(id).catch(oops);
         else { b.setAttribute('data-confirm', '1'); b.textContent = 'Confirm delete'; }
       });
@@ -7276,6 +7296,21 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     }).join('');
     return '<h3 style="margin-top:6px">Participation grid: sessions per participant per day</h3><div class="ds-tw"><table class="ds-table ds-grid"><tr><th>Participant</th>' + head + '<th>Total</th><th>Days</th></tr>' + body + '</table></div>' + (Object.keys(days).length > 12 ? '<p style="font-size:.88em">Showing the 12 most recent days with sessions; totals count every day.</p>' : '');
   }
+  function progress(S) {
+    var X = S.filter(function (x) { return (x.summary || {}).avgMs; });
+    if (!X.length) return '';
+    var f = X[0].summary, l = X[X.length - 1].summary, best = Math.max.apply(null, X.map(function (x) { return x.summary.acc || 0; }));
+    var t = 'You have played ' + S.length + ' session' + (S.length > 1 ? 's' : '') + '. ';
+    if (X.length > 1) {
+      var d = Math.round((1 - l.avgMs / f.avgMs) * 100);
+      t += d > 3 ? 'Your time per target improved ' + d + '%, from ' + (f.avgMs / 1000).toFixed(1) + ' s to ' + (l.avgMs / 1000).toFixed(1) + ' s. ' : d < -3 ? 'Your latest session took a little longer per target (' + (l.avgMs / 1000).toFixed(1) + ' s) than your first (' + (f.avgMs / 1000).toFixed(1) + ' s); a rest or a different setting may help. ' : 'Your pace is steady at about ' + (l.avgMs / 1000).toFixed(1) + ' s per target. ';
+    } else t += 'Play again to start seeing your trend. ';
+    t += 'Best accuracy so far: ' + best + '%.';
+    return '<p class="ds-prog">' + esc(t) + '</p>';
+  }
+  el('dsTabMine').addEventListener('click', function () { setTab('mine'); });
+  el('dsTabRes').addEventListener('click', function () { setTab('res'); });
+  document.addEventListener('change', function (e) { if (e.target && e.target.id === 'dsMyCode') { var v = e.target.value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12); try { localStorage.setItem('accessplus-mycode', v); } catch (er) {} render(); } });
   function oops(e) { el('dsSum').hidden = false; el('dsSum').textContent = 'That change could not be saved' + (e && e.code === 'quota_exceeded' ? ': the prototype store is full. Delete some practice sessions and try again.' : '. You may have view-only access.'); }
 
   function chart(S) {

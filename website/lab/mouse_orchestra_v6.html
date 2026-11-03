@@ -716,7 +716,7 @@ window.addEventListener('load',()=>{
   function openSetup(){
     stopGame(true);
     setup.innerHTML='<h2 id="eSetupT">🎤 Echo Game</h2><p>The mice sing a short tune. Then it is your turn: sing it back by reaching the same mice. Each phrase you echo adds to the song, until the whole tune plays. Nobody fails: if you reach a different mouse, just try again.</p>'
-      +(CTX.hosted?'<div class="erow" style="padding:12px;border:2px solid #7cc4ff;border-radius:14px"><label style="grid-column:1/-1;color:#7cc4ff">Recording to the research dashboard</label><label>Study<select id="eStudy"><option value="">Free play (no study)</option>'+STUDIES.map(x=>'<option value="'+esc2(x.id)+'"'+(x.id===CTX.study?' selected':'')+'>'+esc2(x.name)+'</option>').join('')+'</select></label><label>Participant code<input id="eP" maxlength="12" value="'+esc2(CTX.p)+'" placeholder="P01" style="min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 16px inherit;padding:0 10px;text-transform:uppercase"></label><label style="flex-direction:row;display:flex;align-items:center;gap:8px;text-transform:none;font-size:15px;color:#fff"><input type="checkbox" id="ePr"'+(CTX.practice?' checked':'')+' style="width:22px;height:22px"> Practice run</label></div>':'')
+      +(CTX.hosted?'<div class="erow" style="padding:12px;border:2px solid #7cc4ff;border-radius:14px"><label style="grid-column:1/-1;color:#7cc4ff">Recording to the dashboard</label><label>Study<select id="eStudy"><option value="">Free play (no study)</option>'+STUDIES.map(x=>'<option value="'+esc2(x.id)+'"'+(x.id===CTX.study?' selected':'')+'>'+esc2(x.name)+'</option>').join('')+'</select></label><label>Participant code<input id="eP" maxlength="12" value="'+esc2(CTX.p)+'" placeholder="P01" style="min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 16px inherit;padding:0 10px;text-transform:uppercase"></label><label style="flex-direction:row;display:flex;align-items:center;gap:8px;text-transform:none;font-size:15px;color:#fff"><input type="checkbox" id="ePr"'+(CTX.practice?' checked':'')+' style="width:22px;height:22px"> Practice run</label></div>':'')
       +'<div class="songs" role="group" aria-label="Choose a song">'+SONGS.map(s=>'<button type="button" data-id="'+s.id+'" aria-pressed="'+(s===song)+'"><span>'+s.name+'</span><small>'+s.tag+'</small></button>').join('')+'</div>'
       +'<div class="erow"><label>How you play<select id="eIn">'+INPUTS.map(i=>'<option'+(i===opts.input?' selected':'')+'>'+i+'</option>').join('')+'</select></label>'
       +'<label>Phrase length<select id="eLen"><option value="short"'+(opts.len==='short'?' selected':'')+'>Short (up to 4 notes)</option><option value="full"'+(opts.len==='full'?' selected':'')+'>Full phrases</option></select></label>'
@@ -833,7 +833,7 @@ window.addEventListener('load',()=>{
     $('eRe').addEventListener('click',()=>{result.style.display='none';startGame();});
     $('eNew').addEventListener('click',()=>{result.style.display='none';openSetup();});
     $('eDone').addEventListener('click',()=>{result.style.display='none';});
-    // save locally, and to the research dashboard when played inside Access+
+    // save locally, and to the dashboard when played inside Access+
     let msg='';
     try{ const T=JSON.parse(localStorage.getItem('accessplus-tests')||'[]')||[]; const k=KEYMAP[opts.input]||'head';
       T.push({n:T.filter(t=>t.method===k).length+1,date:new Date().toISOString().slice(0,16).replace('T',' '),method:k,pos:'',mode:'Echo game ('+opts.input+')',size:'',speed:avg?Math.round(60000/avg*10)/10:0,acc,tp:'',effort:null,useful:avg?Math.round(60000/avg*acc/100*10)/10:0,game:'Mouse Orchestra Echo',song:song.name});
@@ -847,7 +847,7 @@ window.addEventListener('load',()=>{
         events:g.notes.slice(0,1500).map(n=>({level:'Phrase '+n.phrase,event:n.wrong?'wrong':(n.clean?'note':'note_after_retry'),time_ms:n.ms,distance_px:null,size_px:null,id_bits:null,midi:n.midi})),preferred:''}},location.origin);}catch(e){}
     }
   }
-  window.addEventListener('message',e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=='accessplus-saved') return; const m=$('eSaved'); if(m) m.textContent+=e.data.mode==='shared'?' Sent to the research dashboard.':e.data.mode==='local'?' Added to the research dashboard in this browser.':' It could not be sent to the research dashboard.'; });
+  window.addEventListener('message',e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=='accessplus-saved') return; const m=$('eSaved'); if(m) m.textContent+=e.data.mode==='shared'?' Sent to the dashboard.':e.data.mode==='local'?' Added to the dashboard in this browser.':' It could not be sent to the dashboard.'; });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&G) stopGame(); });
   window.__echoState=()=>G;
   // open straight into the game with ?game=echo
