@@ -446,7 +446,8 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a>'
+           '<a class="navside navres" href="#dashboard" data-route="dashboard">My dashboard</a>'
+           '<a class="navres navstudy" href="#studies" data-route="studies" hidden>Research dashboard</a>'
            '<a class="navsign" href="#signin" data-route="signin">Sign in</a>'
            '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
@@ -477,10 +478,13 @@ def build():
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
     var MODE = { software: 'tech', hardware: 'tech', bridges: 'tech', advanced: 'tech', tech: 'tech', reviews: 'tech' };
-    var v = MODE[h] || (h === 'ab-data' ? 'about' : h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
+    if (h === 'studies') { var v0 = 'dashboard'; }
+    var v = v0 || MODE[h] || (h === 'ab-data' ? 'about' : h.indexOf('join') === 0 ? 'join' : (h === 'simulators' ? 'try' : (VIEWS.indexOf(h) >= 0 ? h : 'home')));
     if (v === 'tech' && window.tgMode) window.tgMode(h === 'tech' ? 'hardware' : h);
     VIEWS.forEach(function (n) { var e = document.getElementById('view-' + n); if (e) e.hidden = n !== v; });
+    if (v === 'dashboard' && window.dsMode) window.dsMode(h === 'studies' ? 'res' : 'mine');
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
+    if (h === 'studies') navKey = 'studies';
     if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
     if (v === 'keyboards') navKey = 'solutions';
     if (v === 'borrow') navKey = 'try';
