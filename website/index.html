@@ -1624,6 +1624,10 @@ footer .wrap { padding-block: 22px; }
 @media (prefers-reduced-motion: reduce) {
 #view-vte .vt-ic .gl, #view-vte a.vt-ic { transition: none; }
 }
+#view-vte .vt-verbs { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 10px; }
+#view-vte .vt-verbs li { display: grid; gap: 4px; align-content: start; padding: 12px 14px; border-left: 3px solid #5fe0a8; background: rgba(95,224,168,0.06); }
+#view-vte .vt-verbs b { color: #5fe0a8; font: 700 1.05em var(--body); }
+#view-vte .vt-verbs span { color: var(--desc); font-size: 0.95em; line-height: 1.45; }
 #view-dashboard .ds-wrap { gap: 22px !important; grid-template-columns: minmax(0, 1fr); }
 #view-dashboard .ds-wrap > *, #view-dashboard .ds-two > * { min-width: 0; }
 #view-dashboard .ds-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
@@ -2130,7 +2134,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a><a class="navsign" href="#signin" data-route="signin">Sign in</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and measure with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a><a class="navsign" href="#signin" data-route="signin">Sign in</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -2933,8 +2937,14 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap vt-wrap">
     <header class="vt-hero">
       <span class="vt-k">Access+ Virtual Training Environment <span class="vt-tag">Prototype · for review</span></span>
-      <h1>Practice, play and <span>measure</span></h1>
-      <p>Build and share virtual desktops for training and assessing adaptive controls. Each game on the desktop turns a real computer skill into a short, colorful challenge with music, works with the control you already use (an eye tracker, a head mouse, switches, a joystick or an ordinary mouse), and gives a plain-language rundown. Every game can also run as a research study.</p>
+      <h1>Practice, play and <span>test</span></h1>
+      <p>Short, game-like exercises for building skill with your adaptive controls, whether that's an eye tracker, a head mouse, switches, a joystick or an ordinary mouse.</p>
+      <ul class="vt-verbs">
+        <li><b>Practice</b><span>Improve speed, accuracy and comfort with the control you use, one level at a time.</span></li>
+        <li><b>Test</b><span>Every game gives a plain-language rundown, and you can compare controls, positions and settings side by side.</span></li>
+        <li><b>Build</b><span>Create your own training exercises and desktops with the Environment Editor.</span></li>
+        <li><b>Share</b><span>Share exercises with your therapist, colleagues or a research study, and soon play exercises others have shared in a community library.</span></li>
+      </ul>
     </header>
     <section class="vt-desk" aria-labelledby="vt-vtDeskT">
       <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>3 ready · 2 previews · 4 coming</span></div>
@@ -4323,7 +4333,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:13 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:19 UTC</span></div>
   </div>
 </footer>
 

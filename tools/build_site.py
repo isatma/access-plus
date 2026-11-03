@@ -448,7 +448,7 @@ def build():
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
            '<a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a>'
            '<a class="navsign" href="#signin" data-route="signin">Sign in</a>'
-           '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and measure with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
+           '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if 'id="journey"' not in home:
         home = home.replace('</header>', '</header>\n<div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>', 1)

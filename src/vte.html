@@ -79,6 +79,10 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
 .vt-rc span { display: grid; line-height: 1.25; }
 .vt-rc small { color: var(--muted); font-size: 0.85em; }
 @media (prefers-reduced-motion: reduce) { .vt-ic .gl, a.vt-ic { transition: none; } a.vt-ic:hover .gl { transform: none; } }
+.vt-verbs { list-style: none; margin: 4px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); gap: 10px; }
+.vt-verbs li { display: grid; gap: 4px; align-content: start; padding: 12px 14px; border-left: 3px solid #5fe0a8; background: rgba(95,224,168,0.06); }
+.vt-verbs b { color: #5fe0a8; font: 700 1.05em var(--body); }
+.vt-verbs span { color: var(--desc); font-size: 0.95em; line-height: 1.45; }
 </style>
 </head>
 <body>
@@ -86,8 +90,14 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
   <div class="wrap vt-wrap">
     <header class="vt-hero">
       <span class="vt-k">Access+ Virtual Training Environment <span class="vt-tag">Prototype · for review</span></span>
-      <h1>Practice, play and <span>measure</span></h1>
-      <p>Build and share virtual desktops for training and assessing adaptive controls. Each game on the desktop turns a real computer skill into a short, colorful challenge with music, works with the control you already use (an eye tracker, a head mouse, switches, a joystick or an ordinary mouse), and gives a plain-language rundown. Every game can also run as a research study.</p>
+      <h1>Practice, play and <span>test</span></h1>
+      <p>Short, game-like exercises for building skill with your adaptive controls, whether that's an eye tracker, a head mouse, switches, a joystick or an ordinary mouse.</p>
+      <ul class="vt-verbs">
+        <li><b>Practice</b><span>Improve speed, accuracy and comfort with the control you use, one level at a time.</span></li>
+        <li><b>Test</b><span>Every game gives a plain-language rundown, and you can compare controls, positions and settings side by side.</span></li>
+        <li><b>Build</b><span>Create your own training exercises and desktops with the Environment Editor.</span></li>
+        <li><b>Share</b><span>Share exercises with your therapist, colleagues or a research study, and soon play exercises others have shared in a community library.</span></li>
+      </ul>
     </header>
     <section class="vt-desk" aria-labelledby="vtDeskT">
       <div class="vt-deskbar"><span id="vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>3 ready · 2 previews · 4 coming</span></div>
