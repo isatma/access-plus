@@ -116,6 +116,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
       <h2 id="setupT">Pointing Environment</h2>
       <p>Six short levels of colorful targets. Each target you reach plays the next note of a tune, so finishing a level plays the whole song. Choose how you will play, then press Start. You can pause at any time, and nobody fails: when the timer runs out, the level simply ends.</p>
     </div>
+    <div class="note" id="ctxLine" hidden style="border-left-color:#7cc4ff;background:rgba(124,196,255,.08)"></div>
     <h3>1 · How will you play?</h3>
     <div class="opts" id="inputOpts" role="group" aria-label="Input method"></div>
     <div class="note" id="inputNote"></div>
@@ -175,6 +176,19 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
+const QP = new URLSearchParams(location.search);
+const CTX = { hosted: QP.get('hosted') === '1' && window.parent !== window, study: (QP.get('study') || '').slice(0, 80), studyName: (QP.get('studyName') || '').slice(0, 80), p: (QP.get('p') || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12), practice: QP.get('practice') === '1' };
+if (CTX.hosted) {
+  const c = document.getElementById('ctxLine'); c.hidden = false;
+  c.textContent = 'Recording to ' + (CTX.study ? 'study: ' + CTX.studyName : 'free play (no study)') + ' · ' + (CTX.p ? 'participant ' + CTX.p : 'no participant code') + (CTX.practice ? ' · practice run' : '') + '. Your results go to the Access+ research dashboard when you finish.';
+}
+const POSL = { up: 'Sitting upright', rec: 'Reclined', bed: 'Lying in bed', side: 'Side-lying' };
+function postUp(msg) { try { if (CTX.hosted) window.parent.postMessage(msg, location.origin); } catch (e) {} }
+window.addEventListener('message', e => {
+  if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-saved') return;
+  const m = $('savedMsg'); if (!m) return;
+  m.textContent += e.data.mode === 'shared' ? ' Sent to the research dashboard.' : e.data.mode === 'local' ? ' Added to the research dashboard in this browser.' : ' It could not be sent to the research dashboard' + (e.data.code === 'quota_exceeded' ? ' (the prototype store is full).' : '; download the CSV to keep it.');
+});
 const stage = $('stage');
 
 /* ───────── Inputs ───────── */
@@ -536,7 +550,7 @@ function finish() {
     $('compareTable').innerHTML = '<tr><th>Input</th><th>Position</th><th>Reached</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th></tr>' + RUNS.map(r => `<tr><td>${r.input}</td><td>${r.pos}</td><td>${r.hits}</td><td>${r.acc}%</td><td>${(r.avgMs / 1000).toFixed(2)} s</td><td>${r.fat === null ? '–' : (r.fat > 0 ? '+' : '') + r.fat + '%'}</td></tr>`).join('');
     const names = [...new Set(RUNS.map(r => r.input))];
     $('prefBtns').innerHTML = names.map(n => `<button type="button" aria-pressed="false">${n}</button>`).join('');
-    [...$('prefBtns').children].forEach(b => b.addEventListener('click', () => { [...$('prefBtns').children].forEach(x => x.setAttribute('aria-pressed', x === b)); LOG.push({ run: S.id, input: b.textContent, position: S.pos, level: '', event: 'preferred', time_ms: '', distance_px: '', size_px: '', id_bits: '' }); }));
+    [...$('prefBtns').children].forEach(b => b.addEventListener('click', () => { [...$('prefBtns').children].forEach(x => x.setAttribute('aria-pressed', x === b)); postUp({ type: 'accessplus-session-pref', id: S.sid, preferred: b.textContent }); LOG.push({ run: S.id, input: b.textContent, position: S.pos, level: '', event: 'preferred', time_ms: '', distance_px: '', size_px: '', id_bits: '' }); }));
   }
   // save to the person's test sessions (read by the Access+ research workspace)
   try {
@@ -547,6 +561,17 @@ function finish() {
     localStorage.setItem('accessplus-tests', JSON.stringify(T));
     $('savedMsg').textContent = 'Saved to your test sessions in this browser. Nothing is sent anywhere unless you choose to share.';
   } catch (e) { $('savedMsg').textContent = 'Saving is not available here; download the CSV to keep your results.'; }
+  const sid = 's-' + S.id + '-' + Math.random().toString(36).slice(2, 6); S.sid = sid;
+  postUp({ type: 'accessplus-session', session: {
+    id: sid, game: 'pointing', studyId: CTX.study, participant: CTX.p, practice: CTX.practice,
+    input: S.input.name, inputKey: S.input.key, pos: S.pos, posLabel: POSL[S.pos] || S.pos,
+    startedAt: new Date(S.startedAt).toISOString(), endedAt: new Date().toISOString(),
+    settings: { sizeMul: S.sizeMul, timeMul: S.timeMul, dwellMs: S.input.sel === 'dwell' ? S.dwell : null, scanMs: S.input.sel === 'scan1' ? S.scan : null },
+    levels: res.map(r => ({ level: r.level, hits: r.hits, goal: r.goal, done: r.done, misses: r.misses, slips: r.slips, avgMs: r.avgMs, perMin: r.perMin, acc: r.acc, tp: r.tp, secs: r.secs, ease: r.ease, tired: r.tired ? +r.tired : null })),
+    summary: { hits: run.hits, acc: run.acc, avgMs: run.avgMs, tp: run.tp, fat: run.fat, perMin: run.perMin },
+    events: LOG.filter(e => e.run === S.id && e.event !== 'preferred').slice(0, 1500).map(e => ({ level: e.level, event: e.event, time_ms: e.time_ms, distance_px: e.distance_px === '' ? null : e.distance_px, size_px: e.size_px === '' ? null : e.size_px, id_bits: e.id_bits === '' ? null : +e.id_bits })),
+    preferred: ''
+  } });
   show('results');
 }
 $('againBtn').addEventListener('click', () => { show('setup'); drawInputs(); });

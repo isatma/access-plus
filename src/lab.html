@@ -144,7 +144,9 @@
     if (!a || a.id === 'lbPNew' || !/\.html(\?|$)/.test(a.getAttribute('href'))) return;
     e.preventDefault();
     var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : a.getAttribute('data-title') || (a.textContent || '').replace(/[\u2197]/g, '').trim();
-    openApp(a.getAttribute('href'), title);
+    var href = a.getAttribute('href');
+    if (/^vte\//.test(href) && window.APStudyQuery) href = href.split('?')[0] + '?' + window.APStudyQuery();
+    openApp(href, title);
   });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
   chips('lbCats', CATS, 'cat', 'All categories'); chips('lbIns', INS, 'ins', 'Any input'); draw();
