@@ -69,3 +69,4 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - Lab: in-site app player (iframe overlay) so apps open inside the page; new-tab link optional.
 - Mouse Orchestra v6.2: slow score (9–90 px/s, default 18), pause, playhead cue lights matching mouse.
 - Lab: Mini Color Keyboard (built-in synth + MIDI, phone fit) and MIDI Edition preset JSON.
+- 2026-11-03: Virtual Training Environment region (#vte) added as a major section; first environment vte/pointing.html (6 levels, mouse/eye/head/nose/1- and 2-switch, CSV + test sessions). Rec lab nav replaced by Training Environment; Recreation lab is a tile inside the VTE.

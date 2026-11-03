@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access+ VTE · Pointing Environment</title>
+<style>
+:root {
+  --bg: #070b16; --panel: #0e1526; --line: #263552; --ink: #eef3fb; --muted: #9fb0c8;
+  --accent: #5fe0a8; --warn: #ffc670; --bad: #ff8a8a; --glow: #ffe27a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; background: var(--bg); color: var(--ink); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+button, select, input { font: inherit; }
+.btn { min-height: 48px; padding: 0 18px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); border-radius: 10px; cursor: pointer; font-weight: 600; }
+.btn:hover, .btn:focus-visible { border-color: var(--accent); outline: none; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #04201a; }
+.btn.big { min-height: 64px; padding: 0 30px; font-size: 1.15em; }
+
+/* header */
+#hud { height: 58px; display: flex; align-items: center; gap: 14px; padding: 0 14px; background: #0b1120; border-bottom: 2px solid var(--accent); }
+#hud h1 { font-size: 15px; font-weight: 700; letter-spacing: .04em; white-space: nowrap; }
+#hud h1 small { color: var(--accent); font-weight: 600; margin-left: 6px; }
+#hud .sp { flex: 1; }
+.chip { display: flex; flex-direction: column; align-items: center; min-width: 74px; padding: 3px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.chip span { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.chip b { font-size: 18px; font-variant-numeric: tabular-nums; }
+.chip.low b { color: var(--bad); }
+#hud .btn { min-height: 40px; padding: 0 12px; }
+@media (max-width: 700px) { #hud h1 small, #chipInput { display: none; } .chip { min-width: 56px; } }
+
+/* stage */
+#stage { position: absolute; top: 58px; left: 0; right: 0; bottom: 0; overflow: hidden;
+  background: radial-gradient(ellipse at 50% 40%, #182a52 0%, #0c1530 55%, #070b16 100%); touch-action: none; }
+#stage.theme-pond { background: radial-gradient(ellipse at 50% 60%, #134a5c 0%, #0b2a3a 55%, #061520 100%); }
+#stage.theme-garden { background: radial-gradient(ellipse at 50% 30%, #1d4a2a 0%, #0f2a1a 60%, #07130c 100%); }
+#stage.theme-stars { background: radial-gradient(ellipse at 50% 30%, #2a1d5a 0%, #140f33 60%, #07061a 100%); }
+#stage.theme-notes { background: radial-gradient(ellipse at 50% 50%, #3a1d4a 0%, #1e0f2a 60%, #0d0614 100%); }
+#stage.theme-melody { background: radial-gradient(ellipse at 50% 40%, #4a2a12 0%, #2a160a 60%, #120904 100%); }
+.tgt { position: absolute; border-radius: 50%; display: grid; place-items: center; transform: translate(-50%, -50%);
+  box-shadow: 0 8px 26px rgba(0,0,0,.45), inset 0 -10px 18px rgba(0,0,0,.25), inset 0 8px 14px rgba(255,255,255,.35);
+  color: #111; font-weight: 800; user-select: none; transition: transform .12s ease; cursor: pointer; }
+.tgt .em { font-size: 0.42em; line-height: 1; pointer-events: none; }
+.tgt .lb { position: absolute; bottom: 14%; font-size: 0.16em; font-weight: 800; color: rgba(0,0,0,.65); pointer-events: none; }
+.tgt.next { box-shadow: 0 0 0 6px var(--glow), 0 0 40px 10px rgba(255,226,122,.55), inset 0 -10px 18px rgba(0,0,0,.25); }
+.tgt.decoy { opacity: .28; filter: grayscale(.6); }
+.tgt.lit { outline: 6px solid #fff; outline-offset: 6px; }
+.tgt.hit { animation: pop .35s ease-out forwards; }
+.tgt.wrong { animation: shake .3s; }
+@keyframes pop { to { transform: translate(-50%,-50%) scale(1.5); opacity: 0; } }
+@keyframes shake { 25% { margin-left: -8px; } 75% { margin-left: 8px; } }
+.ring { position: absolute; inset: -12px; pointer-events: none; transform: rotate(-90deg); }
+.ring circle { fill: none; stroke: #fff; stroke-width: 6; stroke-linecap: round; }
+#vcursor { position: absolute; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%; border: 3px solid #fff; background: rgba(95,224,168,.5); box-shadow: 0 0 14px rgba(95,224,168,.9); pointer-events: none; display: none; z-index: 20; }
+.spark { position: absolute; width: 10px; height: 10px; border-radius: 50%; pointer-events: none; animation: spark .8s ease-out forwards; }
+@keyframes spark { to { transform: translate(var(--dx), var(--dy)) scale(.2); opacity: 0; } }
+#banner { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); padding: 8px 18px; border-radius: 999px; background: rgba(0,0,0,.6); font-weight: 700; z-index: 15; pointer-events: none; text-align: center; max-width: 90%; }
+#swHint { position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%); padding: 8px 16px; border-radius: 10px; background: rgba(0,0,0,.6); font-size: 14px; color: var(--muted); z-index: 15; pointer-events: none; display: none; text-align: center; }
+
+/* overlay screens */
+.screen { position: absolute; inset: 58px 0 0 0; overflow: auto; background: rgba(7,11,22,.94); z-index: 30; display: none; padding: 26px 16px 40px; }
+.screen.show { display: block; }
+.card { max-width: 860px; margin: 0 auto; display: grid; gap: 18px; }
+.card h2 { font-size: 26px; }
+.card h3 { font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+.card p { color: var(--muted); }
+.opts { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.opt { text-align: left; padding: 14px; border-radius: 12px; border: 2px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; min-height: 84px; display: grid; gap: 4px; }
+.opt b { font-size: 16px; }
+.opt small { color: var(--muted); font-size: 13px; }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: rgba(95,224,168,.1); }
+.row { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; }
+.row label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+.row select { min-height: 46px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); }
+.row input[type=range] { width: 200px; accent-color: var(--accent); }
+.note { padding: 12px 14px; border-left: 3px solid var(--warn); background: rgba(255,198,112,.08); border-radius: 6px; color: var(--ink); font-size: 14px; }
+.levels { display: grid; gap: 6px; }
+.levels div { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); font-size: 14px; }
+.levels i { font-style: normal; color: var(--muted); }
+.check { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.check button { min-height: 52px; min-width: 64px; padding: 0 14px; border-radius: 10px; border: 2px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; font-size: 16px; }
+.check button[aria-pressed="true"] { border-color: var(--accent); background: rgba(95,224,168,.15); }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.tw { overflow-x: auto; }
+.big-num { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.big-num div { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.big-num span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.big-num b { display: block; font-size: 24px; }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; }
+</style>
+</head>
+<body>
+<header id="hud">
+  <h1>Access+ VTE <small>Pointing Environment</small></h1>
+  <div class="sp"></div>
+  <div class="chip" id="chipInput"><span>Input</span><b id="hInput" style="font-size:13px">–</b></div>
+  <div class="chip"><span>Level</span><b id="hLevel">–</b></div>
+  <div class="chip"><span>Goal</span><b id="hGoal">–</b></div>
+  <div class="chip" id="chipTime"><span>Time</span><b id="hTime">–</b></div>
+  <button class="btn" id="pauseBtn" type="button" hidden>Pause</button>
+</header>
+
+<main id="stage" aria-label="Training area">
+  <div id="banner" hidden></div>
+  <div id="swHint"></div>
+  <div id="vcursor" aria-hidden="true"></div>
+</main>
+
+<!-- SETUP -->
+<section class="screen show" id="setup" aria-labelledby="setupT">
+  <div class="card">
+    <div>
+      <p style="color:var(--accent);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12px">Access+ Virtual Training Environment · Prototype</p>
+      <h2 id="setupT">Pointing Environment</h2>
+      <p>Six short levels of colorful targets. Each target you reach plays the next note of a tune, so finishing a level plays the whole song. Choose how you will play, then press Start. You can pause at any time, and nobody fails: when the timer runs out, the level simply ends.</p>
+    </div>
+    <h3>1 · How will you play?</h3>
+    <div class="opts" id="inputOpts" role="group" aria-label="Input method"></div>
+    <div class="note" id="inputNote"></div>
+    <h3>2 · Settings</h3>
+    <div class="row">
+      <label>Position<select id="pos"><option value="up">Sitting upright</option><option value="rec">Reclined</option><option value="bed">Lying in bed</option><option value="side">Side-lying</option></select></label>
+      <label>Target size<select id="size"><option value="0.75">Small</option><option value="1" selected>Medium</option><option value="1.35">Large</option></select></label>
+      <label>Timers<select id="timers"><option value="1">On</option><option value="1.5">Relaxed (50% longer)</option><option value="0">Off</option></select></label>
+      <label id="dwellL">Dwell time <span><input type="range" id="dwell" min="300" max="1500" step="100" value="800"> <b id="dwellV">0.8 s</b></span></label>
+      <label id="scanL">Scan speed <span><input type="range" id="scan" min="600" max="2500" step="100" value="1200"> <b id="scanV">1.2 s</b></span></label>
+      <label id="gainL">Nose tracking reach <span><input type="range" id="gain" min="2" max="8" step="0.5" value="4"> <b id="gainV">4</b></span></label>
+      <label>Sound<select id="sound"><option value="1">On</option><option value="0">Off</option></select></label>
+    </div>
+    <h3>3 · The levels</h3>
+    <div class="levels" id="levelList"></div>
+    <div class="btns"><button class="btn primary big" id="startBtn" type="button">▶ Start</button></div>
+  </div>
+</section>
+
+<!-- BETWEEN LEVELS -->
+<section class="screen" id="between" aria-labelledby="betweenT">
+  <div class="card">
+    <h2 id="betweenT">Level complete</h2>
+    <p id="betweenMsg"></p>
+    <div class="big-num" id="betweenNums"></div>
+    <h3>How easy was that?</h3>
+    <div class="check" id="easeBtns" role="group" aria-label="How easy was that"></div>
+    <h3>How tired do you feel?</h3>
+    <div class="check" id="tiredBtns" role="group" aria-label="How tired do you feel"></div>
+    <div class="btns"><button class="btn primary big" id="nextBtn" type="button">Next level ▶</button><button class="btn" id="endBtn" type="button">Finish now</button></div>
+  </div>
+</section>
+
+<!-- PAUSE -->
+<section class="screen" id="paused" aria-labelledby="pausedT">
+  <div class="card" style="text-align:center;justify-items:center">
+    <h2 id="pausedT">Paused</h2>
+    <p>Take your time. The timer is stopped.</p>
+    <div class="btns"><button class="btn primary big" id="resumeBtn" type="button">▶ Resume</button><button class="btn" id="recenterBtn" type="button" hidden>Re-center nose tracking</button><button class="btn" id="quitBtn" type="button">Finish now</button></div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="screen" id="results" aria-labelledby="resultsT">
+  <div class="card">
+    <h2 id="resultsT">Your rundown</h2>
+    <p id="rundown"></p>
+    <div class="big-num" id="resultNums"></div>
+    <div class="tw"><table id="levelTable"></table></div>
+    <div id="compareWrap" hidden><h3>Compare inputs (this visit)</h3><div class="tw"><table id="compareTable"></table></div>
+      <h3>Which would you choose?</h3><div class="check" id="prefBtns" role="group" aria-label="Preferred input"></div></div>
+    <p id="savedMsg" style="font-size:14px"></p>
+    <div class="btns"><button class="btn primary" id="againBtn" type="button">Try another input</button><button class="btn" id="csvBtn" type="button">Download results (CSV)</button></div>
+  </div>
+</section>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const stage = $('stage');
+
+/* ───────── Inputs ───────── */
+const INPUTS = [
+  { id: 'mouse',  name: 'Hand mouse',             desc: 'Ordinary mouse or trackpad. Click each target.', sel: 'click', cursor: true, key: 'head' },
+  { id: 'eyes',   name: 'Eye tracker',            desc: 'Your eye tracker moves the pointer. Rest on a target until the ring fills.', sel: 'dwell', cursor: true, key: 'eyes' },
+  { id: 'own',    name: 'Head mouse or FaceNav',  desc: 'Your own head or face tracking (FaceNav, MotionInput, a head mouse). Rest on a target to select.', sel: 'dwell', cursor: true, key: 'head' },
+  { id: 'nose',   name: 'Built-in nose tracking', desc: 'Uses your webcam in this page. Move your nose to steer the pointer; rest on a target to select.', sel: 'dwell', cursor: false, key: 'head' },
+  { id: 'sw1',    name: 'One switch',             desc: 'Targets light up one after another. Press your switch (Space, Enter or a click) when the right one lights.', sel: 'scan1', cursor: false, key: 'sw' },
+  { id: 'sw2',    name: 'Two switches',           desc: 'Switch 1 (Space or →) moves the light; switch 2 (Enter or a click) selects.', sel: 'scan2', cursor: false, key: 'sw' }
+];
+let input = INPUTS[0];
+
+/* ───────── Tunes and colors ───────── */
+const NOTE_COL = { 0: '#ff5a5a', 2: '#ff9a3d', 4: '#ffe04d', 5: '#7be04d', 7: '#3dd6b0', 9: '#9b7bff', 11: '#ff7bc8' };
+const NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const col = m => NOTE_COL[m % 12] || '#ffffff';
+const TUNES = {
+  arp:   [60, 64, 67, 72, 76],
+  ode:   [64, 64, 65, 67, 67, 65, 64, 62, 60, 60, 62, 64],
+  twink: [60, 60, 67, 67, 69, 69, 67, 65, 65, 64],
+  row:   [60, 60, 60, 62, 64, 64, 62, 64],
+  mary:  [64, 62, 60, 62, 64, 64, 64, 62, 62, 62, 64, 67, 67]
+};
+
+/* ───────── Levels ───────── */
+const LEVELS = [
+  { name: 'Warm-up Pond',   theme: 'pond',   kind: 'set',    count: 5,  time: 0,  size: 150, emoji: '🪷', tune: 'arp',   tuneName: 'a warm-up chord',       skill: 'Getting comfortable' },
+  { name: 'Target Garden',  theme: 'garden', kind: 'single', count: 12, time: 60, size: 96,  emoji: '🌸', tune: 'ode',   tuneName: 'Ode to Joy',            skill: 'Pointing speed and accuracy' },
+  { name: 'Shrinking Stars',theme: 'stars',  kind: 'single', count: 10, time: 60, size: 120, size1: 46, emoji: '⭐', tune: 'twink', tuneName: 'Twinkle, Twinkle',  skill: 'Small targets' },
+  { name: 'Floating Notes', theme: 'notes',  kind: 'single', count: 8,  time: 60, size: 100, drift: 34, emoji: '🎵', tune: 'row', tuneName: 'Row, Row, Row Your Boat', skill: 'Moving targets' },
+  { name: 'Melody Path',    theme: 'melody', kind: 'seq',    count: 13, time: 90, size: 110, emoji: '', tune: 'mary',  tuneName: 'Mary Had a Little Lamb', skill: 'Sequencing and memory' },
+  { name: 'Return Lap',     theme: 'garden', kind: 'single', count: 12, time: 60, size: 96,  emoji: '🌸', tune: 'ode',   tuneName: 'Ode to Joy',            skill: 'Same as Target Garden, to compare first and last' }
+];
+
+/* ───────── Sound (Web Audio, no downloads) ───────── */
+let AC = null, OUT = null;
+function audio() {
+  if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); const c = AC.createDynamicsCompressor(), g = AC.createGain(); g.gain.value = 0.7; c.connect(g); g.connect(AC.destination); OUT = c; } catch (e) { AC = null; } }
+  if (AC && AC.state === 'suspended') AC.resume();
+  return AC;
+}
+function tone(m, dur, when, vol) {
+  if ($('sound').value !== '1' || !audio()) return;
+  const t = AC.currentTime + (when || 0), f = 440 * Math.pow(2, (m - 69) / 12);
+  const o = AC.createOscillator(), o2 = AC.createOscillator(), g = AC.createGain(), g2 = AC.createGain();
+  o.type = 'triangle'; o.frequency.value = f; o2.type = 'sine'; o2.frequency.value = f * 2; g2.gain.value = 0.25;
+  o.connect(g); o2.connect(g2); g2.connect(g); g.connect(OUT);
+  const v = vol || 0.3;
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.5));
+  o.start(t); o2.start(t); o.stop(t + (dur || 0.5) + 0.05); o2.stop(t + (dur || 0.5) + 0.05);
+}
+function buzz() { if ($('sound').value !== '1' || !audio()) return; const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain(); o.type = 'square'; o.frequency.value = 140; g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.15); o.connect(g); g.connect(OUT); o.start(t); o.stop(t + 0.16); }
+function playTune(arr) { arr.forEach((m, i) => tone(m, 0.32, i * 0.28, 0.25)); }
+
+/* ───────── State ───────── */
+let S = null;            // current run
+const RUNS = [];         // runs this visit, for comparison
+let LOG = [];            // per-event log for CSV
+const R = () => stage.getBoundingClientRect();
+
+function msg(t, ms) { const b = $('banner'); b.textContent = t; b.hidden = false; clearTimeout(msg._t); if (ms) msg._t = setTimeout(() => { b.hidden = true; }, ms); }
+function show(id) { ['setup', 'between', 'paused', 'results'].forEach(s => $(s).classList.toggle('show', s === id)); }
+
+/* ───────── Setup screen ───────── */
+function drawInputs() {
+  $('inputOpts').innerHTML = INPUTS.map(i => `<button type="button" class="opt" data-id="${i.id}" aria-pressed="${i === input}"><b>${i.name}</b><small>${i.desc}</small></button>`).join('');
+  [...$('inputOpts').children].forEach(b => b.addEventListener('click', () => { input = INPUTS.find(i => i.id === b.dataset.id); drawInputs(); }));
+  const notes = {
+    mouse: 'This is the comparison baseline. Clicking on empty space counts as a miss.',
+    eyes: 'Calibrate your eye tracker first, so its pointer follows your gaze. Adjust the dwell time below.',
+    own: 'Start your own head or face tracking software first (for example FaceNav or MotionInput), so it moves the mouse pointer. If it can click with a gesture, choose Hand mouse instead.',
+    nose: 'You will be asked to allow the camera. Sit centered and look at the screen; the pointer re-centers at the start. Your video stays on this device. The private preview may block the camera; if so, open this page directly.',
+    sw1: 'One switch: the light moves on its own at the scan speed below. Any switch that sends Space, Enter or a mouse click works.',
+    sw2: 'Two switches: you move the light with switch 1 (Space or the right arrow) and select with switch 2 (Enter or a click).'
+  };
+  $('inputNote').textContent = notes[input.id];
+  $('dwellL').hidden = input.sel !== 'dwell';
+  $('scanL').hidden = input.sel !== 'scan1';
+  $('gainL').hidden = input.id !== 'nose';
+}
+$('levelList').innerHTML = LEVELS.map((l, i) => `<div><b>${i + 1}</b><span>${l.emoji || '🎼'} <b>${l.name}</b> · ${l.kind === 'set' ? 'Touch ' + l.count + ' lily pads' : l.kind === 'seq' ? 'Play the tune in order' : 'Reach ' + l.count + ' targets'} <i>· ${l.skill}</i></span><i>${l.time ? l.time + ' s' : 'no timer'}</i></div>`).join('');
+['dwell', 'scan'].forEach(id => $(id).addEventListener('input', e => { $(id + 'V').textContent = (e.target.value / 1000).toFixed(1) + ' s'; }));
+$('gain').addEventListener('input', e => { $('gainV').textContent = e.target.value; });
+drawInputs();
+
+/* ───────── Run control ───────── */
+$('startBtn').addEventListener('click', () => {
+  audio();
+  S = { input, pos: $('pos').value, sizeMul: +$('size').value, timeMul: +$('timers').value, dwell: +$('dwell').value, scan: +$('scan').value,
+        levelIdx: -1, results: [], startedAt: Date.now(), id: Date.now().toString(36) };
+  $('hInput').textContent = input.name;
+  $('pauseBtn').hidden = false;
+  if (input.id === 'nose') startNose().then(ok => { if (ok) nextLevel(); else { show('setup'); $('inputNote').textContent = 'The camera or face tracker could not start here. Try opening this page directly in Chrome or Edge, or choose another input.'; } });
+  else nextLevel();
+});
+function nextLevel() {
+  S.levelIdx++;
+  if (S.levelIdx >= LEVELS.length) return finish();
+  startLevel(LEVELS[S.levelIdx]);
+}
+function startLevel(cfg) {
+  show(null);
+  clearStage();
+  stage.className = 'theme-' + cfg.theme;
+  const L = S.L = { cfg, hits: 0, misses: 0, slips: 0, times: [], ids: [], done: false, tunePos: 0, t0: performance.now(), shownAt: 0, last: null,
+                    timeLeft: cfg.time ? cfg.time * (S.timeMul || 1) : 0, timed: !!(cfg.time && S.timeMul), paused: false, pads: [], scanIdx: -1, ease: null, tired: null };
+  $('hLevel').textContent = (S.levelIdx + 1) + ' / ' + LEVELS.length;
+  updateGoal();
+  $('chipTime').style.visibility = L.timed ? 'visible' : 'hidden';
+  msg((S.levelIdx + 1) + ' · ' + cfg.name + (cfg.kind === 'seq' ? ': play the glowing note' : ''), 2200);
+  if (cfg.kind === 'set') spawnSet();
+  else if (cfg.kind === 'seq') spawnSeq();
+  else spawnSingle();
+  if (input.sel.startsWith('scan')) startScan();
+  lastTick = performance.now();
+}
+function updateGoal() { const L = S.L; $('hGoal').textContent = L.hits + ' / ' + L.cfg.count; }
+function clearStage() { stage.querySelectorAll('.tgt').forEach(e => e.remove()); stopScan(); }
+
+/* ───────── Spawning ───────── */
+function sz(cfg, i) { const s = cfg.size1 ? cfg.size + (cfg.size1 - cfg.size) * (i / Math.max(1, cfg.count - 1)) : cfg.size; return Math.round(s * S.sizeMul); }
+const SLOTS = [[.2, .28], [.5, .28], [.8, .28], [.2, .55], [.5, .55], [.8, .55], [.2, .82], [.5, .82], [.8, .82]];
+function makeTarget(x, y, size, color, emoji, label, data) {
+  const el = document.createElement('div');
+  el.className = 'tgt'; el.style.cssText = `left:${x}px;top:${y}px;width:${size}px;height:${size}px;font-size:${size}px;background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.7), ${color} 42%, ${color})`;
+  el.innerHTML = `<span class="em">${emoji || ''}</span>${label ? `<span class="lb">${label}</span>` : ''}<svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" stroke-dasharray="289" stroke-dashoffset="289"/></svg>`;
+  Object.assign(el, { _x: x, _y: y, _s: size }, data || {});
+  stage.appendChild(el);
+  return el;
+}
+function spawnSet() {
+  const r = R(), L = S.L, cfg = L.cfg, pts = [[.2, .35], [.5, .3], [.8, .35], [.33, .72], [.67, .72]];
+  const s = sz(cfg, 0);
+  pts.slice(0, cfg.count).forEach((p, i) => { const el = makeTarget(p[0] * r.width, p[1] * r.height, s, ['#3dd6b0', '#7be04d', '#ffe04d', '#ff9a3d', '#ff7bc8'][i], cfg.emoji, '', { _good: true }); L.pads.push(el); });
+  L.shownAt = performance.now();
+}
+function spawnSingle() {
+  const r = R(), L = S.L, cfg = L.cfg, s = sz(cfg, L.hits), scan = input.sel.startsWith('scan');
+  L.pads.forEach(p => p.remove()); L.pads = [];
+  const m = TUNES[cfg.tune][L.hits % TUNES[cfg.tune].length];
+  if (scan) {
+    const k = Math.floor(Math.random() * SLOTS.length), ss = Math.min(s, 0.22 * r.height);
+    SLOTS.forEach((p, i) => { const el = makeTarget(p[0] * r.width, p[1] * r.height, ss, i === k ? col(m) : '#8796b0', i === k ? cfg.emoji : '', '', { _good: i === k }); if (i !== k) el.classList.add('decoy'); L.pads.push(el); });
+  } else {
+    const pad = s / 2 + 16; let x, y, tries = 0;
+    do { x = pad + Math.random() * (r.width - 2 * pad); y = pad + 40 + Math.random() * (r.height - 2 * pad - 40); tries++; }
+    while (L.last && Math.hypot(x - L.last[0], y - L.last[1]) < Math.min(r.width, r.height) * 0.3 && tries < 40);
+    const el = makeTarget(x, y, s, col(m), cfg.emoji, '', { _good: true });
+    if (cfg.drift) { const a = Math.random() * Math.PI * 2; el._vx = Math.cos(a) * cfg.drift; el._vy = Math.sin(a) * cfg.drift; }
+    L.pads.push(el);
+  }
+  L.shownAt = performance.now();
+}
+function spawnSeq() {
+  const r = R(), L = S.L, cfg = L.cfg, s = sz(cfg, 0), notes = [60, 62, 64, 65, 67];
+  const xs = [.14, .32, .5, .68, .86];
+  notes.forEach((m, i) => { const el = makeTarget(xs[i] * r.width, (i % 2 ? .62 : .48) * r.height, Math.min(s, r.width * 0.17), col(m), NAMES[m % 12], '', { _midi: m }); L.pads.push(el); });
+  markNext();
+  L.shownAt = performance.now();
+}
+function markNext() { const L = S.L, want = TUNES[L.cfg.tune][L.hits]; L.pads.forEach(p => { p._good = p._midi === want; p.classList.toggle('next', p._good); }); }
+
+/* ───────── Hits and misses ───────── */
+function center(el) { return [el._x, el._y]; }
+function hit(el) {
+  const L = S.L; if (!L || L.done || L.paused) return;
+  const now = performance.now(), mt = now - L.shownAt, c = center(el);
+  const from = L.last || [R().width / 2, R().height / 2], D = Math.hypot(c[0] - from[0], c[1] - from[1]), W = el._s;
+  const idb = Math.log2(D / W + 1);
+  if (!el._good) { return miss(el); }
+  L.hits++; L.times.push(mt); if (!input.sel.startsWith('scan') && mt > 80) L.ids.push(idb / (mt / 1000));
+  LOG.push({ run: S.id, input: input.name, position: S.pos, level: L.cfg.name, event: 'hit', time_ms: Math.round(mt), distance_px: Math.round(D), size_px: W, id_bits: idb.toFixed(2) });
+  tone(TUNES[L.cfg.tune][(L.hits - 1) % TUNES[L.cfg.tune].length], 0.45);
+  sparks(c[0], c[1], el.style.background);
+  L.last = c;
+  updateGoal();
+  if (L.cfg.kind === 'set') { el.classList.add('hit'); L.pads = L.pads.filter(p => p !== el); setTimeout(() => el.remove(), 360); L.shownAt = now; if (input.sel.startsWith('scan')) restartScan(); }
+  else if (L.cfg.kind === 'seq') { el.classList.remove('next'); L.shownAt = now; if (L.hits < L.cfg.count) markNext(); if (input.sel.startsWith('scan')) restartScan(); }
+  else { el.classList.add('hit'); setTimeout(() => { if (S.L === L && !L.done) spawnSingle(); }, 220); if (input.sel.startsWith('scan')) restartScan(); }
+  if (L.hits >= L.cfg.count) endLevel(true);
+}
+function miss(el) {
+  const L = S.L; if (!L || L.done || L.paused) return;
+  L.misses++; buzz();
+  LOG.push({ run: S.id, input: input.name, position: S.pos, level: L.cfg.name, event: 'miss', time_ms: Math.round(performance.now() - L.shownAt), distance_px: '', size_px: el ? el._s : '', id_bits: '' });
+  if (el) { el.classList.remove('wrong'); void el.offsetWidth; el.classList.add('wrong'); }
+}
+function sparks(x, y, bg) {
+  for (let i = 0; i < 12; i++) { const s = document.createElement('div'), a = (i / 12) * Math.PI * 2; s.className = 'spark'; s.style.cssText = `left:${x}px;top:${y}px;background:${['#fff', '#ffe27a', '#5fe0a8', '#ff7bc8'][i % 4]};--dx:${Math.cos(a) * 70}px;--dy:${Math.sin(a) * 70}px`; stage.appendChild(s); setTimeout(() => s.remove(), 820); }
+}
+
+/* ───────── Pointer selection: click and dwell ───────── */
+let dwellEl = null, dwellStart = 0;
+function targetAt(x, y) { // x,y in stage coords
+  let best = null, bd = 1e9;
+  S && S.L && S.L.pads.forEach(p => { const d = Math.hypot(x - p._x, y - p._y); if (d <= p._s / 2 + 4 && d < bd) { bd = d; best = p; } });
+  return best;
+}
+function setRing(el, p) { const c = el && el.querySelector('.ring circle'); if (c) c.style.strokeDashoffset = 289 * (1 - p); }
+function pointerAt(x, y) {
+  if (!S || !S.L || S.L.done || S.L.paused || input.sel !== 'dwell') return;
+  const t = targetAt(x, y);
+  if (t !== dwellEl) {
+    if (dwellEl) { setRing(dwellEl, 0); if (performance.now() - dwellStart > 150) { S.L.slips++; } }
+    dwellEl = t; dwellStart = performance.now();
+  }
+}
+stage.addEventListener('pointermove', e => { if (input.id === 'nose') return; const r = R(); pointerAt(e.clientX - r.left, e.clientY - r.top); });
+stage.addEventListener('pointerdown', e => {
+  if (!S || !S.L || S.L.done || S.L.paused) return;
+  if (input.sel === 'click') { const r = R(), t = targetAt(e.clientX - r.left, e.clientY - r.top); if (t) hit(t); else miss(null); }
+  else if (input.sel === 'scan1' || input.sel === 'scan2') { e.preventDefault(); scanSelect(); }
+});
+
+/* ───────── Switch scanning ───────── */
+let scanTimer = 0;
+function scanList() { return S.L.pads.filter(p => p.isConnected && !p.classList.contains('hit')); }
+function startScan() {
+  const L = S.L; L.scanIdx = -1;
+  $('swHint').style.display = 'block';
+  $('swHint').textContent = input.sel === 'scan1' ? 'Press your switch (Space, Enter or click) when the right target lights up' : 'Switch 1 (Space or →) moves the light · Switch 2 (Enter or click) selects';
+  if (input.sel === 'scan1') { clearInterval(scanTimer); scanTimer = setInterval(scanStep, S.scan); }
+  scanStep();
+}
+function restartScan() { setTimeout(() => { if (S && S.L && !S.L.done) { S.L.scanIdx = -1; if (input.sel === 'scan1') { clearInterval(scanTimer); scanTimer = setInterval(scanStep, S.scan); } scanStep(); } }, 260); }
+function stopScan() { clearInterval(scanTimer); $('swHint').style.display = 'none'; }
+function scanStep() {
+  const L = S && S.L; if (!L || L.done || L.paused) return;
+  const list = scanList(); if (!list.length) return;
+  L.scanIdx = (L.scanIdx + 1) % list.length;
+  list.forEach((p, i) => p.classList.toggle('lit', i === L.scanIdx));
+}
+function scanSelect() {
+  const L = S && S.L; if (!L || L.done || L.paused) return;
+  const list = scanList(), el = list[L.scanIdx];
+  if (!el) return;
+  el.classList.remove('lit');
+  if (el._good) hit(el); else { miss(el); }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { if (S && S.L && !S.L.done) { e.preventDefault(); togglePause(); } return; }
+  if (!S || !S.L || S.L.done || S.L.paused) return;
+  if (input.sel === 'scan1' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); scanSelect(); }
+  if (input.sel === 'scan2') {
+    if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); scanStep(); }
+    else if (e.key === 'Enter') { e.preventDefault(); scanSelect(); }
+  }
+  if (input.id === 'nose' && (e.key === 'r' || e.key === 'R')) recenterNose();
+});
+
+/* ───────── Built-in nose tracking (MediaPipe Face Mesh, runs on this device) ───────── */
+const NOSE = { on: false, cx: 0.5, cy: 0.5, x: 0, y: 0, have: false, calib: [], calibrating: false };
+function loadScript(src) { return new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.crossOrigin = 'anonymous'; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+async function startNose() {
+  if (NOSE.on) { recenterNose(); return true; }
+  msg('Starting the camera… allow access when asked');
+  try {
+    await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/face_mesh.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3.1675466862/camera_utils.js');
+    const video = document.createElement('video'); video.playsInline = true; video.muted = true; video.style.display = 'none'; document.body.appendChild(video);
+    const fm = new FaceMesh({ locateFile: f => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@0.4.1633559619/${f}` });
+    fm.setOptions({ maxNumFaces: 1, refineLandmarks: false, minDetectionConfidence: 0.6, minTrackingConfidence: 0.6 });
+    fm.onResults(onFace);
+    const cam = new Camera(video, { onFrame: async () => { await fm.send({ image: video }); }, width: 640, height: 480 });
+    await cam.start();
+    NOSE.on = true; $('vcursor').style.display = 'block'; $('recenterBtn').hidden = false;
+    await recenterNose();
+    return true;
+  } catch (e) { msg('Camera unavailable here', 4000); return false; }
+}
+function recenterNose() {
+  return new Promise(res => { NOSE.calib = []; NOSE.calibrating = true; msg('Look at the middle of the screen and hold still…'); NOSE._done = () => { msg('Nose tracking ready · press R to re-center', 2500); res(); }; });
+}
+function onFace(results) {
+  const lm = results.multiFaceLandmarks && results.multiFaceLandmarks[0]; if (!lm) return;
+  const n = lm[1];
+  if (NOSE.calibrating) { NOSE.calib.push(n); if (NOSE.calib.length >= 20) { NOSE.cx = NOSE.calib.reduce((a, p) => a + p.x, 0) / 20; NOSE.cy = NOSE.calib.reduce((a, p) => a + p.y, 0) / 20; NOSE.calibrating = false; NOSE.have = false; NOSE._done && NOSE._done(); } return; }
+  const r = R(), g = +$('gain').value;
+  const tx = r.width / 2 + (NOSE.cx - n.x) * g * r.width, ty = r.height / 2 + (n.y - NOSE.cy) * g * r.height * 1.3;
+  const cx = Math.max(0, Math.min(r.width, tx)), cy = Math.max(0, Math.min(r.height, ty));
+  if (!NOSE.have) { NOSE.x = cx; NOSE.y = cy; NOSE.have = true; } else { NOSE.x += (cx - NOSE.x) * 0.35; NOSE.y += (cy - NOSE.y) * 0.35; }
+  const vc = $('vcursor'); vc.style.left = NOSE.x + 'px'; vc.style.top = NOSE.y + 'px';
+  pointerAt(NOSE.x, NOSE.y);
+}
+
+/* ───────── Main loop: timer, dwell rings, drift ───────── */
+let lastTick = performance.now();
+function loop(now) {
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.1, (now - lastTick) / 1000); lastTick = now;
+  const L = S && S.L; if (!L || L.done || L.paused) return;
+  if (L.timed) { L.timeLeft -= dt; $('hTime').textContent = Math.max(0, Math.ceil(L.timeLeft)) + ' s'; $('chipTime').classList.toggle('low', L.timeLeft < 10); if (L.timeLeft <= 0) return endLevel(false); }
+  if (input.sel === 'dwell' && dwellEl && dwellEl.isConnected) { const p = (now - dwellStart) / S.dwell; setRing(dwellEl, Math.min(1, p)); if (p >= 1) { const el = dwellEl; dwellEl = null; setRing(el, 0); hit(el); } }
+  if (L.cfg.drift) { const r = R(); L.pads.forEach(p => { if (!p._vx || p.classList.contains('hit')) return; p._x += p._vx * dt; p._y += p._vy * dt; const m = p._s / 2 + 6; if (p._x < m || p._x > r.width - m) p._vx *= -1; if (p._y < m + 30 || p._y > r.height - m) p._vy *= -1; p.style.left = p._x + 'px'; p.style.top = p._y + 'px'; }); }
+}
+requestAnimationFrame(loop);
+
+/* ───────── Pause ───────── */
+function togglePause() { const L = S.L; L.paused = !L.paused; if (L.paused) { show('paused'); } else { show(null); lastTick = performance.now(); } }
+$('pauseBtn').addEventListener('click', () => { if (S && S.L && !S.L.done) togglePause(); });
+$('resumeBtn').addEventListener('click', togglePause);
+$('recenterBtn').addEventListener('click', () => { togglePause(); recenterNose(); });
+$('quitBtn').addEventListener('click', () => { S.L.paused = false; endLevel(false, true); });
+
+/* ───────── End of level ───────── */
+function stats(L) {
+  const avg = L.times.length ? L.times.reduce((a, b) => a + b, 0) / L.times.length : 0;
+  const used = L.cfg.time ? (L.cfg.time * (S.timeMul || 1) - Math.max(0, L.timeLeft)) : (performance.now() - L.t0) / 1000;
+  return { level: L.cfg.name, hits: L.hits, goal: L.cfg.count, misses: L.misses, slips: L.slips, done: L.hits >= L.cfg.count,
+           avgMs: Math.round(avg), perMin: used > 0 ? Math.round(L.hits / used * 600) / 10 : 0,
+           acc: L.hits + L.misses ? Math.round(L.hits / (L.hits + L.misses) * 100) : 100,
+           tp: L.ids.length ? Math.round(L.ids.reduce((a, b) => a + b, 0) / L.ids.length * 100) / 100 : null, secs: Math.round(used), ease: null, tired: null };
+}
+function endLevel(done, quit) {
+  const L = S.L; if (L.done) return; L.done = true; stopScan(); dwellEl = null;
+  const st = stats(L); S.results.push(st);
+  if (done) { setTimeout(() => playTune(TUNES[L.cfg.tune]), 300); for (let i = 0; i < 5; i++) setTimeout(() => sparks(Math.random() * R().width, Math.random() * R().height * 0.7 + 40), i * 160); }
+  setTimeout(() => {
+    clearStage();
+    if (quit) return finish();
+    $('betweenT').textContent = done ? 'Level complete!' : 'Time!';
+    $('betweenMsg').textContent = done ? `You played ${L.cfg.tuneName}.` : `You reached ${L.hits} of ${L.cfg.count}. That still counts: on to the next level whenever you're ready.`;
+    $('betweenNums').innerHTML = [['Reached', st.hits + ' / ' + st.goal], ['Avg time', (st.avgMs / 1000).toFixed(2) + ' s'], ['Accuracy', st.acc + '%'], ['Per minute', st.perMin]].map(x => `<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+    const ease = ['Easy', 'OK', 'Hard'], tired = ['😀 1', '🙂 2', '😐 3', '😕 4', '😫 5'];
+    $('easeBtns').innerHTML = ease.map((w, i) => `<button type="button" data-v="${w}" aria-pressed="false">${w}</button>`).join('');
+    $('tiredBtns').innerHTML = tired.map((w, i) => `<button type="button" data-v="${i + 1}" aria-pressed="false">${w}</button>`).join('');
+    [['easeBtns', 'ease'], ['tiredBtns', 'tired']].forEach(([box, k]) => [...$(box).children].forEach(b => b.addEventListener('click', () => { st[k] = b.dataset.v; [...$(box).children].forEach(x => x.setAttribute('aria-pressed', x === b)); })));
+    $('nextBtn').textContent = S.levelIdx + 1 >= LEVELS.length ? 'See your rundown ▶' : 'Next level: ' + LEVELS[S.levelIdx + 1].name + ' ▶';
+    show('between');
+  }, done ? 1600 : 400);
+}
+$('nextBtn').addEventListener('click', nextLevel);
+$('endBtn').addEventListener('click', finish);
+
+/* ───────── Results ───────── */
+function finish() {
+  $('pauseBtn').hidden = true; clearStage(); S.L = null;
+  const res = S.results, first = res.find(r => r.level === 'Target Garden'), last = res.find(r => r.level === 'Return Lap');
+  const allHits = res.reduce((a, r) => a + r.hits, 0), allMiss = res.reduce((a, r) => a + r.misses, 0);
+  const pointLv = res.filter(r => r.level !== 'Warm-up Pond' && r.avgMs);
+  const avg = pointLv.length ? pointLv.reduce((a, r) => a + r.avgMs, 0) / pointLv.length : 0;
+  const tps = res.map(r => r.tp).filter(x => x), tp = tps.length ? tps.reduce((a, b) => a + b, 0) / tps.length : null;
+  const acc = allHits + allMiss ? Math.round(allHits / (allHits + allMiss) * 100) : 100;
+  let fat = null; if (first && last && first.avgMs && last.avgMs) fat = Math.round((last.avgMs / first.avgMs - 1) * 100);
+  const run = { input: S.input.name, key: S.input.key, pos: S.pos, levels: res.length, hits: allHits, acc, avgMs: Math.round(avg), tp, fat, perMin: avg ? Math.round(60000 / avg * 10) / 10 : 0 };
+  RUNS.push(run);
+  const best = res.filter(r => r.level !== 'Warm-up Pond').sort((a, b) => (b.done - a.done) || (a.avgMs - b.avgMs))[0];
+  const hard = res.filter(r => r.ease === 'Hard').map(r => r.level);
+  let txt = `With ${S.input.name.toLowerCase()} you reached ${allHits} targets at ${acc}% accuracy, about ${(avg / 1000).toFixed(1)} seconds per target.`;
+  if (best) txt += ` Your strongest level was ${best.level}.`;
+  if (fat !== null) txt += fat > 10 ? ` You were ${fat}% slower on the Return Lap than in Target Garden, so shorter sessions or a break may help.` : ` Your pace held steady from Target Garden to the Return Lap.`;
+  if (hard.length) txt += ` You rated ${hard.join(' and ')} as hard: larger targets or a longer dwell time may make ${hard.length > 1 ? 'them' : 'it'} easier.`;
+  $('rundown').textContent = txt;
+  $('resultNums').innerHTML = [['Targets reached', allHits], ['Accuracy', acc + '%'], ['Avg time', (avg / 1000).toFixed(2) + ' s'], ['Throughput', tp ? tp + ' bits/s' : '–'], ['Fatigue', fat === null ? '–' : (fat > 0 ? '+' : '') + fat + '%']].map(x => `<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+  $('levelTable').innerHTML = '<tr><th>Level</th><th>Reached</th><th>Misses</th><th>Avg time</th><th>Throughput</th><th>Ease</th><th>Tired</th></tr>' + res.map(r => `<tr><td>${r.level}</td><td>${r.hits} / ${r.goal}${r.done ? ' ✓' : ''}</td><td>${r.misses}${r.slips ? ' (' + r.slips + ' slips)' : ''}</td><td>${(r.avgMs / 1000).toFixed(2)} s</td><td>${r.tp ? r.tp + ' bits/s' : '–'}</td><td>${r.ease || '–'}</td><td>${r.tired || '–'}</td></tr>`).join('');
+  if (RUNS.length > 1) {
+    $('compareWrap').hidden = false;
+    $('compareTable').innerHTML = '<tr><th>Input</th><th>Position</th><th>Reached</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th></tr>' + RUNS.map(r => `<tr><td>${r.input}</td><td>${r.pos}</td><td>${r.hits}</td><td>${r.acc}%</td><td>${(r.avgMs / 1000).toFixed(2)} s</td><td>${r.fat === null ? '–' : (r.fat > 0 ? '+' : '') + r.fat + '%'}</td></tr>`).join('');
+    const names = [...new Set(RUNS.map(r => r.input))];
+    $('prefBtns').innerHTML = names.map(n => `<button type="button" aria-pressed="false">${n}</button>`).join('');
+    [...$('prefBtns').children].forEach(b => b.addEventListener('click', () => { [...$('prefBtns').children].forEach(x => x.setAttribute('aria-pressed', x === b)); LOG.push({ run: S.id, input: b.textContent, position: S.pos, level: '', event: 'preferred', time_ms: '', distance_px: '', size_px: '', id_bits: '' }); }));
+  }
+  // save to the person's test sessions (read by the Access+ research workspace)
+  try {
+    const T = JSON.parse(localStorage.getItem('accessplus-tests') || '[]') || [];
+    const n = T.filter(t => t.method === run.key).length + 1;
+    const ease = res.map(r => r.ease).filter(Boolean), effort = ease.length ? Math.round(ease.reduce((a, e) => a + ({ Easy: 15, OK: 50, Hard: 85 })[e], 0) / ease.length) : null;
+    T.push({ n, date: new Date().toISOString().slice(0, 16).replace('T', ' '), method: run.key, pos: run.pos, mode: 'VTE pointing (' + run.input + ')', size: S.sizeMul, speed: run.perMin, acc: run.acc, tp: run.tp || '', effort, useful: Math.round(run.perMin * run.acc / 100 * 10) / 10, game: 'Pointing Environment', fatigue: run.fat });
+    localStorage.setItem('accessplus-tests', JSON.stringify(T));
+    $('savedMsg').textContent = 'Saved to your test sessions in this browser. Nothing is sent anywhere unless you choose to share.';
+  } catch (e) { $('savedMsg').textContent = 'Saving is not available here; download the CSV to keep your results.'; }
+  show('results');
+}
+$('againBtn').addEventListener('click', () => { show('setup'); drawInputs(); });
+$('csvBtn').addEventListener('click', () => {
+  const cols = ['run', 'input', 'position', 'level', 'event', 'time_ms', 'distance_px', 'size_px', 'id_bits'];
+  const sum = RUNS.map(r => ['summary', r.input, r.pos, 'all levels', 'avg_ms=' + r.avgMs + ' acc=' + r.acc + ' fatigue=' + (r.fat ?? '') + ' tp=' + (r.tp ?? ''), '', '', '', '']);
+  const data = cols.join(',') + '\n' + LOG.map(r => cols.map(c => r[c] ?? '').join(',')).join('\n') + '\n' + sum.map(r => r.join(',')).join('\n') + '\n';
+  const name = 'vte-pointing-' + new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-') + '.csv';
+  const fallback = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'text/csv' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); };
+  try { const p = window.parent; if (p && p !== window && p.claude && p.claude.use) { p.claude.use('downloads').then(d => d ? d.save({ filename: name, data }).catch(fallback) : fallback()).catch(fallback); return; } } catch (e) {}
+  fallback();
+});
+window.addEventListener('resize', () => { if (S && S.L && !S.L.done) { /* keep targets on screen */ const r = R(); S.L.pads.forEach(p => { p._x = Math.min(p._x, r.width - p._s / 2); p._y = Math.min(p._y, r.height - p._s / 2); p.style.left = p._x + 'px'; p.style.top = p._y + 'px'; }); } });
+</script>
+</body>
+</html>

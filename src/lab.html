@@ -53,6 +53,7 @@
 <main>
   <div class="wrap lb-wrap">
     <header class="lb-hero">
+      <a href="#vte" style="font:500 .8em var(--mono);color:#5fe0a8">&larr; Virtual Training Environment</a>
       <span class="lb-k">Recreation lab · experimental zone <span class="lb-tag">Works in progress · demo only</span></span>
       <h1>Music, art and movement, <span>hands-free</span></h1>
       <p>Works in progress, shared as demos while they are rebuilt. Experimental apps prepared for ISATMA, the International Symposium on Assistive Technology, Music and Art. Each one uses colorful on-screen targets you can trigger with eye tracking, a head pointer, a switch, touch, or movement picked up by a webcam. Some respond to whole-body motion.</p>
@@ -139,10 +140,10 @@
   el('lbPClose').addEventListener('click', closeApp);
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !player.hidden) closeApp(); });
   document.addEventListener('click', function (e) {
-    var a = e.target.closest ? e.target.closest('a[href^="lab/"]') : null;
+    var a = e.target.closest ? e.target.closest('a[href^="lab/"], a[href^="vte/"]') : null;
     if (!a || a.id === 'lbPNew' || !/\.html(\?|$)/.test(a.getAttribute('href'))) return;
     e.preventDefault();
-    var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : (a.textContent || '').replace(/[\u2197]/g, '').trim();
+    var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : a.getAttribute('data-title') || (a.textContent || '').replace(/[\u2197]/g, '').trim();
     openApp(a.getAttribute('href'), title);
   });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });

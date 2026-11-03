@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Access+ Virtual Training Environment</title>
+<style>
+.vt-wrap { gap: 26px !important; }
+.vt-hero { display: grid; gap: 12px; padding: 28px 0 4px; }
+.vt-hero h1 { font-size: clamp(2em, 5vw, 3.2em); line-height: 1.06; margin: 0; }
+.vt-hero h1 span { color: #5fe0a8; }
+.vt-hero p { margin: 0; color: var(--desc); max-width: 58em; font-size: 1.06em; }
+.vt-k { font: 500 0.74em var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: #5fe0a8; }
+.vt-tag { margin-left: 8px; padding: 2px 8px; background: #ffc670; color: #231c05; }
+.vt-draft { display: grid; gap: 6px; padding: 14px 16px; border: 2px dashed #ffc670; background: rgba(255,198,112,0.07); font-size: 0.95em; }
+.vt-draft b { font: 600 0.8em var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: #ffc670; }
+.vt-draft p { margin: 0; color: var(--desc); }
+
+/* the desktop */
+.vt-desk { position: relative; padding: 22px; border: 1px solid var(--line-hi); background:
+  radial-gradient(ellipse at 20% 0%, rgba(95,224,168,0.16), transparent 55%),
+  radial-gradient(ellipse at 90% 100%, rgba(124,196,255,0.14), transparent 55%), #070d1a; }
+.vt-deskbar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; margin: -22px -22px 20px; padding: 10px 16px; border-bottom: 1px solid var(--line-hi); background: rgba(0,0,0,0.35); font: 500 0.78em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.vt-deskbar b { color: #5fe0a8; }
+.vt-icons { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 16px; }
+.vt-ic { position: relative; display: grid; gap: 8px; align-content: start; padding: 16px; min-height: 196px; border: 1px solid var(--line-hi); background: rgba(14,21,38,0.85); color: var(--ink); text-decoration: none; transition: border-color .15s, transform .15s; }
+a.vt-ic:hover, a.vt-ic:focus-visible { border-color: var(--ac); transform: translateY(-2px); outline: none; }
+.vt-ic .gl { display: grid; place-items: center; width: 72px; height: 72px; font-size: 40px; border-radius: 18px; background: color-mix(in srgb, var(--ac) 22%, transparent); border: 2px solid var(--ac); }
+.vt-ic b { font-size: 1.12em; }
+.vt-ic small { color: var(--desc); font-size: 0.9em; line-height: 1.45; }
+.vt-ic .st { position: absolute; top: 12px; right: 12px; font: 600 0.62em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; }
+.vt-ic .st.on { background: #5fe0a8; color: #04201a; }
+.vt-ic .st.soon { border: 1px solid var(--line-hi); color: var(--muted); }
+.vt-ic.soon { opacity: 0.78; }
+.vt-ic.soon .gl { filter: saturate(0.6); }
+.vt-feat { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: center; padding: 20px; border: 1px solid #5fe0a8; background: rgba(95,224,168,0.06); }
+.vt-feat img { display: block; width: 100%; height: auto; border: 1px solid var(--line-hi); }
+.vt-feat h2 { margin: 0; font: 600 1.5em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+.vt-feat p { margin: 0; color: var(--desc); }
+.vt-feat .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.vt-feat .btn { min-height: 56px; }
+.vt-feat ol { margin: 0; padding-left: 20px; color: var(--desc); font-size: 0.94em; line-height: 1.55; }
+@media (max-width: 760px) { .vt-feat { grid-template-columns: 1fr; } }
+
+.vt-sec { display: grid; gap: 12px; }
+.vt-sec h2 { margin: 0; font: 600 1.4em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+.vt-sec > p { margin: 0; color: var(--desc); max-width: 60em; }
+.vt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+.vt-box { display: grid; gap: 6px; align-content: start; padding: 14px; border: 1px solid var(--line-hi); background: var(--panel); }
+.vt-box b { color: var(--ink); }
+.vt-box span { color: var(--desc); font-size: 0.92em; line-height: 1.5; }
+.vt-layers { display: grid; gap: 8px; }
+.vt-layer { display: grid; grid-template-columns: 160px 1fr; gap: 14px; padding: 12px 14px; border-left: 4px solid var(--ac); background: var(--panel); }
+.vt-layer b { color: var(--ac); font: 600 0.8em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; }
+.vt-layer span { color: var(--desc); font-size: 0.94em; }
+@media (max-width: 600px) { .vt-layer { grid-template-columns: 1fr; gap: 4px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="wrap vt-wrap">
+    <header class="vt-hero">
+      <span class="vt-k">Access+ Virtual Training Environment <span class="vt-tag">Prototype · for review</span></span>
+      <h1>Practice, play and measure, <span>hands-free</span></h1>
+      <p>A virtual desktop of short, game-like environments for trying computer access methods: eye tracking, head and face tracking, switches and more. Each environment turns a real computer skill into a colorful challenge with music, records how it went, and gives a plain-language rundown. People use it to find what works for them; researchers use it to build and run their own experiments.</p>
+    </header>
+    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results are stored only in your browser unless you choose to download or share them. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
+
+    <section class="vt-desk" aria-labelledby="vtDeskT">
+      <div class="vt-deskbar"><span id="vtDeskT"><b>VTE desktop</b> · environments</span><span>1 ready · 6 planned</span></div>
+      <div class="vt-icons">
+        <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Try it</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
+        <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: Songboards, the Musical Dial, Mouse Orchestra and more. Works in progress.</small></a>
+        <div class="vt-ic soon" style="--ac:#7cc4ff"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">📜</span><b>Scrolling</b><small>Read and follow along: scroll a story or page to find highlighted words, with dwell or switch scroll zones.</small></div>
+        <div class="vt-ic soon" style="--ac:#b9a4ff"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">🧩</span><b>Drag and drop</b><small>Move puzzle pieces and files into place, with drag lock and dwell-to-drop.</small></div>
+        <div class="vt-ic soon" style="--ac:#ffc670"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">⌨️</span><b>Typing</b><small>On-screen keyboards and word prediction: type short phrases and compare layouts.</small></div>
+        <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st soon">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator preview is on the Try page.</small></a>
+        <div class="vt-ic soon" style="--ac:#ff9a3d"><span class="st soon">Later</span><span class="gl" aria-hidden="true">📱</span><b>Phone</b><small>Tap, swipe and scan on a virtual phone screen, for switch control and voice access.</small></div>
+        <div class="vt-ic soon" style="--ac:#e0e05f"><span class="st soon">Planned</span><span class="gl" aria-hidden="true">🛠️</span><b>Build your own</b><small>For researchers: assemble an experiment from components, set the conditions, and save it to share.</small></div>
+      </div>
+    </section>
+
+    <section class="vt-feat" aria-labelledby="vtFeatT">
+      <a href="vte/pointing.html" data-title="VTE · Pointing Environment" tabindex="-1" aria-hidden="true"><img src="lab/shots/vte-pointing.jpg" alt="" width="640" height="400" loading="lazy"></a>
+      <div style="display:grid;gap:12px">
+        <span class="vt-k">Ready to try</span>
+        <h2 id="vtFeatT">Pointing Environment</h2>
+        <p>Every target you reach plays the next note, so each level ends with a song. Nobody fails: if the timer runs out, the level simply ends and you move on.</p>
+        <ol><li>Warm-up Pond: five big lily pads, no timer</li><li>Target Garden: one flower at a time</li><li>Shrinking Stars: targets get smaller</li><li>Floating Notes: targets drift slowly</li><li>Melody Path: play Mary Had a Little Lamb in order</li><li>Return Lap: Target Garden again, to compare first and last</li></ol>
+        <div class="btns"><a class="btn primary" href="vte/pointing.html" data-title="VTE · Pointing Environment">Play the Pointing Environment</a></div>
+      </div>
+    </section>
+
+    <section class="vt-sec" aria-labelledby="vtInT">
+      <h2 id="vtInT">Use the way you already access a computer</h2>
+      <p>The environment adapts to the input, not the other way round. Try two methods in one visit and the rundown compares them side by side.</p>
+      <div class="vt-grid">
+        <div class="vt-box"><b>Hand mouse or trackpad</b><span>Click to select. A useful baseline for comparison.</span></div>
+        <div class="vt-box"><b>Eye tracker</b><span>Any tracker that moves the pointer. Rest on a target until the ring fills; dwell time is adjustable.</span></div>
+        <div class="vt-box"><b>Your own head mouse or FaceNav</b><span>Use the head or face tracking you already have, commercial or open-source, with dwell or its own click.</span></div>
+        <div class="vt-box"><b>Built-in nose tracking</b><span>No extra software: your webcam steers the pointer, processed on your own device.</span></div>
+        <div class="vt-box"><b>One switch</b><span>Targets light up in turn; press when the right one lights. Scan speed is adjustable.</span></div>
+        <div class="vt-box"><b>Two switches</b><span>One switch moves the light, the other selects, at your own pace.</span></div>
+      </div>
+    </section>
+
+    <section class="vt-sec" aria-labelledby="vtMeT">
+      <h2 id="vtMeT">What it measures</h2>
+      <div class="vt-grid">
+        <div class="vt-box"><b>Speed</b><span>Time to reach each target, and targets per minute.</span></div>
+        <div class="vt-box"><b>Accuracy</b><span>Misses, wrong targets and dwell slips (resting nearby without selecting).</span></div>
+        <div class="vt-box"><b>Throughput</b><span>A standard pointing score (Fitts' law, bits per second) that allows fair comparison across target sizes and distances.</span></div>
+        <div class="vt-box"><b>Fatigue</b><span>The Return Lap repeats level two, so the change from first to last shows how pace holds up over a session.</span></div>
+        <div class="vt-box"><b>Ease and preference</b><span>After each level: how easy it felt and how tired you are. At the end: which input you would choose.</span></div>
+        <div class="vt-box"><b>Your data, your choice</b><span>Saved to your test sessions in this browser and the Research workspace. Download a CSV of every target for analysis.</span></div>
+      </div>
+    </section>
+
+    <section class="vt-sec" aria-labelledby="vtReT">
+      <h2 id="vtReT">For researchers: environments, components and experiments</h2>
+      <p>The VTE is built in layers so researchers can create and store their own studies. The engine underneath grew out of Songboards, the hands-free music board.</p>
+      <div class="vt-layers">
+        <div class="vt-layer" style="--ac:#5fe0a8"><b>Components</b><span>Building blocks: targets, timers, scanners, sounds, rating questions and measures.</span></div>
+        <div class="vt-layer" style="--ac:#7cc4ff"><b>Challenges</b><span>Short tasks assembled from components, such as one level of the Pointing Environment.</span></div>
+        <div class="vt-layer" style="--ac:#b9a4ff"><b>Environments</b><span>A themed set of challenges for one computer skill: pointing, scrolling, typing, driving.</span></div>
+        <div class="vt-layer" style="--ac:#ffc670"><b>Experiments</b><span>An environment plus conditions (inputs, positions, sizes, order) and a protocol, saved and shared so other sites can run the same study. Coming next.</span></div>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+/* Tiles that open environments use the in-site player defined by the recreation lab view (a[href^="vte/"]). */
+</script>
+</body>
+</html>

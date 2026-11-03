@@ -142,6 +142,11 @@ def build():
     main, js = prefix_ids(main, js, 'lb-')
     lab = ('<main id="view-lab" class="view" hidden>\n' + main + '</main>\n', scope(css, 'lab'), js)
 
+    # ---------- virtual training environment ----------
+    css, main, js = fragment(ROOT / 'src' / 'vte.html')
+    main, js = prefix_ids(main, js, 'vt-')
+    vte = ('<main id="view-vte" class="view" hidden>\n' + main + '</main>\n', scope(css, 'vte'), js)
+
     # ---------- sign in (demo role picker, global) ----------
     signin = fragment(ROOT / 'src' / 'signin.html')
 
@@ -436,7 +441,7 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside navlab" href="#lab" data-route="lab" title="Recreation lab (experimental)">Rec lab</a>'
+           '<a class="navside navlab" href="#vte" data-route="vte" title="Virtual Training Environment (prototype)">Training Environment</a>'
            '<a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a>'
            '<a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
@@ -453,16 +458,16 @@ def build():
 .totop { position: fixed; z-index: 6; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); min-height: 56px; min-width: 56px; background: var(--panel-hi); }
 /* hero */''', 1)
 
-    views_html = '<!-- views:start -->\n' + signin[1] + borrow[0] + profile[0] + find[0] + research[0] + care[0] + lab[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__ARM__', open(ROOT / 'src' / 'arm_section.html').read()).replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
+    views_html = '<!-- views:start -->\n' + signin[1] + borrow[0] + profile[0] + find[0] + research[0] + care[0] + lab[0] + vte[0] + keyboards[0] + tech[0] + about[0] + gesture_html + join_html + try_html.replace('__ARM__', open(ROOT / 'src' / 'arm_section.html').read()).replace('__SIMS__', open(ROOT / 'src' / 'sims_section.html').read() if (ROOT / 'src' / 'sims_section.html').exists() else '') + news_html + contact_html + '<!-- views:end -->\n'
     home = re.sub(r'</main>\s*(<div class="band band-bottom".*?</div>\s*)?<footer', lambda m: '</main>\n\n' + views_html + '\n' + (m.group(1) or '') + '<footer', home, count=1, flags=re.S)
     if False:
         home = home.replace('<div class="toast" id="toast"', '<button class="btn totop" id="toTop" type="button" aria-label="Back to top">&uarr; Top</button>\n\n<div class="toast" id="toast"', 1)
 
-    views_css = '/* views-css:start */\n' + signin[0] + borrow[1] + profile[1] + find[1] + research[1] + care[1] + lab[1] + keyboards[1] + tech[1] + about[1] + gesture_css + join_css + '/* views-css:end */\n'
+    views_css = '/* views-css:start */\n' + signin[0] + borrow[1] + profile[1] + find[1] + research[1] + care[1] + lab[1] + vte[1] + keyboards[1] + tech[1] + about[1] + gesture_css + join_css + '/* views-css:end */\n'
     home = home.replace('</style>', views_css + '</style>', 1)
 
     router = r'''
-  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research', 'care', 'lab'];
+  var VIEWS = ['home', 'borrow', 'profile', 'gesture', 'keyboards', 'tech', 'about', 'join', 'try', 'news', 'contact', 'find', 'research', 'care', 'lab', 'vte'];
   function route() {
     var h = (location.hash || '#home').slice(1) || 'home';
     if (h === 'reviews') h = 'hardware';
