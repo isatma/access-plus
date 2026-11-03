@@ -121,7 +121,7 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
       <p id="introP">Six short levels of colorful targets. Each target you reach plays the next note of a tune, so finishing a level plays the whole song. Choose how you will play, then press Start. You can pause at any time, and nobody fails: when the timer runs out, the level simply ends.</p>
     </div>
     <div class="recbox" id="recBox" hidden>
-      <h3 style="margin:0;color:#7cc4ff">Recording to the dashboard</h3>
+      <h3 style="margin:0;color:#7cc4ff">Recording to the research dashboard</h3>
       <div class="row">
         <label>Study<select id="recStudy"><option value="">Free play (no study)</option></select></label>
         <label>Participant code<input type="text" id="recP" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false" style="text-transform:uppercase;width:130px"></label>
@@ -221,7 +221,7 @@ function postUp(msg) { try { if (CTX.hosted) window.parent.postMessage(msg, loca
 window.addEventListener('message', e => {
   if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-saved') return;
   const m = $('savedMsg'); if (!m) return;
-  m.textContent += e.data.mode === 'shared' ? ' Sent to the dashboard.' : e.data.mode === 'local' ? ' Added to the dashboard in this browser.' : ' It could not be sent to the dashboard' + (e.data.code === 'quota_exceeded' ? ' (the prototype store is full).' : '; download the CSV to keep it.');
+  m.textContent += e.data.mode === 'shared' ? ' Sent to the research dashboard.' : e.data.mode === 'local' ? ' Added to the research dashboard in this browser.' : ' It could not be sent to the research dashboard' + (e.data.code === 'quota_exceeded' ? ' (the prototype store is full).' : '; download the CSV to keep it.');
 });
 const stage = $('stage');
 

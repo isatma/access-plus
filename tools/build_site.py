@@ -446,7 +446,7 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside navres" href="#dashboard" data-route="dashboard">Dashboard</a>'
+           '<a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a>'
            '<a class="navsign" href="#signin" data-route="signin">Sign in</a>'
            '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
