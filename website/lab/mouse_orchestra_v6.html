@@ -645,6 +645,10 @@ window.addEventListener('load',()=>{
 @keyframes eRing{50%{transform:translate(-50%,-50%) scale(1.12);opacity:.65}}
 .ecard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(94%,520px);max-height:92%;overflow:auto;padding:22px;border-radius:22px;background:#120a30;border:2px solid #8060ff;box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;color:#eee;text-align:left}
 .ecard h2{font-size:24px;color:#ffe27a;margin-bottom:6px}
+.etop{position:sticky;top:-22px;z-index:2;display:flex;align-items:center;gap:12px;margin:-22px -22px 12px;padding:14px 18px;background:#120a30;border-bottom:1px solid #3a2a7a;border-radius:22px 22px 0 0}
+.etop h2{flex:1;margin:0}
+.eicon{display:grid;place-items:center;width:56px;height:56px;font-size:34px;border-radius:16px;border:2px solid #ff8fd0;background:rgba(255,143,208,.15);flex:none}
+.etop .go{flex:none;padding:12px 24px;font-size:18px;box-shadow:0 0 22px rgba(255,226,122,.5)}
 .ecard p{color:#cfc2f5;font-size:15px;line-height:1.45;margin-bottom:12px}
 .ecard .erow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
 .ecard label{display:grid;gap:4px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#b9a4ff;font-weight:700}
@@ -715,7 +719,7 @@ window.addEventListener('load',()=>{
   function esc2(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
   function openSetup(){
     stopGame(true);
-    setup.innerHTML='<h2 id="eSetupT">🎤 Echo Game</h2><p>The mice sing a short tune. Then it is your turn: sing it back by reaching the same mice. Each phrase you echo adds to the song, until the whole tune plays. Nobody fails: if you reach a different mouse, just try again.</p>'
+    setup.innerHTML='<div class="etop"><span class="eicon" aria-hidden="true">🐭</span><h2 id="eSetupT">Echo Game</h2><button type="button" class="go" id="eGoTop">▶ Start</button></div><p>The mice sing a short tune. Then it is your turn: sing it back by reaching the same mice. Each phrase you echo adds to the song, until the whole tune plays. Nobody fails: if you reach a different mouse, just try again.</p>'
       +(CTX.hosted?'<div class="erow" style="padding:12px;border:2px solid #7cc4ff;border-radius:14px"><label style="grid-column:1/-1;color:#7cc4ff">Recording to the research dashboard</label><label>Study<select id="eStudy"><option value="">Free play (no study)</option>'+STUDIES.map(x=>'<option value="'+esc2(x.id)+'"'+(x.id===CTX.study?' selected':'')+'>'+esc2(x.name)+'</option>').join('')+'</select></label><label>Participant code<input id="eP" maxlength="12" value="'+esc2(CTX.p)+'" placeholder="P01" style="min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 16px inherit;padding:0 10px;text-transform:uppercase"></label><label style="flex-direction:row;display:flex;align-items:center;gap:8px;text-transform:none;font-size:15px;color:#fff"><input type="checkbox" id="ePr"'+(CTX.practice?' checked':'')+' style="width:22px;height:22px"> Practice run</label></div>':'')
       +'<div class="songs" role="group" aria-label="Choose a song">'+SONGS.map(s=>'<button type="button" data-id="'+s.id+'" aria-pressed="'+(s===song)+'"><span>'+s.name+'</span><small>'+s.tag+'</small></button>').join('')+'</div>'
       +'<div class="erow"><label>How you play<select id="eIn">'+INPUTS.map(i=>'<option'+(i===opts.input?' selected':'')+'>'+i+'</option>').join('')+'</select></label>'
@@ -729,9 +733,10 @@ window.addEventListener('load',()=>{
     setup.querySelectorAll('.songs button').forEach(b=>b.addEventListener('click',()=>{song=SONGS.find(s=>s.id===b.dataset.id);setup.querySelectorAll('.songs button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
     if(CTX.hosted){ const push=()=>{ const st=$('eStudy'); CTX.study=st.value; CTX.studyName=st.value?st.options[st.selectedIndex].textContent:''; CTX.p=$('eP').value=$('eP').value.toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,12); CTX.practice=$('ePr').checked; try{window.parent.postMessage({type:'accessplus-setctx',ctx:{studyId:CTX.study,participant:CTX.p,practice:CTX.practice}},location.origin);}catch(e){} };
       $('eStudy').addEventListener('change',push); $('eP').addEventListener('input',push); $('ePr').addEventListener('change',push); }
+    $('eGoTop').addEventListener('click',()=>$('eGo').click());
     $('eGo').addEventListener('click',()=>{DEVICE=$('eDev').value.trim().slice(0,60); try{localStorage.setItem('accessplus-device',DEVICE);}catch(e){} opts={input:$('eIn').value,len:$('eLen').value,hints:$('eHint').value==='1',speed:$('eSpd').value};setup.style.display='none';startGame();});
     $('eClose').addEventListener('click',()=>{setup.style.display='none';});
-    $('eGo').focus();
+    $('eGoTop').focus();
   }
 
   /* ── mice helpers ── */

@@ -93,6 +93,13 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 .row input[type=text] { min-height: 46px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; }
 .row label.ck { display: flex; flex-direction: row; align-items: center; gap: 8px; min-height: 46px; color: var(--ink); font-size: 16px; }
 .row label.ck input { width: 22px; height: 22px; accent-color: #7cc4ff; }
+.gtop { position: sticky; top: -26px; z-index: 5; display: flex; align-items: center; gap: 14px; margin: -26px -16px 0; padding: 14px 16px; background: rgba(7,11,22,.97); border-bottom: 1px solid var(--line); }
+.gicon { display: grid; place-items: center; flex: none; width: 64px; height: 64px; font-size: 38px; border-radius: 18px; border: 2px solid var(--accent); background: rgba(95,224,168,.15); }
+.gtitle { flex: 1; min-width: 0; }
+.gtitle small { display: block; color: var(--accent); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: 11px; }
+.gtitle h2 { font-size: 26px; line-height: 1.15; }
+.btn.gstart { flex: none; min-height: 64px; padding: 0 30px; font-size: 1.2em; box-shadow: 0 0 24px rgba(95,224,168,.45); }
+@media (max-width: 520px) { .gicon { width: 48px; height: 48px; font-size: 28px; } .gtitle h2 { font-size: 20px; } .gtitle small { display: none; } .btn.gstart { padding: 0 18px; min-height: 56px; } }
 </style>
 </head>
 <body>
@@ -115,9 +122,12 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 <!-- SETUP -->
 <section class="screen show" id="setup" aria-labelledby="setupT">
   <div class="card">
+    <div class="gtop">
+      <span class="gicon" aria-hidden="true">🎯</span>
+      <div class="gtitle"><small>Access+ Virtual Training Environment</small><h2 id="setupT">Pointing Environment</h2></div>
+      <button class="btn primary big gstart" id="startTop" type="button">▶ Start</button>
+    </div>
     <div>
-      <p style="color:var(--accent);font-weight:700;letter-spacing:.1em;text-transform:uppercase;font-size:12px">Access+ Virtual Training Environment · Prototype</p>
-      <h2 id="setupT">Pointing Environment</h2>
       <p id="introP">Six short levels of colorful targets. Each target you reach plays the next note of a tune, so finishing a level plays the whole song. Choose how you will play, then press Start. You can pause at any time, and nobody fails: when the timer runs out, the level simply ends.</p>
     </div>
     <div class="recbox" id="recBox" hidden>
@@ -260,6 +270,7 @@ const LEVELS = [
 if (QP.get('quick') === '1') {
   LEVELS.splice(3);
   $('setupT').textContent = 'Two-minute challenge';
+  $('startTop').textContent = '▶ Start challenge';
   $('introP').textContent = 'Three quick levels of colorful targets. Each target you reach plays the next note of a tune. Choose how you will play, then press Start. Nobody fails: if the timer runs out, the level simply ends.';
 }
 
@@ -316,6 +327,7 @@ $('gain').addEventListener('input', e => { $('gainV').textContent = e.target.val
 drawInputs();
 
 /* ───────── Run control ───────── */
+$('startTop').addEventListener('click', () => $('startBtn').click());
 $('startBtn').addEventListener('click', () => {
   audio();
   S = { input, pos: $('pos').value, sizeMul: +$('size').value, timeMul: +$('timers').value, dwell: +$('dwell').value, scan: +$('scan').value,
