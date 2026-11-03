@@ -843,7 +843,8 @@ window.addEventListener('load',()=>{
       +'<div class="nums"><div><span>Notes</span><b>'+total+'</b></div><div><span>First try</span><b>'+acc+'%</b></div><div><span>Per note</span><b>'+(avg/1000).toFixed(1)+' s</b></div></div>'
       +'<p>'+(acc>=90?'Wonderful echoing! ':'Well played! ')+'You echoed '+g.phrases.length+' phrases'+(g.replays?' and asked to hear '+(g.replays===1?'one':g.replays)+' again':'')+'.'+(hard&&hard[0]<100&&g.phrases.length>1?' Phrase '+(hard[1]+1)+' was the trickiest, a good one to practise.':'')+'</p>'
       +'<p id="eSaved" style="font-size:13px"></p>'
-      +'<div class="acts"><button type="button" class="go" id="eRe">▶ Play again</button><button type="button" id="eNew">Choose another song</button><button type="button" id="eDone">Play freely</button></div>';
+      +'<div class="acts"><button type="button" class="go" id="eRe">▶ Play again</button><button type="button" id="eNew">Choose another song</button><button type="button" id="eDone">Play freely</button></div>'
+      +'<div class="acts" style="margin-top:12px;padding-top:12px;border-top:1px solid #3a2a7a"><b style="color:#b9a4ff;font-size:12px;letter-spacing:1px;text-transform:uppercase;align-self:center">What next?</b><button type="button" data-go="#vte">🎮 More games</button><button type="button" data-go="#dashboard">📈 My dashboard</button><button type="button" data-go="#about">ℹ️ About Access+</button></div>';
     result.style.display='block';
     $('eRe').addEventListener('click',()=>{result.style.display='none';startGame();});
     $('eNew').addEventListener('click',()=>{result.style.display='none';openSetup();});
@@ -865,6 +866,8 @@ window.addEventListener('load',()=>{
   window.addEventListener('message',e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=='accessplus-saved') return; const m=$('eSaved'); if(m) m.textContent+=e.data.mode==='shared'?' Sent to the research dashboard.':e.data.mode==='local'?' Added to the research dashboard in this browser.':' It could not be sent to the research dashboard.'; });
   document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&G) stopGame(); });
   window.__echoState=()=>G;
+  function goSite(h){ try{ if(window.parent!==window){ window.parent.postMessage({type:'accessplus-nav',hash:h},location.origin); return; } }catch(e){} location.href='../index.html'+h; }
+  document.addEventListener('click',e=>{ const b=e.target.closest&&e.target.closest('[data-go]'); if(b){ e.preventDefault(); goSite(b.getAttribute('data-go')); } });
   // open straight into the game with ?game=echo
   if(QP.get('game')==='echo'){ window.addEventListener('load',()=>setTimeout(openSetup,50)); }
 })();

@@ -100,6 +100,8 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 .gtitle h2 { font-size: 26px; line-height: 1.15; }
 .btn.gstart { flex: none; min-height: 64px; padding: 0 30px; font-size: 1.2em; box-shadow: 0 0 24px rgba(95,224,168,.45); }
 @media (max-width: 520px) { .gicon { width: 48px; height: 48px; font-size: 28px; } .gtitle h2 { font-size: 20px; } .gtitle small { display: none; } .btn.gstart { padding: 0 18px; min-height: 56px; } }
+.nextrow { display:flex; flex-wrap:wrap; gap:10px; align-items:center; padding-top:14px; border-top:1px solid var(--line); }
+.nextrow b { color:var(--muted); font-size:13px; letter-spacing:.08em; text-transform:uppercase; margin-right:4px; }
 </style>
 </head>
 <body>
@@ -193,12 +195,16 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
       <h3>Which would you choose?</h3><div class="check" id="prefBtns" role="group" aria-label="Preferred input"></div></div>
     <p id="savedMsg" style="font-size:14px"></p>
     <div class="btns"><button class="btn primary" id="againBtn" type="button">Try another input</button><button class="btn" id="csvBtn" type="button">Download results (CSV)</button></div>
+    <div class="nextrow"><b>What next?</b><button class="btn" type="button" data-go="#vte">🎮 More games</button><button class="btn" type="button" data-go="#dashboard">📈 My dashboard</button><button class="btn" type="button" data-go="#about">ℹ️ About the Access+ platform</button></div>
   </div>
 </section>
 
 <script>
 'use strict';
 const $ = id => document.getElementById(id);
+function goSite(h) { try { if (window.parent !== window) { window.parent.postMessage({ type: 'accessplus-nav', hash: h }, location.origin); return; } } catch (e) {} location.href = '../index.html' + h; }
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-go]'); if (b) { e.preventDefault(); goSite(b.getAttribute('data-go')); } });
+
 const QP = new URLSearchParams(location.search);
 const CTX = { hosted: QP.get('hosted') === '1' && window.parent !== window, study: (QP.get('study') || '').slice(0, 80), studyName: (QP.get('studyName') || '').slice(0, 80), p: (QP.get('p') || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12), practice: QP.get('practice') === '1' };
 function recLine() {

@@ -138,6 +138,12 @@
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   el('lbPClose').addEventListener('click', closeApp);
+  var NAVOK = ['#vte', '#dashboard', '#studies', '#about', '#home', '#lab', '#try'];
+  window.addEventListener('message', function (e) {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-nav' || NAVOK.indexOf(e.data.hash) < 0) return;
+    if (!player.hidden) closeApp();
+    location.hash = e.data.hash; window.scrollTo(0, 0);
+  });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !player.hidden) closeApp(); });
   document.addEventListener('click', function (e) {
     var a = e.target.closest ? e.target.closest('a[href^="lab/"], a[href^="vte/"]') : null;
