@@ -145,7 +145,7 @@
     e.preventDefault();
     var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : a.getAttribute('data-title') || (a.textContent || '').replace(/[\u2197]/g, '').trim();
     var href = a.getAttribute('href');
-    if (window.APStudyQuery && (/^vte\//.test(href) || /game=echo/.test(href))) href = href.split('?')[0] + '?' + (/game=echo/.test(href) ? 'game=echo&' : '') + window.APStudyQuery();
+    if (window.APStudyQuery && (/^vte\//.test(href) || /game=echo/.test(href)) && !/hosted=1/.test(href)) href += (href.indexOf('?') < 0 ? '?' : '&') + window.APStudyQuery();
     openApp(href, title);
   });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });

@@ -74,3 +74,4 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - 2026-11-03: VTE page: hero reworded (practice, play and measure; build and share desktops), desktop icons moved to top and enlarged, Environment Editor tile (Songboards engine), Recently played strip.
 - 2026-11-03: Mouse Orchestra v6.3 Echo Game (call and response, 4 songs, records to dashboard). Nav: Research dashboard + Sign in green boxes, full-width VTE bar under the steps. Home: comparison demo hidden.
 - 2026-11-03: Dashboard: studies-underway overview, participation grid (sessions per participant per day), custom device names. Games: study/participant/practice picker and device field on start screen.
+- 2026-11-03: Front page redesign, play first: hero with game icons, two-minute challenge (pointing ?quick=1), how it works, game gallery, who it's for, four-step path; then the previous content. Old page saved as src/home_before_redesign.html and git tag home-before-redesign.

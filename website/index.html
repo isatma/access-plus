@@ -839,6 +839,57 @@ footer .wrap { padding-block: 22px; }
 .cmp-cat { font-size: 0.74em; color: var(--signal); }
 .cmp-p.potp canvas { opacity: 0.55; }
 #cmp[hidden] { display: none !important; }
+/* play-first front page */
+.fp-hero { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: center; padding: 40px 0 10px; }
+.fp-htext { display: grid; gap: 16px; align-content: start; }
+.fp-hero h1 { margin: 0; font-size: clamp(2.1em, 5vw, 3.4em); line-height: 1.05; }
+.fp-hero h1 span { color: var(--signal); }
+.fp-hero p { margin: 0; color: var(--desc); font-size: 1.12em; line-height: 1.5; max-width: 34em; }
+.fp-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn.fp-big { min-height: 60px; font-size: 0.9em; padding: 0 24px; }
+.fp-small { color: var(--muted); font-size: 0.92em; }
+.fp-icons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.fp-ic { display: grid; justify-items: center; gap: 6px; padding: 20px 12px; text-align: center; text-decoration: none; color: var(--ink); border: 1px solid var(--line-hi); background: color-mix(in srgb, var(--ac) 8%, var(--panel)); transition: transform .2s, border-color .2s; }
+.fp-ic span { display: grid; place-items: center; width: 96px; height: 96px; font-size: 56px; border-radius: 26px; border: 2px solid var(--ac); background: color-mix(in srgb, var(--ac) 20%, transparent); box-shadow: 0 10px 28px color-mix(in srgb, var(--ac) 30%, transparent); }
+.fp-ic b { font-size: 1.15em; }
+.fp-ic small { color: var(--desc); font-size: 0.88em; }
+.fp-ic:hover, .fp-ic:focus-visible { transform: translateY(-3px); border-color: var(--ac); outline: none; }
+.fp-try { position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 26px; align-items: center; margin-top: 44px; padding: 22px; border: 2px solid var(--signal); background: linear-gradient(120deg, rgba(95,224,168,0.10), rgba(124,196,255,0.06)); }
+.fp-tryshot img { display: block; width: 100%; height: auto; border: 1px solid var(--line-hi); }
+.fp-trytext { display: grid; gap: 12px; justify-items: start; }
+.fp-try h2, .fp-how h2, .fp-gal h2, .fp-who h2, .fp-path h2 { margin: 0; font: 600 1.7em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+.fp-try p { margin: 0; color: var(--desc); font-size: 1.04em; line-height: 1.5; }
+.fp-how, .fp-gal, .fp-who, .fp-path { position: relative; z-index: 1; display: grid; gap: 16px; margin-top: 52px; }
+.fp-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.fp-card { display: grid; gap: 8px; align-content: start; padding: 20px; border: 1px solid var(--line-hi); background: var(--panel); color: var(--ink); text-decoration: none; }
+.fp-card b { font-size: 1.25em; }
+.fp-card p { margin: 0; color: var(--desc); line-height: 1.5; }
+.fp-n { font-size: 42px; line-height: 1; }
+.fp-spark { width: 100%; max-width: 220px; height: auto; margin-top: 4px; }
+.fp-link { border-top: 4px solid var(--ac); transition: transform .2s, border-color .2s; }
+.fp-link:hover, .fp-link:focus-visible { transform: translateY(-3px); border-color: var(--ac); outline: none; }
+.fp-go { color: var(--ac); font-weight: 700; margin-top: 4px; }
+.fp-galtop { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; align-items: baseline; }
+.fp-galtop a { color: var(--signal); font-weight: 600; }
+.fp-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.fp-g { display: grid; gap: 4px; padding-bottom: 14px; border: 1px solid var(--line-hi); background: var(--panel); color: var(--ink); text-decoration: none; overflow: hidden; transition: transform .2s, border-color .2s; }
+.fp-g img { display: block; width: 100%; aspect-ratio: 16 / 10; height: auto; object-fit: cover; margin-bottom: 8px; background: #000; }
+.fp-g b { padding: 0 14px; font-size: 1.1em; }
+.fp-g small { padding: 0 14px; color: var(--desc); }
+.fp-g:hover, .fp-g:focus-visible { transform: translateY(-3px); border-color: var(--signal); outline: none; }
+.fp-path { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding: 20px; border: 1px solid var(--line-hi); background: var(--panel); margin-bottom: 30px; }
+.fp-steps { display: flex; flex-wrap: wrap; gap: 10px; }
+.fp-steps a { display: inline-flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 16px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; font-weight: 600; }
+.fp-steps a span { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--signal); color: var(--signal); font: 600 0.85em var(--mono); }
+.fp-steps a:hover, .fp-steps a:focus-visible { border-color: var(--signal); outline: none; }
+@media (max-width: 900px) { .fp-hero, .fp-try, .fp-path { grid-template-columns: 1fr; } .fp-3, .fp-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .fp-3, .fp-grid { grid-template-columns: 1fr; } .fp-ic span { width: 76px; height: 76px; font-size: 44px; } .fp-hero { padding-top: 22px; } }
+@media (prefers-reduced-motion: reduce) { .fp-ic, .fp-g, .fp-link { transition: none; } .fp-ic:hover, .fp-g:hover, .fp-link:hover { transform: none; } }
+
+#lab-band[hidden] { display: none !important; }
+.hero .intro h2.ih { margin: 0 0 -4px; font: inherit; font-size: 2.3em; line-height: 1.15; letter-spacing: 0; text-transform: none; color: var(--ink); font-weight: 400; }
+.hero .intro h2.ih span { color: var(--signal); }
+@media (max-width: 640px) { .hero .intro h2.ih { font-size: 1.8em; } }
 /* views-css:start */
 
 .si-back { position: fixed; inset: 0; z-index: 60; background: rgba(3,8,16,0.72); display: grid; place-items: center; padding: 16px; }
@@ -2148,12 +2199,81 @@ footer .wrap { padding-block: 22px; }
 
 <main id="view-home" class="view">
   <div class="wrap">
+    <!-- ===== front page: play first (2026-11 redesign; previous version saved as src/home_before_redesign.html) ===== -->
+    <section class="fp-hero" aria-labelledby="fpT">
+      <div class="fp-htext">
+        <span class="eyebrow">Access+ · draft for review</span>
+        <h1 id="fpT">Try new technology. Build skill. <span>Have fun doing it.</span></h1>
+        <p>For people with advanced and complex impairments, and the people who support them. Play short, colorful games with the control you use, see what works best for you, and watch your skills grow.</p>
+        <div class="fp-cta"><a class="btn primary fp-big" href="vte/pointing.html?quick=1" data-title="Two-minute challenge">▶ Play a game now</a><a class="btn fp-big" href="#vte">See all the games</a></div>
+        <small class="fp-small">No sign-up. Works with an eye tracker, a head mouse, switches, a joystick, touch or an ordinary mouse.</small>
+      </div>
+      <div class="fp-icons" role="list">
+        <a role="listitem" class="fp-ic" href="vte/pointing.html" data-title="VTE · Pointing" style="--ac:#5fe0a8"><span aria-hidden="true">🎯</span><b>Pointing</b><small>Reach targets, play a tune</small></a>
+        <a role="listitem" class="fp-ic" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Echo Game" style="--ac:#ff8fd0"><span aria-hidden="true">🐭</span><b>Echo Game</b><small>The mice sing, you echo</small></a>
+        <a role="listitem" class="fp-ic" href="#lab" style="--ac:#ffc670"><span aria-hidden="true">🎨</span><b>Music and art</b><small>Dial, harmonica, dance</small></a>
+        <a role="listitem" class="fp-ic" href="#try" style="--ac:#7cc4ff"><span aria-hidden="true">♿</span><b>Wheelchair</b><small>Practice driving</small></a>
+      </div>
+    </section>
+
+    <section class="fp-try" aria-labelledby="fpTryT">
+      <a class="fp-tryshot" href="vte/pointing.html?quick=1" data-title="Two-minute challenge" tabindex="-1" aria-hidden="true"><img src="lab/shots/vte-pointing.jpg" alt="" width="640" height="400" loading="lazy"></a>
+      <div class="fp-trytext">
+        <span class="eyebrow">Try it now</span>
+        <h2 id="fpTryT">The two-minute challenge</h2>
+        <p>Three quick levels. Each target you reach plays the next note of a song, and at the end you get a score and a friendly rundown of how it went. Nobody fails: if the timer runs out, the level simply ends.</p>
+        <a class="btn primary fp-big" href="vte/pointing.html?quick=1" data-title="Two-minute challenge">▶ Start the challenge</a>
+      </div>
+    </section>
+
+    <section class="fp-how" aria-labelledby="fpHowT">
+      <h2 id="fpHowT">How it works</h2>
+      <div class="fp-3">
+        <div class="fp-card"><span class="fp-n" aria-hidden="true">🎮</span><b>Try</b><p>Pick a game and play with the control you use, or one you are thinking about.</p></div>
+        <div class="fp-card"><span class="fp-n" aria-hidden="true">🎵</span><b>Practice</b><p>Short levels with music and celebrations. Go at your own pace, take breaks, try again.</p></div>
+        <div class="fp-card"><span class="fp-n" aria-hidden="true">📈</span><b>See progress</b><p>Each game saves a simple record of speed and accuracy, so you can see skills grow and compare controls.</p>
+          <svg class="fp-spark" viewBox="0 0 200 54" role="img" aria-label="Example: a line rising across five sessions"><polyline points="6,44 52,38 98,30 144,22 194,12" fill="none" stroke="#5fe0a8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><g fill="#5fe0a8"><circle cx="6" cy="44" r="4"/><circle cx="52" cy="38" r="4"/><circle cx="98" cy="30" r="4"/><circle cx="144" cy="22" r="4"/><circle cx="194" cy="12" r="4"/></g><text x="6" y="54" fill="#a9e4c4" font-size="9">Example</text></svg></div>
+      </div>
+    </section>
+
+    <section class="fp-gal" aria-labelledby="fpGalT">
+      <div class="fp-galtop"><h2 id="fpGalT">Games to play</h2><a href="#vte">All games and tools →</a></div>
+      <div class="fp-grid">
+        <a class="fp-g" href="vte/pointing.html" data-title="VTE · Pointing"><img src="lab/shots/vte-pointing.jpg" alt="" width="640" height="400" loading="lazy"><b>Pointing</b><small>Six levels of targets that build a tune</small></a>
+        <a class="fp-g" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Echo Game"><img src="lab/shots/echo-game.jpg" alt="" width="640" height="400" loading="lazy"><b>Echo Game</b><small>Call and response with singing mice</small></a>
+        <a class="fp-g" href="lab/isatma_dial_v9.html?game=melody" data-title="Musical Dial · Follow the Melody"><img src="lab/shots/isatma_dial_v9.jpg" alt="" width="640" height="400" loading="lazy"><b>Musical Dial</b><small>Follow the Melody around a circle of notes</small></a>
+        <a class="fp-g" href="lab/virtual_harmonica_v7.html" data-title="Virtual Harmonica"><img src="lab/shots/virtual_harmonica_v7.jpg" alt="" width="640" height="400" loading="lazy"><b>Virtual Harmonica</b><small>Play with head movement, or a mouse</small></a>
+        <a class="fp-g" href="lab/songboards.html" data-title="Environment Editor (Songboards engine)"><img src="lab/shots/songboards.jpg" alt="" width="640" height="400" loading="lazy"><b>Song Boards</b><small>Build your own musical targets</small></a>
+        <a class="fp-g" href="lab/dance-board.html" data-title="Dance Board"><img src="lab/shots/dance-board.jpg" alt="" width="640" height="400" loading="lazy"><b>Dance Board</b><small>Paint with light as you move</small></a>
+      </div>
+    </section>
+
+    <section class="fp-who" aria-labelledby="fpWhoT">
+      <h2 id="fpWhoT">Who it's for</h2>
+      <div class="fp-3">
+        <a class="fp-card fp-link" href="#vte" style="--ac:#5fe0a8"><span class="fp-n" aria-hidden="true">🙂</span><b>People</b><p>Find the control that works for you today, and build skill and confidence with it.</p><span class="fp-go">Play the games →</span></a>
+        <a class="fp-card fp-link" href="#vte" style="--ac:#ffc670"><span class="fp-n" aria-hidden="true">🩺</span><b>Therapists</b><p>Run quick, fun assessments and compare options side by side with the people you work with.</p><span class="fp-go">Try an assessment →</span></a>
+        <a class="fp-card fp-link" href="#dashboard" style="--ac:#7cc4ff"><span class="fp-n" aria-hidden="true">🔬</span><b>Researchers</b><p>Set up studies, follow participants and compare technologies on the research dashboard.</p><span class="fp-go">Open the dashboard →</span></a>
+      </div>
+    </section>
+
+    <section class="fp-path" aria-labelledby="fpPathT">
+      <div><span class="eyebrow">Ready to go further?</span><h2 id="fpPathT">Your path to the right technology</h2></div>
+      <div class="fp-steps">
+        <a href="#goals"><span>1</span>Your goals</a>
+        <a href="#profile"><span>2</span>Your AI profile</a>
+        <a href="#software"><span>3</span>Your solutions</a>
+        <a href="#try"><span>4</span>Try and borrow</a>
+      </div>
+    </section>
+    <!-- ===== end play-first section ===== -->
+
 
     <div class="hero">
       <div class="plane3d" aria-hidden="true"><div class="plane-grid"></div></div>
       <section class="intro" aria-labelledby="introTitle">
       <div class="hero-head">
-        <h1 id="introTitle">Build the skills <span>to control your world.</span></h1>
+        <h2 id="introTitle" class="ih">Build the skills <span>to control your world.</span></h2>
       </div>
       <p>Practice in simulators, borrow equipment, and find open-source and commercial hardware and software for the devices you depend on.</p>
       <div class="hero-agent">
@@ -2329,7 +2449,7 @@ footer .wrap { padding-block: 22px; }
     </section>
 
 
-    <section class="labband" id="lab-band" aria-labelledby="lbbT">
+    <section class="labband" id="lab-band" hidden aria-labelledby="lbbT">
       <div class="lbb-text">
         <span class="eyebrow" style="color:#5fe0a8">Virtual Training Environment · prototype</span>
         <h2 id="lbbT">Practice computer skills as games, and see what works</h2>
@@ -4341,7 +4461,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:41 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:46 UTC</span></div>
   </div>
 </footer>
 
@@ -7366,7 +7486,7 @@ var __ID = function (x) { return document.getElementById('lb-' + x) || document.
     e.preventDefault();
     var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : a.getAttribute('data-title') || (a.textContent || '').replace(/[\u2197]/g, '').trim();
     var href = a.getAttribute('href');
-    if (window.APStudyQuery && (/^vte\//.test(href) || /game=echo/.test(href))) href = href.split('?')[0] + '?' + (/game=echo/.test(href) ? 'game=echo&' : '') + window.APStudyQuery();
+    if (window.APStudyQuery && (/^vte\//.test(href) || /game=echo/.test(href)) && !/hosted=1/.test(href)) href += (href.indexOf('?') < 0 ? '?' : '&') + window.APStudyQuery();
     openApp(href, title);
   });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
