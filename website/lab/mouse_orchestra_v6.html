@@ -633,12 +633,12 @@ window.addEventListener('load',()=>{
 #echoPanel{position:absolute;transform:translate(-50%,-50%);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
   padding:10px 14px;border-radius:22px;background:radial-gradient(ellipse at 50% 30%,rgba(60,30,110,.92),rgba(14,8,40,.94));border:2px solid #8060ff;box-shadow:0 0 40px rgba(128,96,255,.45)}
 #echoPanel .esong{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b9a4ff;font-weight:700}
-#echoPanel .estat{font-size:26px;font-weight:800;color:#fff;text-shadow:0 0 14px rgba(255,226,122,.6);line-height:1.1}
+#echoPanel .estat{font-size:20px;font-weight:800;color:#fff;text-shadow:0 0 14px rgba(255,226,122,.6);line-height:1.1}
 #echoPanel .edots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:100%}
 #echoPanel .edots i{width:16px;height:16px;border-radius:50%;border:2px solid #b9a4ff;display:inline-block}
 #echoPanel .edots i.on{background:#ffe27a;border-color:#ffe27a;box-shadow:0 0 10px #ffe27a}
 #echoPanel .edots i.cur{transform:scale(1.25)}
-#echoPanel .ebtns{display:flex;gap:8px}
+#echoPanel .ebtns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 #echoPanel .ebtns button,.ecard button{font-family:inherit;font-weight:800;cursor:pointer;border-radius:999px;border:2px solid #b9a4ff;background:#1c1240;color:#fff;padding:7px 14px;font-size:14px}
 #echoPanel .ebtns button:hover,.ecard button:hover{border-color:#ffe27a}
 .echo-ring{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:5px dashed #ffe27a;pointer-events:none;z-index:9;animation:eRing 1s ease-in-out infinite;box-shadow:0 0 26px rgba(255,226,122,.7)}
@@ -667,7 +667,7 @@ window.addEventListener('load',()=>{
 .ecard .acts{display:flex;flex-wrap:wrap;gap:8px}
 .e-conf{position:absolute;z-index:45;pointer-events:none;font-size:28px;animation:eConf 1.6s ease-out forwards}
 @keyframes eConf{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
-@media (max-width:600px){.ecard .erow{grid-template-columns:1fr}#echoPanel .estat{font-size:20px}}
+@media (max-width:600px){.ecard .erow{grid-template-columns:1fr}#echoPanel .estat{font-size:16px}#echoPanel .ebtns button{padding:5px 9px;font-size:12px}#echoPanel .esong{font-size:10px}}
 </style>
 <script>
 (function(){
@@ -755,8 +755,18 @@ window.addEventListener('load',()=>{
   function click(hi){ try{ const c=getCtx(); if(!sndOn||c.state!=='running') return; const o=c.createOscillator(),g=c.createGain(); o.type='triangle'; o.frequency.value=hi?1320:880; g.gain.setValueAtTime(0.25,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.09); o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+0.1);}catch(e){} }
   function placePanel(){
     const W=stage.offsetWidth,H=stage.offsetHeight,m=Math.min(W,H);
-    panel.style.left=(W/2)+'px'; panel.style.top=(H/2)+'px';
-    panel.style.width=Math.min(W*0.56,420)+'px'; panel.style.minHeight=Math.min(m*0.34,170)+'px';
+    // upper left of the screen, over the settings column, so it never covers a mouse
+    const ctr=document.getElementById('controls'), cr=ctr?ctr.getBoundingClientRect():null;
+    panel.style.transform='none'; panel.style.minHeight='0';
+    if(cr&&cr.width>150&&window.innerWidth>700){
+      if(panel.parentNode!==document.body) document.body.appendChild(panel);
+      panel.style.position='fixed'; panel.style.zIndex='70';
+      panel.style.left=(cr.left+6)+'px'; panel.style.top=(cr.top+6)+'px'; panel.style.width=Math.max(200,cr.width-12)+'px';
+    } else {
+      if(panel.parentNode!==stage) stage.appendChild(panel);
+      panel.style.position='absolute'; panel.style.zIndex='20';
+      panel.style.left='6px'; panel.style.top='6px'; panel.style.width=Math.min(200,W*0.5)+'px';
+    }
   }
   window.addEventListener('resize',()=>{ if(G){ placePanel(); if(G.state==='turn') showRing(G.cur[G.ni]); } });
 

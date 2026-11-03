@@ -1,0 +1,694 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access+ VTE · Environment Editor</title>
+<style>
+:root { --bg:#070b16; --panel:#0e1526; --panel2:#0b1120; --line:#263552; --ink:#eef3fb; --muted:#9fb0c8; --accent:#5fe0a8; --blue:#7cc4ff; --warn:#ffc670; --bad:#ff8a8a; --glow:#ffe27a; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { height:100%; background:var(--bg); color:var(--ink); font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+body { display:flex; flex-direction:column; overflow:hidden; }
+button, select, input, textarea { font:inherit; color:inherit; }
+.btn { min-height:44px; padding:0 16px; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:10px; cursor:pointer; font-weight:600; }
+.btn:hover, .btn:focus-visible { border-color:var(--accent); outline:none; }
+.btn.pri { background:var(--accent); border-color:var(--accent); color:#04201a; }
+.btn.blue { background:var(--blue); border-color:var(--blue); color:#04162a; }
+.btn.warn { border-color:var(--bad); color:#ffb3b3; }
+.btn.big { min-height:60px; padding:0 28px; font-size:1.15em; box-shadow:0 0 24px rgba(95,224,168,.4); }
+.btn.sm { min-height:36px; padding:0 10px; font-size:.9em; }
+input[type=text], textarea, select { min-height:42px; padding:6px 10px; border-radius:8px; border:1px solid var(--line); background:var(--panel2); }
+textarea { min-height:64px; resize:vertical; }
+input[type=checkbox] { width:20px; height:20px; accent-color:var(--accent); flex:none; }
+input[type=range] { accent-color:var(--accent); }
+label.ck { display:flex; align-items:center; gap:10px; min-height:38px; cursor:pointer; }
+label.f { display:grid; gap:4px; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+label.f > input, label.f > select, label.f > textarea { width:100%; min-width:0; font-size:15px; letter-spacing:0; text-transform:none; color:var(--ink); }
+
+/* top bar */
+#top { display:flex; align-items:center; gap:12px; padding:10px 14px; background:#0b1120; border-bottom:2px solid var(--accent); flex-wrap:wrap; }
+#top .gicon { display:grid; place-items:center; width:48px; height:48px; font-size:28px; border-radius:14px; border:2px solid var(--accent); background:rgba(95,224,168,.15); flex:none; cursor:pointer; }
+#top .ttl { flex:1; min-width:160px; display:grid; }
+#top .ttl input { width:100%; min-width:0; }
+#top .ttl small { color:var(--accent); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:11px; }
+#top .ttl input { font-size:20px; font-weight:700; background:transparent; border:1px solid transparent; padding:2px 6px; margin-left:-6px; }
+#top .ttl input:hover, #top .ttl input:focus { border-color:var(--line); background:var(--panel2); outline:none; }
+#saveMsg { font-size:13px; color:var(--muted); }
+
+/* editor layout */
+#editor { flex:1; display:grid; grid-template-columns:300px minmax(0,1fr) 270px; min-height:0; }
+#left, #right { grid-template-columns:minmax(0,1fr); overflow-x:hidden; overflow-y:auto; background:var(--panel2); border-right:1px solid var(--line); padding:12px; display:grid; gap:12px; align-content:start; }
+#right { border-right:0; border-left:1px solid var(--line); }
+details.grp { border:1px solid var(--line); border-radius:12px; background:var(--panel); }
+details.grp > summary { list-style:none; cursor:pointer; padding:12px 14px; font-weight:700; display:flex; justify-content:space-between; align-items:center; }
+details.grp > summary::after { content:'▾'; color:var(--muted); }
+details.grp:not([open]) > summary::after { content:'▸'; }
+details.grp > div { padding:0 14px 12px; display:grid; gap:2px; }
+.sub { padding-left:30px; display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); min-height:34px; }
+.sub input[type=range] { flex:1; min-width:0; }
+.sub b { flex:none; min-width:42px; text-align:right; color:var(--ink); }
+details.grp { min-width:0; }
+h4 { font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin:4px 0; }
+#center { display:flex; flex-direction:column; min-width:0; min-height:0; }
+#levelBar { display:flex; align-items:center; gap:6px; padding:8px 12px; border-bottom:1px solid var(--line); overflow-x:auto; }
+#levelBar .lv { min-height:40px; padding:0 14px; border-radius:10px 10px 0 0; border:1px solid var(--line); border-bottom:0; background:var(--panel2); cursor:pointer; white-space:nowrap; font-weight:600; }
+#levelBar .lv[aria-pressed="true"] { background:var(--panel); border-color:var(--accent); color:var(--accent); }
+#tools { display:flex; flex-wrap:wrap; gap:6px; padding:8px 12px; align-items:center; }
+#stageWrap { flex:1; display:grid; place-items:center; padding:10px; min-height:0; }
+.stage { position:relative; width:100%; max-height:100%; aspect-ratio:16/10; border-radius:14px; overflow:hidden; background:radial-gradient(ellipse at 50% 40%, #182a52 0%, #0c1530 55%, #070b16 100%); border:1px solid var(--line); touch-action:none; }
+.stage.grid { background-image:linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px), radial-gradient(ellipse at 50% 40%, #182a52 0%, #0c1530 55%, #070b16 100%); background-size:5% 8%, 5% 8%, auto; }
+.tg { position:absolute; transform:translate(-50%,-50%); border-radius:50%; display:grid; place-items:center; user-select:none; color:#111; font-weight:800; box-shadow:0 8px 22px rgba(0,0,0,.45), inset 0 -8px 16px rgba(0,0,0,.22), inset 0 6px 12px rgba(255,255,255,.35); cursor:grab; }
+.tg .em { font-size:.42em; line-height:1; pointer-events:none; }
+.tg .lb { position:absolute; bottom:12%; font-size:.17em; pointer-events:none; color:rgba(0,0,0,.7); }
+.tg .badge { position:absolute; top:-6px; right:-6px; min-width:24px; height:24px; padding:0 5px; border-radius:12px; background:#fff; color:#111; font:700 12px/24px system-ui; text-align:center; pointer-events:none; }
+.tg.sel { outline:4px solid #fff; outline-offset:4px; }
+.tg.decoy { filter:saturate(.35) brightness(.8); }
+.tg.reward::after { content:'★'; position:absolute; top:-10px; left:-6px; color:var(--glow); font-size:22px; text-shadow:0 0 8px #000; }
+.empty-hint { position:absolute; inset:0; display:grid; place-items:center; color:var(--muted); text-align:center; pointer-events:none; padding:20px; }
+.swatches { display:flex; flex-wrap:wrap; gap:6px; }
+.swatches button { width:30px; height:30px; border-radius:50%; border:2px solid transparent; cursor:pointer; }
+.swatches button[aria-pressed="true"] { border-color:#fff; }
+.emojis { display:flex; flex-wrap:wrap; gap:4px; }
+.emojis button { width:36px; height:36px; border-radius:8px; border:1px solid var(--line); background:var(--panel); cursor:pointer; font-size:20px; }
+.note { padding:10px 12px; border-left:3px solid var(--warn); background:rgba(255,198,112,.08); border-radius:6px; font-size:13px; color:var(--ink); }
+@media (max-width: 1000px) { #editor { grid-template-columns:1fr; overflow:auto; } #left, #right { border:0; } #center { min-height:70vh; } body { overflow:auto; } }
+
+/* player */
+#player { flex:1; display:none; flex-direction:column; min-height:0; position:relative; }
+#hud { display:flex; align-items:center; gap:10px; padding:8px 14px; background:#0b1120; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+#hud .sp { flex:1; }
+.chip { display:flex; flex-direction:column; align-items:center; min-width:70px; padding:3px 10px; border:1px solid var(--line); border-radius:8px; background:var(--panel); }
+.chip span { font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); }
+.chip b { font-size:17px; font-variant-numeric:tabular-nums; }
+#pStageWrap { flex:1; display:grid; place-items:center; padding:10px; min-height:0; }
+#pStage .tg { cursor:pointer; transition:transform .1s; }
+#pStage .tg.next { box-shadow:0 0 0 6px var(--glow), 0 0 36px 10px rgba(255,226,122,.5); }
+#pStage .tg.lit { outline:6px solid #fff; outline-offset:6px; }
+#pStage .tg.hit { animation:pop .35s ease-out forwards; }
+#pStage .tg.wrong { animation:shake .3s; }
+@keyframes pop { to { transform:translate(-50%,-50%) scale(1.5); opacity:0; } }
+@keyframes shake { 25% { margin-left:-8px; } 75% { margin-left:8px; } }
+.ring { position:absolute; inset:-12px; pointer-events:none; transform:rotate(-90deg); }
+.ring circle { fill:none; stroke:#fff; stroke-width:6; stroke-linecap:round; }
+.spark { position:absolute; width:10px; height:10px; border-radius:50%; pointer-events:none; animation:spark .8s ease-out forwards; z-index:5; }
+@keyframes spark { to { transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0; } }
+#banner { position:absolute; top:70px; left:50%; transform:translateX(-50%); padding:8px 18px; border-radius:999px; background:rgba(0,0,0,.65); font-weight:700; z-index:8; pointer-events:none; }
+.overlay { position:absolute; inset:0; z-index:20; overflow:auto; background:rgba(7,11,22,.95); display:none; padding:0 16px 30px; }
+.overlay.show { display:block; }
+.card { max-width:820px; margin:0 auto; display:grid; gap:16px; }
+.ptop { position:sticky; top:0; z-index:3; display:flex; align-items:center; gap:14px; padding:16px 0; background:rgba(7,11,22,.97); border-bottom:1px solid var(--line); }
+.ptop .gicon { display:grid; place-items:center; width:64px; height:64px; font-size:38px; border-radius:18px; border:2px solid var(--accent); background:rgba(95,224,168,.15); flex:none; }
+.ptop .t { flex:1; min-width:0; }
+.ptop .t small { display:block; color:var(--accent); font-weight:700; letter-spacing:.1em; text-transform:uppercase; font-size:11px; }
+.ptop .t h2 { font-size:24px; line-height:1.15; }
+.opts { display:grid; grid-template-columns:repeat(auto-fill, minmax(min(100%,220px),1fr)); gap:10px; }
+.opt { text-align:left; padding:14px; border-radius:12px; border:2px solid var(--line); background:var(--panel); cursor:pointer; display:grid; gap:4px; }
+.opt[aria-pressed="true"] { border-color:var(--accent); background:rgba(95,224,168,.1); }
+.opt small { color:var(--muted); }
+.recbox { display:grid; gap:10px; padding:14px; border:2px solid var(--blue); border-radius:12px; background:rgba(124,196,255,.08); }
+.row { display:flex; flex-wrap:wrap; gap:12px 18px; align-items:end; }
+.check { display:flex; flex-wrap:wrap; gap:8px; }
+.check button { min-height:50px; min-width:62px; padding:0 14px; border-radius:10px; border:2px solid var(--line); background:var(--panel); cursor:pointer; font-size:16px; }
+.check button[aria-pressed="true"] { border-color:var(--accent); background:rgba(95,224,168,.15); }
+table { width:100%; border-collapse:collapse; font-size:14px; }
+th, td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+th { color:var(--muted); font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+.tw { overflow-x:auto; }
+.nums { display:grid; grid-template-columns:repeat(auto-fill,minmax(140px,1fr)); gap:10px; }
+.nums div { padding:12px; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
+.nums span { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+.nums b { display:block; font-size:22px; }
+.muted { color:var(--muted); }
+@media (max-width:520px) { .ptop .gicon { width:48px; height:48px; font-size:28px; } .ptop .t h2 { font-size:19px; } .btn.big { padding:0 18px; } }
+</style>
+</head>
+<body>
+
+<!-- ============ EDITOR ============ -->
+<header id="top">
+  <button class="gicon" id="iconBtn" type="button" title="Choose an icon" aria-label="Choose an icon">🧩</button>
+  <div class="ttl"><small>Access+ VTE · Environment Editor</small><input type="text" id="exName" maxlength="60" value="My training exercise" aria-label="Exercise name"></div>
+  <span id="saveMsg" aria-live="polite"></span>
+  <button class="btn" id="exportBtn" type="button" title="Download as a file">⬇ Export</button>
+  <label class="btn" style="display:inline-flex;align-items:center" title="Open an exported file">⬆ Import<input type="file" id="importFile" accept=".json,application/json" hidden></label>
+  <button class="btn blue" id="saveBtn" type="button">💾 Save and share</button>
+  <button class="btn pri big" id="previewBtn" type="button">▶ Preview</button>
+</header>
+
+<div id="editor">
+  <aside id="left" aria-label="Components">
+    <label class="f">Start from a template<select id="tpl"><option value="">Choose a template…</option><option value="blank">Blank stage</option><option value="warm">Big targets warm-up</option><option value="grid">Grid of nine</option><option value="mary">Melody path: Mary Had a Little Lamb</option><option value="shrink">Shrinking targets</option><option value="decoy">Find the star (with decoys)</option></select></label>
+    <label class="f">What it trains<textarea id="exDesc" maxlength="400" placeholder="For example: reaching large targets with a head mouse, lying in bed"></textarea></label>
+
+    <details class="grp" open><summary>Rules for this level</summary><div id="rulesBox"></div></details>
+    <details class="grp" open><summary>Ways to select</summary><div id="selBox"></div></details>
+    <details class="grp"><summary>Feedback and sound</summary><div id="fbBox"></div></details>
+    <details class="grp"><summary>What to measure</summary><div id="msBox"></div></details>
+    <p class="note">Exercises you save are shared with everyone this page is shared with, in the Training Environment's exercise library.</p>
+  </aside>
+
+  <section id="center" aria-label="Stage">
+    <div id="levelBar" role="group" aria-label="Levels"></div>
+    <div id="tools">
+      <button class="btn pri" id="addT" type="button">＋ Target</button>
+      <button class="btn" id="addD" type="button">＋ Decoy</button>
+      <button class="btn" id="addR" type="button">＋ Bonus star</button>
+      <span class="muted" style="margin:0 4px">Arrange:</span>
+      <button class="btn sm" data-arr="row" type="button">Row</button>
+      <button class="btn sm" data-arr="circle" type="button">Circle</button>
+      <button class="btn sm" data-arr="grid" type="button">Grid</button>
+      <button class="btn sm" data-arr="random" type="button">Scatter</button>
+      <label class="ck" style="margin-left:auto"><input type="checkbox" id="snap" checked> Snap to grid</label>
+    </div>
+    <div id="stageWrap"><div class="stage grid" id="stage" aria-label="Exercise stage. Drag targets to move them."></div></div>
+  </section>
+
+  <aside id="right" aria-label="Selected target">
+    <div id="propsEmpty" class="muted">Select a target on the stage to edit it, or add one with <b>＋ Target</b>.</div>
+    <div id="props" hidden style="display:grid;gap:12px">
+      <h4>Selected target</h4>
+      <label class="f">Kind<select id="pRole"><option value="target">Target (counts toward the goal)</option><option value="decoy">Decoy (avoid it)</option><option value="reward">Bonus star (optional)</option></select></label>
+      <label class="f">Label<input type="text" id="pLabel" maxlength="16" placeholder="Optional"></label>
+      <div><h4>Picture</h4><div class="emojis" id="pEmojis"></div></div>
+      <div><h4>Color</h4><div class="swatches" id="pColors"></div></div>
+      <label class="f">Size <span id="pSizeV"></span><input type="range" id="pSize" min="4" max="30" step="1"></label>
+      <label class="f">Note it plays<select id="pNote"></select></label>
+      <label class="f">Order (when playing in order)<input type="text" id="pOrder" inputmode="numeric" maxlength="3"></label>
+      <div class="row"><button class="btn sm" id="pDup" type="button">Duplicate</button><button class="btn sm warn" id="pDel" type="button">Delete</button></div>
+    </div>
+    <hr style="border:0;border-top:1px solid var(--line)">
+    <div style="display:grid;gap:8px">
+      <h4>This level</h4>
+      <label class="f">Level name<input type="text" id="lvName" maxlength="40"></label>
+      <div class="row"><button class="btn sm" id="lvDup" type="button">Duplicate level</button><button class="btn sm warn" id="lvDel" type="button">Delete level</button></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ PLAYER ============ -->
+<div id="player">
+  <div id="hud">
+    <button class="btn sm" id="backEdit" type="button">✎ Back to editor</button>
+    <b id="hName"></b><span class="sp"></span>
+    <div class="chip"><span>Level</span><b id="hLevel">–</b></div>
+    <div class="chip"><span>Goal</span><b id="hGoal">–</b></div>
+    <div class="chip" id="chipTime"><span>Time</span><b id="hTime">–</b></div>
+    <button class="btn sm" id="pauseBtn" type="button">Pause</button>
+  </div>
+  <div id="pStageWrap"><div class="stage" id="pStage" aria-label="Exercise"></div></div>
+  <div id="banner" hidden></div>
+
+  <section class="overlay show" id="pStart">
+    <div class="card">
+      <div class="ptop"><span class="gicon" id="psIcon" aria-hidden="true">🧩</span><div class="t"><small id="psKicker">Access+ Virtual Training Environment</small><h2 id="psName"></h2></div><button class="btn pri big" id="goTop" type="button">▶ Start</button></div>
+      <p id="psDesc" class="muted"></p>
+      <div class="recbox" id="recBox" hidden>
+        <b style="color:var(--blue)">Recording to the research dashboard</b>
+        <div class="row">
+          <label class="f">Study<select id="recStudy"><option value="">Free play (no study)</option></select></label>
+          <label class="f">Participant code<input type="text" id="recP" maxlength="12" placeholder="P01" style="width:120px;text-transform:uppercase"></label>
+          <label class="ck"><input type="checkbox" id="recPr"> Practice run</label>
+        </div>
+      </div>
+      <p id="previewNote" class="note" hidden>Preview: this run is not recorded.</p>
+      <h4>How will you play?</h4>
+      <div class="opts" id="psSel"></div>
+      <div class="row">
+        <label class="f">Your device (optional)<input type="text" id="device" maxlength="60" placeholder="e.g. USB touchpad, lower lip" style="width:240px"></label>
+        <label class="f">Position<select id="pos"><option value="up">Sitting upright</option><option value="rec">Reclined</option><option value="bed">Lying in bed</option><option value="side">Side-lying</option></select></label>
+      </div>
+      <p class="muted" id="psLevels"></p>
+      <div><button class="btn pri big" id="goBottom" type="button">▶ Start</button></div>
+    </div>
+  </section>
+
+  <section class="overlay" id="pBetween">
+    <div class="card" style="padding-top:24px">
+      <h2 id="pbT">Level complete</h2>
+      <p id="pbMsg" class="muted"></p>
+      <div class="nums" id="pbNums"></div>
+      <div id="pbEase"><h4>How easy was that?</h4><div class="check" id="easeBtns"></div></div>
+      <div id="pbTired"><h4>How tired do you feel?</h4><div class="check" id="tiredBtns"></div></div>
+      <div class="row"><button class="btn pri big" id="nextBtn" type="button">Next ▶</button><button class="btn" id="endBtn" type="button">Finish now</button></div>
+    </div>
+  </section>
+
+  <section class="overlay" id="pPause">
+    <div class="card" style="padding-top:60px;text-align:center;justify-items:center">
+      <h2>Paused</h2><p class="muted">Take your time. The timer is stopped.</p>
+      <div class="row" style="justify-content:center"><button class="btn pri big" id="resumeBtn" type="button">▶ Resume</button><button class="btn" id="quitBtn" type="button">Finish now</button></div>
+    </div>
+  </section>
+
+  <section class="overlay" id="pResults">
+    <div class="card" style="padding-top:24px">
+      <h2 id="prT">Your rundown</h2>
+      <p id="prMsg"></p>
+      <div class="nums" id="prNums"></div>
+      <div class="tw"><table id="prTable"></table></div>
+      <p id="prSaved" class="muted" style="font-size:14px"></p>
+      <div class="row"><button class="btn pri" id="againBtn" type="button">Play again</button><button class="btn" id="csvBtn" type="button">Download results (CSV)</button><button class="btn" id="toEdit" type="button">✎ Edit this exercise</button></div>
+    </div>
+  </section>
+</div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const QP = new URLSearchParams(location.search);
+const HOSTED = QP.get('hosted') === '1' && window.parent !== window;
+const CTX = { study: (QP.get('study') || '').slice(0, 80), studyName: (QP.get('studyName') || '').slice(0, 80), p: (QP.get('p') || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12), practice: QP.get('practice') === '1' };
+const SAFE = /^[A-Za-z0-9_.-]{1,80}$/;
+function up(msg) { try { if (HOSTED) window.parent.postMessage(msg, location.origin); } catch (e) {} }
+function esc(t) { return String(t == null ? '' : t).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]); }
+function uid(p) { return p + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+/* ───────── vocabulary ───────── */
+const NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const NOTES = []; for (let m = 48; m <= 84; m++) NOTES.push(m);
+const nn = m => NAMES[m % 12] + Math.floor(m / 12 - 1);
+const NOTE_COL = { 0: '#ff5a5a', 2: '#ff9a3d', 4: '#ffe04d', 5: '#7be04d', 7: '#3dd6b0', 9: '#9b7bff', 11: '#ff7bc8' };
+const COLORS = ['#ff5a5a','#ff9a3d','#ffe04d','#7be04d','#3dd6b0','#7cc4ff','#9b7bff','#ff7bc8','#ffffff','#8796b0'];
+const EMOJIS = ['','⭐','🌸','🪷','🎵','🎯','🐭','🍎','🎈','🐟','🦋','⚽','🚗','🏠','❤️','☀️','🌙','🔔','🎁','🍪'];
+const ICONS = ['🧩','🎯','🎵','🌸','⭐','🐭','🚗','🏠','🎈','🦋','🎮','🧠','✋','👀'];
+const TUNES = {
+  none: ['None (each target plays its own note)', []],
+  mary: ['Mary Had a Little Lamb', [64,62,60,62,64,64,64,62,62,62,64,67,67]],
+  twinkle: ['Twinkle, Twinkle', [60,60,67,67,69,69,67,65,65,64,64,62,62,60]],
+  ode: ['Ode to Joy', [64,64,65,67,67,65,64,62,60,60,62,64,64,62,62]],
+  hcb: ['Hot Cross Buns', [64,62,60,64,62,60,60,60,60,60,62,62,62,62,64,62,60]],
+  arp: ['Rising chord', [60,64,67,72,76,79,84]]
+};
+const RULES = [
+  ['timer', 'Timer', 'secs'],
+  ['order', 'Play targets in order'],
+  ['oneAtATime', 'Show one target at a time'],
+  ['shrink', 'Targets shrink after each hit'],
+  ['drift', 'Targets drift slowly'],
+  ['hint', 'Glow on the next target']
+];
+const SELS = [
+  ['click', 'Click or tap', 'Select with a click, a tap or a switch that clicks.'],
+  ['hover', 'Hover', 'Selects as soon as the pointer touches a target.'],
+  ['dwell', 'Dwell', 'Rest on a target until the ring fills. For eye trackers and head mice.'],
+  ['scan1', 'One switch', 'Targets light up in turn; press Space, Enter or click when the right one lights.'],
+  ['scan2', 'Two switches', 'Space or → moves the light; Enter or click selects.']
+];
+const FBS = [['notes', 'Each hit plays a note'], ['tune', 'Hits build a tune'], ['sparkle', 'Sparkles on each hit'], ['celebrate', 'Celebration at the end of a level'], ['oops', 'Soft sound on a miss']];
+const MEAS = [['time', 'Time per target'], ['acc', 'Accuracy and misses'], ['tp', 'Throughput (Fitts’ law)'], ['slips', 'Dwell slips'], ['ease', 'Ease rating after each level'], ['tired', 'Tiredness rating after each level']];
+
+/* ───────── exercise model ───────── */
+function newTarget(o) { return Object.assign({ id: uid('t'), x: .5, y: .5, size: .12, color: '#7cc4ff', emoji: '', label: '', note: 60, role: 'target', order: 0 }, o || {}); }
+function newLevel(name) { return { id: uid('l'), name: name || 'Level 1', targets: [], rules: { timer: false, secs: 60, order: false, oneAtATime: false, shrink: false, drift: false, hint: true }, tune: 'none' }; }
+function newExercise() {
+  return { v: 1, id: '', name: 'My training exercise', desc: '', icon: '🧩', levels: [newLevel()],
+    select: { click: true, hover: false, dwell: true, scan1: true, scan2: true, dwellMs: 800, scanMs: 1200 },
+    feedback: { notes: true, tune: false, sparkle: true, celebrate: true, oops: true, instrument: 'triangle' },
+    measures: { time: true, acc: true, tp: true, slips: true, ease: true, tired: false } };
+}
+let EX = newExercise(), LV = 0, SEL = null;
+function lvl() { return EX.levels[LV]; }
+
+/* templates */
+function colorFor(m) { return NOTE_COL[m % 12] || '#7cc4ff'; }
+const TPL = {
+  blank: () => { const e = newExercise(); e.name = 'My training exercise'; return e; },
+  warm: () => { const e = newExercise(); e.name = 'Big targets warm-up'; e.icon = '🪷'; e.desc = 'Five large targets to get comfortable with a new control.'; const l = e.levels[0]; l.name = 'Warm-up';
+    [[.2,.35],[.5,.3],[.8,.35],[.33,.72],[.67,.72]].forEach((p, i) => l.targets.push(newTarget({ x: p[0], y: p[1], size: .17, color: COLORS[i + 3], emoji: '🪷', note: [60,64,67,72,76][i] }))); return e; },
+  grid: () => { const e = newExercise(); e.name = 'Grid of nine'; e.icon = '🎯'; e.desc = 'Nine targets in a grid, one at a time.'; const l = e.levels[0]; l.name = 'Grid'; l.rules.oneAtATime = true; l.rules.timer = true; l.rules.secs = 60;
+    let i = 0; for (let r = 0; r < 3; r++) for (let c = 0; c < 3; c++) { const m = [60,62,64,65,67,69,71,72,74][i++]; l.targets.push(newTarget({ x: .2 + c * .3, y: .2 + r * .3, size: .11, color: colorFor(m), emoji: '🎯', note: m })); } return e; },
+  mary: () => { const e = newExercise(); e.name = 'Melody path'; e.icon = '🎵'; e.desc = 'Play Mary Had a Little Lamb by reaching the glowing note.'; e.feedback.tune = true; const l = e.levels[0]; l.name = 'Mary'; l.tune = 'mary'; l.rules.order = true; l.rules.timer = true; l.rules.secs = 90;
+    [60,62,64,65,67].forEach((m, i) => l.targets.push(newTarget({ x: .14 + i * .18, y: i % 2 ? .62 : .45, size: .14, color: colorFor(m), label: NAMES[m % 12], note: m }))); return e; },
+  shrink: () => { const e = newExercise(); e.name = 'Shrinking targets'; e.icon = '⭐'; e.desc = 'Targets get smaller after every hit.'; const l = e.levels[0]; l.name = 'Shrinking stars'; l.rules.shrink = true; l.rules.oneAtATime = true; l.rules.timer = true;
+    [[.25,.3],[.75,.3],[.5,.55],[.2,.75],[.8,.75],[.5,.2]].forEach((p, i) => l.targets.push(newTarget({ x: p[0], y: p[1], size: .13, color: '#ffe04d', emoji: '⭐', note: [60,64,67,72,67,64][i] }))); return e; },
+  decoy: () => { const e = newExercise(); e.name = 'Find the star'; e.icon = '🌟'; e.desc = 'Reach the stars and avoid the grey decoys.'; const l = e.levels[0]; l.name = 'Find the star'; l.rules.timer = true;
+    [[.2,.3],[.5,.25],[.8,.35],[.3,.7],[.7,.72]].forEach((p, i) => l.targets.push(newTarget({ x: p[0], y: p[1], size: .12, color: i % 2 ? '#8796b0' : '#ffe04d', emoji: i % 2 ? '' : '⭐', role: i % 2 ? 'decoy' : 'target', note: [60,62,64,65,67][i] }))); return e; }
+};
+
+/* ───────── editor rendering ───────── */
+const stage = $('stage');
+function stageRect() { return stage.getBoundingClientRect(); }
+function drawLevels() {
+  $('levelBar').innerHTML = EX.levels.map((l, i) => `<button type="button" class="lv" data-i="${i}" aria-pressed="${i === LV}">${esc(l.name)}</button>`).join('') + '<button type="button" class="btn sm" id="lvAdd">＋ Level</button>';
+  $('levelBar').querySelectorAll('.lv').forEach(b => b.addEventListener('click', () => { LV = +b.dataset.i; SEL = null; drawAll(); }));
+  $('lvAdd').addEventListener('click', () => { EX.levels.push(newLevel('Level ' + (EX.levels.length + 1))); LV = EX.levels.length - 1; SEL = null; drawAll(); dirty(); });
+  $('lvName').value = lvl().name;
+}
+function tgHTML(t, W) {
+  const s = Math.round(t.size * W);
+  return `<div class="tg ${t.role === 'decoy' ? 'decoy' : ''} ${t.role === 'reward' ? 'reward' : ''} ${SEL === t.id ? 'sel' : ''}" data-id="${t.id}" style="left:${t.x * 100}%;top:${t.y * 100}%;width:${s}px;height:${s}px;font-size:${s}px;background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.7), ${t.color} 42%, ${t.color})"><span class="em">${esc(t.emoji || (t.label ? '' : NAMES[t.note % 12]))}</span>${t.label ? `<span class="lb">${esc(t.label)}</span>` : ''}${lvl().rules.order && !(EX.feedback.tune && lvl().tune !== 'none') ? `<span class="badge">${(t.order || 0) + 1}</span>` : ''}</div>`;
+}
+function drawStage() {
+  const W = stageRect().width || 800, L = lvl();
+  stage.innerHTML = L.targets.map(t => tgHTML(t, W)).join('') + (L.targets.length ? '' : '<div class="empty-hint">Add targets with ＋ Target, or start from a template on the left.<br>Drag targets to move them.</div>');
+}
+function checkRow(obj, key, label, extra) { return `<label class="ck"><input type="checkbox" data-k="${key}" ${obj[key] ? 'checked' : ''}> ${label}</label>${extra || ''}`; }
+function drawPanels() {
+  const R = lvl().rules;
+  $('rulesBox').innerHTML = RULES.map(r => checkRow(R, r[0], r[1], r[0] === 'timer' ? `<div class="sub" ${R.timer ? '' : 'hidden'}><input type="range" min="15" max="180" step="5" value="${R.secs}" data-n="secs"><b>${R.secs} s</b></div>` : r[0] === 'order' ? `<div class="sub" ${R.order ? '' : 'hidden'}>${EX.feedback.tune && lvl().tune !== 'none' ? 'Follows the tune: the target with the next note glows.' : 'Numbers on the targets set the order.'}</div>` : '')).join('')
+    + `<label class="f" style="margin-top:8px">Tune for this level<select id="lvTune">${Object.keys(TUNES).map(k => `<option value="${k}" ${lvl().tune === k ? 'selected' : ''}>${TUNES[k][0]}</option>`).join('')}</select></label>`;
+  $('rulesBox').querySelectorAll('input[data-k]').forEach(c => c.addEventListener('change', () => { R[c.dataset.k] = c.checked; drawPanels(); drawStage(); dirty(); }));
+  $('rulesBox').querySelectorAll('input[data-n]').forEach(c => c.addEventListener('input', () => { R[c.dataset.n] = +c.value; c.nextElementSibling.textContent = c.value + ' s'; dirty(); }));
+  $('lvTune').addEventListener('change', e => { lvl().tune = e.target.value; if (e.target.value !== 'none') EX.feedback.tune = true; drawPanels(); drawStage(); dirty(); });
+  const S = EX.select;
+  $('selBox').innerHTML = SELS.map(s => checkRow(S, s[0], s[1], s[0] === 'dwell' ? `<div class="sub" ${S.dwell ? '' : 'hidden'}>Dwell <input type="range" min="300" max="2000" step="100" value="${S.dwellMs}" data-n="dwellMs"><b>${(S.dwellMs / 1000).toFixed(1)} s</b></div>` : s[0] === 'scan1' ? `<div class="sub" ${S.scan1 ? '' : 'hidden'}>Scan speed <input type="range" min="600" max="3000" step="100" value="${S.scanMs}" data-n="scanMs"><b>${(S.scanMs / 1000).toFixed(1)} s</b></div>` : '')).join('');
+  $('selBox').querySelectorAll('input[data-k]').forEach(c => c.addEventListener('change', () => { S[c.dataset.k] = c.checked; if (!SELS.some(x => S[x[0]])) { S.click = true; } drawPanels(); dirty(); }));
+  $('selBox').querySelectorAll('input[data-n]').forEach(c => c.addEventListener('input', () => { S[c.dataset.n] = +c.value; c.nextElementSibling.textContent = (c.value / 1000).toFixed(1) + ' s'; dirty(); }));
+  const F = EX.feedback;
+  $('fbBox').innerHTML = FBS.map(f => checkRow(F, f[0], f[1])).join('') + `<label class="f" style="margin-top:8px">Sound<select id="fbInst"><option value="triangle">Soft flute</option><option value="sine">Pure tone</option><option value="bell">Bell</option><option value="square">Retro game</option></select></label>`;
+  $('fbInst').value = F.instrument;
+  $('fbBox').querySelectorAll('input[data-k]').forEach(c => c.addEventListener('change', () => { F[c.dataset.k] = c.checked; drawPanels(); drawStage(); dirty(); }));
+  $('fbInst').addEventListener('change', e => { F.instrument = e.target.value; tone(64, .4); dirty(); });
+  const M = EX.measures;
+  $('msBox').innerHTML = MEAS.map(m => checkRow(M, m[0], m[1])).join('');
+  $('msBox').querySelectorAll('input[data-k]').forEach(c => c.addEventListener('change', () => { M[c.dataset.k] = c.checked; dirty(); }));
+}
+function drawProps() {
+  const t = lvl().targets.find(x => x.id === SEL);
+  $('props').hidden = !t; $('propsEmpty').hidden = !!t;
+  if (!t) return;
+  $('pRole').value = t.role; $('pLabel').value = t.label; $('pSize').value = Math.round(t.size * 100); $('pSizeV').textContent = Math.round(t.size * 100) + '% of the width';
+  $('pNote').value = t.note; $('pOrder').value = (t.order || 0) + 1;
+  $('pEmojis').innerHTML = EMOJIS.map(e => `<button type="button" data-e="${e}" aria-pressed="${t.emoji === e}" title="${e || 'No picture'}">${e || '∅'}</button>`).join('');
+  $('pEmojis').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { t.emoji = b.dataset.e; drawStage(); drawProps(); dirty(); }));
+  $('pColors').innerHTML = COLORS.map(c => `<button type="button" style="background:${c}" data-c="${c}" aria-pressed="${t.color === c}" aria-label="Color ${c}"></button>`).join('');
+  $('pColors').querySelectorAll('button').forEach(b => b.addEventListener('click', () => { t.color = b.dataset.c; drawStage(); drawProps(); dirty(); }));
+}
+$('pNote').innerHTML = NOTES.map(m => `<option value="${m}">${nn(m)}</option>`).join('');
+function selT() { return lvl().targets.find(x => x.id === SEL); }
+$('pRole').addEventListener('change', e => { const t = selT(); if (t) { t.role = e.target.value; if (t.role === 'decoy') t.color = '#8796b0'; if (t.role === 'reward') { t.emoji = '⭐'; t.color = '#ffe04d'; } drawStage(); drawProps(); dirty(); } });
+$('pLabel').addEventListener('input', e => { const t = selT(); if (t) { t.label = e.target.value; drawStage(); dirty(); } });
+$('pSize').addEventListener('input', e => { const t = selT(); if (t) { t.size = +e.target.value / 100; $('pSizeV').textContent = e.target.value + '% of the width'; drawStage(); dirty(); } });
+$('pNote').addEventListener('change', e => { const t = selT(); if (t) { t.note = +e.target.value; tone(t.note, .4); drawStage(); dirty(); } });
+$('pOrder').addEventListener('change', e => { const t = selT(); if (t) { t.order = Math.max(0, (parseInt(e.target.value, 10) || 1) - 1); drawStage(); dirty(); } });
+$('pDup').addEventListener('click', () => { const t = selT(); if (!t) return; const c = Object.assign({}, t, { id: uid('t'), x: Math.min(.92, t.x + .06), y: Math.min(.9, t.y + .06), order: lvl().targets.length }); lvl().targets.push(c); SEL = c.id; drawAll(); dirty(); });
+$('pDel').addEventListener('click', () => { lvl().targets = lvl().targets.filter(x => x.id !== SEL); SEL = null; drawAll(); dirty(); });
+$('lvName').addEventListener('input', e => { lvl().name = e.target.value.slice(0, 40) || 'Level'; $('levelBar').querySelector('.lv[aria-pressed="true"]').textContent = lvl().name; dirty(); });
+$('lvDup').addEventListener('click', () => { const c = JSON.parse(JSON.stringify(lvl())); c.id = uid('l'); c.name = lvl().name + ' (copy)'; c.targets.forEach(t => t.id = uid('t')); EX.levels.splice(LV + 1, 0, c); LV++; SEL = null; drawAll(); dirty(); });
+$('lvDel').addEventListener('click', () => { if (EX.levels.length < 2) { flash('An exercise needs at least one level.'); return; } EX.levels.splice(LV, 1); LV = Math.max(0, LV - 1); SEL = null; drawAll(); dirty(); });
+function addT(role) {
+  const L = lvl(), n = L.targets.filter(t => t.role === 'target').length, scale = [60,62,64,65,67,69,71,72,74,76,77,79];
+  const m = scale[n % scale.length], t = newTarget({ x: .15 + Math.random() * .7, y: .2 + Math.random() * .6, role, note: m, color: role === 'decoy' ? '#8796b0' : role === 'reward' ? '#ffe04d' : colorFor(m), emoji: role === 'reward' ? '⭐' : '', order: L.targets.length });
+  L.targets.push(t); SEL = t.id; drawAll(); dirty();
+}
+$('addT').addEventListener('click', () => addT('target'));
+$('addD').addEventListener('click', () => addT('decoy'));
+$('addR').addEventListener('click', () => addT('reward'));
+document.querySelectorAll('[data-arr]').forEach(b => b.addEventListener('click', () => {
+  const T = lvl().targets, n = T.length; if (!n) return;
+  const k = b.dataset.arr;
+  T.forEach((t, i) => {
+    if (k === 'row') { t.x = n === 1 ? .5 : .12 + i * (.76 / (n - 1)); t.y = .5; }
+    if (k === 'circle') { const a = -Math.PI / 2 + i * 2 * Math.PI / n; t.x = .5 + .34 * Math.cos(a) * .62; t.y = .5 + .34 * Math.sin(a); }
+    if (k === 'grid') { const c = Math.ceil(Math.sqrt(n)), r = Math.ceil(n / c); t.x = (i % c + 1) / (c + 1); t.y = (Math.floor(i / c) + 1) / (r + 1); }
+    if (k === 'random') { t.x = .12 + Math.random() * .76; t.y = .15 + Math.random() * .7; }
+  });
+  drawStage(); dirty();
+}));
+$('tpl').addEventListener('change', e => { const k = e.target.value; if (!k) return; const keepId = EX.id; EX = TPL[k](); EX.id = keepId; LV = 0; SEL = null; e.target.value = ''; loadIntoUI(); dirty(); });
+$('exName').addEventListener('input', e => { EX.name = e.target.value.slice(0, 60); dirty(); });
+$('exDesc').addEventListener('input', e => { EX.desc = e.target.value.slice(0, 400); dirty(); });
+$('iconBtn').addEventListener('click', () => { const i = (ICONS.indexOf(EX.icon) + 1) % ICONS.length; EX.icon = ICONS[i]; $('iconBtn').textContent = EX.icon; dirty(); });
+
+/* drag on stage */
+let drag = null;
+stage.addEventListener('pointerdown', e => {
+  const el = e.target.closest('.tg');
+  if (!el) { SEL = null; drawStage(); drawProps(); return; }
+  SEL = el.dataset.id; const r = stageRect(), t = selT();
+  drag = { t, dx: e.clientX - (r.left + t.x * r.width), dy: e.clientY - (r.top + t.y * r.height), moved: false };
+  stage.setPointerCapture(e.pointerId); drawStage(); drawProps();
+});
+stage.addEventListener('pointermove', e => {
+  if (!drag) return; const r = stageRect();
+  let x = (e.clientX - drag.dx - r.left) / r.width, y = (e.clientY - drag.dy - r.top) / r.height;
+  if ($('snap').checked) { x = Math.round(x * 20) / 20; y = Math.round(y * 12.5) / 12.5; }
+  drag.t.x = Math.min(.97, Math.max(.03, x)); drag.t.y = Math.min(.96, Math.max(.04, y)); drag.moved = true;
+  const el = stage.querySelector(`.tg[data-id="${drag.t.id}"]`); if (el) { el.style.left = drag.t.x * 100 + '%'; el.style.top = drag.t.y * 100 + '%'; }
+});
+stage.addEventListener('pointerup', () => { if (drag && drag.moved) dirty(); else if (drag) tone(drag.t.note, .35); drag = null; });
+document.addEventListener('keydown', e => {
+  if ($('player').style.display === 'flex') return;
+  if ((e.key === 'Delete' || e.key === 'Backspace') && SEL && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) { e.preventDefault(); $('pDel').click(); }
+});
+window.addEventListener('resize', () => { if ($('player').style.display !== 'flex') drawStage(); else layoutPlay(); });
+
+function drawAll() { drawLevels(); drawStage(); drawPanels(); drawProps(); }
+function loadIntoUI() { $('exName').value = EX.name; $('exDesc').value = EX.desc; $('iconBtn').textContent = EX.icon; drawAll(); }
+let isDirty = false;
+function dirty() { isDirty = true; $('saveMsg').textContent = 'Unsaved changes'; try { localStorage.setItem('accessplus-editor-draft', JSON.stringify(EX)); } catch (e) {} }
+function flash(t) { $('saveMsg').textContent = t; }
+
+/* ───────── save, share, import, export ───────── */
+function clean(e) {
+  const s = (v, n) => String(v == null ? '' : v).slice(0, n);
+  const out = { v: 1, id: SAFE.test(e.id || '') ? e.id : uid('x'), name: s(e.name, 60) || 'Untitled exercise', desc: s(e.desc, 400), icon: s(e.icon, 4) || '🧩',
+    select: Object.assign(newExercise().select, e.select || {}), feedback: Object.assign(newExercise().feedback, e.feedback || {}), measures: Object.assign(newExercise().measures, e.measures || {}),
+    levels: (Array.isArray(e.levels) && e.levels.length ? e.levels : [newLevel()]).slice(0, 20).map(l => ({ id: SAFE.test(l.id || '') ? l.id : uid('l'), name: s(l.name, 40) || 'Level', tune: TUNES[l.tune] ? l.tune : 'none',
+      rules: Object.assign(newLevel().rules, l.rules || {}),
+      targets: (Array.isArray(l.targets) ? l.targets : []).slice(0, 60).map(t => ({ id: SAFE.test(t.id || '') ? t.id : uid('t'), x: Math.min(1, Math.max(0, +t.x || .5)), y: Math.min(1, Math.max(0, +t.y || .5)), size: Math.min(.4, Math.max(.03, +t.size || .12)),
+        color: /^#[0-9a-fA-F]{3,8}$/.test(t.color || '') ? t.color : '#7cc4ff', emoji: s(t.emoji, 4), label: s(t.label, 16), note: Math.min(96, Math.max(36, +t.note || 60)), role: ['target', 'decoy', 'reward'].includes(t.role) ? t.role : 'target', order: Math.max(0, +t.order || 0) })) })) };
+  out.levels.forEach(l => { l.rules.secs = Math.min(600, Math.max(10, +l.rules.secs || 60)); });
+  return out;
+}
+$('saveBtn').addEventListener('click', () => {
+  EX = clean(EX);
+  if (!lvl()) LV = 0;
+  if (HOSTED) { flash('Saving…'); up({ type: 'accessplus-ex-save', exercise: EX }); }
+  else { try { const all = JSON.parse(localStorage.getItem('accessplus-exercises') || '{}'); all[EX.id] = EX; localStorage.setItem('accessplus-exercises', JSON.stringify(all)); isDirty = false; flash('Saved in this browser. Open the editor from Access+ to share it.'); } catch (e) { flash('Could not save here: use Export.'); } }
+});
+$('exportBtn').addEventListener('click', () => {
+  const data = JSON.stringify(clean(EX), null, 2), name = (EX.name || 'exercise').replace(/[^A-Za-z0-9]+/g, '-').toLowerCase() + '.json';
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'application/json' })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+});
+$('importFile').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 300000) { flash('That file is too large.'); return; }
+  const rd = new FileReader(); rd.onload = () => { try { EX = clean(JSON.parse(rd.result)); EX.id = ''; LV = 0; SEL = null; loadIntoUI(); dirty(); flash('Imported. Save to share it.'); } catch (er) { flash('That file is not an exercise.'); } }; rd.readAsText(f);
+  e.target.value = '';
+});
+window.addEventListener('message', e => {
+  if (e.origin !== location.origin || !e.data) return;
+  const m = e.data;
+  if (m.type === 'accessplus-ex-saved') { if (m.ok) { EX.id = m.id; isDirty = false; flash(m.mode === 'shared' ? '✓ Saved and shared in the exercise library' : '✓ Saved in this browser'); } else flash('Could not save' + (m.code === 'quota_exceeded' ? ': the store is full.' : '. You may have view-only access.')); }
+  if (m.type === 'accessplus-ex' && m.exercise) { EX = clean(m.exercise); EX.id = m.exercise.id; LV = 0; SEL = null; loadIntoUI(); isDirty = false; flash(''); if (QP.get('play')) openPlayer(false); }
+  if (m.type === 'accessplus-ex' && !m.exercise) flash('That exercise could not be found.');
+  if (m.type === 'accessplus-ctx' && Array.isArray(m.studies)) {
+    const box = $('recStudy'), cur = box.value || CTX.study;
+    box.innerHTML = '<option value="">Free play (no study)</option>' + m.studies.map(x => `<option value="${esc(x.id)}">${esc(x.name)}</option>`).join('');
+    box.value = [...box.options].some(o => o.value === cur) ? cur : '';
+  }
+  if (m.type === 'accessplus-saved') { const s = $('prSaved'); if (s) s.textContent += m.mode === 'shared' ? ' Sent to the research dashboard.' : m.mode === 'local' ? ' Added to the research dashboard in this browser.' : ' It could not be sent to the research dashboard.'; }
+});
+
+/* ───────── sound ───────── */
+let AC = null, OUT = null;
+function audio() { if (!AC) { try { AC = new (window.AudioContext || window.webkitAudioContext)(); OUT = AC.createDynamicsCompressor(); const g = AC.createGain(); g.gain.value = .7; OUT.connect(g); g.connect(AC.destination); } catch (e) { AC = null; } } if (AC && AC.state === 'suspended') AC.resume(); return AC; }
+function tone(m, dur, when, vol) {
+  if (!audio()) return; const t = AC.currentTime + (when || 0), f = 440 * Math.pow(2, (m - 69) / 12), ins = EX.feedback.instrument;
+  const o = AC.createOscillator(), g = AC.createGain(); o.type = ins === 'bell' ? 'sine' : ins; o.frequency.value = f; o.connect(g); g.connect(OUT);
+  const v = (vol || .3) * (ins === 'square' ? .4 : 1);
+  g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .015); g.gain.exponentialRampToValueAtTime(.0001, t + (dur || .5) * (ins === 'bell' ? 2.2 : 1));
+  o.start(t); o.stop(t + (dur || .5) * 2.3);
+  if (ins === 'bell') { const o2 = AC.createOscillator(), g2 = AC.createGain(); o2.frequency.value = f * 2.76; o2.connect(g2); g2.connect(OUT); g2.gain.setValueAtTime(v * .25, t); g2.gain.exponentialRampToValueAtTime(.0001, t + .6); o2.start(t); o2.stop(t + .7); }
+}
+function buzz() { if (!audio()) return; const t = AC.currentTime, o = AC.createOscillator(), g = AC.createGain(); o.type = 'square'; o.frequency.value = 140; g.gain.setValueAtTime(.05, t); g.gain.exponentialRampToValueAtTime(.0001, t + .15); o.connect(g); g.connect(OUT); o.start(t); o.stop(t + .16); }
+
+/* ───────── player ───────── */
+const pStage = $('pStage');
+let P = null, RUN = null, LOG = [], previewMode = false, chosenSel = 'click';
+function show(id) { ['pStart', 'pBetween', 'pPause', 'pResults'].forEach(s => $(s).classList.toggle('show', s === id)); }
+function banner(t, ms) { const b = $('banner'); b.textContent = t; b.hidden = false; clearTimeout(banner._t); banner._t = setTimeout(() => b.hidden = true, ms || 1800); }
+function openPlayer(preview) {
+  EX = clean(Object.assign({}, EX, { id: EX.id || '' })); if (!EX.id) EX.id = '';
+  previewMode = preview;
+  $('editor').style.display = 'none'; $('top').style.display = 'none'; $('player').style.display = 'flex';
+  $('backEdit').hidden = QP.get('play') && !preview; $('toEdit').hidden = false;
+  $('hName').textContent = EX.name; $('psIcon').textContent = EX.icon; $('psName').textContent = EX.name; $('psDesc').textContent = EX.desc || 'A custom training exercise.';
+  $('psKicker').textContent = preview ? 'Preview · Environment Editor' : 'Access+ Virtual Training Environment';
+  $('previewNote').hidden = !preview; $('recBox').hidden = preview || !HOSTED;
+  const allowed = SELS.filter(s => EX.select[s[0]]); if (!allowed.some(s => s[0] === chosenSel)) chosenSel = allowed[0][0];
+  $('psSel').innerHTML = allowed.map(s => `<button type="button" class="opt" data-s="${s[0]}" aria-pressed="${s[0] === chosenSel}"><b>${s[1]}</b><small>${s[2]}</small></button>`).join('');
+  $('psSel').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => { chosenSel = b.dataset.s; $('psSel').querySelectorAll('.opt').forEach(x => x.setAttribute('aria-pressed', x === b)); }));
+  $('psLevels').textContent = EX.levels.length + ' level' + (EX.levels.length > 1 ? 's' : '') + ': ' + EX.levels.map(l => l.name).join(' · ');
+  $('recP').value = CTX.p; $('recPr').checked = CTX.practice;
+  try { $('device').value = localStorage.getItem('accessplus-device') || ''; } catch (e) {}
+  show('pStart'); pStage.innerHTML = ''; $('goTop').focus();
+}
+$('previewBtn').addEventListener('click', () => { audio(); openPlayer(true); });
+$('backEdit').addEventListener('click', () => { stopLevel(); $('player').style.display = 'none'; $('editor').style.display = ''; $('top').style.display = ''; drawAll(); });
+$('toEdit').addEventListener('click', () => { if (QP.get('play') && !previewMode) { location.search = location.search.replace('play=', 'edit='); return; } $('backEdit').click(); });
+$('goTop').addEventListener('click', () => $('goBottom').click());
+$('goBottom').addEventListener('click', () => {
+  audio();
+  const dev = $('device').value.trim().slice(0, 60); try { localStorage.setItem('accessplus-device', dev); } catch (e) {}
+  const st = $('recStudy'); CTX.study = st.value; CTX.studyName = st.value ? st.options[st.selectedIndex].textContent : ''; CTX.p = $('recP').value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12); CTX.practice = $('recPr').checked;
+  if (HOSTED && !previewMode) up({ type: 'accessplus-setctx', ctx: { studyId: CTX.study, participant: CTX.p, practice: CTX.practice } });
+  RUN = { id: uid('r'), sel: chosenSel, device: dev, pos: $('pos').value, startedAt: Date.now(), results: [], li: -1 };
+  LOG = []; nextLevel();
+});
+function nextLevel() { RUN.li++; if (RUN.li >= EX.levels.length) return finish(); startLevel(EX.levels[RUN.li]); }
+function goalOf(L) { if (L.rules.order && EX.feedback.tune && L.tune !== 'none') return TUNES[L.tune][1].filter(m => L.targets.some(t => t.role === 'target' && t.note === m)).length || L.targets.filter(t => t.role === 'target').length; return L.targets.filter(t => t.role === 'target').length; }
+function startLevel(L) {
+  show(null); stopLevel();
+  const live = JSON.parse(JSON.stringify(L.targets)).map(t => Object.assign(t, { done: false, vx: 0, vy: 0 }));
+  if (L.rules.drift) live.forEach(t => { const a = Math.random() * Math.PI * 2; t.vx = Math.cos(a) * .035; t.vy = Math.sin(a) * .05; });
+  const tuneSeq = (EX.feedback.tune && L.tune !== 'none') ? TUNES[L.tune][1] : null;
+  let seq = null;
+  if (L.rules.order) {
+    if (tuneSeq) seq = tuneSeq.map(m => live.find(t => t.role === 'target' && t.note === m)).filter(Boolean);
+    else seq = live.filter(t => t.role === 'target').sort((a, b) => a.order - b.order);
+  } else if (L.rules.oneAtATime) { seq = live.filter(t => t.role === 'target').sort(() => Math.random() - .5); }
+  P = { L, live, seq, step: 0, hits: 0, misses: 0, slips: 0, times: [], ids: [], tuneStep: 0, tuneSeq, goal: seq ? seq.length : live.filter(t => t.role === 'target').length,
+        timeLeft: L.rules.timer ? L.rules.secs : 0, shownAt: performance.now(), last: null, done: false, paused: false, scanIdx: -1, sizeMul: 1, t0: performance.now(), ease: null, tired: null };
+  $('hLevel').textContent = (RUN.li + 1) + ' / ' + EX.levels.length; $('chipTime').style.visibility = L.rules.timer ? 'visible' : 'hidden';
+  layoutPlay(); updGoal(); banner((RUN.li + 1) + ' · ' + L.name, 2000);
+  if (!P.goal) { banner('This level has no targets yet.', 2500); setTimeout(() => endLevel(true), 1500); return; }
+  if (RUN.sel === 'scan1') { P.scanTimer = setInterval(scanStep, EX.select.scanMs); scanStep(); }
+  if (RUN.sel === 'scan2') scanStep();
+  lastTick = performance.now();
+}
+function stopLevel() { if (P && P.scanTimer) clearInterval(P.scanTimer); }
+function visible() { if (!P) return []; return P.live.filter(t => !t.done && (!P.L.rules.oneAtATime || P.L.rules.order || t.role !== 'target' || t === P.seq[P.step])); }
+function wanted() { return P.seq ? P.seq[P.step] : null; }
+function layoutPlay() {
+  if (!P) return; const W = pStage.getBoundingClientRect().width || 800, vis = visible(), want = wanted();
+  pStage.innerHTML = vis.map(t => { const s = Math.round(t.size * W * (t.role === 'target' ? P.sizeMul : 1)); return `<div class="tg ${t.role === 'decoy' ? 'decoy' : ''} ${t.role === 'reward' ? 'reward' : ''} ${P.L.rules.hint && want === t ? 'next' : ''}" data-id="${t.id}" style="left:${t.x * 100}%;top:${t.y * 100}%;width:${s}px;height:${s}px;font-size:${s}px;background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.7), ${t.color} 42%, ${t.color})"><span class="em">${esc(t.emoji || (t.label ? '' : NAMES[t.note % 12]))}</span>${t.label ? `<span class="lb">${esc(t.label)}</span>` : ''}<svg class="ring" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="46" stroke-dasharray="289" stroke-dashoffset="289"/></svg></div>`; }).join('');
+  if (P.scanIdx >= 0) { const l = scanList()[P.scanIdx]; if (l) { const el = pStage.querySelector(`.tg[data-id="${l.id}"]`); if (el) el.classList.add('lit'); } }
+}
+function updGoal() { $('hGoal').textContent = P.hits + ' / ' + P.goal; }
+function sparks(x, y) { for (let i = 0; i < 12; i++) { const s = document.createElement('div'), a = i / 12 * Math.PI * 2; s.className = 'spark'; s.style.cssText = `left:${x}px;top:${y}px;background:${['#fff', '#ffe27a', '#5fe0a8', '#ff7bc8'][i % 4]};--dx:${Math.cos(a) * 70}px;--dy:${Math.sin(a) * 70}px`; pStage.appendChild(s); setTimeout(() => s.remove(), 820); } }
+function select(t) {
+  if (!P || P.done || P.paused) return;
+  const now = performance.now(), mt = now - P.shownAt, r = pStage.getBoundingClientRect(), cx = t.x * r.width, cy = t.y * r.height;
+  const want = wanted();
+  if (t.role === 'decoy' || (want && t !== want && t.role === 'target')) return miss(t);
+  if (t.role === 'reward') { t.done = true; if (EX.feedback.sparkle) sparks(cx, cy); tone(84, .35); LOG.push(ev('bonus', mt, null, t)); layoutPlay(); return; }
+  const from = P.last || [r.width / 2, r.height / 2], D = Math.hypot(cx - from[0], cy - from[1]), W = t.size * r.width * P.sizeMul, idb = Math.log2(D / W + 1);
+  P.hits++; P.times.push(mt); if (!RUN.sel.startsWith('scan') && mt > 80) P.ids.push(idb / (mt / 1000));
+  LOG.push(ev('hit', mt, D, t, W, idb));
+  if (EX.feedback.notes || EX.feedback.tune) tone(P.tuneSeq && EX.feedback.tune ? P.tuneSeq[P.tuneStep++ % P.tuneSeq.length] : t.note, .45);
+  if (EX.feedback.sparkle) sparks(cx, cy);
+  P.last = [cx, cy]; P.shownAt = now;
+  if (P.seq) { P.step++; if (!P.L.rules.oneAtATime && !P.L.rules.order) t.done = true; if (P.L.rules.oneAtATime && !P.L.rules.order) t.done = true; }
+  else t.done = true;
+  if (P.L.rules.shrink) P.sizeMul = Math.max(.35, P.sizeMul * .88);
+  updGoal(); layoutPlay(); if (RUN.sel.startsWith('scan')) restartScan();
+  if (P.hits >= P.goal) endLevel(true);
+}
+function miss(t) {
+  if (!P || P.done) return; P.misses++; if (EX.feedback.oops) buzz(); LOG.push(ev('miss', performance.now() - P.shownAt, null, t));
+  const el = t && pStage.querySelector(`.tg[data-id="${t.id}"]`); if (el) { el.classList.remove('wrong'); void el.offsetWidth; el.classList.add('wrong'); }
+}
+function ev(event, ms, D, t, W, idb) { return { level: P.L.name, event, time_ms: Math.round(ms), distance_px: D == null ? null : Math.round(D), size_px: W ? Math.round(W) : null, id_bits: idb == null ? null : +idb.toFixed(2), target: t ? (t.label || t.emoji || nn(t.note)) : '' }; }
+function tAt(x, y) { let best = null, bd = 1e9; const r = pStage.getBoundingClientRect(); visible().forEach(t => { const s = t.size * r.width * (t.role === 'target' ? P.sizeMul : 1), d = Math.hypot(x - t.x * r.width, y - t.y * r.height); if (d <= s / 2 + 4 && d < bd) { bd = d; best = t; } }); return best; }
+let dwellT = null, dwellStart = 0;
+function setRing(t, p) { const el = t && pStage.querySelector(`.tg[data-id="${t.id}"] .ring circle`); if (el) el.style.strokeDashoffset = 289 * (1 - p); }
+pStage.addEventListener('pointermove', e => {
+  if (!P || P.done || P.paused) return; const r = pStage.getBoundingClientRect(), t = tAt(e.clientX - r.left, e.clientY - r.top);
+  if (RUN.sel === 'hover') { if (t && t !== hoverLast) select(t); hoverLast = t; return; }
+  if (RUN.sel !== 'dwell') return;
+  if (t !== dwellT) { if (dwellT) { setRing(dwellT, 0); if (performance.now() - dwellStart > 150) P.slips++; } dwellT = t; dwellStart = performance.now(); }
+});
+let hoverLast = null;
+pStage.addEventListener('pointerdown', e => {
+  if (!P || P.done || P.paused) return;
+  if (RUN.sel === 'click') { const r = pStage.getBoundingClientRect(), t = tAt(e.clientX - r.left, e.clientY - r.top); if (t) select(t); else miss(null); }
+  else if (RUN.sel.startsWith('scan')) { e.preventDefault(); scanSelect(); }
+});
+function scanList() { return visible(); }
+function scanStep() { if (!P || P.done || P.paused) return; const l = scanList(); if (!l.length) return; P.scanIdx = (P.scanIdx + 1) % l.length; pStage.querySelectorAll('.tg.lit').forEach(x => x.classList.remove('lit')); const el = pStage.querySelector(`.tg[data-id="${l[P.scanIdx].id}"]`); if (el) el.classList.add('lit'); }
+function restartScan() { P.scanIdx = -1; if (RUN.sel === 'scan1') { clearInterval(P.scanTimer); P.scanTimer = setInterval(scanStep, EX.select.scanMs); } setTimeout(scanStep, 250); }
+function scanSelect() { const t = scanList()[P.scanIdx]; if (t) select(t); }
+document.addEventListener('keydown', e => {
+  if ($('player').style.display !== 'flex') return;
+  if (e.key === 'Escape' && P && !P.done) { e.preventDefault(); togglePause(); return; }
+  if (!P || P.done || P.paused || !RUN) return;
+  if (RUN.sel === 'scan1' && (e.key === ' ' || e.key === 'Enter')) { e.preventDefault(); scanSelect(); }
+  if (RUN.sel === 'scan2') { if (e.key === ' ' || e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); scanStep(); } else if (e.key === 'Enter') { e.preventDefault(); scanSelect(); } }
+});
+let lastTick = performance.now();
+function loop(now) {
+  requestAnimationFrame(loop); const dt = Math.min(.1, (now - lastTick) / 1000); lastTick = now;
+  if (!P || P.done || P.paused) return;
+  if (P.L.rules.timer) { P.timeLeft -= dt; $('hTime').textContent = Math.max(0, Math.ceil(P.timeLeft)) + ' s'; if (P.timeLeft <= 0) return endLevel(false); }
+  if (RUN.sel === 'dwell' && dwellT && !dwellT.done) { const p = (now - dwellStart) / EX.select.dwellMs; setRing(dwellT, Math.min(1, p)); if (p >= 1) { const t = dwellT; dwellT = null; select(t); } }
+  if (P.L.rules.drift) { let moved = false; P.live.forEach(t => { if (t.done || !t.vx) return; t.x += t.vx * dt; t.y += t.vy * dt; if (t.x < .06 || t.x > .94) t.vx *= -1; if (t.y < .08 || t.y > .92) t.vy *= -1; moved = true; const el = pStage.querySelector(`.tg[data-id="${t.id}"]`); if (el) { el.style.left = t.x * 100 + '%'; el.style.top = t.y * 100 + '%'; } }); }
+}
+requestAnimationFrame(loop);
+function togglePause() { P.paused = !P.paused; show(P.paused ? 'pPause' : null); lastTick = performance.now(); }
+$('pauseBtn').addEventListener('click', () => { if (P && !P.done) togglePause(); });
+$('resumeBtn').addEventListener('click', togglePause);
+$('quitBtn').addEventListener('click', () => { P.paused = false; endLevel(false, true); });
+function stats() {
+  const avg = P.times.length ? P.times.reduce((a, b) => a + b, 0) / P.times.length : 0, used = P.L.rules.timer ? P.L.rules.secs - Math.max(0, P.timeLeft) : (performance.now() - P.t0) / 1000;
+  return { level: P.L.name, hits: P.hits, goal: P.goal, done: P.hits >= P.goal, misses: P.misses, slips: P.slips, avgMs: Math.round(avg), perMin: used > 0 ? Math.round(P.hits / used * 600) / 10 : 0,
+    acc: P.hits + P.misses ? Math.round(P.hits / (P.hits + P.misses) * 100) : 100, tp: P.ids.length ? Math.round(P.ids.reduce((a, b) => a + b, 0) / P.ids.length * 100) / 100 : null, secs: Math.round(used), ease: null, tired: null };
+}
+function endLevel(done, quit) {
+  if (!P || P.done) return; P.done = true; stopLevel(); dwellT = null;
+  const st = stats(); RUN.results.push(st);
+  if (done && EX.feedback.celebrate) { if (P.tuneSeq) P.tuneSeq.forEach((m, i) => tone(m, .3, .3 + i * .26, .22)); for (let i = 0; i < 5; i++) setTimeout(() => { const r = pStage.getBoundingClientRect(); sparks(Math.random() * r.width, Math.random() * r.height); }, i * 150); }
+  setTimeout(() => {
+    pStage.innerHTML = '';
+    if (quit) return finish();
+    $('pbT').textContent = done ? 'Level complete!' : 'Time!';
+    $('pbMsg').textContent = done ? 'Nicely done.' : `You reached ${st.hits} of ${st.goal}. That still counts.`;
+    const M = EX.measures;
+    $('pbNums').innerHTML = [['Reached', st.hits + ' / ' + st.goal], M.time ? ['Avg time', (st.avgMs / 1000).toFixed(2) + ' s'] : null, M.acc ? ['Accuracy', st.acc + '%'] : null].filter(Boolean).map(x => `<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+    $('pbEase').hidden = !M.ease; $('pbTired').hidden = !M.tired;
+    $('easeBtns').innerHTML = ['Easy', 'OK', 'Hard'].map(w => `<button type="button" data-v="${w}" aria-pressed="false">${w}</button>`).join('');
+    $('tiredBtns').innerHTML = ['😀 1', '🙂 2', '😐 3', '😕 4', '😫 5'].map((w, i) => `<button type="button" data-v="${i + 1}" aria-pressed="false">${w}</button>`).join('');
+    [['easeBtns', 'ease'], ['tiredBtns', 'tired']].forEach(([box, k]) => $(box).querySelectorAll('button').forEach(b => b.addEventListener('click', () => { st[k] = k === 'tired' ? +b.dataset.v : b.dataset.v; $(box).querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b)); })));
+    $('nextBtn').textContent = RUN.li + 1 >= EX.levels.length ? 'See your rundown ▶' : 'Next: ' + EX.levels[RUN.li + 1].name + ' ▶';
+    show('pBetween');
+  }, done ? 1400 : 400);
+}
+$('nextBtn').addEventListener('click', nextLevel);
+$('endBtn').addEventListener('click', finish);
+const SELNAME = { click: 'Click or tap', hover: 'Hover', dwell: 'Dwell', scan1: 'One switch', scan2: 'Two switches' };
+const POSL = { up: 'Sitting upright', rec: 'Reclined', bed: 'Lying in bed', side: 'Side-lying' };
+function finish() {
+  stopLevel(); P = null; show('pResults');
+  const res = RUN.results, hits = res.reduce((a, r) => a + r.hits, 0), mis = res.reduce((a, r) => a + r.misses, 0);
+  const tl = res.filter(r => r.avgMs), avg = tl.length ? tl.reduce((a, r) => a + r.avgMs, 0) / tl.length : 0;
+  const tps = res.map(r => r.tp).filter(x => x), tp = tps.length ? Math.round(tps.reduce((a, b) => a + b, 0) / tps.length * 100) / 100 : null, acc = hits + mis ? Math.round(hits / (hits + mis) * 100) : 100;
+  const M = EX.measures;
+  $('prT').textContent = EX.name + ': your rundown';
+  $('prMsg').textContent = `You reached ${hits} targets` + (M.acc ? ` at ${acc}% accuracy` : '') + (M.time && avg ? `, about ${(avg / 1000).toFixed(1)} seconds each` : '') + '.';
+  $('prNums').innerHTML = [['Targets', hits], M.acc ? ['Accuracy', acc + '%'] : null, M.time ? ['Avg time', (avg / 1000).toFixed(2) + ' s'] : null, M.tp ? ['Throughput', tp ? tp + ' bits/s' : '–'] : null].filter(Boolean).map(x => `<div><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+  $('prTable').innerHTML = '<tr><th>Level</th><th>Reached</th>' + (M.acc ? '<th>Misses</th>' : '') + (M.time ? '<th>Avg time</th>' : '') + (M.ease ? '<th>Ease</th>' : '') + (M.tired ? '<th>Tired</th>' : '') + '</tr>' + res.map(r => `<tr><td>${esc(r.level)}</td><td>${r.hits} / ${r.goal}${r.done ? ' ✓' : ''}</td>${M.acc ? `<td>${r.misses}${M.slips && r.slips ? ' (' + r.slips + ' slips)' : ''}</td>` : ''}${M.time ? `<td>${(r.avgMs / 1000).toFixed(2)} s</td>` : ''}${M.ease ? `<td>${r.ease || '–'}</td>` : ''}${M.tired ? `<td>${r.tired || '–'}</td>` : ''}</tr>`).join('');
+  $('prSaved').textContent = previewMode ? 'Preview: not recorded.' : '';
+  if (!previewMode) {
+    const inputName = SELNAME[RUN.sel];
+    try { const T = JSON.parse(localStorage.getItem('accessplus-tests') || '[]') || []; const k = RUN.sel.startsWith('scan') ? 'sw' : RUN.sel === 'dwell' ? 'eyes' : 'head'; T.push({ n: T.filter(t => t.method === k).length + 1, date: new Date().toISOString().slice(0, 16).replace('T', ' '), method: k, pos: RUN.pos, mode: EX.name + ' (' + (RUN.device || inputName) + ')', size: '', speed: avg ? Math.round(60000 / avg * 10) / 10 : 0, acc, tp: tp || '', effort: null, useful: avg ? Math.round(60000 / avg * acc / 100 * 10) / 10 : 0, game: EX.name }); localStorage.setItem('accessplus-tests', JSON.stringify(T)); $('prSaved').textContent = 'Saved to your test sessions in this browser.'; } catch (e) {}
+    up({ type: 'accessplus-session', session: { id: 'c-' + RUN.id, game: 'custom', exerciseId: EX.id || '', exerciseName: EX.name, studyId: CTX.study, participant: CTX.p, practice: CTX.practice,
+      input: inputName, device: RUN.device || '', inputKey: RUN.sel, pos: RUN.pos, posLabel: POSL[RUN.pos], startedAt: new Date(RUN.startedAt).toISOString(), endedAt: new Date().toISOString(),
+      settings: { selection: RUN.sel, dwellMs: RUN.sel === 'dwell' ? EX.select.dwellMs : null, scanMs: RUN.sel === 'scan1' ? EX.select.scanMs : null },
+      levels: res, summary: { hits, acc, avgMs: Math.round(avg), tp, fat: null, perMin: avg ? Math.round(60000 / avg * 10) / 10 : 0 }, events: LOG.slice(0, 1500), preferred: '' } });
+  }
+}
+$('againBtn').addEventListener('click', () => openPlayer(previewMode));
+$('csvBtn').addEventListener('click', () => {
+  const cols = ['level', 'event', 'time_ms', 'distance_px', 'size_px', 'id_bits', 'target'];
+  const data = cols.join(',') + '\n' + LOG.map(r => cols.map(c => { const v = r[c] == null ? '' : String(r[c]); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',')).join('\n') + '\n';
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([data], { type: 'text/csv' })); a.download = (EX.name || 'exercise').replace(/[^A-Za-z0-9]+/g, '-').toLowerCase() + '-results.csv'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+});
+
+/* ───────── start up ───────── */
+(function init() {
+  const pid = QP.get('play'), eid = QP.get('edit');
+  if (HOSTED) { up({ type: 'accessplus-hello' }); }
+  if ((pid || eid) && SAFE.test(pid || eid)) {
+    if (HOSTED) { up({ type: 'accessplus-ex-get', id: pid || eid }); flash('Loading…'); }
+    else { try { const all = JSON.parse(localStorage.getItem('accessplus-exercises') || '{}'); const x = all[pid || eid]; if (x) { EX = clean(x); EX.id = x.id; } } catch (e) {} }
+  } else {
+    try { const d = localStorage.getItem('accessplus-editor-draft'); if (d && !QP.get('new')) { EX = clean(JSON.parse(d)); EX.id = JSON.parse(d).id || ''; } } catch (e) {}
+    if (!EX.levels[0].targets.length && !QP.get('new')) { EX = TPL.warm(); }
+  }
+  loadIntoUI();
+  if (pid && !HOSTED && EX.id === pid) openPlayer(false);
+})();
+</script>
+</body>
+</html>

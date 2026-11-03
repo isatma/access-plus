@@ -1680,6 +1680,20 @@ footer .wrap { padding-block: 22px; }
 #view-vte .vt-verbs li { display: grid; gap: 4px; align-content: start; padding: 12px 14px; border-left: 3px solid #5fe0a8; background: rgba(95,224,168,0.06); }
 #view-vte .vt-verbs b { color: #5fe0a8; font: 700 1.05em var(--body); }
 #view-vte .vt-verbs span { color: var(--desc); font-size: 0.95em; line-height: 1.45; }
+#view-vte .vt-build { display: grid; gap: 14px; padding: 20px; border: 1px solid #e0e05f; background: rgba(224,224,95,0.05); }
+#view-vte .vt-bhead { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: space-between; align-items: flex-end; }
+#view-vte .vt-bhead h2 { margin: 4px 0 6px; font: 600 1.45em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+#view-vte .vt-bhead p { margin: 0; color: var(--desc); max-width: 52em; }
+#view-vte .vt-lib { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+#view-vte .vt-ex { display: grid; gap: 8px; align-content: start; padding: 14px; border: 1px solid var(--line-hi); background: rgba(14,21,38,0.85); }
+#view-vte .vt-ex .h { display: flex; gap: 10px; align-items: center; }
+#view-vte .vt-ex .h span { display: grid; place-items: center; width: 52px; height: 52px; font-size: 30px; border-radius: 14px; border: 2px solid #e0e05f; background: rgba(224,224,95,0.12); flex: none; }
+#view-vte .vt-ex b { font-size: 1.05em; }
+#view-vte .vt-ex small { color: var(--desc); line-height: 1.4; }
+#view-vte .vt-ex .a { display: flex; gap: 8px; flex-wrap: wrap; }
+#view-vte .vt-ex .a a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; font-weight: 600; }
+#view-vte .vt-ex .a a.play { background: #5fe0a8; border-color: #5fe0a8; color: #04201a; }
+#view-vte .vt-libempty { color: var(--desc); padding: 14px; border: 1px dashed var(--line-hi); }
 #view-dashboard .ds-wrap { gap: 22px !important; grid-template-columns: minmax(0, 1fr); }
 #view-dashboard .ds-wrap > *, #view-dashboard .ds-two > * { min-width: 0; }
 #view-dashboard .ds-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
@@ -2253,7 +2267,7 @@ footer .wrap { padding-block: 22px; }
         <a class="fp-g" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Echo Game"><img src="lab/shots/echo-game.jpg" alt="" width="640" height="400" loading="lazy"><b>Echo Game</b><small>Call and response with singing mice</small></a>
         <a class="fp-g" href="lab/isatma_dial_v9.html?game=melody" data-title="Musical Dial · Follow the Melody"><img src="lab/shots/isatma_dial_v9.jpg" alt="" width="640" height="400" loading="lazy"><b>Musical Dial</b><small>Follow the Melody around a circle of notes</small></a>
         <a class="fp-g" href="lab/virtual_harmonica_v7.html" data-title="Virtual Harmonica"><img src="lab/shots/virtual_harmonica_v7.jpg" alt="" width="640" height="400" loading="lazy"><b>Virtual Harmonica</b><small>Play with head movement, or a mouse</small></a>
-        <a class="fp-g" href="lab/songboards.html" data-title="Environment Editor (Songboards engine)"><img src="lab/shots/songboards.jpg" alt="" width="640" height="400" loading="lazy"><b>Song Boards</b><small>Build your own musical targets</small></a>
+        <a class="fp-g" href="lab/songboards.html" data-title="Song Boards"><img src="lab/shots/songboards.jpg" alt="" width="640" height="400" loading="lazy"><b>Song Boards</b><small>Build your own musical targets</small></a>
         <a class="fp-g" href="lab/dance-board.html" data-title="Dance Board"><img src="lab/shots/dance-board.jpg" alt="" width="640" height="400" loading="lazy"><b>Dance Board</b><small>Paint with light as you move</small></a>
       </div>
     </section>
@@ -3084,11 +3098,11 @@ footer .wrap { padding-block: 22px; }
       </ul>
     </header>
     <section class="vt-desk" aria-labelledby="vt-vtDeskT">
-      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>3 ready · 2 previews · 4 coming</span></div>
+      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>4 ready · 1 preview · 4 coming</span></div>
       <div class="vt-icons">
         <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Play</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
         <a class="vt-ic" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Mouse Orchestra Echo Game" style="--ac:#ff8fd0"><span class="st on">Play</span><span class="gl" aria-hidden="true">🐭</span><b>Echo Game</b><small>The mice sing a phrase, you sing it back. Phrase by phrase the song builds up: Mary Had a Little Lamb, Twinkle and more. Great for kids.</small></a>
-        <a class="vt-ic" href="lab/songboards.html" data-title="VTE · Environment Editor (Songboards engine)" style="--ac:#e0e05f"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">🛠️</span><b>Environment Editor</b><small>Build your own desktop: place targets, sounds and rewards, then save it to share. Runs on the Songboards engine.</small></a>
+        <a class="vt-ic" href="vte/editor.html" data-title="VTE · Environment Editor" style="--ac:#e0e05f"><span class="st on">Build</span><span class="gl" aria-hidden="true">🛠️</span><b>Environment Editor</b><small>Build your own training exercise: place targets, tick the rules, sounds and measures you want, preview and share.</small></a>
         <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: the Musical Dial, Mouse Orchestra, the Virtual Harmonica and more.</small></a>
         <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator is on the Try page.</small></a>
         <div class="vt-ic soon" style="--ac:#7cc4ff"><span class="st soon">Coming</span><span class="gl" aria-hidden="true">📜</span><b>Scrolling</b><small>Scroll a story to find highlighted words, with dwell or switch scroll zones.</small></div>
@@ -3097,6 +3111,12 @@ footer .wrap { padding-block: 22px; }
         <div class="vt-ic soon" style="--ac:#ff9a3d"><span class="st soon">Later</span><span class="gl" aria-hidden="true">📱</span><b>Phone</b><small>Tap, swipe and scan on a virtual phone, for switch control and voice access.</small></div>
       </div>
       <div class="vt-recent" id="vt-vtRecentWrap" hidden><h3>Recently played</h3><div class="vt-rl" id="vt-vtRecent"></div></div>
+    </section>
+
+    <section class="vt-build" aria-labelledby="vt-vtBuildT">
+      <div class="vt-bhead"><div><span class="vt-k" style="color:#e0e05f">Build your own</span><h2 id="vt-vtBuildT">Training exercises, made by you</h2><p>Use the Environment Editor to place targets on a stage and tick the components you want: rules, ways to select, feedback and what to measure. Add levels, preview, then save to share it here. Everyone this page is shared with can play it, and results go to the dashboards.</p></div>
+      <div class="vt-bbtns"><a class="btn primary" href="vte/editor.html?new=1" data-title="VTE · Environment Editor">🛠️ New exercise</a></div></div>
+      <div class="vt-lib" id="vt-vtLib"></div>
     </section>
 
     <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
@@ -4473,7 +4493,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 22:18 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 22:26 UTC</span></div>
   </div>
 </footer>
 
@@ -7066,17 +7086,17 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 /* ---------- Access+ prototype research store (shared on Claude when available, else this browser) ---------- */
 (function () {
   var LKEY = 'accessplus-studydb';
-  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, subs: [] };
+  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, subs: [] };
   window.APStore = AP;
   function lget() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}') || {}; } catch (e) { return {}; } }
-  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions })); } catch (e) {} }
+  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises })); } catch (e) {} }
   function emit() { AP.subs.forEach(function (f) { try { f(AP); } catch (e) {} }); }
   AP.onChange = function (f) { AP.subs.push(f); f(AP); };
   AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
     AP.uid = 'local';
-    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.mode = 'local'; readyRes(); emit();
+    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.mode = 'local'; readyRes(); emit();
   }
   function snapMap(snap) { var m = {}; snap.docs.forEach(function (d) { if (d.exists) m[d.id] = d.data(); }); return m; }
   (async function init() {
@@ -7091,6 +7111,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
       function done() { first++; if (first === 2) { clearTimeout(timer); AP.slow = false; readyRes(); } emit(); }
       var once1 = false, once2 = false;
       db.collection('studies').onSnapshot(function (s) { AP.studies = snapMap(s); if (!once1 && !s.metadata.fromCache) { once1 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
+      db.collection('exercises').onSnapshot(function (s) { AP.exercises = snapMap(s); emit(); }, function () {});
       db.collection('sessions').onSnapshot(function (s) { AP.sessions = snapMap(s); if (!once2 && !s.metadata.fromCache) { once2 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
     } catch (e) { goLocal(); }
   })();
@@ -7145,6 +7166,20 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: 'error', code: err && err.code }, e.origin);
       });
     }
+    if (m.type === 'accessplus-ex-save' && m.exercise && SAFE.test(m.exercise.id || '') && e.source) {
+      var ex = m.exercise, src2 = e.source;
+      try { if (JSON.stringify(ex).length > 200000) throw { code: 'too_large' }; } catch (er) { src2.postMessage({ type: 'accessplus-ex-saved', ok: false, code: 'too_large' }, e.origin); return; }
+      var prev = AP.exercises[ex.id] || {};
+      ex.owner = prev.owner || AP.uid || ''; ex.created = prev.created || new Date().toISOString(); ex.updated = new Date().toISOString();
+      write('exercises', ex.id, ex).then(function (mode) { src2.postMessage({ type: 'accessplus-ex-saved', ok: true, id: ex.id, mode: mode }, e.origin); })
+        .catch(function (err) { src2.postMessage({ type: 'accessplus-ex-saved', ok: false, code: err && err.code }, e.origin); });
+    }
+    if (m.type === 'accessplus-ex-get' && SAFE.test(m.id || '') && e.source) {
+      var src3 = e.source, xid = m.id;
+      Promise.race([AP.ready, new Promise(function (r) { setTimeout(r, 6000); })]).then(function () {
+        var x = AP.exercises[xid]; src3.postMessage({ type: 'accessplus-ex', exercise: x ? Object.assign({}, x, { id: xid }) : null }, e.origin);
+      });
+    }
     if (m.type === 'accessplus-hello' && e.source) {
       var src = e.source, reply = function () {
         var list = Object.keys(AP.studies).filter(function (k) { return AP.studies[k].status !== 'closed'; }).map(function (k) { return { id: k, name: String(AP.studies[k].name || '').slice(0, 80) }; });
@@ -7167,7 +7202,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 (function () {
   function el(id) { return __ID(id); }
   var AP = window.APStore;
-  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game' };
+  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game', custom: 'Custom exercises' };
   var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9'], ['Touch screen', '#008300']];
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
   var EXTRA = ['#e66767', '#9085e9', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300'], XCOL = {};
@@ -7584,10 +7619,11 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
     var list = Object.keys(AP.sessions).map(function (k) { return AP.sessions[k]; }).filter(function (x) { return x && x.startedAt; });
     list.sort(function (a, b) { return String(b.startedAt).localeCompare(String(a.startedAt)); });
     var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'], echo: ['🐭', 'Echo Game', 'lab/mouse_orchestra_v6.html?game=echo'] };
+    list.forEach(function (x) { if (x.game === 'custom') G['custom'] = G['custom'] || ['🧩', 'Exercise', 'vte/editor.html']; });
     list = list.slice(0, 4);
     el('vtRecentWrap').hidden = !list.length;
     el('vtRecent').innerHTML = list.map(function (x) {
-      var g = G[x.game] || ['🎮', x.game || 'Game', 'vte/pointing.html'], d = new Date(x.startedAt), sm = x.summary || {};
+      var g = x.game === 'custom' ? [(AP.exercises[x.exerciseId] || {}).icon || '🧩', x.exerciseName || 'Exercise', 'vte/editor.html?play=' + encodeURIComponent(x.exerciseId || '')] : (G[x.game] || ['🎮', x.game || 'Game', 'vte/pointing.html']), d = new Date(x.startedAt), sm = x.summary || {};
       var when = isNaN(d) ? '' : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
       var a = document.createElement('a'); a.className = 'vt-rc'; a.href = g[2]; a.setAttribute('data-title', 'VTE · ' + g[1]);
       a.innerHTML = '<i aria-hidden="true">' + g[0] + '</i><span><b></b><small></small></span>';
@@ -7597,6 +7633,22 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
     }).join('');
   }
   AP.onChange(recent);
+  function lib() {
+    var ids = Object.keys(AP.exercises || {}).sort(function (a, b) { return String((AP.exercises[b] || {}).updated || '').localeCompare(String((AP.exercises[a] || {}).updated || '')); });
+    if (!ids.length) { el('vtLib').innerHTML = '<p class="vt-libempty">No shared exercises yet. Press New exercise to build the first one, or start from a template in the editor.</p>'; return; }
+    el('vtLib').innerHTML = ids.map(function (id) {
+      var x = AP.exercises[id] || {}, d = document.createElement('div'); d.className = 'vt-ex';
+      d.innerHTML = '<div class="h"><span aria-hidden="true"></span><div><b></b><br><small class="lv"></small></div></div><small class="ds"></small><div class="a"><a class="play">▶ Play</a><a class="ed">✎ Edit</a></div>';
+      d.querySelector('.h span').textContent = x.icon || '🧩'; d.querySelector('b').textContent = x.name || 'Untitled exercise';
+      var n = (x.levels || []).length; d.querySelector('.lv').textContent = n + ' level' + (n === 1 ? '' : 's');
+      d.querySelector('.ds').textContent = x.desc || '';
+      var pa = d.querySelector('.play'), ea = d.querySelector('.ed');
+      pa.setAttribute('href', 'vte/editor.html?play=' + encodeURIComponent(id)); pa.setAttribute('data-title', 'VTE · ' + (x.name || 'Exercise'));
+      ea.setAttribute('href', 'vte/editor.html?edit=' + encodeURIComponent(id)); ea.setAttribute('data-title', 'VTE · Environment Editor');
+      return d.outerHTML;
+    }).join('');
+  }
+  AP.onChange(lib);
   el('vtStudy').addEventListener('change', save);
   el('vtPart').addEventListener('input', save);
   el('vtPractice').addEventListener('change', save);

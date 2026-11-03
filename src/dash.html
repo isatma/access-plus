@@ -148,17 +148,17 @@
 /* ---------- Access+ prototype research store (shared on Claude when available, else this browser) ---------- */
 (function () {
   var LKEY = 'accessplus-studydb';
-  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, subs: [] };
+  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, subs: [] };
   window.APStore = AP;
   function lget() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}') || {}; } catch (e) { return {}; } }
-  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions })); } catch (e) {} }
+  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises })); } catch (e) {} }
   function emit() { AP.subs.forEach(function (f) { try { f(AP); } catch (e) {} }); }
   AP.onChange = function (f) { AP.subs.push(f); f(AP); };
   AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
     AP.uid = 'local';
-    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.mode = 'local'; readyRes(); emit();
+    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.mode = 'local'; readyRes(); emit();
   }
   function snapMap(snap) { var m = {}; snap.docs.forEach(function (d) { if (d.exists) m[d.id] = d.data(); }); return m; }
   (async function init() {
@@ -173,6 +173,7 @@
       function done() { first++; if (first === 2) { clearTimeout(timer); AP.slow = false; readyRes(); } emit(); }
       var once1 = false, once2 = false;
       db.collection('studies').onSnapshot(function (s) { AP.studies = snapMap(s); if (!once1 && !s.metadata.fromCache) { once1 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
+      db.collection('exercises').onSnapshot(function (s) { AP.exercises = snapMap(s); emit(); }, function () {});
       db.collection('sessions').onSnapshot(function (s) { AP.sessions = snapMap(s); if (!once2 && !s.metadata.fromCache) { once2 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
     } catch (e) { goLocal(); }
   })();
@@ -227,6 +228,20 @@
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: 'error', code: err && err.code }, e.origin);
       });
     }
+    if (m.type === 'accessplus-ex-save' && m.exercise && SAFE.test(m.exercise.id || '') && e.source) {
+      var ex = m.exercise, src2 = e.source;
+      try { if (JSON.stringify(ex).length > 200000) throw { code: 'too_large' }; } catch (er) { src2.postMessage({ type: 'accessplus-ex-saved', ok: false, code: 'too_large' }, e.origin); return; }
+      var prev = AP.exercises[ex.id] || {};
+      ex.owner = prev.owner || AP.uid || ''; ex.created = prev.created || new Date().toISOString(); ex.updated = new Date().toISOString();
+      write('exercises', ex.id, ex).then(function (mode) { src2.postMessage({ type: 'accessplus-ex-saved', ok: true, id: ex.id, mode: mode }, e.origin); })
+        .catch(function (err) { src2.postMessage({ type: 'accessplus-ex-saved', ok: false, code: err && err.code }, e.origin); });
+    }
+    if (m.type === 'accessplus-ex-get' && SAFE.test(m.id || '') && e.source) {
+      var src3 = e.source, xid = m.id;
+      Promise.race([AP.ready, new Promise(function (r) { setTimeout(r, 6000); })]).then(function () {
+        var x = AP.exercises[xid]; src3.postMessage({ type: 'accessplus-ex', exercise: x ? Object.assign({}, x, { id: xid }) : null }, e.origin);
+      });
+    }
     if (m.type === 'accessplus-hello' && e.source) {
       var src = e.source, reply = function () {
         var list = Object.keys(AP.studies).filter(function (k) { return AP.studies[k].status !== 'closed'; }).map(function (k) { return { id: k, name: String(AP.studies[k].name || '').slice(0, 80) }; });
@@ -249,7 +264,7 @@
 (function () {
   function el(id) { return document.getElementById(id); }
   var AP = window.APStore;
-  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game' };
+  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game', custom: 'Custom exercises' };
   var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9'], ['Touch screen', '#008300']];
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
   var EXTRA = ['#e66767', '#9085e9', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300'], XCOL = {};
