@@ -446,9 +446,9 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<a class="navside navlab" href="#vte" data-route="vte" title="Virtual Training Environment (prototype)">Training Environment</a>'
-           '<a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a>'
-           '<a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav>')
+           '<a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a>'
+           '<a class="navsign" href="#signin" data-route="signin">Sign in</a>'
+           '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and measure with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if 'id="journey"' not in home:
         home = home.replace('</header>', '</header>\n<div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>', 1)

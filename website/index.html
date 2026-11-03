@@ -838,6 +838,7 @@ footer .wrap { padding-block: 22px; }
 .cmp-src.com { color: #ffc670; } .cmp-src.open { color: #5fe0a8; } .cmp-src.built { color: #7cc4ff; } .cmp-src.res { color: #b9a4ff; }
 .cmp-cat { font-size: 0.74em; color: var(--signal); }
 .cmp-p.potp canvas { opacity: 0.55; }
+#cmp[hidden] { display: none !important; }
 /* views-css:start */
 
 .si-back { position: fixed; inset: 0; z-index: 60; background: rgba(3,8,16,0.72); display: grid; place-items: center; padding: 16px; }
@@ -858,6 +859,16 @@ footer .wrap { padding-block: 22px; }
 .si-foot .btn { min-height: 52px; }
 .si-box .btn { color: #0b1220; border-color: #4b5a6b; background: #fff; }
 .nav .navsign .navrole { margin-left: 8px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; background: var(--rc, #5fe0a8); color: #04201a; }
+.nav a.navres, .nav a.navsign { gap: 8px; border: 1px solid #5fe0a8; border-bottom-width: 1px; color: #5fe0a8; padding: 0 14px; margin-left: 6px; }
+.nav a.navres:hover, .nav a.navsign:hover { background: rgba(95,224,168,0.12); color: var(--ink); border-color: #5fe0a8; }
+.nav a.navres[aria-current="page"], .nav a.navsign[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
+.nav a.navvte { order: 99; flex: 1 1 100%; justify-content: center; gap: 12px; min-height: 58px; margin-top: 8px; padding: 0 16px; border: 2px solid #5fe0a8; background: linear-gradient(90deg, rgba(95,224,168,0.20), rgba(124,196,255,0.14)); color: var(--ink); font: 600 1em var(--body); text-align: center; }
+.nav a.navvte b { color: #5fe0a8; font-weight: 800; }
+.nav a.navvte .vi { font-size: 1.5em; }
+.nav a.navvte:hover { background: linear-gradient(90deg, rgba(95,224,168,0.32), rgba(124,196,255,0.22)); border-color: #5fe0a8; color: var(--ink); }
+.nav a.navvte[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
+.nav a.navvte[aria-current="page"] b { color: #04201a; }
+@media (max-width: 640px) { .nav a.navvte { order: -1; flex: none; margin-top: 0; min-height: 48px; font-size: 0.85em; } .nav a.navvte .vtx { display: none; } }
 .nav .navlab { gap: 8px; border: 1px solid #5fe0a8; color: #5fe0a8; padding: 0 12px; margin-right: 6px; }
 .nav .navlab:hover { background: rgba(95,224,168,0.12); color: var(--ink); }
 .nav .navlab[aria-current="page"] { background: #5fe0a8; color: #04201a; }
@@ -2119,7 +2130,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navlab" href="#vte" data-route="vte" title="Virtual Training Environment (prototype)">Training Environment</a><a class="navside navres" href="#research" data-route="research">Research workspace<span class="navproto">Prototype</span></a><a class="navsign" href="#signin" data-route="signin">Sign in<span class="navdemo">Demo</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">Research dashboard</a><a class="navsign" href="#signin" data-route="signin">Sign in</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and measure with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -2142,7 +2153,7 @@ footer .wrap { padding-block: 22px; }
         </div>
       </div>
     </section>
-      <div class="cmp" id="cmp" aria-labelledby="cmpTitle">
+      <div class="cmp" id="cmp" hidden aria-labelledby="cmpTitle">
         <div class="cmp-top"><div><span class="eyebrow">Compare the core technologies</span><h2 id="cmpTitle">Which control works best, and when?</h2></div><span class="cmp-tag">Simulated demo · for discussion</span></div>
         <div class="cmp-gal" role="group" aria-label="Choose three methods to compare" id="cmpGal"></div>
         <div class="cmp-panels" id="cmpPanels"></div>
@@ -2926,9 +2937,10 @@ footer .wrap { padding-block: 22px; }
       <p>Build and share virtual desktops for training and assessing adaptive controls. Each game on the desktop turns a real computer skill into a short, colorful challenge with music, works with the control you already use (an eye tracker, a head mouse, switches, a joystick or an ordinary mouse), and gives a plain-language rundown. Every game can also run as a research study.</p>
     </header>
     <section class="vt-desk" aria-labelledby="vt-vtDeskT">
-      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>2 ready · 1 preview · 5 coming</span></div>
+      <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>3 ready · 2 previews · 4 coming</span></div>
       <div class="vt-icons">
         <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Play</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
+        <a class="vt-ic" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Mouse Orchestra Echo Game" style="--ac:#ff8fd0"><span class="st on">Play</span><span class="gl" aria-hidden="true">🐭</span><b>Echo Game</b><small>The mice sing a phrase, you sing it back. Phrase by phrase the song builds up: Mary Had a Little Lamb, Twinkle and more. Great for kids.</small></a>
         <a class="vt-ic" href="lab/songboards.html" data-title="VTE · Environment Editor (Songboards engine)" style="--ac:#e0e05f"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">🛠️</span><b>Environment Editor</b><small>Build your own desktop: place targets, sounds and rewards, then save it to share. Runs on the Songboards engine.</small></a>
         <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: the Musical Dial, Mouse Orchestra, the Virtual Harmonica and more.</small></a>
         <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator is on the Try page.</small></a>
@@ -4311,7 +4323,7 @@ footer .wrap { padding-block: 22px; }
       <div class="fcol"><h2>About</h2><a href="#about">About Access+</a><a href="#about">Partners</a><a href="#research">Research workspace (prototype)</a><a href="#care">Care team (prototype)</a><a href="#vte">Virtual Training Environment</a><a href="#dashboard">Research dashboard (prototype)</a><a href="#lab">Recreation lab (experimental)</a><a href="#ab-data">Research and your data</a><a href="#news">News and updates</a></div>
       <div class="fcol"><h2>Contact us</h2><p>Questions, ideas, or want to take part? We'd like to hear from you.</p><a class="btn" href="#contact">Contact us</a></div>
     </div>
-    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:03 UTC</span></div>
+    <div class="fbar"><span>Access+ ALS · Draft for review and discussion only · Under construction · No personal data collected on this site</span><span>Version 0.9 · Pilot draft · Updated 2026-11-03 21:13 UTC</span></div>
   </div>
 </footer>
 
@@ -6990,8 +7002,8 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 (function () {
   function el(id) { return __ID(id); }
   var AP = window.APStore;
-  var GAMES = { pointing: 'Pointing Environment' };
-  var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9']];
+  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game' };
+  var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9'], ['Touch screen', '#008300']];
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
   var sel = '__all', editing = null;
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -7231,7 +7243,7 @@ var __ID = function (x) { return document.getElementById('lb-' + x) || document.
   var APPS = [
     { f: 'songboards.html', name: 'Songboards', cat: 'music', ins: ['touch', 'eyes', 'head', 'cam'], d: 'Build colorful keyboards out of musical targets: notes, chords, drums and backing tracks. Arrange targets where you can reach them, then play by tap, hover or dwell. No camera needed; a webcam wave is optional. Press Start, then hover a target.', meta: 'Uses Tone.js for sound' },
     { f: 'isatma_dial_v9.html', name: 'Musical Dial', cat: 'music', ins: ['touch', 'eyes', 'head', 'breath'], d: 'A circular instrument: note circles and chord hexagons around the dial, with the root at 12 o\u2019clock. Hover to sustain, release to stop. Outer ring wedges switch key and scale by click or dwell, and a breath into the microphone steps to the next key.', meta: 'Built-in sound, optional MIDI out to a synth or DAW' },
-    { f: 'mouse_orchestra_v6.html', name: 'Mouse Orchestra', cat: 'music', ins: ['touch', 'eyes', 'head'], d: 'Sixteen singing mice around a scrolling music score. Hover a mouse and it sings its note; choose the instrument, scale and key, rename the mice, and share a layout as a link. A slow-scrolling score lights up the next mouse to play, with pause and speed controls; a hover delay helps eye gaze and head pointers.', meta: 'Built-in sound with reverb' },
+    { f: 'mouse_orchestra_v6.html', name: 'Mouse Orchestra', cat: 'music', ins: ['touch', 'eyes', 'head'], d: 'Sixteen singing mice around a scrolling music score. Hover a mouse and it sings its note; choose the instrument, scale and key, rename the mice, and share a layout as a link. A slow-scrolling score lights up the next mouse to play, and the Echo Game is a call-and-response challenge: the mice sing a phrase, you sing it back. A hover delay helps eye gaze and head pointers.', meta: 'Built-in sound with reverb' },
     { f: 'virtual_harmonica_v7.html', name: 'Virtual Harmonica', cat: 'music', ins: ['face', 'touch'], d: 'A face-played chromatic harmonica: turn your head to choose a hole, tilt to bend the pitch, and open your mouth to play louder. Many scales and keys, 4 to 16 holes, a built-in synth or MIDI out. A mouse or touch mode lets you try it without a camera.', meta: 'Loads a face-tracking model (MediaPipe)' },
     { f: 'mini-color-keyboard.html', name: 'Mini Color Keyboard', cat: 'music', ins: ['touch'], d: 'Eight rainbow keys from C to C for the melody, plus C, F and G chord pads with strum loops. A chord and rhythm editor lets you draw strum patterns, pick from a strum library and load any chord in the key. Built-in sound, or MIDI to a DAW with lead and chords on separate channels.', meta: 'Keys A to K play the melody · <a href="lab/presets/Mini-Color-Keyboard-channel-routed.json" download>preset for the MIDI Edition</a>' },
     { f: 'songboards-2target-test.html', name: 'Songboards camera test', cat: 'music', ins: ['cam'], d: 'Two large targets that play a note when you wave over them. Shows the live motion signal and a heatmap, for tuning the camera before a performance.', meta: 'Diagnostic' },
@@ -7282,7 +7294,7 @@ var __ID = function (x) { return document.getElementById('lb-' + x) || document.
     e.preventDefault();
     var card = a.closest('.lb-card'), title = card ? card.querySelector('h2').textContent : a.getAttribute('data-title') || (a.textContent || '').replace(/[\u2197]/g, '').trim();
     var href = a.getAttribute('href');
-    if (/^vte\//.test(href) && window.APStudyQuery) href = href.split('?')[0] + '?' + window.APStudyQuery();
+    if (window.APStudyQuery && (/^vte\//.test(href) || /game=echo/.test(href))) href = href.split('?')[0] + '?' + (/game=echo/.test(href) ? 'game=echo&' : '') + window.APStudyQuery();
     openApp(href, title);
   });
   el('lbQ').addEventListener('input', function (e) { F.q = e.target.value; draw(); });
@@ -7318,7 +7330,7 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
   function recent() {
     var list = Object.keys(AP.sessions).map(function (k) { return AP.sessions[k]; }).filter(function (x) { return x && x.startedAt; });
     list.sort(function (a, b) { return String(b.startedAt).localeCompare(String(a.startedAt)); });
-    var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'] };
+    var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'], echo: ['🐭', 'Echo Game', 'lab/mouse_orchestra_v6.html?game=echo'] };
     list = list.slice(0, 4);
     el('vtRecentWrap').hidden = !list.length;
     el('vtRecent').innerHTML = list.map(function (x) {
@@ -7342,7 +7354,7 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
 })();
 
 (function () {
-  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#research'] };
+  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#dashboard'] };
   var back = document.getElementById('siBack'), lastFocus = null;
   var role = ''; try { role = localStorage.getItem('accessplus-role') || ''; } catch (e) {}
   if (!ROLES[role]) role = '';
@@ -7350,7 +7362,7 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
   function paint() {
     document.documentElement.setAttribute('data-role', role || 'none');
     Array.prototype.forEach.call(document.querySelectorAll('.navsign'), function (a) {
-      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in<span class="navdemo">Demo</span>';
+      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in';
       a.setAttribute('aria-label', role ? 'Signed in as ' + ROLES[role][0] + ' (demo). Change role' : 'Sign in (demo)');
     });
     Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-role') === role ? 'true' : 'false'); });

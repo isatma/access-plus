@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mouse Orchestra v6.2 (slow score)</title>
+<title>Mouse Orchestra v6.3 (Echo game)</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:#06041a;color:#e0d0ff;font-family:'Segoe UI',sans-serif;height:100vh;overflow:hidden}
@@ -353,6 +353,7 @@ let scoreSpeed=2, scorePaused=false, scoreNotes=[], cueIdx=-1;
 // Cue: when a score note reaches the playhead, the matching mouse glows, so you know which one to catch
 function cueLoop(){
   requestAnimationFrame(cueLoop);
+  if(window.ECHO_ON){ if(cueIdx!==-1){ document.querySelectorAll('.pad-wrap.cue').forEach(w=>w.classList.remove('cue')); cueIdx=-1; } return; }
   const svg=document.getElementById('noteTrack'), ph=document.getElementById('playhead');
   if(!svg||!ph||!scoreNotes.length) return;
   const sx=svg.getBoundingClientRect().left, px=ph.getBoundingClientRect().left;
@@ -518,7 +519,9 @@ function rebuildPads(){
       logMidi('ON',midi,100,pd.idx%4);
       playNote(midi);
       flashScore();
+      document.dispatchEvent(new CustomEvent('mo-sing',{detail:{midi,idx:pd.idx}}));
     };
+    wrap._sing=sing; wrap._rest=()=>wrap.dispatchEvent(new Event('mouseleave'));
     wrap.addEventListener('mouseenter',()=>{ clearTimeout(hvT); if(hoverDelay>0) hvT=setTimeout(sing,hoverDelay); else sing(); });
     wrap.addEventListener('pointerdown',e=>{ if(e.pointerType==='touch'||e.pointerType==='pen'){ unlockSound(); sing(); setTimeout(()=>wrap.dispatchEvent(new Event('mouseleave')),350); } });
     wrap.addEventListener('mouseleave',()=>{
@@ -624,5 +627,222 @@ window.addEventListener('load',()=>{
   window.addEventListener('resize',()=>{rebuildPads();applyScoreSpeed();});
 });
 </script>
+<!-- ── ECHO GAME (call and response), added for the Access+ Virtual Training Environment ── -->
+<style>
+#echoBtn{background:linear-gradient(180deg,#ffe27a,#ffb347);color:#2a1600;border-color:#ffe27a}
+#echoPanel{position:absolute;transform:translate(-50%,-50%);z-index:20;display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;
+  padding:10px 14px;border-radius:22px;background:radial-gradient(ellipse at 50% 30%,rgba(60,30,110,.92),rgba(14,8,40,.94));border:2px solid #8060ff;box-shadow:0 0 40px rgba(128,96,255,.45)}
+#echoPanel .esong{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#b9a4ff;font-weight:700}
+#echoPanel .estat{font-size:26px;font-weight:800;color:#fff;text-shadow:0 0 14px rgba(255,226,122,.6);line-height:1.1}
+#echoPanel .edots{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;max-width:100%}
+#echoPanel .edots i{width:16px;height:16px;border-radius:50%;border:2px solid #b9a4ff;display:inline-block}
+#echoPanel .edots i.on{background:#ffe27a;border-color:#ffe27a;box-shadow:0 0 10px #ffe27a}
+#echoPanel .edots i.cur{transform:scale(1.25)}
+#echoPanel .ebtns{display:flex;gap:8px}
+#echoPanel .ebtns button,.ecard button{font-family:inherit;font-weight:800;cursor:pointer;border-radius:999px;border:2px solid #b9a4ff;background:#1c1240;color:#fff;padding:7px 14px;font-size:14px}
+#echoPanel .ebtns button:hover,.ecard button:hover{border-color:#ffe27a}
+.echo-ring{position:absolute;transform:translate(-50%,-50%);border-radius:50%;border:5px dashed #ffe27a;pointer-events:none;z-index:9;animation:eRing 1s ease-in-out infinite;box-shadow:0 0 26px rgba(255,226,122,.7)}
+@keyframes eRing{50%{transform:translate(-50%,-50%) scale(1.12);opacity:.65}}
+.ecard{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:50;width:min(94%,520px);max-height:92%;overflow:auto;padding:22px;border-radius:22px;background:#120a30;border:2px solid #8060ff;box-shadow:0 20px 60px rgba(0,0,0,.6);display:none;color:#eee;text-align:left}
+.ecard h2{font-size:24px;color:#ffe27a;margin-bottom:6px}
+.ecard p{color:#cfc2f5;font-size:15px;line-height:1.45;margin-bottom:12px}
+.ecard .erow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.ecard label{display:grid;gap:4px;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#b9a4ff;font-weight:700}
+.ecard select{min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 16px inherit;padding:0 10px}
+.ecard .songs{display:grid;gap:8px;margin-bottom:12px}
+.ecard .songs button{text-align:left;border-radius:14px;padding:10px 14px;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.ecard .songs button small{font-weight:600;color:#b9a4ff;font-size:12px}
+.ecard .songs button[aria-pressed="true"]{border-color:#ffe27a;background:#3a2a10}
+.ecard .go{background:linear-gradient(180deg,#ffe27a,#ffb347);color:#2a1600;border:0;font-size:20px;padding:14px 30px}
+.ecard .ctx{font-size:13px;color:#7cc4ff;margin-bottom:10px}
+.ecard .stars{font-size:40px;letter-spacing:6px;margin:4px 0 10px}
+.ecard .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.ecard .nums div{background:#1c1240;border-radius:12px;padding:8px 10px}
+.ecard .nums span{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#b9a4ff}
+.ecard .nums b{font-size:22px}
+.ecard .acts{display:flex;flex-wrap:wrap;gap:8px}
+.e-conf{position:absolute;z-index:45;pointer-events:none;font-size:28px;animation:eConf 1.6s ease-out forwards}
+@keyframes eConf{to{transform:translate(var(--dx),var(--dy)) rotate(260deg);opacity:0}}
+@media (max-width:600px){.ecard .erow{grid-template-columns:1fr}#echoPanel .estat{font-size:20px}}
+</style>
+<script>
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id);
+  // Songs: notes are MIDI numbers that exist on the mice for the given scale and key (root C3 = 48)
+  const nE=52,nD=50,nC=48,nF=53,nG=55,nA=57;
+  const SONGS=[
+    {id:'hcb',name:'Hot Cross Buns',tag:'First try · 3 big mice',scale:'Major',key:'C',
+      phrases:[[nE,nD,nC],[nE,nD,nC],[nC,nC,nC,nC],[nD,nD,nD,nD],[nE,nD,nC]]},
+    {id:'mary',name:'Mary Had a Little Lamb',tag:'4 big mice',scale:'Pentatonic',key:'C',
+      phrases:[[nE,nD,nC,nD,nE,nE,nE],[nD,nD,nD],[nE,nG,nG],[nE,nD,nC,nD,nE,nE,nE,nE],[nD,nD,nE,nD,nC]]},
+    {id:'twinkle',name:'Twinkle, Twinkle, Little Star',tag:'Big and small mice',scale:'Major',key:'C',
+      phrases:[[nC,nC,nG,nG,nA,nA,nG],[nF,nF,nE,nE,nD,nD,nC],[nG,nG,nF,nF,nE,nE,nD],[nG,nG,nF,nF,nE,nE,nD],[nC,nC,nG,nG,nA,nA,nG],[nF,nF,nE,nE,nD,nD,nC]]},
+    {id:'ode',name:'Ode to Joy',tag:'Longer phrases',scale:'Major',key:'C',
+      phrases:[[nE,nE,nF,nG],[nG,nF,nE,nD],[nC,nC,nD,nE],[nE,nD,nD],[nE,nE,nF,nG],[nG,nF,nE,nD],[nC,nC,nD,nE],[nD,nC,nC]]}
+  ];
+  // In C Pentatonic the first four (big) mice are C D E G, so Mary needs no small mice.
+  const INPUTS=['Hand mouse','Eye tracker','Head mouse or FaceNav','Touch screen'];
+  const KEYMAP={'Hand mouse':'head','Eye tracker':'eyes','Head mouse or FaceNav':'head','Touch screen':'touch'};
+  const QP=new URLSearchParams(location.search);
+  const CTX={hosted:QP.get('hosted')==='1'&&window.parent!==window,study:(QP.get('study')||'').slice(0,80),studyName:(QP.get('studyName')||'').slice(0,80),
+    p:(QP.get('p')||'').toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,12),practice:QP.get('practice')==='1'};
+  let song=SONGS[0], opts={input:'Hand mouse',len:'short',hints:true,speed:'slow'};
+  let G=null; // game state
+  let saved=null;
+
+  /* ── UI scaffolding ── */
+  const stage=$('stage');
+  const panel=document.createElement('div'); panel.id='echoPanel'; panel.setAttribute('aria-live','polite');
+  panel.innerHTML='<div class="esong" id="eSong"></div><div class="estat" id="eStat"></div><div class="edots" id="eDots"></div><div class="ebtns"><button type="button" id="eAgain">🔁 Hear it again</button><button type="button" id="eStop">⏹ Stop</button></div>';
+  stage.appendChild(panel);
+  const setup=document.createElement('div'); setup.className='ecard'; setup.id='eSetup'; setup.setAttribute('role','dialog'); setup.setAttribute('aria-labelledby','eSetupT');
+  stage.appendChild(setup);
+  const result=document.createElement('div'); result.className='ecard'; result.id='eResult'; result.setAttribute('role','dialog');
+  stage.appendChild(result);
+  const btn=document.createElement('button'); btn.className='cb'; btn.id='echoBtn'; btn.type='button'; btn.textContent='🎤 Echo Game';
+  document.querySelector('#hdr .hrow').prepend(btn);
+  btn.addEventListener('click',()=>{ unlockSound(); openSetup(); });
+
+  function esc2(t){return String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c])}
+  function openSetup(){
+    stopGame(true);
+    setup.innerHTML='<h2 id="eSetupT">🎤 Echo Game</h2><p>The mice sing a short tune. Then it is your turn: sing it back by reaching the same mice. Each phrase you echo adds to the song, until the whole tune plays. Nobody fails: if you reach a different mouse, just try again.</p>'
+      +(CTX.hosted?'<div class="ctx">Recording to '+(CTX.study?'study: '+esc2(CTX.studyName):'free play')+' · '+(CTX.p?'participant '+esc2(CTX.p):'no participant code')+(CTX.practice?' · practice':'')+'</div>':'')
+      +'<div class="songs" role="group" aria-label="Choose a song">'+SONGS.map(s=>'<button type="button" data-id="'+s.id+'" aria-pressed="'+(s===song)+'"><span>'+s.name+'</span><small>'+s.tag+'</small></button>').join('')+'</div>'
+      +'<div class="erow"><label>How you play<select id="eIn">'+INPUTS.map(i=>'<option'+(i===opts.input?' selected':'')+'>'+i+'</option>').join('')+'</select></label>'
+      +'<label>Phrase length<select id="eLen"><option value="short"'+(opts.len==='short'?' selected':'')+'>Short (up to 4 notes)</option><option value="full"'+(opts.len==='full'?' selected':'')+'>Full phrases</option></select></label>'
+      +'<label>Helper glow<select id="eHint"><option value="1"'+(opts.hints?' selected':'')+'>On: next mouse glows</option><option value="0"'+(!opts.hints?' selected':'')+'>Off: play from memory</option></select></label>'
+      +'<label>Speed<select id="eSpd"><option value="slow"'+(opts.speed==='slow'?' selected':'')+'>Slow</option><option value="medium"'+(opts.speed==='medium'?' selected':'')+'>Medium</option></select></label></div>'
+      +'<p style="font-size:13px">For eye gaze or a head pointer, set the Hover delay on the left so a mouse only sings when you rest on it.</p>'
+      +'<div class="acts"><button type="button" class="go" id="eGo">▶ Start</button><button type="button" id="eClose">Just play freely</button></div>';
+    setup.style.display='block';
+    setup.querySelectorAll('.songs button').forEach(b=>b.addEventListener('click',()=>{song=SONGS.find(s=>s.id===b.dataset.id);setup.querySelectorAll('.songs button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
+    $('eGo').addEventListener('click',()=>{opts={input:$('eIn').value,len:$('eLen').value,hints:$('eHint').value==='1',speed:$('eSpd').value};setup.style.display='none';startGame();});
+    $('eClose').addEventListener('click',()=>{setup.style.display='none';});
+    $('eGo').focus();
+  }
+
+  /* ── mice helpers ── */
+  function wraps(){return [...document.querySelectorAll('#padsC .pad-wrap')];}
+  function wrapFor(midi){return wraps().find(w=>+w.dataset.midi===midi);}
+  let ring=null;
+  function showRing(midi){
+    hideRing(); if(!opts.hints) return; const w=wrapFor(midi); if(!w) return;
+    const s=w.querySelector('svg'), sz=s?s.getAttribute('width'):80;
+    ring=document.createElement('div'); ring.className='echo-ring';
+    ring.style.cssText='left:'+w.style.left+';top:'+w.style.top+';width:'+(sz*1.12)+'px;height:'+(sz*1.12)+'px';
+    $('padsC').appendChild(ring);
+  }
+  function hideRing(){ if(ring){ring.remove();ring=null;} }
+  function singVisual(midi,ms){ const w=wrapFor(midi); if(!w||!w._sing) { playNote(midi); return; } w._sing(); setTimeout(()=>{ const x=wrapFor(midi); if(x&&x._rest) x._rest(); },ms); }
+  function click(hi){ try{ const c=getCtx(); if(!sndOn||c.state!=='running') return; const o=c.createOscillator(),g=c.createGain(); o.type='triangle'; o.frequency.value=hi?1320:880; g.gain.setValueAtTime(0.25,c.currentTime); g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+0.09); o.connect(g); g.connect(c.destination); o.start(); o.stop(c.currentTime+0.1);}catch(e){} }
+  function placePanel(){
+    const W=stage.offsetWidth,H=stage.offsetHeight,m=Math.min(W,H);
+    panel.style.left=(W/2)+'px'; panel.style.top=(H/2)+'px';
+    panel.style.width=Math.min(W*0.56,420)+'px'; panel.style.minHeight=Math.min(m*0.34,170)+'px';
+  }
+  window.addEventListener('resize',()=>{ if(G){ placePanel(); if(G.state==='turn') showRing(G.cur[G.ni]); } });
+
+  /* ── game flow ── */
+  function chunk(phrases){ if(opts.len==='full') return phrases.map(p=>p.slice()); const out=[]; phrases.forEach(p=>{ if(p.length<=4) out.push(p.slice()); else { const h=Math.ceil(p.length/2); out.push(p.slice(0,h)); out.push(p.slice(h)); } }); return out; }
+  function startGame(){
+    saved={scale:currentScale,key:currentKey,paused:scorePaused};
+    currentScale=song.scale; currentKey=song.key; updateScaleUI(); updateKeyUI(); buildScale();
+    if(!scorePaused) toggleScore();
+    window.ECHO_ON=true;
+    ['dzGlow','deadZone','dzLabel'].forEach(id=>{const e=$(id); if(e) e.style.visibility='hidden';});
+    const phrases=chunk(song.phrases);
+    G={phrases,pi:0,ni:0,cur:phrases[0],state:'idle',t0:0,last:0,clean:true,notes:[],replays:0,startedAt:new Date().toISOString(),timers:[],wrongNow:0,phraseWrong:0};
+    $('eSong').textContent=song.name;
+    panel.style.display='flex'; placePanel();
+    runCall();
+  }
+  function later(fn,ms){ const t=setTimeout(fn,ms); G.timers.push(t); }
+  function beat(){ return opts.speed==='slow'?720:520; }
+  function dots(){ $('eDots').innerHTML=G.cur.map((n,i)=>'<i class="'+(i<G.ni?'on':'')+(i===G.ni&&G.state==='turn'?' cur':'')+'"></i>').join(''); }
+  function runCall(replay){
+    if(!G) return; hideRing(); G.state='call'; G.ni=0; dots();
+    $('eStat').textContent=replay?'Listen again…':'Listen… phrase '+(G.pi+1)+' of '+G.phrases.length;
+    const b=beat();
+    later(()=>{click(true); $('eStat').textContent='1…';},300);
+    later(()=>{click(false); $('eStat').textContent='2…';},300+b);
+    G.cur.forEach((n,i)=>later(()=>{ $('eStat').textContent='Listen ♪'; singVisual(n,b*0.8); const ds=$('eDots').children; if(ds[i]) ds[i].classList.add('on'); },300+b*(2+i)));
+    later(()=>{ if(!G) return; G.state='turn'; G.ni=0; G.clean=true; G.phraseWrong=0; G.t0=G.last=performance.now(); dots(); $('eStat').textContent='Your turn! 🎤'; showRing(G.cur[0]); },300+b*(2+G.cur.length)+250);
+  }
+  document.addEventListener('mo-sing',e=>{
+    if(!G||G.state!=='turn') return;
+    const midi=e.detail.midi, now=performance.now(), want=G.cur[G.ni];
+    if(midi===want){
+      G.notes.push({phrase:G.pi+1,note:G.ni+1,midi,ms:Math.round(now-G.last),clean:G.clean});
+      G.last=now; G.clean=true; G.ni++;
+      if(G.ni>=G.cur.length){ phraseDone(); return; }
+      dots(); $('eStat').textContent=['Yes! ✨','Great!','Nice!','Keep going!'][G.ni%4]; showRing(G.cur[G.ni]);
+    } else {
+      G.clean=false; G.phraseWrong++; G.notes.push({phrase:G.pi+1,note:G.ni+1,midi,ms:Math.round(now-G.last),wrong:true});
+      $('eStat').textContent=opts.hints?'Try the glowing mouse 💛':'Not that one, try again';
+    }
+  });
+  function phraseDone(){
+    G.state='reward'; hideRing(); dots(); $('eStat').textContent='You did it! 🎉';
+    confetti(6);
+    G.pi++;
+    // play the song so far, so the tune builds up
+    const sofar=[].concat(...G.phrases.slice(0,G.pi)), b=beat()*0.62;
+    later(()=>{ $('eStat').textContent=G.pi>=G.phrases.length?'The whole song! 🎶':'The song so far 🎶'; sofar.forEach((n,i)=>later(()=>singVisual(n,b*0.8),i*b)); },700);
+    const wait=700+sofar.length*b+700;
+    if(G.pi>=G.phrases.length) later(finish,wait+300);
+    else later(()=>{ G.cur=G.phrases[G.pi]; runCall(); },wait);
+  }
+  function confetti(n){ const W=stage.offsetWidth,H=stage.offsetHeight; for(let i=0;i<n;i++){ const s=document.createElement('div'); s.className='e-conf'; s.textContent=['🎵','✨','🎶','⭐','🧀'][i%5]; const a=Math.random()*Math.PI*2; s.style.cssText='left:'+(W/2)+'px;top:'+(H/2)+'px;--dx:'+Math.cos(a)*(120+Math.random()*160)+'px;--dy:'+Math.sin(a)*(90+Math.random()*120)+'px'; stage.appendChild(s); setTimeout(()=>s.remove(),1700);} }
+  $('eAgain').addEventListener('click',()=>{ if(G&&G.state==='turn'){ G.replays++; runCall(true); } });
+  $('eStop').addEventListener('click',()=>stopGame());
+  function clearTimers(){ if(G) G.timers.forEach(clearTimeout); }
+  function stopGame(silent){
+    if(!G){ return; }
+    clearTimers(); hideRing(); panel.style.display='none'; G=null; window.ECHO_ON=false;
+    ['dzGlow','deadZone','dzLabel'].forEach(id=>{const e=$(id); if(e) e.style.visibility='';});
+    if(saved){ currentScale=saved.scale; currentKey=saved.key; updateScaleUI(); updateKeyUI(); buildScale(); if(scorePaused!==saved.paused) toggleScore(); saved=null; }
+  }
+  function finish(){
+    const g=G; clearTimers(); confetti(16);
+    const right=g.notes.filter(n=>!n.wrong), total=right.length, clean=right.filter(n=>n.clean).length;
+    const acc=total?Math.round(clean/total*100):0, avg=total?Math.round(right.reduce((a,n)=>a+n.ms,0)/total):0;
+    const stars=acc>=90?3:acc>=70?2:1;
+    const perPhrase=g.phrases.map((p,i)=>{ const r=right.filter(n=>n.phrase===i+1), w=g.notes.filter(n=>n.wrong&&n.phrase===i+1).length;
+      return {level:'Phrase '+(i+1),hits:r.length,goal:p.length,done:true,misses:w,slips:0,avgMs:r.length?Math.round(r.reduce((a,n)=>a+n.ms,0)/r.length):0,perMin:0,acc:r.length?Math.round(r.filter(n=>n.clean).length/r.length*100):0,tp:null,secs:null,ease:null,tired:null}; });
+    const hard=perPhrase.map((p,i)=>[p.acc,i]).sort((a,b)=>a[0]-b[0])[0];
+    stopGame(true);
+    result.innerHTML='<h2>🎶 '+song.name+'</h2><div class="stars" aria-label="'+stars+' of 3 stars">'+'⭐'.repeat(stars)+'<span style="opacity:.25">'+'⭐'.repeat(3-stars)+'</span></div>'
+      +'<div class="nums"><div><span>Notes</span><b>'+total+'</b></div><div><span>First try</span><b>'+acc+'%</b></div><div><span>Per note</span><b>'+(avg/1000).toFixed(1)+' s</b></div></div>'
+      +'<p>'+(acc>=90?'Wonderful echoing! ':'Well played! ')+'You echoed '+g.phrases.length+' phrases'+(g.replays?' and asked to hear '+(g.replays===1?'one':g.replays)+' again':'')+'.'+(hard&&hard[0]<100&&g.phrases.length>1?' Phrase '+(hard[1]+1)+' was the trickiest, a good one to practise.':'')+'</p>'
+      +'<p id="eSaved" style="font-size:13px"></p>'
+      +'<div class="acts"><button type="button" class="go" id="eRe">▶ Play again</button><button type="button" id="eNew">Choose another song</button><button type="button" id="eDone">Play freely</button></div>';
+    result.style.display='block';
+    $('eRe').addEventListener('click',()=>{result.style.display='none';startGame();});
+    $('eNew').addEventListener('click',()=>{result.style.display='none';openSetup();});
+    $('eDone').addEventListener('click',()=>{result.style.display='none';});
+    // save locally, and to the research dashboard when played inside Access+
+    let msg='';
+    try{ const T=JSON.parse(localStorage.getItem('accessplus-tests')||'[]')||[]; const k=KEYMAP[opts.input]||'head';
+      T.push({n:T.filter(t=>t.method===k).length+1,date:new Date().toISOString().slice(0,16).replace('T',' '),method:k,pos:'',mode:'Echo game ('+opts.input+')',size:'',speed:avg?Math.round(60000/avg*10)/10:0,acc,tp:'',effort:null,useful:avg?Math.round(60000/avg*acc/100*10)/10:0,game:'Mouse Orchestra Echo',song:song.name});
+      localStorage.setItem('accessplus-tests',JSON.stringify(T)); msg='Saved to your test sessions in this browser.'; }catch(e){}
+    $('eSaved').textContent=msg;
+    if(CTX.hosted){
+      const sid='e-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
+      try{ window.parent.postMessage({type:'accessplus-session',session:{id:sid,game:'echo',studyId:CTX.study,participant:CTX.p,practice:CTX.practice,input:opts.input,inputKey:KEYMAP[opts.input]||'head',pos:'',posLabel:'',
+        startedAt:g.startedAt,endedAt:new Date().toISOString(),song:song.name,settings:{phraseLength:opts.len,hints:opts.hints,speed:opts.speed,hoverDelayMs:hoverDelay,replays:g.replays},
+        levels:perPhrase,summary:{hits:total,acc,avgMs:avg,tp:null,fat:null,perMin:avg?Math.round(60000/avg*10)/10:0},
+        events:g.notes.slice(0,1500).map(n=>({level:'Phrase '+n.phrase,event:n.wrong?'wrong':(n.clean?'note':'note_after_retry'),time_ms:n.ms,distance_px:null,size_px:null,id_bits:null,midi:n.midi})),preferred:''}},location.origin);}catch(e){}
+    }
+  }
+  window.addEventListener('message',e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=='accessplus-saved') return; const m=$('eSaved'); if(m) m.textContent+=e.data.mode==='shared'?' Sent to the research dashboard.':e.data.mode==='local'?' Added to the research dashboard in this browser.':' It could not be sent to the research dashboard.'; });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&G) stopGame(); });
+  window.__echoState=()=>G;
+  // open straight into the game with ?game=echo
+  if(QP.get('game')==='echo'){ window.addEventListener('load',()=>setTimeout(openSetup,50)); }
+})();
+</script>
+
 </body>
 </html>

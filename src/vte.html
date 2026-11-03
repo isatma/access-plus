@@ -90,9 +90,10 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
       <p>Build and share virtual desktops for training and assessing adaptive controls. Each game on the desktop turns a real computer skill into a short, colorful challenge with music, works with the control you already use (an eye tracker, a head mouse, switches, a joystick or an ordinary mouse), and gives a plain-language rundown. Every game can also run as a research study.</p>
     </header>
     <section class="vt-desk" aria-labelledby="vtDeskT">
-      <div class="vt-deskbar"><span id="vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>2 ready · 1 preview · 5 coming</span></div>
+      <div class="vt-deskbar"><span id="vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>3 ready · 2 previews · 4 coming</span></div>
       <div class="vt-icons">
         <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Play</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
+        <a class="vt-ic" href="lab/mouse_orchestra_v6.html?game=echo" data-title="VTE · Mouse Orchestra Echo Game" style="--ac:#ff8fd0"><span class="st on">Play</span><span class="gl" aria-hidden="true">🐭</span><b>Echo Game</b><small>The mice sing a phrase, you sing it back. Phrase by phrase the song builds up: Mary Had a Little Lamb, Twinkle and more. Great for kids.</small></a>
         <a class="vt-ic" href="lab/songboards.html" data-title="VTE · Environment Editor (Songboards engine)" style="--ac:#e0e05f"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">🛠️</span><b>Environment Editor</b><small>Build your own desktop: place targets, sounds and rewards, then save it to share. Runs on the Songboards engine.</small></a>
         <a class="vt-ic" href="#lab" style="--ac:#ff8fd0"><span class="st on">Open</span><span class="gl" aria-hidden="true">🎨</span><b>Recreation lab</b><small>Music, art and movement apps from ISATMA: the Musical Dial, Mouse Orchestra, the Virtual Harmonica and more.</small></a>
         <a class="vt-ic soon" href="#try" style="--ac:#5fd3e0"><span class="st pv">Preview</span><span class="gl" aria-hidden="true">♿</span><b>Wheelchair driving</b><small>Drive a virtual power wheelchair through rooms and doorways. An early simulator is on the Try page.</small></a>
@@ -195,7 +196,7 @@ a.vt-ic:hover .gl, a.vt-ic:focus-visible .gl { transform: translateY(-4px) scale
   function recent() {
     var list = Object.keys(AP.sessions).map(function (k) { return AP.sessions[k]; }).filter(function (x) { return x && x.startedAt; });
     list.sort(function (a, b) { return String(b.startedAt).localeCompare(String(a.startedAt)); });
-    var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'] };
+    var G = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'], echo: ['🐭', 'Echo Game', 'lab/mouse_orchestra_v6.html?game=echo'] };
     list = list.slice(0, 4);
     el('vtRecentWrap').hidden = !list.length;
     el('vtRecent').innerHTML = list.map(function (x) {

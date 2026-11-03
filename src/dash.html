@@ -206,8 +206,8 @@
 (function () {
   function el(id) { return document.getElementById(id); }
   var AP = window.APStore;
-  var GAMES = { pointing: 'Pointing Environment' };
-  var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9']];
+  var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game' };
+  var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9'], ['Touch screen', '#008300']];
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
   var sel = '__all', editing = null;
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }

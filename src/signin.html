@@ -22,6 +22,16 @@
 .si-foot .btn { min-height: 52px; }
 .si-box .btn { color: #0b1220; border-color: #4b5a6b; background: #fff; }
 .nav .navsign .navrole { margin-left: 8px; font: 600 0.72em var(--mono); letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; background: var(--rc, #5fe0a8); color: #04201a; }
+.nav a.navres, .nav a.navsign { gap: 8px; border: 1px solid #5fe0a8; border-bottom-width: 1px; color: #5fe0a8; padding: 0 14px; margin-left: 6px; }
+.nav a.navres:hover, .nav a.navsign:hover { background: rgba(95,224,168,0.12); color: var(--ink); border-color: #5fe0a8; }
+.nav a.navres[aria-current="page"], .nav a.navsign[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
+.nav a.navvte { order: 99; flex: 1 1 100%; justify-content: center; gap: 12px; min-height: 58px; margin-top: 8px; padding: 0 16px; border: 2px solid #5fe0a8; background: linear-gradient(90deg, rgba(95,224,168,0.20), rgba(124,196,255,0.14)); color: var(--ink); font: 600 1em var(--body); text-align: center; }
+.nav a.navvte b { color: #5fe0a8; font-weight: 800; }
+.nav a.navvte .vi { font-size: 1.5em; }
+.nav a.navvte:hover { background: linear-gradient(90deg, rgba(95,224,168,0.32), rgba(124,196,255,0.22)); border-color: #5fe0a8; color: var(--ink); }
+.nav a.navvte[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
+.nav a.navvte[aria-current="page"] b { color: #04201a; }
+@media (max-width: 640px) { .nav a.navvte { order: -1; flex: none; margin-top: 0; min-height: 48px; font-size: 0.85em; } .nav a.navvte .vtx { display: none; } }
 .nav .navlab { gap: 8px; border: 1px solid #5fe0a8; color: #5fe0a8; padding: 0 12px; margin-right: 6px; }
 .nav .navlab:hover { background: rgba(95,224,168,0.12); color: var(--ink); }
 .nav .navlab[aria-current="page"] { background: #5fe0a8; color: #04201a; }
@@ -56,7 +66,7 @@
 </main>
 <script>
 (function () {
-  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#research'] };
+  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#dashboard'] };
   var back = document.getElementById('siBack'), lastFocus = null;
   var role = ''; try { role = localStorage.getItem('accessplus-role') || ''; } catch (e) {}
   if (!ROLES[role]) role = '';
@@ -64,7 +74,7 @@
   function paint() {
     document.documentElement.setAttribute('data-role', role || 'none');
     Array.prototype.forEach.call(document.querySelectorAll('.navsign'), function (a) {
-      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in<span class="navdemo">Demo</span>';
+      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in';
       a.setAttribute('aria-label', role ? 'Signed in as ' + ROLES[role][0] + ' (demo). Change role' : 'Sign in (demo)');
     });
     Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-role') === role ? 'true' : 'false'); });
