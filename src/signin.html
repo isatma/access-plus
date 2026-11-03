@@ -67,7 +67,7 @@
 </main>
 <script>
 (function () {
-  var ROLES = { participant: ['Participant', '#5fe0a8', '#profile'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#studies'] };
+  var ROLES = { participant: ['Participant', '#5fe0a8', '#dashboard'], care: ['Care team', '#ffc670', '#care'], researcher: ['Researcher', '#7cc4ff', '#studies'] };
   var back = document.getElementById('siBack'), lastFocus = null;
   var role = ''; try { role = localStorage.getItem('accessplus-role') || ''; } catch (e) {}
   if (!ROLES[role]) role = '';
@@ -75,8 +75,10 @@
   function paint() {
     document.documentElement.setAttribute('data-role', role || 'none');
     Array.prototype.forEach.call(document.querySelectorAll('.navsign'), function (a) {
-      a.innerHTML = role ? 'Signed in<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in';
-      a.setAttribute('aria-label', role ? 'Signed in as ' + ROLES[role][0] + ' (demo). Change role' : 'Sign in (demo)');
+      a.innerHTML = role ? 'My dashboard<span class="navrole" style="--rc:' + ROLES[role][1] + '">' + ROLES[role][0] + '</span>' : 'Sign in';
+      a.setAttribute('aria-label', role ? 'My dashboard (signed in as ' + ROLES[role][0] + ', demo)' : 'Sign in to your dashboard (demo)');
+      a.setAttribute('href', role ? (role === 'care' ? '#care' : '#dashboard') : '#signin');
+      a.setAttribute('data-route', role ? (role === 'care' ? 'care' : 'dashboard') : 'signin');
     });
     Array.prototype.forEach.call(document.querySelectorAll('.nav a.navstudy'), function (a) { a.hidden = role !== 'researcher'; });
     Array.prototype.forEach.call(back.querySelectorAll('.si-role'), function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-role') === role ? 'true' : 'false'); });
@@ -94,6 +96,7 @@
   window.accessSignIn = open;
   document.addEventListener('click', function (e) {
     var t = e.target.closest ? e.target.closest('.navsign, .signin, [data-signin], [data-signas]') : null;
+    if (t && role && t.classList.contains('navsign')) { e.preventDefault(); location.hash = role === 'care' ? '#care' : '#dashboard'; return; }
     if (t) { e.preventDefault(); if (t.hasAttribute('data-signas')) setRole(t.getAttribute('data-signas'), false); else open(); return; }
     if (e.target === back) close();
   });

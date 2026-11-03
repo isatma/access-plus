@@ -97,7 +97,7 @@
     <header class="ds-hero">
       <div class="ds-bar" style="justify-content:space-between;align-items:center">
         <h1 id="dsH1">My dashboard</h1>
-        <div class="ds-viewas" role="group" aria-label="Demo: sign in as"><span>Demo · sign in as</span><button type="button" data-signas="participant" id="dsAsP">Participant</button><button type="button" data-signas="researcher" id="dsAsR">Researcher</button></div>
+        <div class="ds-viewas" role="group" aria-label="Demo: sign in as"><span>Demo · sign in as</span><button type="button" data-signas="participant" id="dsAsP">Participant</button><button type="button" data-signas="researcher" id="dsAsR">Researcher</button><button type="button" data-signas="" id="dsOut" hidden>Sign out</button></div>
       </div>
       <span class="ds-status" id="dsStatus"><i></i><span id="dsStatusT">Connecting…</span></span>
     </header>
@@ -267,6 +267,9 @@
     el('dsCsv').textContent = tab === 'mine' ? 'Download my data (CSV)' : 'Download summary (CSV)';
     sel = tab === 'mine' ? '__mine' : (sel === '__mine' ? '__all' : sel); el('dsPart').value = ''; render();
   }
+  function outBtn() { el('dsOut').hidden = !(window.accessRole && window.accessRole()); }
+  window.addEventListener('accessrole', outBtn);
+  el('dsOut').addEventListener('click', function () { setTimeout(function () { location.hash = '#home'; }, 0); });
   window.dsMode = function (m) { if (m !== tab || !setMode._d) { setMode._d = 1; setMode(m); } };
   el('dsAsP').addEventListener('click', function () { location.hash = '#dashboard'; });
   el('dsAsR').addEventListener('click', function () { location.hash = '#studies'; });
