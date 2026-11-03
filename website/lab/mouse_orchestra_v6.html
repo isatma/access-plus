@@ -689,6 +689,14 @@ window.addEventListener('load',()=>{
     p:(QP.get('p')||'').toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,12),practice:QP.get('practice')==='1'};
   let song=SONGS[0], opts={input:'Hand mouse',len:'short',hints:true,speed:'slow'};
   let G=null; // game state
+  let STUDIES=CTX.study?[{id:CTX.study,name:CTX.studyName||'Study'}]:[];
+  let DEVICE=''; try{DEVICE=localStorage.getItem('accessplus-device')||'';}catch(e){}
+  if(CTX.hosted){
+    window.addEventListener('message',e=>{ if(e.origin!==location.origin||!e.data||e.data.type!=='accessplus-ctx'||!Array.isArray(e.data.studies)) return;
+      STUDIES=e.data.studies.map(x=>({id:String(x.id),name:String(x.name)})); if(CTX.study&&!STUDIES.some(x=>x.id===CTX.study)) CTX.study='';
+      const sel=$('eStudy'); if(sel&&setup.style.display==='block'){ const cur=sel.value; sel.innerHTML='<option value="">Free play (no study)</option>'+STUDIES.map(x=>'<option value="'+esc2(x.id)+'">'+esc2(x.name)+'</option>').join(''); sel.value=STUDIES.some(x=>x.id===cur)?cur:''; } });
+    try{window.parent.postMessage({type:'accessplus-hello'},location.origin);}catch(e){}
+  }
   let saved=null;
 
   /* ── UI scaffolding ── */
@@ -708,17 +716,20 @@ window.addEventListener('load',()=>{
   function openSetup(){
     stopGame(true);
     setup.innerHTML='<h2 id="eSetupT">🎤 Echo Game</h2><p>The mice sing a short tune. Then it is your turn: sing it back by reaching the same mice. Each phrase you echo adds to the song, until the whole tune plays. Nobody fails: if you reach a different mouse, just try again.</p>'
-      +(CTX.hosted?'<div class="ctx">Recording to '+(CTX.study?'study: '+esc2(CTX.studyName):'free play')+' · '+(CTX.p?'participant '+esc2(CTX.p):'no participant code')+(CTX.practice?' · practice':'')+'</div>':'')
+      +(CTX.hosted?'<div class="erow" style="padding:12px;border:2px solid #7cc4ff;border-radius:14px"><label style="grid-column:1/-1;color:#7cc4ff">Recording to the research dashboard</label><label>Study<select id="eStudy"><option value="">Free play (no study)</option>'+STUDIES.map(x=>'<option value="'+esc2(x.id)+'"'+(x.id===CTX.study?' selected':'')+'>'+esc2(x.name)+'</option>').join('')+'</select></label><label>Participant code<input id="eP" maxlength="12" value="'+esc2(CTX.p)+'" placeholder="P01" style="min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 16px inherit;padding:0 10px;text-transform:uppercase"></label><label style="flex-direction:row;display:flex;align-items:center;gap:8px;text-transform:none;font-size:15px;color:#fff"><input type="checkbox" id="ePr"'+(CTX.practice?' checked':'')+' style="width:22px;height:22px"> Practice run</label></div>':'')
       +'<div class="songs" role="group" aria-label="Choose a song">'+SONGS.map(s=>'<button type="button" data-id="'+s.id+'" aria-pressed="'+(s===song)+'"><span>'+s.name+'</span><small>'+s.tag+'</small></button>').join('')+'</div>'
       +'<div class="erow"><label>How you play<select id="eIn">'+INPUTS.map(i=>'<option'+(i===opts.input?' selected':'')+'>'+i+'</option>').join('')+'</select></label>'
       +'<label>Phrase length<select id="eLen"><option value="short"'+(opts.len==='short'?' selected':'')+'>Short (up to 4 notes)</option><option value="full"'+(opts.len==='full'?' selected':'')+'>Full phrases</option></select></label>'
       +'<label>Helper glow<select id="eHint"><option value="1"'+(opts.hints?' selected':'')+'>On: next mouse glows</option><option value="0"'+(!opts.hints?' selected':'')+'>Off: play from memory</option></select></label>'
+      +'<label>Your device (optional)<input id="eDev" maxlength="60" value="'+esc2(DEVICE)+'" placeholder="e.g. USB touchpad, lower lip" style="min-height:46px;border-radius:10px;border:1.5px solid #5a4a9e;background:#1c1240;color:#fff;font:600 15px inherit;padding:0 10px"></label>'
       +'<label>Speed<select id="eSpd"><option value="slow"'+(opts.speed==='slow'?' selected':'')+'>Slow</option><option value="medium"'+(opts.speed==='medium'?' selected':'')+'>Medium</option></select></label></div>'
       +'<p style="font-size:13px">For eye gaze or a head pointer, set the Hover delay on the left so a mouse only sings when you rest on it.</p>'
       +'<div class="acts"><button type="button" class="go" id="eGo">▶ Start</button><button type="button" id="eClose">Just play freely</button></div>';
     setup.style.display='block';
     setup.querySelectorAll('.songs button').forEach(b=>b.addEventListener('click',()=>{song=SONGS.find(s=>s.id===b.dataset.id);setup.querySelectorAll('.songs button').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
-    $('eGo').addEventListener('click',()=>{opts={input:$('eIn').value,len:$('eLen').value,hints:$('eHint').value==='1',speed:$('eSpd').value};setup.style.display='none';startGame();});
+    if(CTX.hosted){ const push=()=>{ const st=$('eStudy'); CTX.study=st.value; CTX.studyName=st.value?st.options[st.selectedIndex].textContent:''; CTX.p=$('eP').value=$('eP').value.toUpperCase().replace(/[^A-Z0-9_-]/g,'').slice(0,12); CTX.practice=$('ePr').checked; try{window.parent.postMessage({type:'accessplus-setctx',ctx:{studyId:CTX.study,participant:CTX.p,practice:CTX.practice}},location.origin);}catch(e){} };
+      $('eStudy').addEventListener('change',push); $('eP').addEventListener('input',push); $('ePr').addEventListener('change',push); }
+    $('eGo').addEventListener('click',()=>{DEVICE=$('eDev').value.trim().slice(0,60); try{localStorage.setItem('accessplus-device',DEVICE);}catch(e){} opts={input:$('eIn').value,len:$('eLen').value,hints:$('eHint').value==='1',speed:$('eSpd').value};setup.style.display='none';startGame();});
     $('eClose').addEventListener('click',()=>{setup.style.display='none';});
     $('eGo').focus();
   }
@@ -830,7 +841,7 @@ window.addEventListener('load',()=>{
     $('eSaved').textContent=msg;
     if(CTX.hosted){
       const sid='e-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,6);
-      try{ window.parent.postMessage({type:'accessplus-session',session:{id:sid,game:'echo',studyId:CTX.study,participant:CTX.p,practice:CTX.practice,input:opts.input,inputKey:KEYMAP[opts.input]||'head',pos:'',posLabel:'',
+      try{ window.parent.postMessage({type:'accessplus-session',session:{id:sid,game:'echo',studyId:CTX.study,participant:CTX.p,practice:CTX.practice,input:opts.input,device:DEVICE,inputKey:KEYMAP[opts.input]||'head',pos:'',posLabel:'',
         startedAt:g.startedAt,endedAt:new Date().toISOString(),song:song.name,settings:{phraseLength:opts.len,hints:opts.hints,speed:opts.speed,hoverDelayMs:hoverDelay,replays:g.replays},
         levels:perPhrase,summary:{hits:total,acc,avgMs:avg,tp:null,fat:null,perMin:avg?Math.round(60000/avg*10)/10:0},
         events:g.notes.slice(0,1500).map(n=>({level:'Phrase '+n.phrase,event:n.wrong?'wrong':(n.clean?'note':'note_after_retry'),time_ms:n.ms,distance_px:null,size_px:null,id_bits:null,midi:n.midi})),preferred:''}},location.origin);}catch(e){}

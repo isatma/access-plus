@@ -89,6 +89,10 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 .big-num span { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .big-num b { display: block; font-size: 24px; }
 .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+.recbox { display: grid; gap: 12px; padding: 16px; border: 2px solid #7cc4ff; border-radius: 12px; background: rgba(124,196,255,.08); }
+.row input[type=text] { min-height: 46px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-size: 16px; }
+.row label.ck { display: flex; flex-direction: row; align-items: center; gap: 8px; min-height: 46px; color: var(--ink); font-size: 16px; }
+.row label.ck input { width: 22px; height: 22px; accent-color: #7cc4ff; }
 </style>
 </head>
 <body>
@@ -116,12 +120,21 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
       <h2 id="setupT">Pointing Environment</h2>
       <p>Six short levels of colorful targets. Each target you reach plays the next note of a tune, so finishing a level plays the whole song. Choose how you will play, then press Start. You can pause at any time, and nobody fails: when the timer runs out, the level simply ends.</p>
     </div>
-    <div class="note" id="ctxLine" hidden style="border-left-color:#7cc4ff;background:rgba(124,196,255,.08)"></div>
+    <div class="recbox" id="recBox" hidden>
+      <h3 style="margin:0;color:#7cc4ff">Recording to the research dashboard</h3>
+      <div class="row">
+        <label>Study<select id="recStudy"><option value="">Free play (no study)</option></select></label>
+        <label>Participant code<input type="text" id="recP" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false" style="text-transform:uppercase;width:130px"></label>
+        <label class="ck"><input type="checkbox" id="recPr"> Practice run</label>
+      </div>
+      <p id="recLine" style="margin:0;font-size:14px;color:var(--ink)"></p>
+    </div>
     <h3>1 · How will you play?</h3>
     <div class="opts" id="inputOpts" role="group" aria-label="Input method"></div>
     <div class="note" id="inputNote"></div>
     <h3>2 · Settings</h3>
     <div class="row">
+      <label>Your device (optional)<input type="text" id="device" maxlength="60" placeholder="e.g. USB touchpad, lower lip" style="width:240px"></label>
       <label>Position<select id="pos"><option value="up">Sitting upright</option><option value="rec">Reclined</option><option value="bed">Lying in bed</option><option value="side">Side-lying</option></select></label>
       <label>Target size<select id="size"><option value="0.75">Small</option><option value="1" selected>Medium</option><option value="1.35">Large</option></select></label>
       <label>Timers<select id="timers"><option value="1">On</option><option value="1.5">Relaxed (50% longer)</option><option value="0">Off</option></select></label>
@@ -178,10 +191,31 @@ th { color: var(--muted); font-weight: 600; font-size: 12px; letter-spacing: .06
 const $ = id => document.getElementById(id);
 const QP = new URLSearchParams(location.search);
 const CTX = { hosted: QP.get('hosted') === '1' && window.parent !== window, study: (QP.get('study') || '').slice(0, 80), studyName: (QP.get('studyName') || '').slice(0, 80), p: (QP.get('p') || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12), practice: QP.get('practice') === '1' };
-if (CTX.hosted) {
-  const c = document.getElementById('ctxLine'); c.hidden = false;
-  c.textContent = 'Recording to ' + (CTX.study ? 'study: ' + CTX.studyName : 'free play (no study)') + ' · ' + (CTX.p ? 'participant ' + CTX.p : 'no participant code') + (CTX.practice ? ' · practice run' : '') + '. Your results go to the Access+ research dashboard when you finish.';
+function recLine() {
+  const st = $('recStudy'), name = st.value ? st.options[st.selectedIndex].textContent : '';
+  CTX.study = st.value; CTX.studyName = name; CTX.p = $('recP').value; CTX.practice = $('recPr').checked;
+  $('recLine').textContent = 'Saving to ' + (CTX.study ? 'study: ' + name : 'free play (no study)') + ' · ' + (CTX.p ? 'participant ' + CTX.p : 'no participant code') + (CTX.practice ? ' · practice run' : '') + '.';
 }
+if (CTX.hosted) {
+  $('recBox').hidden = false;
+  if (CTX.study) { const o = document.createElement('option'); o.value = CTX.study; o.textContent = CTX.studyName || 'Study'; $('recStudy').appendChild(o); $('recStudy').value = CTX.study; }
+  $('recP').value = CTX.p; $('recPr').checked = CTX.practice; recLine();
+  const push = () => { recLine(); try { window.parent.postMessage({ type: 'accessplus-setctx', ctx: { studyId: CTX.study, participant: CTX.p, practice: CTX.practice } }, location.origin); } catch (e) {} };
+  $('recStudy').addEventListener('change', push);
+  $('recP').addEventListener('input', () => { const v = $('recP').value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12); if (v !== $('recP').value) $('recP').value = v; push(); });
+  $('recPr').addEventListener('change', push);
+  window.addEventListener('message', e => {
+    if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-ctx' || !Array.isArray(e.data.studies)) return;
+    const box = $('recStudy'), cur = box.value;
+    box.innerHTML = '<option value="">Free play (no study)</option>';
+    e.data.studies.forEach(x => { const o = document.createElement('option'); o.value = String(x.id); o.textContent = String(x.name); box.appendChild(o); });
+    box.value = [...box.options].some(o => o.value === cur) ? cur : '';
+    recLine();
+  });
+  try { window.parent.postMessage({ type: 'accessplus-hello' }, location.origin); } catch (e) {}
+}
+try { $('device').value = localStorage.getItem('accessplus-device') || ''; } catch (e) {}
+$('device').addEventListener('change', () => { try { localStorage.setItem('accessplus-device', $('device').value.trim()); } catch (e) {} });
 const POSL = { up: 'Sitting upright', rec: 'Reclined', bed: 'Lying in bed', side: 'Side-lying' };
 function postUp(msg) { try { if (CTX.hosted) window.parent.postMessage(msg, location.origin); } catch (e) {} }
 window.addEventListener('message', e => {
@@ -279,8 +313,8 @@ drawInputs();
 $('startBtn').addEventListener('click', () => {
   audio();
   S = { input, pos: $('pos').value, sizeMul: +$('size').value, timeMul: +$('timers').value, dwell: +$('dwell').value, scan: +$('scan').value,
-        levelIdx: -1, results: [], startedAt: Date.now(), id: Date.now().toString(36) };
-  $('hInput').textContent = input.name;
+        levelIdx: -1, results: [], startedAt: Date.now(), id: Date.now().toString(36), device: $('device').value.trim().slice(0, 60) };
+  $('hInput').textContent = S.device || input.name;
   $('pauseBtn').hidden = false;
   if (input.id === 'nose') startNose().then(ok => { if (ok) nextLevel(); else { show('setup'); $('inputNote').textContent = 'The camera or face tracker could not start here. Try opening this page directly in Chrome or Edge, or choose another input.'; } });
   else nextLevel();
@@ -534,11 +568,11 @@ function finish() {
   const tps = res.map(r => r.tp).filter(x => x), tp = tps.length ? tps.reduce((a, b) => a + b, 0) / tps.length : null;
   const acc = allHits + allMiss ? Math.round(allHits / (allHits + allMiss) * 100) : 100;
   let fat = null; if (first && last && first.avgMs && last.avgMs) fat = Math.round((last.avgMs / first.avgMs - 1) * 100);
-  const run = { input: S.input.name, key: S.input.key, pos: S.pos, levels: res.length, hits: allHits, acc, avgMs: Math.round(avg), tp, fat, perMin: avg ? Math.round(60000 / avg * 10) / 10 : 0 };
+  const run = { input: S.device || S.input.name, key: S.input.key, pos: S.pos, levels: res.length, hits: allHits, acc, avgMs: Math.round(avg), tp, fat, perMin: avg ? Math.round(60000 / avg * 10) / 10 : 0 };
   RUNS.push(run);
   const best = res.filter(r => r.level !== 'Warm-up Pond').sort((a, b) => (b.done - a.done) || (a.avgMs - b.avgMs))[0];
   const hard = res.filter(r => r.ease === 'Hard').map(r => r.level);
-  let txt = `With ${S.input.name.toLowerCase()} you reached ${allHits} targets at ${acc}% accuracy, about ${(avg / 1000).toFixed(1)} seconds per target.`;
+  let txt = `With ${S.device ? S.device : S.input.name.toLowerCase()} you reached ${allHits} targets at ${acc}% accuracy, about ${(avg / 1000).toFixed(1)} seconds per target.`;
   if (best) txt += ` Your strongest level was ${best.level}.`;
   if (fat !== null) txt += fat > 10 ? ` You were ${fat}% slower on the Return Lap than in Target Garden, so shorter sessions or a break may help.` : ` Your pace held steady from Target Garden to the Return Lap.`;
   if (hard.length) txt += ` You rated ${hard.join(' and ')} as hard: larger targets or a longer dwell time may make ${hard.length > 1 ? 'them' : 'it'} easier.`;
@@ -564,7 +598,7 @@ function finish() {
   const sid = 's-' + S.id + '-' + Math.random().toString(36).slice(2, 6); S.sid = sid;
   postUp({ type: 'accessplus-session', session: {
     id: sid, game: 'pointing', studyId: CTX.study, participant: CTX.p, practice: CTX.practice,
-    input: S.input.name, inputKey: S.input.key, pos: S.pos, posLabel: POSL[S.pos] || S.pos,
+    input: S.input.name, device: S.device || '', inputKey: S.input.key, pos: S.pos, posLabel: POSL[S.pos] || S.pos,
     startedAt: new Date(S.startedAt).toISOString(), endedAt: new Date().toISOString(),
     settings: { sizeMul: S.sizeMul, timeMul: S.timeMul, dwellMs: S.input.sel === 'dwell' ? S.dwell : null, scanMs: S.input.sel === 'scan1' ? S.scan : null },
     levels: res.map(r => ({ level: r.level, hits: r.hits, goal: r.goal, done: r.done, misses: r.misses, slips: r.slips, avgMs: r.avgMs, perMin: r.perMin, acc: r.acc, tp: r.tp, secs: r.secs, ease: r.ease, tired: r.tired ? +r.tired : null })),

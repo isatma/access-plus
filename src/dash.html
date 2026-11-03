@@ -64,6 +64,13 @@
 .ds-sum { white-space: pre-wrap; padding: 14px 16px; border-left: 3px solid #7cc4ff; background: #0b1222; color: var(--ink); line-height: 1.55; }
 .ds-two { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
 @media (max-width: 860px) { .ds-two { grid-template-columns: 1fr; } }
+.ds-over tr.go { cursor: pointer; }
+.ds-over tr.go:hover td { background: rgba(124,196,255,0.07); }
+.ds-over tr.cur td { background: rgba(124,196,255,0.12); }
+.ds-grid td.c { text-align: center; min-width: 46px; font-variant-numeric: tabular-nums; }
+.ds-grid td.c b { display: inline-grid; place-items: center; width: 34px; height: 30px; border-radius: 6px; color: #fff; font-weight: 700; }
+.ds-grid th.c { text-align: center; }
+.ds-grid td.c i { color: var(--muted); font-style: normal; }
 </style>
 </head>
 <body>
@@ -80,6 +87,7 @@
     <section class="ds-panel" aria-labelledby="dsStudiesT">
       <div class="ds-bar" style="justify-content:space-between"><h2 id="dsStudiesT">Studies</h2><button type="button" class="ds-btn pri" id="dsNewBtn">+ New study</button></div>
       <div class="ds-bar" role="group" aria-label="Choose a study" id="dsStudyChips"></div>
+      <div class="ds-tw" id="dsOver"></div>
       <form class="ds-form" id="dsForm" hidden>
         <label class="full">Study name<input type="text" id="dsFName" maxlength="80" required placeholder="Pilot: comparing pointing inputs"></label>
         <label class="full">What it is about<textarea id="dsFDesc" maxlength="600" placeholder="Question, who takes part, how many visits"></textarea></label>
@@ -112,7 +120,7 @@
         <button type="button" class="ds-btn warn" id="dsClear">Delete practice sessions</button>
       </div>
       <div class="ds-sum" id="dsSum" hidden></div>
-      <p>To add a session: open the <a href="#vte">Training Environment</a>, choose a study and participant code in the research session panel, and play.</p>
+      <p>To add a session: open a game in the <a href="#vte">Training Environment</a>, choose the study and participant code on the game's start screen, and play.</p>
     </section>
   </div>
 </main>
@@ -126,6 +134,7 @@
   function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions })); } catch (e) {} }
   function emit() { AP.subs.forEach(function (f) { try { f(AP); } catch (e) {} }); }
   AP.onChange = function (f) { AP.subs.push(f); f(AP); };
+  AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
     var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.mode = 'local'; readyRes(); emit();
@@ -196,6 +205,18 @@
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: 'error', code: err && err.code }, e.origin);
       });
     }
+    if (m.type === 'accessplus-hello' && e.source) {
+      var src = e.source, reply = function () {
+        var list = Object.keys(AP.studies).filter(function (k) { return AP.studies[k].status !== 'closed'; }).map(function (k) { return { id: k, name: String(AP.studies[k].name || '').slice(0, 80) }; });
+        try { src.postMessage({ type: 'accessplus-ctx', studies: list, ctx: AP.ctx(), mode: AP.mode }, e.origin); } catch (er) {}
+      };
+      Promise.race([AP.ready, new Promise(function (r) { setTimeout(r, 4000); })]).then(reply);
+    }
+    if (m.type === 'accessplus-setctx' && m.ctx && typeof m.ctx === 'object') {
+      var c = m.ctx, sid = SAFE.test(c.studyId || '') ? c.studyId : '';
+      AP.setCtx({ studyId: sid, participant: String(c.participant || '').toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12), practice: !!c.practice });
+      AP.emit();
+    }
     if (m.type === 'accessplus-session-pref' && SAFE.test(m.id || '') && typeof m.preferred === 'string') {
       AP.patchSession(m.id, { preferred: m.preferred.slice(0, 60) }).catch(function () {});
     }
@@ -209,6 +230,8 @@
   var GAMES = { pointing: 'Pointing Environment', echo: 'Mouse Orchestra Echo Game' };
   var INPUTS = [['Hand mouse', '#3987e5'], ['Eye tracker', '#d95926'], ['Head mouse or FaceNav', '#199e70'], ['Built-in nose tracking', '#c98500'], ['One switch', '#d55181'], ['Two switches', '#9085e9'], ['Touch screen', '#008300']];
   var ICOL = {}; INPUTS.forEach(function (i) { ICOL[i[0]] = i[1]; });
+  var EXTRA = ['#e66767', '#9085e9', '#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300'], XCOL = {};
+  function col(k) { if (ICOL[k]) return ICOL[k]; if (!XCOL[k]) XCOL[k] = EXTRA[Object.keys(XCOL).length % EXTRA.length]; return XCOL[k]; }
   var sel = '__all', editing = null;
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function fmtS(ms) { return ms ? (ms / 1000).toFixed(2) + ' s' : '–'; }
@@ -219,7 +242,7 @@
   el('dsFInputs').innerHTML = INPUTS.map(function (i) { return '<label><input type="checkbox" value="' + esc(i[0]) + '"> ' + esc(i[0]) + '</label>'; }).join('');
 
   function sessionsFor() {
-    var all = Object.keys(AP.sessions).map(function (k) { return Object.assign({ _id: k }, AP.sessions[k]); });
+    var all = Object.keys(AP.sessions).map(function (k) { var o = Object.assign({ _id: k }, AP.sessions[k]); o.mode = o.input; if (o.device) o.input = o.device; return o; });
     if (sel === '__free') all = all.filter(function (s) { return !s.studyId || !AP.studies[s.studyId]; });
     else if (sel !== '__all') all = all.filter(function (s) { return s.studyId === sel; });
     return all.sort(function (a, b) { return String(a.startedAt).localeCompare(String(b.startedAt)); });
@@ -242,6 +265,7 @@
     st.classList.toggle('shared', AP.mode === 'shared');
     stT.textContent = AP.mode === 'connecting' ? 'Connecting to the shared store…' : AP.mode === 'shared' ? (AP.slow ? 'Shared store is slow to answer; showing what has arrived' : 'Saved to the shared prototype store on Claude' + (AP.canWrite ? '' : ' · view only for you')) : 'Shared store not available here: saving in this browser only';
     drawChips();
+    overview();
     var study = AP.studies[sel];
     el('dsViewT').textContent = study ? study.name : sel === '__free' ? 'Free play (no study)' : 'All sessions';
     el('dsViewD').textContent = study ? (study.desc || '') + (study.inputs && study.inputs.length ? (study.desc ? ' · ' : '') + 'Comparing: ' + study.inputs.join(', ') : '') : sel === '__free' ? 'Sessions played without choosing a study.' : 'Every session saved from the Training Environment.';
@@ -268,16 +292,16 @@
       var topEase = Object.keys(ease).sort(function (a, b) { return ease[b] - ease[a]; })[0] || '–';
       var fat = mean(X.map(function (x) { return x.fat; })), tp = mean(X.map(function (x) { return x.tp; }));
       var pref = S.filter(function (s) { return s.preferred === k; }).length;
-      return '<tr><td><span class="sw" style="background:' + (ICOL[k] || '#888') + '"></span>' + esc(k) + '</td><td class="num">' + L.length + '</td><td class="num">' + fmtS(mean(X.map(function (x) { return x.avgMs; }))) + '</td><td class="num">' + Math.round(mean(X.map(function (x) { return x.acc; }))) + '%</td><td class="num">' + (tp ? tp.toFixed(2) + ' bits/s' : '–') + '</td><td class="num">' + (fat == null ? '–' : (fat > 0 ? '+' : '') + Math.round(fat) + '%') + '</td><td>' + esc(topEase) + '</td><td class="num">' + (pref || '–') + '</td></tr>';
+      return '<tr><td><span class="sw" style="background:' + col(k) + '"></span>' + esc(k) + '</td><td class="num">' + L.length + '</td><td class="num">' + fmtS(mean(X.map(function (x) { return x.avgMs; }))) + '</td><td class="num">' + Math.round(mean(X.map(function (x) { return x.acc; }))) + '%</td><td class="num">' + (tp ? tp.toFixed(2) + ' bits/s' : '–') + '</td><td class="num">' + (fat == null ? '–' : (fat > 0 ? '+' : '') + Math.round(fat) + '%') + '</td><td>' + esc(topEase) + '</td><td class="num">' + (pref || '–') + '</td></tr>';
     }).join('');
     var sess = S.slice().reverse().map(function (s) {
       var x = s.summary || {}, done = (s.levels || []).filter(function (l) { return l.done; }).length;
-      return '<tr><td>' + esc(day(s.startedAt)) + '</td><td>' + (s.participant ? esc(s.participant) : '–') + '</td><td><span class="sw" style="background:' + (ICOL[s.input] || '#888') + '"></span>' + esc(s.input) + '</td><td>' + esc(s.posLabel || s.pos || '') + '</td><td class="num">' + done + ' / ' + (s.levels || []).length + '</td><td class="num">' + (x.acc == null ? '–' : x.acc + '%') + '</td><td class="num">' + fmtS(x.avgMs) + '</td><td class="num">' + (x.fat == null ? '–' : (x.fat > 0 ? '+' : '') + x.fat + '%') + '</td><td>' + (s.practice ? '<span class="ds-pill pr">Practice</span>' : '<span class="ds-pill">Study</span>') + (sel === '__all' && s.studyId && AP.studies[s.studyId] ? ' <small style="color:var(--muted)">' + esc(AP.studies[s.studyId].name) + '</small>' : '') + '</td><td>' + (AP.canWrite ? '<button type="button" data-act="pr" data-id="' + esc(s._id) + '">' + (s.practice ? 'Mark study' : 'Mark practice') + '</button> <button type="button" data-act="del" data-id="' + esc(s._id) + '" aria-label="Delete session">Delete</button>' : '') + '</td></tr>';
+      return '<tr><td>' + esc(day(s.startedAt)) + '</td><td>' + (s.participant ? esc(s.participant) : '–') + '</td><td><span class="sw" style="background:' + col(s.input) + '"></span>' + esc(s.input) + '</td><td>' + esc(s.posLabel || s.pos || '') + '</td><td class="num">' + done + ' / ' + (s.levels || []).length + '</td><td class="num">' + (x.acc == null ? '–' : x.acc + '%') + '</td><td class="num">' + fmtS(x.avgMs) + '</td><td class="num">' + (x.fat == null ? '–' : (x.fat > 0 ? '+' : '') + x.fat + '%') + '</td><td>' + (s.practice ? '<span class="ds-pill pr">Practice</span>' : '<span class="ds-pill">Study</span>') + (sel === '__all' && s.studyId && AP.studies[s.studyId] ? ' <small style="color:var(--muted)">' + esc(AP.studies[s.studyId].name) + '</small>' : '') + '</td><td>' + (AP.canWrite ? '<button type="button" data-act="pr" data-id="' + esc(s._id) + '">' + (s.practice ? 'Mark study' : 'Mark practice') + '</button> <button type="button" data-act="del" data-id="' + esc(s._id) + '" aria-label="Delete session">Delete</button>' : '') + '</td></tr>';
     }).join('');
     el('dsBody').innerHTML =
       '<div class="ds-two"><div style="display:grid;gap:10px"><h3>Average time per target, session by session</h3><div class="ds-chart" id="dsChart"></div><div class="ds-legend" id="dsLegend"></div></div>' +
       '<div style="display:grid;gap:10px;align-content:start"><h3>By input</h3><div class="ds-tw"><table class="ds-table"><tr><th>Input</th><th>Sessions</th><th>Avg time</th><th>Accuracy</th><th>Throughput</th><th>Fatigue</th><th>Usually felt</th><th>Preferred</th></tr>' + rows + '</table></div><p style="font-size:.88em">Fatigue compares the Return Lap with Target Garden (positive = slower by the end). Preferred counts sessions where that input was chosen after trying more than one.</p></div></div>' +
-      '<h3 style="margin-top:6px">Sessions</h3><div class="ds-tw"><table class="ds-table"><tr><th>When</th><th>Participant</th><th>Input</th><th>Position</th><th>Levels done</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th><th>Type</th><th></th></tr>' + sess + '</table></div>';
+      grid(S) + '<h3 style="margin-top:6px">Sessions</h3><div class="ds-tw"><table class="ds-table"><tr><th>When</th><th>Participant</th><th>Input</th><th>Position</th><th>Levels done</th><th>Accuracy</th><th>Avg time</th><th>Fatigue</th><th>Type</th><th></th></tr>' + sess + '</table></div>';
     Array.prototype.forEach.call(el('dsBody').querySelectorAll('button[data-act]'), function (b) {
       b.addEventListener('click', function () {
         var id = b.getAttribute('data-id'), s = AP.sessions[id]; if (!s) return;
@@ -288,10 +312,48 @@
     });
     chart(S);
   }
+
+  function overview() {
+    var inc = el('dsPractice').checked;
+    var all = Object.keys(AP.sessions).map(function (k) { return AP.sessions[k]; });
+    var rows = Object.keys(AP.studies).map(function (id) { return [id, AP.studies[id]]; });
+    rows.sort(function (a, b) { return (a[1].status === 'closed') - (b[1].status === 'closed') || String(b[1].created || '').localeCompare(String(a[1].created || '')); });
+    rows.push(['__free', { name: 'Free play (no study)', status: '' }]);
+    function stats(id) {
+      var L = all.filter(function (x) { return id === '__free' ? (!x.studyId || !AP.studies[x.studyId]) : x.studyId === id; });
+      var pr = L.filter(function (x) { return x.practice; }).length, R = inc ? L : L.filter(function (x) { return !x.practice; });
+      var P = {}; R.forEach(function (x) { P[x.participant || ''] = 1; });
+      var last = R.map(function (x) { return x.startedAt; }).sort().pop();
+      return { n: R.length, pr: pr, p: Object.keys(P).length, last: last };
+    }
+    el('dsOver').innerHTML = '<table class="ds-table ds-over"><tr><th>Study</th><th>Status</th><th>Participants</th><th>Sessions</th><th>Practice</th><th>Last session</th><th>Games</th></tr>' + rows.map(function (r) {
+      var st = stats(r[0]); if (r[0] === '__free' && !st.n && !st.pr) return '';
+      var games = (r[1].games || []).map(function (g) { return GAMES[g] || g; }).join(', ');
+      return '<tr class="go' + (sel === r[0] ? ' cur' : '') + '" data-v="' + esc(r[0]) + '" tabindex="0"><td><b>' + esc(r[1].name) + '</b></td><td>' + (r[1].status ? '<span class="ds-pill' + (r[1].status === 'active' ? '" style="border-color:#5fe0a8;color:#5fe0a8' : '') + '">' + (r[1].status === 'active' ? 'Underway' : 'Closed') + '</span>' : '') + '</td><td class="num">' + st.p + '</td><td class="num">' + st.n + '</td><td class="num">' + (st.pr || '–') + '</td><td>' + (st.last ? esc(day(st.last)) : '–') + '</td><td>' + esc(games) + '</td></tr>';
+    }).join('') + '</table>';
+    Array.prototype.forEach.call(el('dsOver').querySelectorAll('tr.go'), function (tr) {
+      function go() { sel = tr.getAttribute('data-v'); el('dsPart').value = ''; render(); }
+      tr.addEventListener('click', go); tr.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    });
+  }
+  function grid(S) {
+    var dk = function (t) { var d = new Date(t); return isNaN(d) ? '' : d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); };
+    var days = {}, parts = {};
+    S.forEach(function (x) { var k = dk(x.startedAt); if (!k) return; days[k] = 1; var p = x.participant || '(no code)'; parts[p] = parts[p] || {}; parts[p][k] = (parts[p][k] || 0) + 1; });
+    var D = Object.keys(days).sort().slice(-12), P = Object.keys(parts).sort();
+    if (!D.length) return '';
+    var head = D.map(function (k) { var d = new Date(k + 'T12:00:00'); return '<th class="c">' + d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }) + '</th>'; }).join('');
+    var body = P.map(function (p) {
+      var tot = 0, cells = D.map(function (k) { var n = parts[p][k] || 0; tot += n; return '<td class="c">' + (n ? '<b style="background:rgba(57,135,229,' + Math.min(0.95, 0.35 + 0.2 * (n - 1)) + ')">' + n + '</b>' : '<i>·</i>') + '</td>'; }).join('');
+      var all = Object.keys(parts[p]).reduce(function (a, k) { return a + parts[p][k]; }, 0);
+      return '<tr><td><b>' + esc(p) + '</b></td>' + cells + '<td class="num"><b>' + all + '</b></td><td class="num">' + Object.keys(parts[p]).length + '</td></tr>';
+    }).join('');
+    return '<h3 style="margin-top:6px">Participation grid: sessions per participant per day</h3><div class="ds-tw"><table class="ds-table ds-grid"><tr><th>Participant</th>' + head + '<th>Total</th><th>Days</th></tr>' + body + '</table></div>' + (Object.keys(days).length > 12 ? '<p style="font-size:.88em">Showing the 12 most recent days with sessions; totals count every day.</p>' : '');
+  }
   function oops(e) { el('dsSum').hidden = false; el('dsSum').textContent = 'That change could not be saved' + (e && e.code === 'quota_exceeded' ? ': the prototype store is full. Delete some practice sessions and try again.' : '. You may have view-only access.'); }
 
   function chart(S) {
-    var box = el('dsChart'), W = 560, H = 280, m = { l: 48, r: 14, t: 12, b: 34 };
+    var box = el('dsChart'), W = 960, H = 260, m = { l: 48, r: 14, t: 12, b: 34 };
     var series = {}; S.forEach(function (s, i) { var v = (s.summary || {}).avgMs; if (!v) return; (series[s.input] = series[s.input] || []).push({ i: i, v: v / 1000, s: s }); });
     var keys = INPUTS.map(function (x) { return x[0]; }).filter(function (k) { return series[k]; }).concat(Object.keys(series).filter(function (k) { return !ICOL[k]; }));
     var maxV = Math.max.apply(null, [1].concat(S.map(function (s) { return ((s.summary || {}).avgMs || 0) / 1000; })));
@@ -302,12 +364,12 @@
     for (var t = 0; t <= ticks; t++) { var v = top * t / ticks, yy = y(v); g += '<line class="grid" x1="' + m.l + '" x2="' + (W - m.r) + '" y1="' + yy + '" y2="' + yy + '"/><text class="axis" x="' + (m.l - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + v.toFixed(1) + 's</text>'; }
     g += '<text class="axis" x="' + m.l + '" y="' + (H - 8) + '">Session 1</text><text class="axis" x="' + (W - m.r) + '" y="' + (H - 8) + '" text-anchor="end">Session ' + S.length + '</text>';
     keys.forEach(function (k) {
-      var c = ICOL[k] || '#c3c2b7', pts = series[k];
+      var c = col(k), pts = series[k];
       if (pts.length > 1) g += '<path class="ln" stroke="' + c + '" d="' + pts.map(function (p, j) { return (j ? 'L' : 'M') + x(p.i).toFixed(1) + ' ' + y(p.v).toFixed(1); }).join(' ') + '"/>';
       pts.forEach(function (p) { g += '<circle class="pt" fill="' + c + '" r="5" cx="' + x(p.i).toFixed(1) + '" cy="' + y(p.v).toFixed(1) + '" data-k="' + esc(k) + '" data-i="' + p.i + '"/>'; });
     });
     box.innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Average seconds per target for each session, one line per input. The tables give the same numbers.">' + g + '</svg><div class="ds-tip" hidden></div>';
-    el('dsLegend').innerHTML = keys.map(function (k) { return '<span><i style="background:' + (ICOL[k] || '#c3c2b7') + '"></i>' + esc(k) + '</span>'; }).join('');
+    el('dsLegend').innerHTML = keys.map(function (k) { return '<span><i style="background:' + (col(k)) + '"></i>' + esc(k) + '</span>'; }).join('');
     var svg = box.querySelector('svg'), tip = box.querySelector('.ds-tip'), circles = svg.querySelectorAll('circle');
     function hide() { tip.hidden = true; }
     svg.addEventListener('pointermove', function (e) {
@@ -362,8 +424,8 @@
   function csvCell(v) { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
   function stamp() { return new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-'); }
   el('dsCsv').addEventListener('click', function () {
-    var cols = ['session', 'study', 'participant', 'practice', 'game', 'input', 'position', 'started', 'levels_done', 'targets', 'accuracy_pct', 'avg_ms', 'throughput_bps', 'fatigue_pct', 'preferred'];
-    var rows = filtered().map(function (s) { var x = s.summary || {}; return [s._id, s.studyId && AP.studies[s.studyId] ? AP.studies[s.studyId].name : '', s.participant, s.practice ? 1 : 0, s.game, s.input, s.posLabel || s.pos, s.startedAt, (s.levels || []).filter(function (l) { return l.done; }).length, x.hits, x.acc, x.avgMs, x.tp, x.fat, s.preferred]; });
+    var cols = ['session', 'study', 'participant', 'practice', 'game', 'input', 'position', 'started', 'levels_done', 'targets', 'accuracy_pct', 'avg_ms', 'throughput_bps', 'fatigue_pct', 'preferred', 'input_mode'];
+    var rows = filtered().map(function (s) { var x = s.summary || {}; return [s._id, s.studyId && AP.studies[s.studyId] ? AP.studies[s.studyId].name : '', s.participant, s.practice ? 1 : 0, s.game, s.input, s.posLabel || s.pos, s.startedAt, (s.levels || []).filter(function (l) { return l.done; }).length, x.hits, x.acc, x.avgMs, x.tp, x.fat, s.preferred, s.mode]; });
     var lv = []; filtered().forEach(function (s) { (s.levels || []).forEach(function (l) { lv.push([s._id, s.participant, s.input, l.level, l.hits, l.goal, l.misses, l.slips, l.avgMs, l.tp, l.ease, l.tired]); }); });
     save('accessplus-summary-' + stamp() + '.csv', cols.join(',') + '\n' + rows.map(function (r) { return r.map(csvCell).join(','); }).join('\n') + '\n\nsession,participant,input,level,hits,goal,misses,slips,avg_ms,throughput_bps,ease,tired\n' + lv.map(function (r) { return r.map(csvCell).join(','); }).join('\n') + '\n');
   });
