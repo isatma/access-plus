@@ -442,7 +442,6 @@ def build():
     home = re.sub(r'<a class="btn primary" href="#profile">My profile</a>', '<a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>', home, count=1)
     nav = ('<nav class="nav" aria-label="Site">'
            '<a href="#home" data-route="home">Home</a>'
-           '<a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a>'
            '<a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a>'
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
