@@ -28,6 +28,7 @@
 .nav a.navres[aria-current="page"], .nav a.navsign[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
 .nav .navgrp { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .nav .navgrp a.navres { margin-left: 0; }
+@media (min-width: 641px) { .nav .navgrp { flex: 1 1 100%; margin: 12px 0 4px !important; padding-top: 14px; border-top: 1px solid var(--line-hi); justify-content: flex-start; gap: 8px; } }
 @media (max-width: 640px) { .nav .navgrp { flex: none; flex-wrap: nowrap; } }
 .nav a.navbox { gap: 8px; padding: 0 12px; border: 1px solid #7cc4ff; color: var(--ink); }
 .nav a.navbox span { font-size: 1.2em; }
