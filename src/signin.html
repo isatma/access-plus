@@ -29,6 +29,10 @@
 .nav .navgrp { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .nav .navgrp a.navres { margin-left: 0; }
 @media (max-width: 640px) { .nav .navgrp { flex: none; flex-wrap: nowrap; } }
+.nav a.navbox { gap: 8px; padding: 0 12px; border: 1px solid #7cc4ff; color: var(--ink); }
+.nav a.navbox span { font-size: 1.2em; }
+.nav a.navbox:hover { background: rgba(124,196,255,0.14); color: var(--ink); border-color: #7cc4ff; }
+.nav a.navbox[aria-current="page"] { background: #7cc4ff; color: #04162a; border-color: #7cc4ff; }
 .nav a.navtrain { gap: 8px; padding: 0 16px; margin-right: 2px; border: 2px solid #5fe0a8; background: rgba(95,224,168,0.14); color: var(--ink); font-weight: 800; }
 .nav a.navtrain span { font-size: 1.25em; }
 .nav a.navtrain:hover { background: rgba(95,224,168,0.28); color: var(--ink); border-color: #5fe0a8; }

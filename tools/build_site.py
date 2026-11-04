@@ -446,7 +446,10 @@ def build():
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
-           '<span class="navside navgrp"><a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a>'
+           '<span class="navside navgrp"><a class="navbox" href="#simulators" data-route="simulators"><span aria-hidden="true">♿</span>Simulators</a>'
+           '<a class="navbox" href="#lab" data-route="lab"><span aria-hidden="true">🎨</span>Recreation lab</a>'
+           '<a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a>'
+           '<a class="navbox" href="vte/editor.html?new=1" data-title="VTE · Environment Editor"><span aria-hidden="true">🛠️</span>Editor</a>'
            '<a class="navres" href="#dashboard" data-route="dashboard">My dashboard</a>'
            '<a class="navres" href="#studies" data-route="studies">Research dashboard</a></span>'
            '</nav>')
@@ -485,6 +488,7 @@ def build():
     if (v === 'dashboard' && window.dsMode) window.dsMode(h === 'studies' ? 'res' : 'mine');
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
     if (h === 'studies') navKey = 'studies';
+    if (h === 'simulators') navKey = 'simulators';
     if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
     if (v === 'keyboards') navKey = 'solutions';
     if (v === 'borrow') navKey = 'try';

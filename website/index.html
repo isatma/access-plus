@@ -917,6 +917,10 @@ footer .wrap { padding-block: 22px; }
 .nav .navgrp { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 .nav .navgrp a.navres { margin-left: 0; }
 @media (max-width: 640px) { .nav .navgrp { flex: none; flex-wrap: nowrap; } }
+.nav a.navbox { gap: 8px; padding: 0 12px; border: 1px solid #7cc4ff; color: var(--ink); }
+.nav a.navbox span { font-size: 1.2em; }
+.nav a.navbox:hover { background: rgba(124,196,255,0.14); color: var(--ink); border-color: #7cc4ff; }
+.nav a.navbox[aria-current="page"] { background: #7cc4ff; color: #04162a; border-color: #7cc4ff; }
 .nav a.navtrain { gap: 8px; padding: 0 16px; margin-right: 2px; border: 2px solid #5fe0a8; background: rgba(95,224,168,0.14); color: var(--ink); font-weight: 800; }
 .nav a.navtrain span { font-size: 1.25em; }
 .nav a.navtrain:hover { background: rgba(95,224,168,0.28); color: var(--ink); border-color: #5fe0a8; }
@@ -2281,7 +2285,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><span class="navside navgrp"><a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a><a class="navres" href="#dashboard" data-route="dashboard">My dashboard</a><a class="navres" href="#studies" data-route="studies">Research dashboard</a></span></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><span class="navside navgrp"><a class="navbox" href="#simulators" data-route="simulators"><span aria-hidden="true">♿</span>Simulators</a><a class="navbox" href="#lab" data-route="lab"><span aria-hidden="true">🎨</span>Recreation lab</a><a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a><a class="navbox" href="vte/editor.html?new=1" data-title="VTE · Environment Editor"><span aria-hidden="true">🛠️</span>Editor</a><a class="navres" href="#dashboard" data-route="dashboard">My dashboard</a><a class="navres" href="#studies" data-route="studies">Research dashboard</a></span></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -8123,6 +8127,7 @@ var __ID = function (x) { return document.getElementById('ab-' + x) || document.
     if (v === 'dashboard' && window.dsMode) window.dsMode(h === 'studies' ? 'res' : 'mine');
     var navKey = v !== 'home' ? v : (h === 'goals' ? 'goals' : (h === 'simulators' ? 'try' : 'home'));
     if (h === 'studies') navKey = 'studies';
+    if (h === 'simulators') navKey = 'simulators';
     if (v === 'tech') navKey = h === 'reviews' ? 'reviews' : 'solutions';
     if (v === 'keyboards') navKey = 'solutions';
     if (v === 'borrow') navKey = 'try';

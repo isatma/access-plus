@@ -81,3 +81,4 @@ Living list of planned work for the pilot website. Newest ideas at the top of ea
 - 2026-11-03: Environment Editor (vte/editor.html): component checklists (rules, selection, feedback, measures), draggable targets, levels, templates, preview, save/share to exercises store, export/import JSON, play mode recording to dashboards. VTE 'Build your own' section + shared exercise library. Echo game panel moved to upper left.
 - 2026-11-04: Research dashboard shows practice sessions by default; Dave's 3 touchpad sessions moved into the USB touchpad study.
 - 2026-11-04: Training is a main menu item with Play/Build/Test doors; session plans (games in order, study, participant, device) run back to back and stamp every result; exercises can be Only me or Shared with colleagues (public off).
+- 2026-11-04: Top menu row: Simulators, Recreation lab, Training, Editor, My dashboard, Research dashboard (trial).
