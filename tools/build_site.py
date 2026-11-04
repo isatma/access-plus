@@ -442,13 +442,14 @@ def build():
     home = re.sub(r'<a class="btn primary" href="#profile">My profile</a>', '<a class="btn primary signin" href="#profile">Sign in / My profile<span class="demo">Demo</span></a>', home, count=1)
     nav = ('<nav class="nav" aria-label="Site">'
            '<a href="#home" data-route="home">Home</a>'
+           '<a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a>'
            '<a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a>'
            '<a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a>'
            '<a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a>'
            '<a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a>'
            '<a class="navside navres" href="#dashboard" data-route="dashboard">My dashboard</a>'
            '<a class="navres" href="#studies" data-route="studies">Research dashboard</a>'
-           '<a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav>')
+           '</nav>')
     home = re.sub(r'<nav class="nav" aria-label="Site">.*?</nav>', lambda m: nav, home, count=1, flags=re.S)
     if 'id="journey"' not in home:
         home = home.replace('</header>', '</header>\n<div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>', 1)

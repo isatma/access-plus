@@ -214,6 +214,7 @@ function recLine() {
 }
 if (CTX.hosted) {
   $('recBox').hidden = false;
+  if (new URLSearchParams(location.search).get('plan') === '1') { const B = $('recBox'); if (B) { B.querySelectorAll('select,input').forEach(x => { x.disabled = true; }); B.insertAdjacentHTML('afterbegin', '<p style="grid-column:1/-1;margin:0 0 6px;font-weight:700;color:#5fe0a8">✓ Set by your session plan: results go to the study, participant and device in the plan.</p>'); } }
   if (CTX.study) { const o = document.createElement('option'); o.value = CTX.study; o.textContent = CTX.studyName || 'Study'; $('recStudy').appendChild(o); $('recStudy').value = CTX.study; }
   $('recP').value = CTX.p; $('recPr').checked = CTX.practice; recLine();
   const push = () => { recLine(); try { window.parent.postMessage({ type: 'accessplus-setctx', ctx: { studyId: CTX.study, participant: CTX.p, practice: CTX.practice } }, location.origin); } catch (e) {} };

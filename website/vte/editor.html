@@ -133,7 +133,7 @@ th { color:var(--muted); font-size:12px; letter-spacing:.06em; text-transform:up
   <span id="saveMsg" aria-live="polite"></span>
   <button class="btn" id="exportBtn" type="button" title="Download as a file">⬇ Export</button>
   <label class="btn" style="display:inline-flex;align-items:center" title="Open an exported file">⬆ Import<input type="file" id="importFile" accept=".json,application/json" hidden></label>
-  <button class="btn blue" id="saveBtn" type="button">💾 Save and share</button>
+  <button class="btn blue" id="saveBtn" type="button">💾 Save</button>
   <button class="btn pri big" id="previewBtn" type="button">▶ Preview</button>
 </header>
 
@@ -146,7 +146,8 @@ th { color:var(--muted); font-size:12px; letter-spacing:.06em; text-transform:up
     <details class="grp" open><summary>Ways to select</summary><div id="selBox"></div></details>
     <details class="grp"><summary>Feedback and sound</summary><div id="fbBox"></div></details>
     <details class="grp"><summary>What to measure</summary><div id="msBox"></div></details>
-    <p class="note">Exercises you save are shared with everyone this page is shared with, in the Training Environment's exercise library.</p>
+    <label class="f">Who can see it<select id="exShare"><option value="private">Only me</option><option value="team">Colleagues: everyone this site is shared with</option><option value="public" disabled>Public library (coming later)</option></select></label>
+    <p class="note">Only me keeps it out of other people's library. Shared exercises appear in the Training Environment for colleagues to play, and can be added to session plans.</p>
   </aside>
 
   <section id="center" aria-label="Stage">
@@ -307,7 +308,7 @@ const MEAS = [['time', 'Time per target'], ['acc', 'Accuracy and misses'], ['tp'
 function newTarget(o) { return Object.assign({ id: uid('t'), x: .5, y: .5, size: .12, color: '#7cc4ff', emoji: '', label: '', note: 60, role: 'target', order: 0 }, o || {}); }
 function newLevel(name) { return { id: uid('l'), name: name || 'Level 1', targets: [], rules: { timer: false, secs: 60, order: false, oneAtATime: false, shrink: false, drift: false, hint: true }, tune: 'none' }; }
 function newExercise() {
-  return { v: 1, id: '', name: 'My training exercise', desc: '', icon: '🧩', levels: [newLevel()],
+  return { v: 1, id: '', name: 'My training exercise', desc: '', icon: '🧩', share: 'private', levels: [newLevel()],
     select: { click: true, hover: false, dwell: true, scan1: true, scan2: true, dwellMs: 800, scanMs: 1200 },
     feedback: { notes: true, tune: false, sparkle: true, celebrate: true, oops: true, instrument: 'triangle' },
     measures: { time: true, acc: true, tp: true, slips: true, ease: true, tired: false } };
@@ -414,6 +415,7 @@ document.querySelectorAll('[data-arr]').forEach(b => b.addEventListener('click',
 $('tpl').addEventListener('change', e => { const k = e.target.value; if (!k) return; const keepId = EX.id; EX = TPL[k](); EX.id = keepId; LV = 0; SEL = null; e.target.value = ''; loadIntoUI(); dirty(); });
 $('exName').addEventListener('input', e => { EX.name = e.target.value.slice(0, 60); dirty(); });
 $('exDesc').addEventListener('input', e => { EX.desc = e.target.value.slice(0, 400); dirty(); });
+$('exShare').addEventListener('change', e => { EX.share = e.target.value === 'private' ? 'private' : 'team'; dirty(); });
 $('iconBtn').addEventListener('click', () => { const i = (ICONS.indexOf(EX.icon) + 1) % ICONS.length; EX.icon = ICONS[i]; $('iconBtn').textContent = EX.icon; dirty(); });
 
 /* drag on stage */
@@ -440,7 +442,7 @@ document.addEventListener('keydown', e => {
 window.addEventListener('resize', () => { if ($('player').style.display !== 'flex') drawStage(); else layoutPlay(); });
 
 function drawAll() { drawLevels(); drawStage(); drawPanels(); drawProps(); }
-function loadIntoUI() { $('exName').value = EX.name; $('exDesc').value = EX.desc; $('iconBtn').textContent = EX.icon; drawAll(); }
+function loadIntoUI() { $('exName').value = EX.name; $('exDesc').value = EX.desc; $('exShare').value = EX.share === 'private' ? 'private' : 'team'; $('iconBtn').textContent = EX.icon; drawAll(); }
 let isDirty = false;
 function dirty() { isDirty = true; $('saveMsg').textContent = 'Unsaved changes'; try { localStorage.setItem('accessplus-editor-draft', JSON.stringify(EX)); } catch (e) {} }
 function flash(t) { $('saveMsg').textContent = t; }
@@ -448,7 +450,7 @@ function flash(t) { $('saveMsg').textContent = t; }
 /* ───────── save, share, import, export ───────── */
 function clean(e) {
   const s = (v, n) => String(v == null ? '' : v).slice(0, n);
-  const out = { v: 1, id: SAFE.test(e.id || '') ? e.id : uid('x'), name: s(e.name, 60) || 'Untitled exercise', desc: s(e.desc, 400), icon: s(e.icon, 4) || '🧩',
+  const out = { v: 1, id: SAFE.test(e.id || '') ? e.id : uid('x'), name: s(e.name, 60) || 'Untitled exercise', desc: s(e.desc, 400), icon: s(e.icon, 4) || '🧩', share: e.share === 'private' ? 'private' : 'team',
     select: Object.assign(newExercise().select, e.select || {}), feedback: Object.assign(newExercise().feedback, e.feedback || {}), measures: Object.assign(newExercise().measures, e.measures || {}),
     levels: (Array.isArray(e.levels) && e.levels.length ? e.levels : [newLevel()]).slice(0, 20).map(l => ({ id: SAFE.test(l.id || '') ? l.id : uid('l'), name: s(l.name, 40) || 'Level', tune: TUNES[l.tune] ? l.tune : 'none',
       rules: Object.assign(newLevel().rules, l.rules || {}),
@@ -476,7 +478,7 @@ $('importFile').addEventListener('change', e => {
 window.addEventListener('message', e => {
   if (e.origin !== location.origin || !e.data) return;
   const m = e.data;
-  if (m.type === 'accessplus-ex-saved') { if (m.ok) { EX.id = m.id; isDirty = false; flash(m.mode === 'shared' ? '✓ Saved and shared in the exercise library' : '✓ Saved in this browser'); } else flash('Could not save' + (m.code === 'quota_exceeded' ? ': the store is full.' : '. You may have view-only access.')); }
+  if (m.type === 'accessplus-ex-saved') { if (m.ok) { EX.id = m.id; isDirty = false; flash(m.mode !== 'shared' ? '✓ Saved in this browser' : EX.share === 'private' ? '✓ Saved: only you see it' : '✓ Saved and shared with colleagues'); } else flash('Could not save' + (m.code === 'quota_exceeded' ? ': the store is full.' : '. You may have view-only access.')); }
   if (m.type === 'accessplus-ex' && m.exercise) { EX = clean(m.exercise); EX.id = m.exercise.id; LV = 0; SEL = null; loadIntoUI(); isDirty = false; flash(''); if (QP.get('play')) openPlayer(false); }
   if (m.type === 'accessplus-ex' && !m.exercise) flash('That exercise could not be found.');
   if (m.type === 'accessplus-ctx' && Array.isArray(m.studies)) {
@@ -695,6 +697,7 @@ $('csvBtn').addEventListener('click', () => {
   loadIntoUI();
   if (pid && !HOSTED && EX.id === pid) openPlayer(false);
 })();
+if (new URLSearchParams(location.search).get('plan') === '1') { const B = document.getElementById('recBox'); if (B) { B.querySelectorAll('select,input').forEach(x => { x.disabled = true; }); B.insertAdjacentHTML('afterbegin', '<p style="grid-column:1/-1;margin:0 0 6px;font-weight:700;color:#5fe0a8">✓ Set by your session plan: results go to the study, participant and device in the plan.</p>'); } }
 </script>
 </body>
 </html>

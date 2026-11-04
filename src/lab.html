@@ -81,7 +81,7 @@
 
     <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for a few hosting fixes: Songboards opens on a music board and reports if its sound library cannot load, the hand-tracking ergometer loads fixed versions of its hand-tracking library, the Musical Dial (v9.1) adds built-in sound, dwell on the key ring and screen fitting, Mouse Orchestra (v6.1) adds a start-sound button, tap support and a hover delay, and the Mini Color Keyboard adds built-in sound alongside MIDI, the Virtual Harmonica (v7.1) adds a start button, the built-in synth by default, a mouse or touch mode and screen fitting. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
     <div class="lb-player" id="lbPlayer" hidden role="dialog" aria-modal="true" aria-labelledby="lbPTitle">
-      <div class="lb-pbar"><b id="lbPTitle">App</b><small>Work in progress · as is</small><a id="lbPNew" href="#" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="close" id="lbPClose">&times; Close</button></div>
+      <div class="lb-pbar"><b id="lbPTitle">App</b><small>Work in progress · as is</small><a id="lbPNew" href="#" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="close" id="lbPClose">&times; Close</button><div class="lb-run" id="lbRun" hidden><span class="rs" id="lbRunSteps" aria-hidden="true"></span><span class="rt" id="lbRunT" aria-live="polite"></span><button type="button" id="lbRunNext">Next game &rarr;</button></div></div>
       <iframe id="lbPFrame" title="Lab app" allow="autoplay; camera; microphone; midi; clipboard-write; fullscreen" allowfullscreen></iframe>
     </div>
   </div>
@@ -132,12 +132,65 @@
     el('lbPClose').focus();
   }
   function closeApp() {
+    if (RUN) endRun(false);
     frame.src = 'about:blank';
     player.hidden = true;
     document.documentElement.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   el('lbPClose').addEventListener('click', closeApp);
+
+  /* ───── Session runner: plays a saved session plan, game after game ───── */
+  var RUN = null;
+  var KINDS = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'], pointing2: ['⏱️', 'Pointing two-minute challenge', 'vte/pointing.html?quick=1'], echo: ['🐭', 'Echo Game', 'lab/mouse_orchestra_v6.html?game=echo'] };
+  function stepInfo(st) {
+    var AP = window.APStore || {};
+    if (st.k === 'custom') { var x = (AP.exercises || {})[st.id] || {}; return [x.icon || '🧩', x.name || st.name || 'Exercise', 'vte/editor.html?play=' + encodeURIComponent(st.id || '')]; }
+    return KINDS[st.k] || KINDS.pointing;
+  }
+  window.APStepInfo = stepInfo;
+  function runBar() {
+    var n = RUN.plan.steps.length, i = RUN.i, cur = stepInfo(RUN.plan.steps[i]), last = i >= n - 1, saved = RUN.done[i];
+    el('lbRun').hidden = false;
+    el('lbRunSteps').innerHTML = RUN.plan.steps.map(function (st, k) { return '<i class="' + (RUN.done[k] ? 'ok' : k === i ? 'on' : '') + '">' + stepInfo(st)[0] + '</i>'; }).join('');
+    el('lbRunT').textContent = 'Session: ' + (RUN.plan.name || 'Session plan') + ' · game ' + (i + 1) + ' of ' + n + ': ' + cur[1] + (saved ? ' · ✓ saved' : '');
+    var nb = el('lbRunNext');
+    nb.textContent = last ? (saved ? '✓ Finish session' : 'Finish session') : (saved ? 'Next: ' + stepInfo(RUN.plan.steps[i + 1])[1] + ' →' : 'Skip to next game →');
+    nb.classList.toggle('go', !!saved);
+  }
+  function openStep() {
+    var info = stepInfo(RUN.plan.steps[RUN.i]), AP = window.APStore;
+    if (AP) AP.run = { planId: RUN.id, planName: RUN.plan.name || '', studyId: RUN.plan.studyId || '', participant: RUN.plan.participant || '', practice: !!RUN.plan.practice, device: RUN.plan.device || '', step: RUN.i };
+    var href = info[2]; if (window.APStudyQuery) href += (href.indexOf('?') < 0 ? '?' : '&') + window.APStudyQuery() + '&plan=1';
+    if (player.hidden) openApp(href, info[1]); else { el('lbPTitle').textContent = info[1]; el('lbPNew').href = href; frame.src = href; }
+    el('lbPTitle').textContent = info[1];
+    runBar();
+  }
+  function endRun(finished) {
+    var r = RUN, AP = window.APStore; RUN = null;
+    if (AP) { AP.run = null; AP.setCtx(r.prevCtx || {}); AP.emit(); }
+    try { if (r.prevDev == null) localStorage.removeItem('accessplus-device'); else localStorage.setItem('accessplus-device', r.prevDev); } catch (e) {}
+    el('lbRun').hidden = true;
+    if (finished) { setTimeout(function () { location.hash = r.plan.studyId ? '#studies' : '#dashboard'; window.scrollTo(0, 0); }, 0); }
+  }
+  window.APRunPlan = function (id, plan) {
+    var AP = window.APStore; if (!AP || !plan || !plan.steps || !plan.steps.length) return;
+    if (RUN) endRun(false);
+    var prevDev = null; try { prevDev = localStorage.getItem('accessplus-device'); } catch (e) {}
+    RUN = { id: id, plan: plan, i: 0, done: [], prevCtx: AP.ctx(), prevDev: prevDev };
+    AP.setCtx({ studyId: plan.studyId || '', participant: plan.participant || '', practice: !!plan.practice });
+    try { if (plan.device) localStorage.setItem('accessplus-device', plan.device); } catch (e) {}
+    openStep();
+  };
+  el('lbRunNext').addEventListener('click', function () {
+    if (!RUN) return;
+    if (RUN.i >= RUN.plan.steps.length - 1) { endRun(true); closeApp(); return; }
+    RUN.i++; openStep();
+  });
+  window.addEventListener('message', function (e) {
+    if (!RUN || e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-session' || e.source !== frame.contentWindow) return;
+    RUN.done[RUN.i] = true; setTimeout(runBar, 50);
+  });
   var NAVOK = ['#vte', '#dashboard', '#studies', '#about', '#home', '#lab', '#try'];
   window.addEventListener('message', function (e) {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-nav' || NAVOK.indexOf(e.data.hash) < 0) return;

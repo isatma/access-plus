@@ -914,6 +914,10 @@ footer .wrap { padding-block: 22px; }
 .nav a.navres, .nav a.navsign { gap: 8px; border: 1px solid #5fe0a8; border-bottom-width: 1px; color: #5fe0a8; padding: 0 14px; margin-left: 6px; }
 .nav a.navres:hover, .nav a.navsign:hover { background: rgba(95,224,168,0.12); color: var(--ink); border-color: #5fe0a8; }
 .nav a.navres[aria-current="page"], .nav a.navsign[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
+.nav a.navtrain { gap: 8px; padding: 0 16px; margin: 0 4px; border: 2px solid #5fe0a8; background: rgba(95,224,168,0.14); color: var(--ink); font-weight: 800; }
+.nav a.navtrain span { font-size: 1.25em; }
+.nav a.navtrain:hover { background: rgba(95,224,168,0.28); color: var(--ink); border-color: #5fe0a8; }
+.nav a.navtrain[aria-current="page"] { background: #5fe0a8; color: #04201a; border-color: #5fe0a8; }
 .nav a.navvte { order: 99; flex: 1 1 100%; justify-content: center; gap: 12px; min-height: 58px; margin-top: 8px; padding: 0 16px; border: 2px solid #5fe0a8; background: linear-gradient(90deg, rgba(95,224,168,0.20), rgba(124,196,255,0.14)); color: var(--ink); font: 600 1em var(--body); text-align: center; }
 .nav a.navvte b { color: #5fe0a8; font-weight: 800; }
 .nav a.navvte .vi { font-size: 1.5em; }
@@ -932,6 +936,15 @@ footer .wrap { padding-block: 22px; }
 .lb-pbar small { color: #ffc670; font: 500 0.7em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; }
 .lb-pbar a, .lb-pbar button { min-height: 48px; padding: 0 16px; display: inline-flex; align-items: center; border: 1px solid #ff8fd0; background: transparent; color: #fff; font: 600 0.92em var(--body); text-decoration: none; cursor: pointer; }
 .lb-pbar button.close { background: #ff8fd0; color: #2b0a1c; border-color: #ff8fd0; }
+.lb-run { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 8px 10px; margin: 2px -4px 0; background: rgba(124,196,255,0.10); border: 1px solid #7cc4ff; }
+.lb-run[hidden] { display: none; }
+.lb-run .rs { display: flex; gap: 4px; }
+.lb-run .rs i { display: grid; place-items: center; width: 36px; height: 36px; font-style: normal; font-size: 20px; border: 1px solid #33415e; opacity: .55; }
+.lb-run .rs i.on { opacity: 1; border: 2px solid #7cc4ff; }
+.lb-run .rs i.ok { opacity: 1; border-color: #5fe0a8; background: rgba(95,224,168,.18); }
+.lb-run .rt { flex: 1 1 220px; color: #fff; font: 600 0.95em var(--body); }
+.lb-pbar .lb-run button { border-color: #7cc4ff; }
+.lb-pbar .lb-run button.go { background: #5fe0a8; border-color: #5fe0a8; color: #04201a; }
 .lb-player iframe { width: 100%; height: 100%; border: 0; background: #000; }
 .rolebar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; padding: 10px 14px; border: 1px solid var(--rc, #7cc4ff); background: color-mix(in srgb, var(--rc, #7cc4ff) 10%, transparent); color: var(--ink); font-size: 0.95em; }
 .rolebar b { font: 600 0.78em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--rc, #7cc4ff); }
@@ -1694,6 +1707,46 @@ footer .wrap { padding-block: 22px; }
 #view-vte .vt-ex .a a { min-height: 44px; display: inline-flex; align-items: center; padding: 0 14px; border: 1px solid var(--line-hi); color: var(--ink); text-decoration: none; font-weight: 600; }
 #view-vte .vt-ex .a a.play { background: #5fe0a8; border-color: #5fe0a8; color: #04201a; }
 #view-vte .vt-libempty { color: var(--desc); padding: 14px; border: 1px dashed var(--line-hi); }
+#view-vte .vt-doors { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px; margin-top: 6px; }
+#view-vte .vt-door { display: grid; grid-template-columns: auto 1fr; grid-template-rows: auto auto; column-gap: 14px; row-gap: 2px; align-items: center; text-align: left; min-height: 104px; padding: 16px 18px; border: 2px solid var(--ac); background: color-mix(in srgb, var(--ac) 10%, #0b1222); color: var(--ink); text-decoration: none; cursor: pointer; font: inherit; transition: transform .15s, background .15s; }
+#view-vte .vt-door:hover, #view-vte .vt-door:focus-visible { background: color-mix(in srgb, var(--ac) 22%, #0b1222); transform: translateY(-2px); outline: none; }
+#view-vte .vt-door .gl { grid-row: 1 / 3; display: grid; place-items: center; width: 64px; height: 64px; font-size: 32px; border-radius: 18px; background: color-mix(in srgb, var(--ac) 25%, transparent); color: var(--ac); }
+#view-vte .vt-door b { font: 800 1.45em var(--body); color: var(--ac); }
+#view-vte .vt-door span:not(.gl) { color: var(--desc); font-size: 0.95em; line-height: 1.4; }
+#view-vte .vt-test { gap: 16px; }
+#view-vte .vt-test .vt-bhead h2 { margin: 4px 0 6px; font: 600 1.45em var(--body); }
+#view-vte .vt-plans { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 12px; }
+#view-vte .vt-plan { display: grid; gap: 8px; align-content: start; padding: 14px; border: 1px solid var(--line-hi); background: rgba(14,21,38,0.85); }
+#view-vte .vt-plan .ic { display: flex; gap: 4px; font-size: 26px; }
+#view-vte .vt-plan b { font-size: 1.08em; }
+#view-vte .vt-plan small { color: var(--desc); line-height: 1.45; }
+#view-vte .vt-plan .a { display: flex; gap: 8px; flex-wrap: wrap; }
+#view-vte .vt-plan .a button { min-height: 48px; padding: 0 16px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font: 600 0.95em var(--body); cursor: pointer; }
+#view-vte .vt-plan .a button.start { background: #5fe0a8; border-color: #5fe0a8; color: #04201a; font-size: 1.05em; }
+#view-vte .vt-pform { display: grid; gap: 14px; padding: 16px; border: 1px solid #7cc4ff; background: #0b1222; }
+#view-vte .vt-pform h3 { margin: 0; font: 600 1.15em var(--body); color: var(--ink); }
+#view-vte .vt-pform .f { display: grid; gap: 6px; font: 500 0.7em var(--mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+#view-vte .vt-pform .f input { min-height: 50px; padding: 0 12px; font: 600 1.4em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); background: #070d1a; border: 1px solid var(--line-hi); max-width: 520px; }
+#view-vte .vt-steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; counter-reset: st; }
+#view-vte .vt-steps li { counter-increment: st; display: flex; gap: 10px; align-items: center; padding: 6px 8px; border: 1px solid var(--line-hi); background: #070d1a; font: 600 1.35em var(--body); letter-spacing: 0; text-transform: none; color: var(--ink); }
+#view-vte .vt-steps li::before { content: counter(st); display: grid; place-items: center; width: 30px; height: 30px; flex: none; background: #7cc4ff; color: #04131f; font: 700 0.8em var(--body); }
+#view-vte .vt-steps li .n { flex: 1 1 auto; min-width: 0; }
+#view-vte .vt-steps li button { min-width: 44px; min-height: 44px; border: 1px solid var(--line-hi); background: transparent; color: var(--ink); font-size: 0.9em; cursor: pointer; }
+#view-vte .vt-steps .none { display: block; padding: 12px; border: 1px dashed var(--line-hi); color: var(--desc); font: 500 1.3em var(--body); letter-spacing: 0; text-transform: none; }
+#view-vte .vt-steps .none::before { display: none; }
+#view-vte .vt-add { display: flex; flex-wrap: wrap; gap: 8px; }
+#view-vte .vt-add button { min-height: 50px; padding: 0 14px; border: 1px dashed #7cc4ff; background: transparent; color: var(--ink); font: 600 1.35em var(--body); letter-spacing: 0; text-transform: none; cursor: pointer; }
+#view-vte .vt-add button:hover { background: rgba(124,196,255,0.12); }
+#view-vte .vt-pbtns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+#view-vte .vt-quick { padding: 10px 14px; border: 1px solid var(--line-hi); background: rgba(14,21,38,0.6); }
+#view-vte .vt-quick summary { cursor: pointer; min-height: 40px; display: flex; align-items: center; font-weight: 600; color: var(--ink); }
+#view-vte .vt-quick > p { margin: 6px 0 10px; color: var(--desc); font-size: 0.94em; }
+#view-vte .vt-ex .sh { justify-self: start; font: 600 0.66em var(--mono); letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 7px; border: 1px solid var(--line-hi); color: var(--muted); }
+#view-vte .vt-ex .sh.team { border-color: #5fe0a8; color: #5fe0a8; }
+@media (max-width: 600px) {
+#view-vte .vt-rsrow select, #view-vte .vt-rsrow input[type=text] { min-width: 0; width: 100% !important; }
+#view-vte .vt-rsrow label { flex: 1 1 100%; }
+}
 #view-dashboard .ds-wrap { gap: 22px !important; grid-template-columns: minmax(0, 1fr); }
 #view-dashboard .ds-wrap > *, #view-dashboard .ds-two > * { min-width: 0; }
 #view-dashboard .ds-hero { display: grid; gap: 10px; padding: 28px 0 4px; }
@@ -2225,7 +2278,7 @@ footer .wrap { padding-block: 22px; }
   <div class="wrap">
     <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><span class="testbadge" title="This is a test version. Nothing is saved to a real account.">Test version</span><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
   </div>
-  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">My dashboard</a><a class="navres" href="#studies" data-route="studies">Research dashboard</a><a class="navvte" href="#vte" data-route="vte"><span class="vi" aria-hidden="true">🎯</span><span><b>Virtual Training Environment</b><span class="vtx"> · practice, play and test with your adaptive controls</span></span><span aria-hidden="true">&rarr;</span></a></nav></div>
+  <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a class="navtrain" href="#vte" data-route="vte"><span aria-hidden="true">🎯</span>Training</a><a class="jl" href="#goals" data-route="goals"><span class="sn">1</span>Your goals</a><a class="jl" href="#profile" data-route="profile"><span class="sn">2</span>Your AI profile</a><a class="jl" href="#software" data-route="solutions"><span class="sn">3</span>Your solutions</a><a class="jl" href="#try" data-route="try"><span class="sn">4</span>Try and borrow</a><a class="navside navres" href="#dashboard" data-route="dashboard">My dashboard</a><a class="navres" href="#studies" data-route="studies">Research dashboard</a></nav></div>
 </header>
 <div class="journey" id="journey" hidden><div class="wrap"><span class="jdots" id="jDots"></span><span class="jt" id="jTitle"></span><a class="btn primary jnext" id="jNext" href="#"></a></div></div>
 <div class="band band-top" aria-hidden="true"></div>
@@ -3078,7 +3131,7 @@ footer .wrap { padding-block: 22px; }
 
     <div class="lb-dev"><b>For developers</b><span>These apps are published unchanged except for a few hosting fixes: Songboards opens on a music board and reports if its sound library cannot load, the hand-tracking ergometer loads fixed versions of its hand-tracking library, the Musical Dial (v9.1) adds built-in sound, dwell on the key ring and screen fitting, Mouse Orchestra (v6.1) adds a start-sound button, tap support and a hover delay, and the Mini Color Keyboard adds built-in sound alongside MIDI, the Virtual Harmonica (v7.1) adds a start button, the built-in synth by default, a mouse or touch mode and screen fitting. Build scripts and work-in-progress files are kept out of the lab. <a href="lab/accessibility-studio.html" target="_blank" rel="noopener">Open the original Accessibility Studio home</a>.</span></div>
     <div class="lb-player" id="lb-lbPlayer" hidden role="dialog" aria-modal="true" aria-labelledby="lb-lbPTitle">
-      <div class="lb-pbar"><b id="lb-lbPTitle">App</b><small>Work in progress · as is</small><a id="lb-lbPNew" href="#" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="close" id="lb-lbPClose">&times; Close</button></div>
+      <div class="lb-pbar"><b id="lb-lbPTitle">App</b><small>Work in progress · as is</small><a id="lb-lbPNew" href="#" target="_blank" rel="noopener">Open in a new tab</a><button type="button" class="close" id="lb-lbPClose">&times; Close</button><div class="lb-run" id="lb-lbRun" hidden><span class="rs" id="lb-lbRunSteps" aria-hidden="true"></span><span class="rt" id="lb-lbRunT" aria-live="polite"></span><button type="button" id="lb-lbRunNext">Next game &rarr;</button></div></div>
       <iframe id="lb-lbPFrame" title="Lab app" allow="autoplay; camera; microphone; midi; clipboard-write; fullscreen" allowfullscreen></iframe>
     </div>
   </div>
@@ -3090,14 +3143,13 @@ footer .wrap { padding-block: 22px; }
       <span class="vt-k">Access+ Virtual Training Environment <span class="vt-tag">Prototype · for review</span></span>
       <h1>Practice, play and <span>test</span></h1>
       <p>Short, game-like exercises for building skill with your adaptive controls, whether that's an eye tracker, a head mouse, switches, a joystick or an ordinary mouse.</p>
-      <ul class="vt-verbs">
-        <li><b>Practice</b><span>Improve speed, accuracy and comfort with the control you use, one level at a time.</span></li>
-        <li><b>Test</b><span>Every game gives a plain-language rundown, and you can compare controls, positions and settings side by side.</span></li>
-        <li><b>Build</b><span>Create your own training exercises and desktops with the Environment Editor.</span></li>
-        <li><b>Share</b><span>Share exercises with your therapist, colleagues or a research study, and soon play exercises others have shared in a community library.</span></li>
-      </ul>
+      <div class="vt-doors">
+        <button type="button" class="vt-door" data-go="vtDesk" style="--ac:#5fe0a8"><span class="gl" aria-hidden="true">▶</span><b>Play</b><span>Jump into a game with the control you use.</span></button>
+        <a class="vt-door" href="vte/editor.html?new=1" data-title="VTE · Environment Editor" style="--ac:#e0e05f"><span class="gl" aria-hidden="true">🛠️</span><b>Build</b><span>Make your own training exercise and share it with colleagues.</span></a>
+        <button type="button" class="vt-door" data-go="vtTest" style="--ac:#7cc4ff"><span class="gl" aria-hidden="true">📋</span><b>Test</b><span>Set up a recorded session: games in order, participant, device.</span></button>
+      </div>
     </header>
-    <section class="vt-desk" aria-labelledby="vt-vtDeskT">
+    <section class="vt-desk" id="vt-vtDesk" aria-labelledby="vt-vtDeskT">
       <div class="vt-deskbar"><span id="vt-vtDeskT"><b>Access+ desktop</b> · games and tools</span><span>4 ready · 1 preview · 4 coming</span></div>
       <div class="vt-icons">
         <a class="vt-ic" href="vte/pointing.html" data-title="VTE · Pointing Environment" style="--ac:#5fe0a8"><span class="st on">Play</span><span class="gl" aria-hidden="true">🎯</span><b>Pointing</b><small>Six levels of targets that play a tune as you reach them. Mouse, eye tracker, head mouse, nose tracking, one or two switches.</small></a>
@@ -3114,26 +3166,49 @@ footer .wrap { padding-block: 22px; }
     </section>
 
     <section class="vt-build" aria-labelledby="vt-vtBuildT">
-      <div class="vt-bhead"><div><span class="vt-k" style="color:#e0e05f">Build your own</span><h2 id="vt-vtBuildT">Training exercises, made by you</h2><p>Use the Environment Editor to place targets on a stage and tick the components you want: rules, ways to select, feedback and what to measure. Add levels, preview, then save to share it here. Everyone this page is shared with can play it, and results go to the dashboards.</p></div>
+      <div class="vt-bhead"><div><span class="vt-k" style="color:#e0e05f">Build your own</span><h2 id="vt-vtBuildT">Training exercises, made by you</h2><p>Use the Environment Editor to place targets on a stage and tick the components you want: rules, ways to select, feedback and what to measure. Add levels, preview and save. Keep an exercise to yourself or share it with colleagues; a public library will come later.</p></div>
       <div class="vt-bbtns"><a class="btn primary" href="vte/editor.html?new=1" data-title="VTE · Environment Editor">🛠️ New exercise</a></div></div>
       <div class="vt-lib" id="vt-vtLib"></div>
     </section>
 
-    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
 
 
-    <section class="vt-rs" aria-labelledby="vt-vtRsT">
-      <span class="vt-k" style="color:#7cc4ff">Research session · optional</span>
-      <h2 id="vt-vtRsT">Record your play to a study</h2>
-      <p>Choose a study and a participant code before you play. Every game you finish is saved to the research dashboard; without a study it is saved as free play.</p>
-      <div class="vt-rsrow">
-        <label>Study<select id="vt-vtStudy"><option value="">Free play (no study)</option></select></label>
-        <label>Participant code<input type="text" id="vt-vtPart" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false"></label>
-        <label class="ck"><input type="checkbox" id="vt-vtPractice"> Practice run</label>
-      </div>
-      <span class="vt-rsnow" id="vt-vtRsNow" aria-live="polite"></span>
-      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn primary" href="#dashboard">Open the research dashboard</a><a class="btn" href="#dashboard" id="vt-vtNewStudy">Set up a new study</a></div>
+
+    <section class="vt-rs vt-test" id="vt-vtTest" aria-labelledby="vt-vtTestT">
+      <div class="vt-bhead"><div><span class="vt-k" style="color:#7cc4ff">Test</span><h2 id="vt-vtTestT">Set up a session</h2><p>Choose the games in order, who is playing, which study and which device, once. Then press Start: the games play one after another and every result is saved to the right place.</p></div>
+      <div class="vt-bbtns"><button type="button" class="btn primary" id="vt-vtPlanNew">📋 New session plan</button></div></div>
+      <div class="vt-plans" id="vt-vtPlans"></div>
+
+      <form class="vt-pform" id="vt-vtPForm" hidden autocomplete="off">
+        <h3 id="vt-vtPFormT">New session plan</h3>
+        <label class="f">Plan name<input type="text" id="vt-vtPName" maxlength="60" placeholder="e.g. Touchpad check, 3 games"></label>
+        <div class="f"><span>Games, in order</span>
+          <ol class="vt-steps" id="vt-vtSteps"></ol>
+          <div class="vt-add" id="vt-vtAdd" aria-label="Add a game"></div>
+        </div>
+        <div class="vt-rsrow">
+          <label>Study<select id="vt-vtPStudy"></select></label>
+          <label>Participant code<input type="text" id="vt-vtPPart" maxlength="12" placeholder="P01" spellcheck="false"></label>
+          <label>Device<input type="text" id="vt-vtPDev" maxlength="60" placeholder="e.g. USB touchpad, lower lip" style="width:260px;text-transform:none"></label>
+          <label class="ck"><input type="checkbox" id="vt-vtPPr"> Practice run</label>
+        </div>
+        <span class="vt-rsnow" id="vt-vtPNow" aria-live="polite"></span>
+        <div class="vt-pbtns"><button type="submit" class="btn primary" id="vt-vtPStart">▶ Save and start</button><button type="button" class="btn" id="vt-vtPSave">Save plan</button><button type="button" class="btn" id="vt-vtPCancel">Cancel</button><span class="vt-rsnow" id="vt-vtPMsg" aria-live="polite"></span></div>
+      </form>
+
+      <details class="vt-quick"><summary>Playing a single game instead? Choose where it is saved</summary>
+        <p>Without a plan, games you open from the desktop are saved here.</p>
+        <div class="vt-rsrow">
+          <label>Study<select id="vt-vtStudy"><option value="">Free play (no study)</option></select></label>
+          <label>Participant code<input type="text" id="vt-vtPart" maxlength="12" placeholder="P01" autocomplete="off" spellcheck="false"></label>
+          <label class="ck"><input type="checkbox" id="vt-vtPractice"> Practice run</label>
+        </div>
+        <span class="vt-rsnow" id="vt-vtRsNow" aria-live="polite"></span>
+      </details>
+      <div style="display:flex;flex-wrap:wrap;gap:10px"><a class="btn" href="#studies">Open the research dashboard</a><a class="btn" href="#studies" id="vt-vtNewStudy">Set up a new study</a></div>
     </section>
+
+    <div class="vt-draft" role="note"><b>Draft for discussion</b><p>This is an early working prototype shared for review. Results go to your test sessions and the research dashboard; nothing is shared unless you share the page. Camera features may be blocked inside this private preview; mouse, touch, eye trackers that move the pointer and switches all work.</p></div>
 
 
     <section class="vt-feat" aria-labelledby="vt-vtFeatT">
@@ -3197,7 +3272,7 @@ footer .wrap { padding-block: 22px; }
     <div class="ds-note" role="note" id="ds-dsNote" hidden><b>Prototype data store</b><p>Pilot data only. Use participant codes such as P01, never names. Studies with participants need consent and proper research hosting first.</p></div>
 
     <section class="ds-panel" aria-labelledby="ds-dsStudiesT" id="ds-dsStudiesP" hidden>
-      <div class="ds-bar" style="justify-content:space-between"><h2 id="ds-dsStudiesT">Studies</h2><button type="button" class="ds-btn pri" id="ds-dsNewBtn">+ New study</button></div>
+      <div class="ds-bar" style="justify-content:space-between"><h2 id="ds-dsStudiesT">Studies</h2><span style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" class="ds-btn" id="ds-dsPlanBtn">📋 Set up a session</button><button type="button" class="ds-btn pri" id="ds-dsNewBtn">+ New study</button></span></div>
       <div class="ds-bar" role="group" aria-label="Choose a study" id="ds-dsStudyChips"></div>
       <div class="ds-tw" id="ds-dsOver"></div>
       <form class="ds-form" id="ds-dsForm" hidden>
@@ -7086,17 +7161,17 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
 /* ---------- Access+ prototype research store (shared on Claude when available, else this browser) ---------- */
 (function () {
   var LKEY = 'accessplus-studydb';
-  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, subs: [] };
+  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, plans: {}, subs: [] };
   window.APStore = AP;
   function lget() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}') || {}; } catch (e) { return {}; } }
-  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises })); } catch (e) {} }
+  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises, plans: AP.plans })); } catch (e) {} }
   function emit() { AP.subs.forEach(function (f) { try { f(AP); } catch (e) {} }); }
   AP.onChange = function (f) { AP.subs.push(f); f(AP); };
   AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
     AP.uid = 'local';
-    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.mode = 'local'; readyRes(); emit();
+    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.plans = d.plans || {}; AP.mode = 'local'; readyRes(); emit();
   }
   function snapMap(snap) { var m = {}; snap.docs.forEach(function (d) { if (d.exists) m[d.id] = d.data(); }); return m; }
   (async function init() {
@@ -7112,6 +7187,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
       var once1 = false, once2 = false;
       db.collection('studies').onSnapshot(function (s) { AP.studies = snapMap(s); if (!once1 && !s.metadata.fromCache) { once1 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
       db.collection('exercises').onSnapshot(function (s) { AP.exercises = snapMap(s); emit(); }, function () {});
+      db.collection('plans').onSnapshot(function (s) { AP.plans = snapMap(s); emit(); }, function () {});
       db.collection('sessions').onSnapshot(function (s) { AP.sessions = snapMap(s); if (!once2 && !s.metadata.fromCache) { once2 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
     } catch (e) { goLocal(); }
   })();
@@ -7138,6 +7214,8 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
   AP.saveSession = function (id, s) { return write('sessions', id, s); };
   AP.patchSession = function (id, p) { return patch('sessions', id, p); };
   AP.deleteSession = function (id) { return del('sessions', id); };
+  AP.savePlan = function (id, p) { return write('plans', id, p); };
+  AP.deletePlan = function (id) { return del('plans', id); };
 
   /* study context chosen in the Training Environment, passed to games as URL parameters */
   AP.ctx = function () { try { return JSON.parse(localStorage.getItem('accessplus-studyctx') || '{}') || {}; } catch (e) { return {}; } };
@@ -7159,6 +7237,8 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
     if (m.type === 'accessplus-session' && m.session && SAFE.test(m.session.id || '')) {
       var s = m.session;
       s.by = AP.uid || (AP.mode === 'local' ? 'local' : '');
+      var R = AP.run; /* a session plan is running: its settings win, so nothing is saved to the wrong place */
+      if (R) { s.studyId = R.studyId || ''; s.participant = R.participant || ''; s.practice = !!R.practice; if (R.device) s.device = R.device; s.planId = R.planId; s.planName = R.planName; s.planStep = R.step + 1; }
       if (s.studyId && !SAFE.test(s.studyId)) s.studyId = '';
       AP.saveSession(s.id, s).then(function (mode) {
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: mode }, e.origin);
@@ -7224,6 +7304,7 @@ var __ID = function (x) { return document.getElementById('ds-' + x) || document.
   window.addEventListener('accessrole', outBtn);
   el('dsOut').addEventListener('click', function () { setTimeout(function () { location.hash = '#home'; }, 0); });
   window.dsMode = function (m) { if (m !== tab || !setMode._d) { setMode._d = 1; setMode(m); } };
+  el('dsPlanBtn').addEventListener('click', function () { location.hash = '#vte'; if (window.vtGoTest) window.vtGoTest(); });
   el('dsAsP').addEventListener('click', function () { location.hash = '#dashboard'; });
   el('dsAsR').addEventListener('click', function () { location.hash = '#studies'; });
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -7569,12 +7650,65 @@ var __ID = function (x) { return document.getElementById('lb-' + x) || document.
     el('lbPClose').focus();
   }
   function closeApp() {
+    if (RUN) endRun(false);
     frame.src = 'about:blank';
     player.hidden = true;
     document.documentElement.style.overflow = '';
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
   el('lbPClose').addEventListener('click', closeApp);
+
+  /* ───── Session runner: plays a saved session plan, game after game ───── */
+  var RUN = null;
+  var KINDS = { pointing: ['🎯', 'Pointing', 'vte/pointing.html'], pointing2: ['⏱️', 'Pointing two-minute challenge', 'vte/pointing.html?quick=1'], echo: ['🐭', 'Echo Game', 'lab/mouse_orchestra_v6.html?game=echo'] };
+  function stepInfo(st) {
+    var AP = window.APStore || {};
+    if (st.k === 'custom') { var x = (AP.exercises || {})[st.id] || {}; return [x.icon || '🧩', x.name || st.name || 'Exercise', 'vte/editor.html?play=' + encodeURIComponent(st.id || '')]; }
+    return KINDS[st.k] || KINDS.pointing;
+  }
+  window.APStepInfo = stepInfo;
+  function runBar() {
+    var n = RUN.plan.steps.length, i = RUN.i, cur = stepInfo(RUN.plan.steps[i]), last = i >= n - 1, saved = RUN.done[i];
+    el('lbRun').hidden = false;
+    el('lbRunSteps').innerHTML = RUN.plan.steps.map(function (st, k) { return '<i class="' + (RUN.done[k] ? 'ok' : k === i ? 'on' : '') + '">' + stepInfo(st)[0] + '</i>'; }).join('');
+    el('lbRunT').textContent = 'Session: ' + (RUN.plan.name || 'Session plan') + ' · game ' + (i + 1) + ' of ' + n + ': ' + cur[1] + (saved ? ' · ✓ saved' : '');
+    var nb = el('lbRunNext');
+    nb.textContent = last ? (saved ? '✓ Finish session' : 'Finish session') : (saved ? 'Next: ' + stepInfo(RUN.plan.steps[i + 1])[1] + ' →' : 'Skip to next game →');
+    nb.classList.toggle('go', !!saved);
+  }
+  function openStep() {
+    var info = stepInfo(RUN.plan.steps[RUN.i]), AP = window.APStore;
+    if (AP) AP.run = { planId: RUN.id, planName: RUN.plan.name || '', studyId: RUN.plan.studyId || '', participant: RUN.plan.participant || '', practice: !!RUN.plan.practice, device: RUN.plan.device || '', step: RUN.i };
+    var href = info[2]; if (window.APStudyQuery) href += (href.indexOf('?') < 0 ? '?' : '&') + window.APStudyQuery() + '&plan=1';
+    if (player.hidden) openApp(href, info[1]); else { el('lbPTitle').textContent = info[1]; el('lbPNew').href = href; frame.src = href; }
+    el('lbPTitle').textContent = info[1];
+    runBar();
+  }
+  function endRun(finished) {
+    var r = RUN, AP = window.APStore; RUN = null;
+    if (AP) { AP.run = null; AP.setCtx(r.prevCtx || {}); AP.emit(); }
+    try { if (r.prevDev == null) localStorage.removeItem('accessplus-device'); else localStorage.setItem('accessplus-device', r.prevDev); } catch (e) {}
+    el('lbRun').hidden = true;
+    if (finished) { setTimeout(function () { location.hash = r.plan.studyId ? '#studies' : '#dashboard'; window.scrollTo(0, 0); }, 0); }
+  }
+  window.APRunPlan = function (id, plan) {
+    var AP = window.APStore; if (!AP || !plan || !plan.steps || !plan.steps.length) return;
+    if (RUN) endRun(false);
+    var prevDev = null; try { prevDev = localStorage.getItem('accessplus-device'); } catch (e) {}
+    RUN = { id: id, plan: plan, i: 0, done: [], prevCtx: AP.ctx(), prevDev: prevDev };
+    AP.setCtx({ studyId: plan.studyId || '', participant: plan.participant || '', practice: !!plan.practice });
+    try { if (plan.device) localStorage.setItem('accessplus-device', plan.device); } catch (e) {}
+    openStep();
+  };
+  el('lbRunNext').addEventListener('click', function () {
+    if (!RUN) return;
+    if (RUN.i >= RUN.plan.steps.length - 1) { endRun(true); closeApp(); return; }
+    RUN.i++; openStep();
+  });
+  window.addEventListener('message', function (e) {
+    if (!RUN || e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-session' || e.source !== frame.contentWindow) return;
+    RUN.done[RUN.i] = true; setTimeout(runBar, 50);
+  });
   var NAVOK = ['#vte', '#dashboard', '#studies', '#about', '#home', '#lab', '#try'];
   window.addEventListener('message', function (e) {
     if (e.origin !== location.origin || !e.data || e.data.type !== 'accessplus-nav' || NAVOK.indexOf(e.data.hash) < 0) return;
@@ -7640,11 +7774,11 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
   }
   AP.onChange(recent);
   function lib() {
-    var ids = Object.keys(AP.exercises || {}).sort(function (a, b) { return String((AP.exercises[b] || {}).updated || '').localeCompare(String((AP.exercises[a] || {}).updated || '')); });
+    var ids = Object.keys(AP.exercises || {}).filter(function (id) { var x = AP.exercises[id] || {}; return x.share !== 'private' || !x.owner || x.owner === AP.uid; }).sort(function (a, b) { return String((AP.exercises[b] || {}).updated || '').localeCompare(String((AP.exercises[a] || {}).updated || '')); });
     if (!ids.length) { el('vtLib').innerHTML = '<p class="vt-libempty">No shared exercises yet. Press New exercise to build the first one, or start from a template in the editor.</p>'; return; }
     el('vtLib').innerHTML = ids.map(function (id) {
       var x = AP.exercises[id] || {}, d = document.createElement('div'); d.className = 'vt-ex';
-      d.innerHTML = '<div class="h"><span aria-hidden="true"></span><div><b></b><br><small class="lv"></small></div></div><small class="ds"></small><div class="a"><a class="play">▶ Play</a><a class="ed">✎ Edit</a></div>';
+      d.innerHTML = '<div class="h"><span aria-hidden="true"></span><div><b></b><br><small class="lv"></small></div></div><span class="sh' + (x.share === 'private' ? '' : ' team') + '">' + (x.share === 'private' ? 'Only you' : 'Shared with colleagues') + '</span><small class="ds"></small><div class="a"><a class="play">▶ Play</a><a class="ed">✎ Edit</a></div>';
       d.querySelector('.h span').textContent = x.icon || '🧩'; d.querySelector('b').textContent = x.name || 'Untitled exercise';
       var n = (x.levels || []).length; d.querySelector('.lv').textContent = n + ' level' + (n === 1 ? '' : 's');
       d.querySelector('.ds').textContent = x.desc || '';
@@ -7658,7 +7792,95 @@ var __ID = function (x) { return document.getElementById('vt-' + x) || document.
   el('vtStudy').addEventListener('change', save);
   el('vtPart').addEventListener('input', save);
   el('vtPractice').addEventListener('change', save);
-  el('vtNewStudy').addEventListener('click', function () { setTimeout(function () { var b = __ID('ds-dsNewBtn'); if (b) b.click(); }, 60); });
+  /* ───── doors ───── */
+  Array.prototype.forEach.call(document.querySelectorAll('.vt-door[data-go]'), function (b) {
+    b.addEventListener('click', function () { var g = b.getAttribute('data-go'), t = __ID('vt-' + g) || __ID(g); if (t) { var y = t.getBoundingClientRect().top + window.scrollY - 90; window.scrollTo({ top: y, behavior: 'smooth' }); } });
+  });
+  window.vtGoTest = function () { setTimeout(function () { var t = el('vtTest'); if (t) window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 90 }); }, 80); };
+
+  /* ───── session plans ───── */
+  var DRAFT = null, EDIT = null;
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function info(st) { return window.APStepInfo ? window.APStepInfo(st) : ['🎮', st.name || 'Game', '']; }
+  function canEdit(p) { return !p.by || p.by === AP.uid || AP.mode === 'local'; }
+  function where(p) {
+    var st = p.studyId && AP.studies[p.studyId];
+    return (st ? st.name : 'Free play') + ' · ' + (p.participant || 'no participant code') + (p.device ? ' · ' + p.device : '') + (p.practice ? ' · practice' : '');
+  }
+  function plans() {
+    var P = AP.plans || {}, ids = Object.keys(P).sort(function (a, b) { return String(P[b].updated || '').localeCompare(String(P[a].updated || '')); });
+    if (!ids.length) { el('vtPlans').innerHTML = '<p class="vt-libempty">No session plans yet. Press New session plan to put one together.</p>'; return; }
+    el('vtPlans').innerHTML = ids.map(function (id) {
+      var p = P[id], n = (p.steps || []).length;
+      return '<div class="vt-plan"><span class="ic" aria-hidden="true">' + (p.steps || []).map(function (st) { return esc(info(st)[0]); }).join('') + '</span><b>' + esc(p.name || 'Session plan') + '</b><small>' + n + ' game' + (n === 1 ? '' : 's') + ': ' + (p.steps || []).map(function (st) { return esc(info(st)[1]); }).join(', ') + '</small><small>Saves to: ' + esc(where(p)) + '</small><div class="a"><button type="button" class="start" data-start="' + esc(id) + '">▶ Start</button>' + (canEdit(p) ? '<button type="button" data-edit="' + esc(id) + '">✎ Edit</button><button type="button" data-del="' + esc(id) + '">Delete</button>' : '<button type="button" data-copy="' + esc(id) + '">Copy and edit</button>') + '</div></div>';
+    }).join('');
+  }
+  el('vtPlans').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var P = AP.plans || {};
+    if (b.dataset.start && P[b.dataset.start]) window.APRunPlan(b.dataset.start, P[b.dataset.start]);
+    if (b.dataset.edit && P[b.dataset.edit]) openForm(b.dataset.edit, P[b.dataset.edit]);
+    if (b.dataset.copy && P[b.dataset.copy]) { var c = JSON.parse(JSON.stringify(P[b.dataset.copy])); c.name = (c.name || 'Session plan') + ' (copy)'; openForm(null, c); }
+    if (b.dataset.del) {
+      if (b.getAttribute('data-confirm') === '1') AP.deletePlan(b.dataset.del).catch(function () {});
+      else { b.setAttribute('data-confirm', '1'); b.textContent = 'Confirm delete'; setTimeout(function () { b.removeAttribute('data-confirm'); b.textContent = 'Delete'; }, 4000); }
+    }
+  });
+  function studyOpts(cur) {
+    var ids = Object.keys(AP.studies).filter(function (k) { return AP.studies[k].status !== 'closed' || k === cur; });
+    el('vtPStudy').innerHTML = '<option value="">Free play (no study)</option>' + ids.map(function (k) { return '<option value="' + esc(k) + '">' + esc(AP.studies[k].name) + '</option>'; }).join('');
+    el('vtPStudy').value = AP.studies[cur] ? cur : '';
+  }
+  function addBtns() {
+    var list = [['pointing'], ['pointing2'], ['echo']].map(function (x) { return { k: x[0] }; });
+    Object.keys(AP.exercises || {}).forEach(function (id) { var x = AP.exercises[id]; if (x && (x.share !== 'private' || !x.owner || x.owner === AP.uid)) list.push({ k: 'custom', id: id, name: x.name }); });
+    el('vtAdd').innerHTML = list.map(function (st, i) { var f = info(st); return '<button type="button" data-i="' + i + '">+ ' + esc(f[0]) + ' ' + esc(f[1]) + '</button>'; }).join('');
+    addBtns.list = list;
+  }
+  el('vtAdd').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b || !DRAFT) return; var st = addBtns.list[+b.dataset.i]; if (DRAFT.steps.length < 12) DRAFT.steps.push(Object.assign({}, st)); steps(); });
+  function steps() {
+    el('vtSteps').innerHTML = DRAFT.steps.length ? DRAFT.steps.map(function (st, i) { var f = info(st); return '<li><span class="n">' + esc(f[0]) + ' ' + esc(f[1]) + '</span><button type="button" data-up="' + i + '" aria-label="Move up"' + (i ? '' : ' disabled') + '>↑</button><button type="button" data-dn="' + i + '" aria-label="Move down"' + (i < DRAFT.steps.length - 1 ? '' : ' disabled') + '>↓</button><button type="button" data-rm="' + i + '" aria-label="Remove">✕</button></li>'; }).join('') : '<li class="none">No games yet: add them below, in the order you want them played.</li>';
+    now();
+  }
+  el('vtSteps').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return; var S = DRAFT.steps, i;
+    if (b.dataset.up) { i = +b.dataset.up; S.splice(i - 1, 0, S.splice(i, 1)[0]); }
+    if (b.dataset.dn) { i = +b.dataset.dn; S.splice(i + 1, 0, S.splice(i, 1)[0]); }
+    if (b.dataset.rm) S.splice(+b.dataset.rm, 1);
+    steps();
+  });
+  function read() {
+    var p = el('vtPPart').value.toUpperCase().replace(/[^A-Z0-9_-]/g, '').slice(0, 12); if (p !== el('vtPPart').value) el('vtPPart').value = p;
+    DRAFT.name = el('vtPName').value.trim().slice(0, 60); DRAFT.studyId = el('vtPStudy').value; DRAFT.participant = p; DRAFT.device = el('vtPDev').value.trim().slice(0, 60); DRAFT.practice = el('vtPPr').checked;
+  }
+  function now() { read(); el('vtPNow').textContent = 'Every game in this plan will be saved to: ' + where(DRAFT); }
+  ['vtPName', 'vtPPart', 'vtPDev'].forEach(function (k) { el(k).addEventListener('input', now); });
+  ['vtPStudy', 'vtPPr'].forEach(function (k) { el(k).addEventListener('change', now); });
+  function openForm(id, p) {
+    EDIT = id; DRAFT = { steps: (p && p.steps || []).map(function (x) { return Object.assign({}, x); }) };
+    el('vtPFormT').textContent = id ? 'Edit session plan' : 'New session plan';
+    el('vtPName').value = p && p.name || ''; studyOpts(p && p.studyId || ''); el('vtPPart').value = p && p.participant || ''; el('vtPDev').value = p ? (p.device || '') : (function () { try { return localStorage.getItem('accessplus-device') || ''; } catch (e) { return ''; } })(); el('vtPPr').checked = !!(p && p.practice);
+    el('vtPMsg').textContent = ''; addBtns(); steps();
+    el('vtPForm').hidden = false; el('vtPName').focus();
+  }
+  el('vtPlanNew').addEventListener('click', function () { openForm(null, null); });
+  el('vtPCancel').addEventListener('click', function () { el('vtPForm').hidden = true; DRAFT = null; });
+  function savePlan(start) {
+    read();
+    if (!DRAFT.steps.length) { el('vtPMsg').textContent = 'Add at least one game first.'; return; }
+    var id = EDIT || ('pl-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 6)), prev = (AP.plans || {})[id] || {};
+    var plan = { name: DRAFT.name || 'Session plan', steps: DRAFT.steps.map(function (st) { var o = { k: st.k }; if (st.k === 'custom') { o.id = st.id; o.name = String(info(st)[1]).slice(0, 60); } return o; }), studyId: DRAFT.studyId || '', participant: DRAFT.participant || '', device: DRAFT.device || '', practice: !!DRAFT.practice, by: prev.by || AP.uid || '', created: prev.created || new Date().toISOString(), updated: new Date().toISOString() };
+    el('vtPMsg').textContent = 'Saving…';
+    AP.savePlan(id, plan).then(function () {
+      el('vtPForm').hidden = true; DRAFT = null; EDIT = null;
+      if (start) window.APRunPlan(id, plan);
+    }).catch(function (er) { el('vtPMsg').textContent = 'Could not save' + (er && er.code === 'quota_exceeded' ? ': the prototype store is full.' : '. You may have view-only access.'); });
+  }
+  el('vtPForm').addEventListener('submit', function (e) { e.preventDefault(); savePlan(true); });
+  el('vtPSave').addEventListener('click', function () { savePlan(false); });
+  AP.onChange(function () { plans(); if (DRAFT && !el('vtPForm').hidden) { addBtns(); if (document.activeElement !== el('vtPStudy')) { var c = el('vtPStudy').value; studyOpts(c); } } });
+
+  el('vtNewStudy').addEventListener('click', function () { setTimeout(function () { var b = __ID('ds-dsNewBtn'); if (b) b.click(); }, 120); });
 })();
 
 

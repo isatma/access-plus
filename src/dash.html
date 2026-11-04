@@ -104,7 +104,7 @@
     <div class="ds-note" role="note" id="dsNote" hidden><b>Prototype data store</b><p>Pilot data only. Use participant codes such as P01, never names. Studies with participants need consent and proper research hosting first.</p></div>
 
     <section class="ds-panel" aria-labelledby="dsStudiesT" id="dsStudiesP" hidden>
-      <div class="ds-bar" style="justify-content:space-between"><h2 id="dsStudiesT">Studies</h2><button type="button" class="ds-btn pri" id="dsNewBtn">+ New study</button></div>
+      <div class="ds-bar" style="justify-content:space-between"><h2 id="dsStudiesT">Studies</h2><span style="display:flex;flex-wrap:wrap;gap:8px"><button type="button" class="ds-btn" id="dsPlanBtn">📋 Set up a session</button><button type="button" class="ds-btn pri" id="dsNewBtn">+ New study</button></span></div>
       <div class="ds-bar" role="group" aria-label="Choose a study" id="dsStudyChips"></div>
       <div class="ds-tw" id="dsOver"></div>
       <form class="ds-form" id="dsForm" hidden>
@@ -148,17 +148,17 @@
 /* ---------- Access+ prototype research store (shared on Claude when available, else this browser) ---------- */
 (function () {
   var LKEY = 'accessplus-studydb';
-  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, subs: [] };
+  var AP = { mode: 'connecting', db: null, user: null, canWrite: true, studies: {}, sessions: {}, exercises: {}, plans: {}, subs: [] };
   window.APStore = AP;
   function lget() { try { return JSON.parse(localStorage.getItem(LKEY) || '{}') || {}; } catch (e) { return {}; } }
-  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises })); } catch (e) {} }
+  function lput() { try { localStorage.setItem(LKEY, JSON.stringify({ studies: AP.studies, sessions: AP.sessions, exercises: AP.exercises, plans: AP.plans })); } catch (e) {} }
   function emit() { AP.subs.forEach(function (f) { try { f(AP); } catch (e) {} }); }
   AP.onChange = function (f) { AP.subs.push(f); f(AP); };
   AP.emit = function () { emit(); };
   var readyRes; AP.ready = new Promise(function (r) { readyRes = r; });
   function goLocal() {
     AP.uid = 'local';
-    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.mode = 'local'; readyRes(); emit();
+    var d = lget(); AP.studies = d.studies || {}; AP.sessions = d.sessions || {}; AP.exercises = d.exercises || {}; AP.plans = d.plans || {}; AP.mode = 'local'; readyRes(); emit();
   }
   function snapMap(snap) { var m = {}; snap.docs.forEach(function (d) { if (d.exists) m[d.id] = d.data(); }); return m; }
   (async function init() {
@@ -174,6 +174,7 @@
       var once1 = false, once2 = false;
       db.collection('studies').onSnapshot(function (s) { AP.studies = snapMap(s); if (!once1 && !s.metadata.fromCache) { once1 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
       db.collection('exercises').onSnapshot(function (s) { AP.exercises = snapMap(s); emit(); }, function () {});
+      db.collection('plans').onSnapshot(function (s) { AP.plans = snapMap(s); emit(); }, function () {});
       db.collection('sessions').onSnapshot(function (s) { AP.sessions = snapMap(s); if (!once2 && !s.metadata.fromCache) { once2 = true; done(); } else emit(); }, function () { AP.err = true; emit(); });
     } catch (e) { goLocal(); }
   })();
@@ -200,6 +201,8 @@
   AP.saveSession = function (id, s) { return write('sessions', id, s); };
   AP.patchSession = function (id, p) { return patch('sessions', id, p); };
   AP.deleteSession = function (id) { return del('sessions', id); };
+  AP.savePlan = function (id, p) { return write('plans', id, p); };
+  AP.deletePlan = function (id) { return del('plans', id); };
 
   /* study context chosen in the Training Environment, passed to games as URL parameters */
   AP.ctx = function () { try { return JSON.parse(localStorage.getItem('accessplus-studyctx') || '{}') || {}; } catch (e) { return {}; } };
@@ -221,6 +224,8 @@
     if (m.type === 'accessplus-session' && m.session && SAFE.test(m.session.id || '')) {
       var s = m.session;
       s.by = AP.uid || (AP.mode === 'local' ? 'local' : '');
+      var R = AP.run; /* a session plan is running: its settings win, so nothing is saved to the wrong place */
+      if (R) { s.studyId = R.studyId || ''; s.participant = R.participant || ''; s.practice = !!R.practice; if (R.device) s.device = R.device; s.planId = R.planId; s.planName = R.planName; s.planStep = R.step + 1; }
       if (s.studyId && !SAFE.test(s.studyId)) s.studyId = '';
       AP.saveSession(s.id, s).then(function (mode) {
         if (e.source) e.source.postMessage({ type: 'accessplus-saved', id: s.id, mode: mode }, e.origin);
@@ -286,6 +291,7 @@
   window.addEventListener('accessrole', outBtn);
   el('dsOut').addEventListener('click', function () { setTimeout(function () { location.hash = '#home'; }, 0); });
   window.dsMode = function (m) { if (m !== tab || !setMode._d) { setMode._d = 1; setMode(m); } };
+  el('dsPlanBtn').addEventListener('click', function () { location.hash = '#vte'; if (window.vtGoTest) window.vtGoTest(); });
   el('dsAsP').addEventListener('click', function () { location.hash = '#dashboard'; });
   el('dsAsR').addEventListener('click', function () { location.hash = '#studies'; });
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
