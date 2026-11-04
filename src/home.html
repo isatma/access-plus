@@ -80,7 +80,7 @@ section[id] { scroll-margin-top: 170px; }
 @media (max-width: 640px) { .nav2 { flex-wrap: nowrap; overflow-x: auto; } .nav2 a { flex: none; } .nav2-k { flex: none; } }
 .nav { display: flex; flex-wrap: wrap; gap: 0; padding-block: 4px; flex: 1 1 auto; width: 100%; }
 @media (max-width: 640px) { .nav { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; } }
-.nav a { flex: none; min-height: 48px; display: inline-flex; align-items: center; padding: 0 7px; text-decoration: none; color: var(--ink); font: 600 0.78em var(--body); letter-spacing: 0; border-bottom: 2px solid transparent; }
+.nav a { flex: none; min-height: 64px; display: inline-flex; align-items: center; padding: 0 8px; text-decoration: none; color: var(--ink); font: 600 0.86em var(--body); letter-spacing: 0; border-bottom: 2px solid transparent; }
 .nav a:hover { color: var(--ink); border-bottom-color: var(--line-hi); }
 .nav a[aria-current="page"] { color: var(--signal); border-bottom-color: var(--signal); }
 
@@ -95,7 +95,7 @@ section[id] { scroll-margin-top: 170px; }
 .nav .navsign { color: var(--signal); }
 .nav .navside { margin-left: auto; }
 .nav .jl { gap: 8px; }
-.nav .jl .sn { display: inline-grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--signal); color: var(--signal); font: 600 0.82em var(--body); }
+.nav .jl .sn { display: inline-grid; place-items: center; width: 30px; height: 30px; border: 1px solid var(--signal); color: var(--signal); font: 600 0.82em var(--body); }
 .nav .jl[aria-current="page"] .sn { background: var(--signal); color: var(--signal-ink); }
 .nav .jl + .jl::before { content: "\203A"; color: var(--muted); margin: 0 6px 0 -4px; font-size: 1.2em; }
 @media (max-width: 640px) { .nav .navside { margin-left: 0; } }
@@ -895,7 +895,7 @@ footer .wrap { padding-block: 22px; }
 <div class="draftbar" role="note"><b>Draft website · under construction</b><span>For review and discussion purposes only. Partners, products, data and features shown are illustrative ideas, not commitments.</span></div>
 <header class="bar" id="top">
   <div class="wrap">
-    <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p><div class="badgerow"><button class="testbadge bigbadge" id="bigToggle" type="button" aria-pressed="false">Larger targets</button></div></div>
+    <div class="brandbox"><div class="brandrow"><a class="brand" href="#home">Access<span>+</span> <em class="brand-als">ALS</em></a><span class="tagline">Skill building for assistive technology</span></div></div><div class="hdr-right"><p class="audience">For people living with ALS and other complex disabilities affecting <b>mobility</b>, <b>upper-limb function</b>, <b>breathing</b> and <b>speech</b>.</p></div>
   </div>
   <div class="wrap navrow"><nav class="nav" aria-label="Site"><a href="#home" data-route="home">Home</a><a href="#simulators" data-route="simulators">Simulators</a><a href="#guide-ai" data-route="guide-ai">Meet the AI agent</a><a href="#gesture" data-route="gesture">Ability checks</a><a href="#borrow" data-route="borrow">Borrow a kit</a><a href="#profile" data-route="profile">My profile</a></nav></div>
 </header>
@@ -1892,10 +1892,6 @@ function AgentCloud(canvas, opts) {
     note.textContent = 'The guide uses Claude on your own Claude account. It’s for learning and practice, not medical advice.';
   }).catch(function () { setBusy(false); unavailable('The live guide isn’t available here. The conversation above is an example.'); });
 
-  var root = document.documentElement, big = document.getElementById('bigToggle');
-  function setBig(on) { root.classList.toggle('big', on); big.setAttribute('aria-pressed', on ? 'true' : 'false'); try { localStorage.setItem('ap-big', on ? '1' : '0'); } catch (e) {} }
-  try { if (localStorage.getItem('ap-big') === '1') setBig(true); } catch (e) {}
-  big.addEventListener('click', function () { setBig(!root.classList.contains('big')); });
 })();
 
   // ---- 3D arm (loads Three.js; keeps the 2D arm if 3D is unavailable) ----
